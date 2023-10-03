@@ -1,6 +1,24 @@
 ##### getPSSA (complete approach)
 ##### either give both index and marker names or
 ##### cohort_table (latter most preferably being generated from generateDrugCohortPSSA())
+
+#' Get PPSA
+#'
+#' @param cdm A cdm reference
+#' @param index Index drug
+#' @param marker Marker drug
+#' @param cohort_table Cohort table
+#' @param table_name Table name
+#' @param study_time Study time
+#' @param confidence_interval_level Confidence interval level
+#' @param prior_obs Prior observation
+#' @param start_date Start date
+#' @param end_date End date
+#'
+#' @return
+#' @export
+#'
+#' @examples
 getPSSA <- function(cdm,
                     index,
                     marker,
