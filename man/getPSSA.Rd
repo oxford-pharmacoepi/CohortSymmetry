@@ -12,7 +12,7 @@ getPSSA(
   table_name = "pssa",
   study_time = NULL,
   confidence_interval_level = 0.025,
-  prior_obs,
+  prior_obs = 365,
   start_date,
   end_date
 )

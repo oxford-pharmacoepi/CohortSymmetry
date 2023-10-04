@@ -1,21 +1,35 @@
 #generate drug cohort using DrugUtilisation - to be fed into getPSSA()
+#' Title
+#'
+#' @param cdm a CDM reference
+#' @param index index drug
+#' @param marker marker drug
+#' @param table_name table name in CDM
+#' @param prior_obs prior observation
+#' @param start_date start date
+#' @param end_date end date
+#'
+#' @return
+#' @export
+#'
+#' @examples
 generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prior_obs = 365, start_date, end_date){
   index_drug <- list()
   marker_drug <- list()
 
   for (i in (1: length(index))){
     if (index[[i]][2] == "ingredient"){
-      index_drug[[i]] <- getDrugIngredientCodes(cdm = cdm, name = index[[i]][1])
+      index_drug[[i]] <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm, name = index[[i]][1])
     } else {
-      index_drug[[i]] <- getATCCodes(cdm = cdm, name = index[[i]][1], level = c(index[[i]][2]))
+      index_drug[[i]] <- CodelistGenerator::getATCCodes(cdm = cdm, name = index[[i]][1], level = c(index[[i]][2]))
     }
   }
 
   for (i in (1: length(marker))){
     if (marker[[i]][2] == "ingredient"){
-      marker_drug[[i]] <- getDrugIngredientCodes(cdm = cdm, name = marker[[i]][1])
+      marker_drug[[i]] <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm, name = marker[[i]][1])
     } else {
-      marker_drug[[i]] <- getATCCodes(cdm = cdm, name = marker[[i]][1], level = c(marker[[i]][2]))
+      marker_drug[[i]] <- CodelistGenerator::getATCCodes(cdm = cdm, name = marker[[i]][1], level = c(marker[[i]][2]))
     }
   }
 
@@ -28,7 +42,7 @@ generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prio
     conceptSetList <- c(conceptSetList, marker_drug[[i]])
   }
 
-  cdm <- generateDrugUtilisationCohortSet(
+  cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     cdm = cdm,
     name = table_name,
     conceptSetList = conceptSetList,
@@ -43,15 +57,15 @@ generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prio
   }
 
   cdm[[table_name]] <- cdm[[table_name]] %>%
-    collect() %>%
-    dplyr::mutate(cohort_definition_id = case_when(cohort_definition_id <= index_length ~ 1,
-                                                   cohort_definition_id > index_length ~ 2)) %>%
-    dplyr::mutate(cohort_definition_id = as.integer(cohort_definition_id)) %>%
-    group_by(cohort_definition_id, subject_id) %>%
-    arrange(cohort_start_date, .by_group =T) %>%
-    filter(row_number()==1) %>%
-    ungroup() %>%
-    compute()
+    dplyr::collect() %>%
+    dplyr::mutate(cohort_definition_id = tidyr::case_when(.data$cohort_definition_id <= index_length ~ 1,
+                                                          .data$cohort_definition_id > index_length ~ 2)) %>%
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id)) %>%
+    dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
+    dplyr::arrange(.data$cohort_start_date, .by_group =T) %>%
+    dplyr::filter(tidyr::row_number()==1) %>%
+    dplyr::ungroup() %>%
+    dplyr::compute()
 
   raw_table <- cdm[[table_name]]
 

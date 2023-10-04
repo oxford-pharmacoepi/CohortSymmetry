@@ -3,9 +3,9 @@ getPSSAStrata <- function(cdm,
                           sex, #e.g., sex = c("Male", "Female", "Both")
                           index,
                           marker,
-                          prior_obs =365,
-                          start_date,
-                          end_date,
+                          prior_obs = 365,
+                          start_date = NA,
+                          end_date = NA,
                           table_name = "pssa",
                           study_time = NULL,
                           confidence_interval_level = 0.025){
@@ -14,8 +14,8 @@ getPSSAStrata <- function(cdm,
                                                            ageGroup = ageGroup,
                                                            sex = sex)
   strata_results <- list()
-  for (i in (1:nrow(cohortSet(cdm$denominator)))){
-    subject_ids <- cdm$denominator %>% filter(cohort_definition_id == i) %>% pull(subject_id)
+  for (i in (1:nrow(CDMConnector::cohortSet(cdm$denominator)))){
+    subject_ids <- cdm$denominator %>% dplyr::filter(cohort_definition_id == i) %>% dplyr::pull(subject_id)
 
     drug_cohort <- generateDrugCohortPSSA(cdm = cdm,
                                           index = index,
@@ -24,11 +24,11 @@ getPSSAStrata <- function(cdm,
                                           table_name = table_name,
                                           start_date = start_date,
                                           end_date = end_date) %>%
-      filter(subject_id %in% subject_ids)
+      dplyr::filter(subject_id %in% subject_ids)
 
-    cohort_groups <- cohortSet(cdm$denominator) %>% mutate(group = paste(age_group, " ", sex))
+    cohort_groups <- CDMConnector::cohortSet(cdm$denominator) %>% dplyr::mutate(group = paste(age_group, " ", sex))
 
-    strata_results[[cohort_groups %>% filter(cohort_definition_id == i) %>% pull(group)]]<-getPSSA(cohort_table = drug_cohort, study_time = study_time, confidence_interval_level = confidence_interval_level)
+    strata_results[[cohort_groups %>% dplyr::filter(cohort_definition_id == i) %>% dplyr::pull(group)]]<-getPSSA(cohort_table = drug_cohort, study_time = study_time, confidence_interval_level = confidence_interval_level)
 
   }
   return(strata_results)

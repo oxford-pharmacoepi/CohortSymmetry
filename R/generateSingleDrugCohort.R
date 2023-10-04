@@ -5,9 +5,9 @@ generateSingleDrugCohort <- function(cdm, drug, table_name = "wtd", start_date, 
 
   for (i in (1: length(drug))){
     if (drug[[i]][2] == "ingredient"){
-      drug_name[[i]] <- getDrugIngredientCodes(cdm = cdm, name = drug[[i]][1])
+      drug_name[[i]] <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm, name = drug[[i]][1])
     } else {
-      drug_name[[i]] <- getATCCodes(cdm = cdm, name = drug[[i]][1], level = c(drug[[i]][2]))
+      drug_name[[i]] <- CodelistGenerator::getATCCodes(cdm = cdm, name = drug[[i]][1], level = c(drug[[i]][2]))
     }
   }
 
@@ -16,7 +16,7 @@ generateSingleDrugCohort <- function(cdm, drug, table_name = "wtd", start_date, 
     conceptSetList <- c(conceptSetList, drug_name[[i]])
   }
 
-  cdm <- generateDrugUtilisationCohortSet(
+  cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     cdm = cdm,
     name = table_name,
     conceptSetList = conceptSetList,
@@ -25,7 +25,8 @@ generateSingleDrugCohort <- function(cdm, drug, table_name = "wtd", start_date, 
     cohortDateRange = as.Date(c(start_date, end_date))
   )
 
-  raw_table <- cdm[[table_name]] %>% collect()
+  raw_table <- cdm[[table_name]] %>%
+    tidyr::collect()
 
   return(raw_table)
 }

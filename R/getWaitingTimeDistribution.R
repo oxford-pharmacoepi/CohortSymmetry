@@ -13,18 +13,18 @@ getWaitingTimeDistribution <- function(cdm,
   } else {
     table <- generateSingleDrugCohort(cdm = cdm, drug = drug, table_name = table_name, start_date = start_date, end_date = end_date, prior_obs = prior_obs)
   }
-  table <- table %>% mutate(gap = cohort_start_date - as.Date(start_date))
-  n_months <- interval(as.Date(start_date), as.Date(end_date)) %/% months(1)
+  table <- table %>% dplyr::mutate(gap = cohort_start_date - as.Date(start_date))
+  n_months <- lubridate::interval(as.Date(start_date), as.Date(end_date)) %/% months(1)
 
-  p <- ggplot(table, aes(x=gap)) +
-    geom_histogram(bins = n_months, color="black") +
-    labs(title = paste0("Waiting Time Distribution for the chosen drug(s)")) +
-    theme(axis.text.x = element_text(angle = 45, hjust=1),
-          panel.background = element_blank() ,
-          axis.line = element_line(colour = "black", size = 0.6) ,
-          panel.grid.major = element_line(color = "grey", size = 0.2, linetype = "dashed"),
-          legend.key = element_rect(fill = "transparent", colour = "transparent")) +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    xlab("Days after the start date") + ylab("Number of Patients")
+  p <- ggplot2::ggplot(table, ggplot2::aes(x=gap)) +
+    ggplot2::geom_histogram(bins = n_months, color="black") +
+    ggplot2::labs(title = paste0("Waiting Time Distribution for the chosen drug(s)")) +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1),
+          panel.background = ggplot2::element_blank() ,
+          axis.line = ggplot2::element_line(colour = "black", size = 0.6) ,
+          panel.grid.major = ggplot2::element_line(color = "grey", size = 0.2, linetype = "dashed"),
+          legend.key = ggplot2::element_rect(fill = "transparent", colour = "transparent")) +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
+    ggplot2::xlab("Days after the start date") + ggplot2::ylab("Number of Patients")
   return(p)
 }

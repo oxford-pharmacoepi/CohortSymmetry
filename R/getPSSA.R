@@ -26,9 +26,9 @@ getPSSA <- function(cdm,
                     table_name = "pssa",
                     study_time = NULL,
                     confidence_interval_level = 0.025,
-                    prior_obs,
-                    start_date,
-                    end_date # set both as NA for full
+                    prior_obs = 365,
+                    start_date = NA,
+                    end_date = NA # set both as NA for full
 ){
   if (!is.null(cohort_table)){
     colChecks(cohort_table, c("cohort_definition_id", "subject_id", "cohort_start_date"))
@@ -41,7 +41,7 @@ getPSSA <- function(cdm,
   asr<-adjustedSequenceRatio(summaryTable(table_cleaned))
   counts <- getConfidenceInterval(summaryTable(table_cleaned), confidence_interval_level = confidence_interval_level)
 
-  results <- tibble(name = table_name,
+  results <- tibble::tibble(name = table_name,
                     csr = csr,
                     asr = asr)
 
