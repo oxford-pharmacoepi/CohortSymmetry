@@ -6,7 +6,7 @@ getHistogram <- function (pssa_output, time_scale = "weeks"){
   prep <- table %>%
     dplyr::mutate(gap_days = as.integer(.data$dateMarkerDrug - .data$dateIndexDrug)) %>%
     dplyr::mutate(gap_weeks = round((.data$gap_days / 7),2)) %>%
-    dplyr::mutate(gap_months = round((gap_days / 31),2)) %>%
+    dplyr::mutate(gap_months = round((.data$gap_days / 31),2)) %>%
     dplyr::mutate(drug_initiation_order = ifelse(.data$dateMarkerDrug > .data$dateIndexDrug, "Index -> Marker", "Marker -> Index"))
   # %>%
   #   filter(gap_weeks <= 52) %>%
@@ -26,7 +26,7 @@ getHistogram <- function (pssa_output, time_scale = "weeks"){
     max_val <- plyr::round_any(max(prep$gap_weeks), 10, f = ceiling)
     min_val <- plyr::round_any(min(prep$gap_weeks), 10, f = floor)
 
-    p <- ggplot2::ggplot(prep, ggplot2::aes(x=gap_weeks, color=drug_initiation_order, fill=drug_initiation_order)) +
+    p <- ggplot2::ggplot(prep, ggplot2::aes(x=.data$gap_weeks, color=.data$drug_initiation_order, fill=.data$drug_initiation_order)) +
       ggplot2::geom_histogram(bins = bins) +
       ggplot2::geom_hline(yintercept = 0, colour="white", size=0.5) + # this removes the green line at the bottom
       ggplot2::geom_vline(xintercept = 0, linewidth = 1, color = "red", linetype ="dashed") +
@@ -48,7 +48,7 @@ getHistogram <- function (pssa_output, time_scale = "weeks"){
     max_val <- plyr::round_any(max(prep$gap_days), 10, f = ceiling)
     min_val <- plyr::round_any(min(prep$gap_days), 10, f = floor)
 
-    p <- ggplot2::ggplot(prep, ggplot2::aes(x=gap_days, color=drug_initiation_order, fill=drug_initiation_order)) +
+    p <- ggplot2::ggplot(prep, ggplot2::aes(x=.data$gap_days, color=.data$drug_initiation_order, fill=.data$drug_initiation_order)) +
       ggplot2::geom_histogram(bins = bins) +
       ggplot2::geom_hline(yintercept=0, colour="white", size=0.5) +
       ggplot2::geom_vline(xintercept = 0, linewidth = 1, color = "red", linetype ="dashed") +
@@ -70,7 +70,7 @@ getHistogram <- function (pssa_output, time_scale = "weeks"){
     max_val <- plyr::round_any(max(prep$gap_months), 10, f = ceiling)
     min_val <- plyr::round_any(min(prep$gap_months), 10, f = floor)
 
-    p <- ggplot2::ggplot(prep, ggplot2::aes(x=gap_months, color=drug_initiation_order, fill=drug_initiation_order)) +
+    p <- ggplot2::ggplot(prep, ggplot2::aes(x=.data$gap_months, color=.data$drug_initiation_order, fill=.data$drug_initiation_order)) +
       ggplot2::geom_histogram(bins = bins) +
       ggplot2::geom_hline(yintercept=0, colour="white", size=0.5) +
       ggplot2::geom_vline(xintercept = 0, linewidth = 1, color = "red", linetype ="dashed") +

@@ -13,8 +13,8 @@ getPSSA(
   study_time = NULL,
   confidence_interval_level = 0.025,
   prior_obs = 365,
-  start_date,
-  end_date
+  start_date = NA,
+  end_date = NA
 )
 }
 \arguments{

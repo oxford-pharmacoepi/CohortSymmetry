@@ -15,10 +15,10 @@ nullSequenceRatio <- function(table, restriction = 548) {
     table <-
       table %>%
       dplyr::mutate(
-        marker_cumsum_fwd = deltaCumulativeSum(marker_first, days_first, restriction, backwards = FALSE), # For each days_first, look back 548 (restriction) days and see how many marker_first are there
-        marker_cumsum_bwd = deltaCumulativeSum(marker_first, days_first, restriction, backwards = TRUE), # For each days_first, look forward 548 (restriction days) and see how many marker_first are there
-        numerator = index_first * marker_cumsum_fwd,
-        denominator = index_first * (marker_cumsum_bwd + marker_cumsum_fwd - marker_first), # why the minus - mistake?
+        marker_cumsum_fwd = deltaCumulativeSum(.data$marker_first, .data$days_first, .env$restriction, backwards = FALSE), # For each days_first, look back 548 (restriction) days and see how many marker_first are there
+        marker_cumsum_bwd = deltaCumulativeSum(.data$marker_first, .data$days_first, .env$restriction, backwards = TRUE), # For each days_first, look forward 548 (restriction days) and see how many marker_first are there
+        numerator = .data$index_first * .data$marker_cumsum_fwd,
+        denominator = .data$index_first * (.data$marker_cumsum_bwd + .data$marker_cumsum_fwd - .data$marker_first), # why the minus - mistake?
       )
 
     numer <- table %>% dplyr::pull("numerator") %>% sum()
@@ -30,13 +30,13 @@ nullSequenceRatio <- function(table, restriction = 548) {
     numer <-
       table %>%
       dplyr::mutate(
-        marker_cumsum = n_marker_before_index - cumsum(marker_first),
-        numerator = index_first * marker_cumsum
+        marker_cumsum = .data$n_marker_before_index - cumsum(.data$marker_first),
+        numerator = .data$index_first * .data$marker_cumsum
       ) %>%
       dplyr::pull("numerator")
 
     numer <- sum(numer)
-    denom <- n_marker_before_index * n_index_before_marker
+    denom <- .data$n_marker_before_index * .data$n_index_before_marker
 
   }
 

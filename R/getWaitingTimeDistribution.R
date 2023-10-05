@@ -11,12 +11,12 @@ getWaitingTimeDistribution <- function(cdm,
     colChecks(single_drug_cohort, c("cohort_definition_id", "subject_id", "cohort_start_date"))
     table <- single_drug_cohort
   } else {
-    table <- generateSingleDrugCohort(cdm = cdm, drug = drug, table_name = table_name, start_date = start_date, end_date = end_date, prior_obs = prior_obs)
+    table <- generateSingleDrugCohort(cdm = cdm, drug = drug, table_name = .env$table_name, start_date = .env$start_date, end_date = .env$end_date, prior_obs = .env$prior_obs)
   }
-  table <- table %>% dplyr::mutate(gap = cohort_start_date - as.Date(start_date))
+  table <- table %>% dplyr::mutate(gap = .data$cohort_start_date - as.Date(start_date))
   n_months <- lubridate::interval(as.Date(start_date), as.Date(end_date)) %/% months(1)
 
-  p <- ggplot2::ggplot(table, ggplot2::aes(x=gap)) +
+  p <- ggplot2::ggplot(table, ggplot2::aes(x=.data$gap)) +
     ggplot2::geom_histogram(bins = n_months, color="black") +
     ggplot2::labs(title = paste0("Waiting Time Distribution for the chosen drug(s)")) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust=1),
