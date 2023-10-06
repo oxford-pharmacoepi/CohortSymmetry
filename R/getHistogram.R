@@ -1,4 +1,13 @@
 #Histogram
+#' Title
+#'
+#' @param pssa_output the output from PSSA functions (for example, getPSSA(), getPSSAStrata() or getPSSASubset())
+#' @param time_scale the x axis of the histogram plot, options are weeks, days or months
+#'
+#' @return
+#' @export
+#'
+#' @examples
 getHistogram <- function (pssa_output, time_scale = "weeks"){
   colChecks(pssa_output[[1]], c("dateIndexDrug", "dateMarkerDrug"))
   # added in additional columns that calculate gap in days/weeks/months etc

@@ -2,6 +2,7 @@
 
 export("%>%")
 export(generateDrugCohortPSSA)
+export(getHistogram)
 export(getPSSA)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)

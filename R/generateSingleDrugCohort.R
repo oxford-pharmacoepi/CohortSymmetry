@@ -26,7 +26,7 @@ generateSingleDrugCohort <- function(cdm, drug, table_name = "wtd", start_date, 
   )
 
   raw_table <- cdm[[table_name]] %>%
-    tidyr::collect()
+    dplyr::collect()
 
   return(raw_table)
 }

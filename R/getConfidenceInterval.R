@@ -3,8 +3,8 @@ getConfidenceInterval <- function(table, confidence_interval_level = 0.025){
   colChecks(table, c("marker_first", "index_first"))
 
   counts <- tibble::tibble(
-    index_first = table %>% tidyr::pull("index_first") %>% sum(),
-    marker_first = table %>% tidyr::pull("marker_first") %>% sum()
+    index_first = table %>% dplyr::pull("index_first") %>% sum(),
+    marker_first = table %>% dplyr::pull("marker_first") %>% sum()
   )
 
   if (counts$index_first == 0 & counts$marker_first == 0){

@@ -2,7 +2,7 @@
 % Please edit documentation in R/generateDrugCohortPSSA.R
 \name{generateDrugCohortPSSA}
 \alias{generateDrugCohortPSSA}
-\title{Title}
+\title{Generate PSSA Drug Cohort}
 \usage{
 generateDrugCohortPSSA(
   cdm,
@@ -17,18 +17,20 @@ generateDrugCohortPSSA(
 \arguments{
 \item{cdm}{a CDM reference}
 
-\item{index}{index drug}
+\item{index}{index drug(s), need to specify the name and the level in the ATC format}
 
-\item{marker}{marker drug}
+\item{marker}{marker drug(s), need to specify the name and the level in the ATC format}
 
-\item{table_name}{table name in CDM}
+\item{table_name}{table name in CDM of user's choice}
 
-\item{prior_obs}{prior observation}
+\item{prior_obs}{prior observation that the user would like to impose on both index drug(s) and marker drug(s)}
 
-\item{start_date}{start date}
+\item{start_date}{start date that the user would impose so that both index drug(s) and marker drug(s) would be initiated after this day. Set NA if this is not necessary.}
 
-\item{end_date}{end date}
+\item{end_date}{end date that the user would impose so that both index drug(s) and marker drug(s) would be initiated before this day. Set NA if this is not necessary.}
 }
 \description{
-Title
+Generate the necessary drug cohorts based on the index drug(s) and
+marker drug(s) specified. The output of this function will subsequently
+be fed into, for exmaple, getPSSA().
 }

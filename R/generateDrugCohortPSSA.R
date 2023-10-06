@@ -17,15 +17,6 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
-#' drugCohort <- generateDrugCohortPSSA(
-#'  cdm = cdm,
-#'  index = list(c("amiodarone", "ingredient")),
-#'  marker = list(c("levothyroxine", "ingredient")),
-#'  start_date = NA,
-#'  end_date = NA
-#' )
-#' }
 generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prior_obs = 365, start_date, end_date){
   index_drug <- list()
   marker_drug <- list()
@@ -71,12 +62,12 @@ generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prio
 
   cdm[[table_name]] <- cdm[[table_name]] %>%
     dplyr::collect() %>%
-    dplyr::mutate(cohort_definition_id = tidyr::case_when(.data$cohort_definition_id <= index_length ~ 1,
+    dplyr::mutate(cohort_definition_id = dplyr::case_when(.data$cohort_definition_id <= index_length ~ 1,
                                                           .data$cohort_definition_id > index_length ~ 2)) %>%
     dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id)) %>%
     dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
     dplyr::arrange(.data$cohort_start_date, .by_group =T) %>%
-    dplyr::filter(tidyr::row_number()==1) %>%
+    dplyr::filter(dplyr::row_number()==1) %>%
     dplyr::ungroup() %>%
     dplyr::compute()
 
