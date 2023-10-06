@@ -5,13 +5,13 @@
 #' marker drug(s) specified. The output of this function will subsequently
 #' be fed into, for exmaple, getPSSA().
 #'
-#' @param cdm a CDM reference
-#' @param index index drug(s), need to specify the name and the level in the ATC format
-#' @param marker marker drug(s), need to specify the name and the level in the ATC format
-#' @param table_name table name in CDM of user's choice
-#' @param prior_obs prior observation that the user would like to impose on both index drug(s) and marker drug(s)
-#' @param start_date start date that the user would impose so that both index drug(s) and marker drug(s) would be initiated after this day. Set NA if this is not necessary.
-#' @param end_date end date that the user would impose so that both index drug(s) and marker drug(s) would be initiated before this day. Set NA if this is not necessary.
+#' @param cdm A CDM reference.
+#' @param index Index drug(s), need to specify the name and the level in the ATC format.
+#' @param marker Marker drug(s), need to specify the name and the level in the ATC format.
+#' @param table_name Table name in CDM of user's choice.
+#' @param prior_obs Prior observation that the user would like to impose on both index drug(s) and marker drug(s).
+#' @param start_date Start date that the user would impose so that both index drug(s) and marker drug(s) would be initiated after this day. Set NA if this is not necessary.
+#' @param end_date End date that the user would impose so that both index drug(s) and marker drug(s) would be initiated before this day. Set NA if this is not necessary.
 #'
 #' @return
 #' @export

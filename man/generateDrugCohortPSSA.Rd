@@ -15,19 +15,19 @@ generateDrugCohortPSSA(
 )
 }
 \arguments{
-\item{cdm}{a CDM reference}
+\item{cdm}{A CDM reference.}
 
-\item{index}{index drug(s), need to specify the name and the level in the ATC format}
+\item{index}{Index drug(s), need to specify the name and the level in the ATC format.}
 
-\item{marker}{marker drug(s), need to specify the name and the level in the ATC format}
+\item{marker}{Marker drug(s), need to specify the name and the level in the ATC format.}
 
-\item{table_name}{table name in CDM of user's choice}
+\item{table_name}{Table name in CDM of user's choice.}
 
-\item{prior_obs}{prior observation that the user would like to impose on both index drug(s) and marker drug(s)}
+\item{prior_obs}{Prior observation that the user would like to impose on both index drug(s) and marker drug(s).}
 
-\item{start_date}{start date that the user would impose so that both index drug(s) and marker drug(s) would be initiated after this day. Set NA if this is not necessary.}
+\item{start_date}{Start date that the user would impose so that both index drug(s) and marker drug(s) would be initiated after this day. Set NA if this is not necessary.}
 
-\item{end_date}{end date that the user would impose so that both index drug(s) and marker drug(s) would be initiated before this day. Set NA if this is not necessary.}
+\item{end_date}{End date that the user would impose so that both index drug(s) and marker drug(s) would be initiated before this day. Set NA if this is not necessary.}
 }
 \description{
 Generate the necessary drug cohorts based on the index drug(s) and

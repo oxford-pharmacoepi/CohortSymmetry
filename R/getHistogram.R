@@ -1,5 +1,5 @@
 #Histogram
-#' Title
+#' Histogram for sequences
 #'
 #' @param pssa_output the output from PSSA functions (for example, getPSSA(), getPSSAStrata() or getPSSASubset())
 #' @param time_scale the x axis of the histogram plot, options are weeks, days or months

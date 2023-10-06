@@ -2,7 +2,7 @@
 % Please edit documentation in R/getHistogram.R
 \name{getHistogram}
 \alias{getHistogram}
-\title{Title}
+\title{Histogram for sequences}
 \usage{
 getHistogram(pssa_output, time_scale = "weeks")
 }
@@ -12,5 +12,5 @@ getHistogram(pssa_output, time_scale = "weeks")
 \item{time_scale}{the x axis of the histogram plot, options are weeks, days or months}
 }
 \description{
-Title
+Histogram for sequences
 }

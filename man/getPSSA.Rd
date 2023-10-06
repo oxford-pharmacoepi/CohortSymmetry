@@ -2,7 +2,7 @@
 % Please edit documentation in R/getPSSA.R
 \name{getPSSA}
 \alias{getPSSA}
-\title{Get PPSA}
+\title{PSSA Calculations including CSR, ASR and CI.}
 \usage{
 getPSSA(
   cdm,
@@ -18,26 +18,31 @@ getPSSA(
 )
 }
 \arguments{
-\item{cdm}{A cdm reference}
+\item{cdm}{A CDM reference.}
 
-\item{index}{Index drug}
+\item{index}{Index drug(s), need to specify the name and the level in the ATC format.}
 
-\item{marker}{Marker drug}
+\item{marker}{Marker drug(s), need to specify the name and the level in the ATC format.}
 
-\item{cohort_table}{Cohort table}
+\item{cohort_table}{Cohort table produced using generateDrugCohort() function. Default NA.}
 
-\item{table_name}{Table name}
+\item{table_name}{Table name in CDM of user's choice.}
 
-\item{study_time}{Study time}
+\item{study_time}{Study time is defined to be the gap between the initiation of index and the initiation of marker. Default is NULL, meaning no restriction is imposed.}
 
-\item{confidence_interval_level}{Confidence interval level}
+\item{confidence_interval_level}{Default 0.025, meaning 95\% interval. If the user wants N\% interval (N between 0 and 100) then change the default to (1-N/100)/2.}
 
-\item{prior_obs}{Prior observation}
+\item{prior_obs}{Prior observation that the user would like to impose on both index drug(s) and marker drug(s).}
 
-\item{start_date}{Start date}
+\item{start_date}{Start date that the user would impose so that both index drug(s) and marker drug(s) would be initiated after this day. Set NA if this is not necessary.}
 
-\item{end_date}{End date}
+\item{end_date}{End date that the user would impose so that both index drug(s) and marker drug(s) would be initiated before this day. Set NA if this is not necessary.}
 }
 \description{
-Get PPSA
+Using a cohort table with two different cohort_definition_id (coded 1 and 2)
+to compute the necessary PSSA calculations.
+Either, using the cohort table produced by generateDrugCohort function,
+or simply specify index and marker drug(s) and leave cohort_table NULL.
+The outputs include csr (Crude Sequence Ratio), asr (Adjusted sequence ratio),
+confidence intervals and relevant counts (marker_first and index_first).
 }
