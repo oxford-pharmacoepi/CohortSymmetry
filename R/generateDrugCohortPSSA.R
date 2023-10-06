@@ -1,18 +1,31 @@
 #generate drug cohort using DrugUtilisation - to be fed into getPSSA()
-#' Title
+#' Generate PSSA Drug Cohort
+#' @description
+#' Generate the necessary drug cohorts based on the index drug(s) and
+#' marker drug(s) specified. The output of this function will subsequently
+#' be fed into, for exmaple, getPSSA().
 #'
 #' @param cdm a CDM reference
-#' @param index index drug
-#' @param marker marker drug
-#' @param table_name table name in CDM
-#' @param prior_obs prior observation
-#' @param start_date start date
-#' @param end_date end date
+#' @param index index drug(s), need to specify the name and the level in the ATC format
+#' @param marker marker drug(s), need to specify the name and the level in the ATC format
+#' @param table_name table name in CDM of user's choice
+#' @param prior_obs prior observation that the user would like to impose on both index drug(s) and marker drug(s)
+#' @param start_date start date that the user would impose so that both index drug(s) and marker drug(s) would be initiated after this day. Set NA if this is not necessary.
+#' @param end_date end date that the user would impose so that both index drug(s) and marker drug(s) would be initiated before this day. Set NA if this is not necessary.
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' drugCohort <- generateDrugCohortPSSA(
+#'  cdm = cdm,
+#'  index = list(c("amiodarone", "ingredient")),
+#'  marker = list(c("levothyroxine", "ingredient")),
+#'  start_date = NA,
+#'  end_date = NA
+#' )
+#' }
 generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prior_obs = 365, start_date, end_date){
   index_drug <- list()
   marker_drug <- list()
