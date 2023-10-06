@@ -4,9 +4,9 @@
 \name{PSSA-package}
 \alias{PSSA}
 \alias{PSSA-package}
-\title{PSSA: What the Package Does (One Line, Title Case)}
+\title{PSSA: Prescription Sequence Symmetry Analysis using OMOP CDM (Common Data Model)}
 \description{
-What the package does (one paragraph).
+Calculating crude sequence ratio (csr), adjusted sequence ratio (asr) and confidence intervals using data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Calculations can also be done in a particular disease strata and stratification cohorts.
 }
 \author{
 \strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
