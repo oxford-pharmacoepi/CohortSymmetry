@@ -55,7 +55,7 @@ getPSSA <- function(cdm,
 
   results <- cbind(results, counts)
 
-  result <- list(table_cleaned[1], results)
+  result <- list(table_cleaned[[1]], results)
 
   return(result)
 }
