@@ -29,5 +29,11 @@ tableCleaning <- function(table, study_time = NULL){
       dplyr::select(-.data$gap, - .data$subject_id) %>%
       dplyr::collect()
   }
+
+  dat <-
+    dat %>%
+    dplyr::filter((!is.na(.data$dateIndexDrug)) & (!is.na(.data$dateMarkerDrug))) %>%
+    dplyr::mutate(orderBA = .data$dateIndexDrug >= .data$dateMarkerDrug)
+
   return(dat)
 }
