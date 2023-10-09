@@ -42,9 +42,9 @@ getPSSA <- function(cdm,
     colChecks(cohort_table, c("cohort_definition_id", "subject_id", "cohort_start_date"))
     table <- cohort_table
   } else {
-    table <- generateDrugCohortPSSA(cdm = cdm, index = index, marker = marker, table_name = .env$table_name, prior_obs = .env$prior_obs, start_date = .env$start_date, end_date = .env$end_date)
+    table <- generateDrugCohortPSSA(cdm = cdm, index = index, marker = marker, table_name = table_name, prior_obs = prior_obs, start_date = start_date, end_date = end_date)
   }
-  table_cleaned <- tableCleaning(table = table, study_time = .env$study_time)
+  table_cleaned <- tableCleaning(table = table, study_time = study_time)
   csr<-crudeSequenceRatio(summaryTable(table_cleaned))
   asr<-adjustedSequenceRatio(summaryTable(table_cleaned))
   counts <- getConfidenceInterval(summaryTable(table_cleaned), confidence_interval_level = confidence_interval_level)

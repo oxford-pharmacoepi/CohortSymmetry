@@ -15,8 +15,8 @@ nullSequenceRatio <- function(table, restriction = 548) {
     table <-
       table %>%
       dplyr::mutate(
-        marker_cumsum_fwd = deltaCumulativeSum(.data$marker_first, .data$days_first, .env$restriction, backwards = FALSE), # For each days_first, look back 548 (restriction) days and see how many marker_first are there
-        marker_cumsum_bwd = deltaCumulativeSum(.data$marker_first, .data$days_first, .env$restriction, backwards = TRUE), # For each days_first, look forward 548 (restriction days) and see how many marker_first are there
+        marker_cumsum_fwd = deltaCumulativeSum(.data$marker_first, .data$days_first, restriction, backwards = FALSE), # For each days_first, look back 548 (restriction) days and see how many marker_first are there
+        marker_cumsum_bwd = deltaCumulativeSum(.data$marker_first, .data$days_first, restriction, backwards = TRUE), # For each days_first, look forward 548 (restriction days) and see how many marker_first are there
         numerator = .data$index_first * .data$marker_cumsum_fwd,
         denominator = .data$index_first * (.data$marker_cumsum_bwd + .data$marker_cumsum_fwd - .data$marker_first), # why the minus - mistake?
       )

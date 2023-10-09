@@ -21,8 +21,8 @@ generateSingleDrugCohort <- function(cdm, drug, table_name = "wtd", start_date, 
     name = table_name,
     conceptSetList = conceptSetList,
     summariseMode = "FirstEra",
-    daysPriorObservation = .env$prior_obs,
-    cohortDateRange = as.Date(c(.env$start_date, .env$end_date))
+    daysPriorObservation = prior_obs,
+    cohortDateRange = as.Date(c(start_date, end_date))
   )
 
   raw_table <- cdm[[table_name]] %>%

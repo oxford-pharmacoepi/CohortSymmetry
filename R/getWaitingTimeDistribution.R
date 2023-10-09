@@ -25,7 +25,7 @@ getWaitingTimeDistribution <- function(cdm,
                                        end_date,
                                        prior_obs = 365
 ){
-  table <- generateSingleDrugCohort(cdm = cdm, drug = drug, table_name = .env$table_name, start_date = .env$start_date, end_date = .env$end_date, prior_obs = .env$prior_obs)
+  table <- generateSingleDrugCohort(cdm = cdm, drug = drug, table_name = table_name, start_date = start_date, end_date = end_date, prior_obs = prior_obs)
   table <- table %>% dplyr::mutate(gap = .data$cohort_start_date - as.Date(start_date))
   n_months <- lubridate::interval(as.Date(start_date), as.Date(end_date)) %/% months(1)
 
