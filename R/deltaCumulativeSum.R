@@ -26,14 +26,14 @@ deltaCumulativeSum <- function(y, t, delta, backwards = TRUE) {
     n_y <- length(y)
     prior_cumsum <- c(0, y_cumsum[-n_y])
     bwd_cumsum <- rep(0, n_y)
-    t_delta_bwd <- indexDeltaBackward(t, delta) - 1
+    t_delta_bwd <- indexDelta(t, delta, "Backward") - 1
     look_bwds <- t_delta_bwd > 0
     bwd_cumsum[look_bwds] <- y_cumsum[t_delta_bwd[look_bwds]]
 
     return(prior_cumsum - bwd_cumsum)
 
   } else {
-    t_delta_fwd <- indexDeltaForward(t, delta)
+    t_delta_fwd <- indexDelta(t, delta, "Forward")
     fwd_cumsum <- y_cumsum[t_delta_fwd]
 
     return(fwd_cumsum - y_cumsum)
