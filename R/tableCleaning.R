@@ -30,8 +30,6 @@ tableCleaning <- function(table, study_time = NULL){
       dplyr::collect()
   }
 
-  date_start <- min(dat$dateIndexDrug, dat$dateMarkerDrug)
-
   dat <-
     dat %>%
     dplyr::filter((!is.na(.data$dateIndexDrug)) & (!is.na(.data$dateMarkerDrug))) %>%
@@ -39,7 +37,7 @@ tableCleaning <- function(table, study_time = NULL){
     dplyr::mutate(
       date_first = lubridate::as_date(ifelse(.data$orderBA, .data$dateMarkerDrug, .data$dateIndexDrug)), # setting which date is first and which is second
       date_second = lubridate::as_date(ifelse(.data$orderBA, .data$dateIndexDrug, .data$dateMarkerDrug)),
-      days_first = as.integer((lubridate::interval(.data$date_start, .data$date_first)) / lubridate::days(1)), # gap between the first drug of a person and the first drug of the whole population
+      days_first = as.integer((lubridate::interval(min(.data$dateIndexDrug, .data$dateMarkerDrug), .data$date_first)) / lubridate::days(1)), # gap between the first drug of a person and the first drug of the whole population
       days_second = as.integer((lubridate::interval(.data$date_first, .data$date_second)) / lubridate::days(1)) # gap between two drugs of a person
     ) %>%
     dplyr::arrange(.data$days_first) %>%
