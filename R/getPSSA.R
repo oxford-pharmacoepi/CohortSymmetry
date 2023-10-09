@@ -45,9 +45,9 @@ getPSSA <- function(cdm,
     table <- generateDrugCohortPSSA(cdm = cdm, index = index, marker = marker, table_name = table_name, prior_obs = prior_obs, start_date = start_date, end_date = end_date)
   }
   table_cleaned <- tableCleaning(table = table, study_time = study_time)
-  csr<-crudeSequenceRatio(table_cleaned)
-  asr<-adjustedSequenceRatio(table_cleaned)
-  counts <- getConfidenceInterval(table_cleaned, confidence_interval_level = confidence_interval_level)
+  csr<-crudeSequenceRatio(table_cleaned[[2]])
+  asr<-adjustedSequenceRatio(table_cleaned[[2]])
+  counts <- getConfidenceInterval(table_cleaned[[2]], confidence_interval_level = confidence_interval_level)
 
   results <- tibble::tibble(name = table_name,
                     csr = csr,
@@ -55,7 +55,7 @@ getPSSA <- function(cdm,
 
   results <- cbind(results, counts)
 
-  result <- list(table_cleaned, results)
+  result <- list(table_cleaned[1], results)
 
   return(result)
 }

@@ -26,9 +26,11 @@ tableCleaning <- function(table, study_time = NULL){
       dplyr::filter(!is.na(.data$gap)) %>%
       dplyr::filter(!.data$gap==0) %>%
       dplyr::filter(-study_time<= .data$gap & .data$gap <= study_time) %>%
-      dplyr::select(-.data$gap, - .data$subject_id) %>%
+      dplyr::select(- .data$gap, - .data$subject_id) %>%
       dplyr::collect()
   }
+
+  table_1 <- dat
 
   date_start <- min(dat$dateIndexDrug, dat$dateMarkerDrug)
 
@@ -47,5 +49,7 @@ tableCleaning <- function(table, study_time = NULL){
     dplyr::summarise(marker_first = sum(.data$orderBA), index_first = sum(!.data$orderBA), .groups = "drop") %>%
     dplyr::ungroup()
 
-  return(dat)
+  dat_fin <- list(table_1, dat)
+
+  return(dat_fin)
 }
