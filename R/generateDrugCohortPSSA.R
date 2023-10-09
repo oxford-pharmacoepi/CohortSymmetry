@@ -17,7 +17,7 @@
 #' @export
 #'
 #' @examples
-generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prior_obs = 365, start_date, end_date){
+generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prior_obs = 365, start_date = NA, end_date = NA){
   index_drug <- list()
   marker_drug <- list()
 
