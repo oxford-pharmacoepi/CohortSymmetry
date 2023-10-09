@@ -3,8 +3,8 @@ nullSequenceRatio <- function(table, restriction = 548) {
 
   colChecks(table, c("days_first", "marker_first", "index_first"))
 
-  n_index_before_marker <- table %>% dplyr::pull("index_first") %>% sum()
-  n_marker_before_index <- table %>% dplyr::pull("marker_first") %>% sum()
+  n_index_before_marker <- table %>% dplyr::pull(.data$index_first) %>% sum()
+  n_marker_before_index <- table %>% dplyr::pull(.data$marker_first) %>% sum()
 
   numer <- 0
   denom <- 0
@@ -21,8 +21,8 @@ nullSequenceRatio <- function(table, restriction = 548) {
         denominator = .data$index_first * (.data$marker_cumsum_bwd + .data$marker_cumsum_fwd - .data$marker_first), # why the minus - mistake?
       )
 
-    numer <- table %>% dplyr::pull("numerator") %>% sum()
-    denom <- table %>% dplyr::pull("denominator") %>% sum()
+    numer <- table %>% dplyr::pull(.data$numerator) %>% sum()
+    denom <- table %>% dplyr::pull(.data$denominator) %>% sum()
 
   } else {
     # The case restriction is infinite:
@@ -33,7 +33,7 @@ nullSequenceRatio <- function(table, restriction = 548) {
         marker_cumsum = .data$n_marker_before_index - cumsum(.data$marker_first),
         numerator = .data$index_first * .data$marker_cumsum
       ) %>%
-      dplyr::pull("numerator")
+      dplyr::pull(.data$numerator)
 
     numer <- sum(numer)
     denom <- .data$n_marker_before_index * .data$n_index_before_marker

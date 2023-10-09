@@ -35,7 +35,7 @@ getPSSAStrata <- function(cdm,
                                                            sex = sex)
   strata_results <- list()
   for (i in (1:nrow(CDMConnector::cohortSet(cdm$denominator)))){
-    subject_ids <- cdm$denominator %>% dplyr::filter(.data$cohort_definition_id == i) %>% dplyr::pull("subject_id")
+    subject_ids <- cdm$denominator %>% dplyr::filter(.data$cohort_definition_id == i) %>% dplyr::pull(.data$subject_id)
 
     drug_cohort <- generateDrugCohortPSSA(cdm = cdm,
                                           index = index,
@@ -48,7 +48,7 @@ getPSSAStrata <- function(cdm,
 
     cohort_groups <- CDMConnector::cohortSet(cdm$denominator) %>% dplyr::mutate(group = paste(.data$age_group, " ", sex))
 
-    strata_results[[cohort_groups %>% dplyr::filter(.data$cohort_definition_id == i) %>% dplyr::pull("group")]]<-getPSSA(cohort_table = drug_cohort, study_time = study_time, confidence_interval_level = confidence_interval_level)
+    strata_results[[cohort_groups %>% dplyr::filter(.data$cohort_definition_id == i) %>% dplyr::pull(.data$group)]]<-getPSSA(cohort_table = drug_cohort, study_time = study_time, confidence_interval_level = confidence_interval_level)
 
   }
   return(strata_results)

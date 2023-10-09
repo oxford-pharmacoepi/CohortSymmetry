@@ -13,7 +13,7 @@ summaryTable <- function(table) {
     dplyr::mutate(orderBA = .data$dateIndexDrug >= .data$dateMarkerDrug)
 
   # min date of any drug start
-  date_start <- min(dplyr::pull("table", "dateIndexDrug"), dplyr::pull("table", "dateMarkerDrug"))
+  date_start <- min(dplyr::pull(.data$table, .data$dateIndexDrug), dplyr::pull(.data$table, .data$dateMarkerDrug))
 
   # lubridate package used, days(1), as_date() and %--%.
   table <-
