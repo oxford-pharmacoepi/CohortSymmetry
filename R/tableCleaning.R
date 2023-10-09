@@ -30,7 +30,7 @@ tableCleaning <- function(table, study_time = NULL){
       dplyr::collect()
   }
 
-  date_start <- min(dat %>% dplyr::pull(.data$dateIndexDrug), table %>% dplyr::pull(.data$dateMarkerDrug))
+  date_start <- min(dat$dateIndexDrug, dat$dateMarkerDrug)
 
   dat <-
     dat %>%
