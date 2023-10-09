@@ -9,31 +9,23 @@ summaryTable <- function(table) {
   # creating order, orderBA is TRUE if index is AFTER marker
   table <-
     table %>%
-    dplyr::filter((!is.na(.data$dateIndexDrug)) & (!is.na(.data$dateMarkerDrug))) %>%
-    dplyr::mutate(orderBA = .data$dateIndexDrug >= .data$dateMarkerDrug)
+    dplyr::filter((!is.na(.env$dateIndexDrug)) & (!is.na(.env$dateMarkerDrug))) %>%
+    dplyr::mutate(orderBA = .env$dateIndexDrug >= .env$dateMarkerDrug)
 
   # min date of any drug start
-  date_start <- min(dplyr::pull(.data$table, .data$dateIndexDrug), dplyr::pull(.data$table, .data$dateMarkerDrug))
+  date_start <- min(table %>% dplyr::pull(.env$dateIndexDrug), table %>% dplyr::pull(.env$dateMarkerDrug))
 
-  # lubridate package used, days(1), as_date() and %--%.
   table <-
     table %>%
     dplyr::mutate(
-      date_first = lubridate::as_date(ifelse(.data$orderBA, .data$dateMarkerDrug, .data$dateIndexDrug)), # setting which date is first and which is second
-      date_second = lubridate::as_date(ifelse(.data$orderBA, .data$dateIndexDrug, .data$dateMarkerDrug)),
-      days_first = as.integer((lubridate::interval(.data$date_start, .data$date_first)) / lubridate::days(1)), # gap between the first drug of a person and the first drug of the whole population
-      days_second = as.integer((lubridate::interval(.data$date_first, .data$date_second)) / lubridate::days(1)) # gap between two drugs of a person
+      date_first = lubridate::as_date(ifelse(.env$orderBA, .env$dateMarkerDrug, .env$dateIndexDrug)), # setting which date is first and which is second
+      date_second = lubridate::as_date(ifelse(.env$orderBA, .env$dateIndexDrug, .env$dateMarkerDrug)),
+      days_first = as.integer((lubridate::interval(.env$date_start, .env$date_first)) / lubridate::days(1)), # gap between the first drug of a person and the first drug of the whole population
+      days_second = as.integer((lubridate::interval(.env$date_first, .env$date_second)) / lubridate::days(1)) # gap between two drugs of a person
     )
-
-  #max number of digits in days_first
-  # max_dig <- nchar(as.character(max(dplyr::pull("table", "days_first"))))
-  # ch_format <- paste0("%0", max_dig, ".0f")
 
   table <-
     table %>%
-    # dplyr::mutate(
-    #   days_first_ch_format = sprintf(ch_format, days_first) # make a column with days_first having the same number of digits - Why?
-    # ) %>%
     dplyr::arrange(.data$days_first)
 
   ### final output, a dataframe with four columns, days_first_ch_format, days_first, marker_first and index_first.

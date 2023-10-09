@@ -1,4 +1,4 @@
-### NSR (uses summary table, days_first, marker_first and index_first)
+### NSR (uses tableCleaning, days_first, marker_first and index_first)
 nullSequenceRatio <- function(table, restriction = 548) {
 
   colChecks(table, c("days_first", "marker_first", "index_first"))
