@@ -12,7 +12,7 @@
 #' @param markerId Cohort definition IDs in markerTable to be considered for the analysis.
 #' Change to NULL if all markers are wished to be included.
 #' @param timeGap The time between two initiations of index and marker. Default is 365.
-#' Change to NULL if no constrains are imposed.
+#' Change to Inf if no constrains are imposed.
 #'
 #' @return
 #' A local table with subjectId, indexId, markerId, indexDate, markerDate and firstDate.
@@ -20,6 +20,14 @@
 #'
 #' @examples
 joinCohorts <- function(cdm, indexTable, indexId, markerTable, markerId, timeGap = 365){
+# 1. Check if cdm is found in the global environment
+# 2. Check if indexTable and markerTable are indeed tables in cdm
+# 3. Check if indexId and markerId are indeed in indexTable and markerTable respectively
+# 4. Check if timeGap is a numeric
+# 5. Check if indexIds and markerIds are numerics or NULL.
+# 6. Check if indexTable and markerTable are strings.
+# 7. Check if cdm[[indexTable]] and cdm[[markerTable]] have the four columns (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date) [last one is not necessary so it's up to you Berta.]
+
   data <- data.frame()
   if (is.null(indexId)){
     if (is.null(markerId)){
@@ -38,7 +46,7 @@ joinCohorts <- function(cdm, indexTable, indexId, markerTable, markerId, timeGap
       markerCohort <- cdm[[markerTable]] %>% dplyr::filter(.data$cohort_definition_id %in% markerId)
     }
   }
-  if(is.null(timeGap)){
+  if(is.finite(timeGap)){
     for (j in (1:length(markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull()))){
       for (i in (1:length(indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull()))){
         temp <-
