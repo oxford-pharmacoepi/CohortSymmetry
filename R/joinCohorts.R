@@ -101,7 +101,8 @@ joinCohorts <- function(cdm, indexTable, indexId, markerTable, markerId, timeGap
     }
   }
   cdm[["joined_cohorts"]] <- data %>%
-    dplyr::mutate(cdm_name = attr(cdm, "cdm_name"),
-                  timeGap = .env$timeGap)
+    dplyr::mutate(timeGap = .env$timeGap,
+                  cdm_name = attr(cdm, "cdm_name")
+                  )
   return(cdm)
 }
