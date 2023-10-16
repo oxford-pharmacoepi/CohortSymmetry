@@ -62,8 +62,8 @@ generateDrugCohortPSSA <- function(cdm, index, marker, table_name = "pssa", prio
 
   cdm[[table_name]] <- cdm[[table_name]] %>%
     dplyr::collect() %>%
-    dplyr::mutate(cohort_definition_id = dplyr::case_when(.data$cohort_definition_id <= index_length ~ 1,
-                                                          .data$cohort_definition_id > index_length ~ 2)) %>%
+    dplyr::mutate(cohort_definition_id = dplyr::case_when(.data$cohort_definition_id <= .data$index_length ~ 1,
+                                                          .data$cohort_definition_id > .data$index_length ~ 2)) %>%
     dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id)) %>%
     dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
     dplyr::arrange(.data$cohort_start_date, .by_group =T) %>%

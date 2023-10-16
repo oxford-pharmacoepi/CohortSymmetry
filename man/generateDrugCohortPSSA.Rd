@@ -10,8 +10,8 @@ generateDrugCohortPSSA(
   marker,
   table_name = "pssa",
   prior_obs = 365,
-  start_date,
-  end_date
+  start_date = NA,
+  end_date = NA
 )
 }
 \arguments{
