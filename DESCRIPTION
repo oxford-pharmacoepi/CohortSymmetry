@@ -1,5 +1,5 @@
-Package: PSSA
-Title: Prescription Sequence Symmetry Analysis using OMOP CDM (Common Data Model)
+Package: CohortSymmetry
+Title: Sequence Symmetry Analysis using OMOP CDM (Common Data Model)
 Version: 0.0.0.9000
 Authors@R: 
     person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),

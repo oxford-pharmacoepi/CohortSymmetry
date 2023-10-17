@@ -1,3 +1,3 @@
-# PSSA
+# CohortSymmetry
 
-devtools::install_github("oxford-pharmacoepi/PSSA")
+devtools::install_github("oxford-pharmacoepi/CohortSymmetry")
