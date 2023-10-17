@@ -27,6 +27,7 @@ joinCohorts <- function(cdm, indexTable, indexId, markerTable, markerId, timeGap
 # 5. Check if indexIds and markerIds are numerics or NULL.
 # 6. Check if indexTable and markerTable are strings.
 # 7. Check if cdm[[indexTable]] and cdm[[markerTable]] have the four columns (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date) [last one is not necessary so it's up to you Berta.]
+# 8. Check if per cohort_definition_id, there is at most one person.
 
   data <- data.frame()
   if (is.null(indexId)){
@@ -68,7 +69,8 @@ joinCohorts <- function(cdm, indexTable, indexId, markerTable, markerId, timeGap
           dplyr::filter(!.data$gap==0) %>%
           dplyr::filter(-.env$timeGap <= .data$gap & .data$gap <= .env$timeGap) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate))
+          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate))%>%
+          dplyr::collect()
 
         data <- rbind(data, temp)
       }
@@ -94,7 +96,7 @@ joinCohorts <- function(cdm, indexTable, indexId, markerTable, markerId, timeGap
           dplyr::mutate(gap = .data$markerDate - .data$indexDate) %>%
           dplyr::filter(!.data$gap==0) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate))
+          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T))
 
         data <- rbind(data, temp)
       }
