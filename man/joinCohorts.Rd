@@ -20,7 +20,7 @@ Change to NULL if all indices are wished to be included.}
 Change to NULL if all markers are wished to be included.}
 
 \item{timeGap}{The time between two initiations of index and marker. Default is 365.
-Change to NULL if no constrains are imposed.}
+Change to Inf if no constrains are imposed.}
 }
 \value{
 A local table with subjectId, indexId, markerId, indexDate, markerDate and firstDate.
