@@ -9,8 +9,11 @@ License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Suggests:
+    testthat (>= 3.1.5)
 Imports: 
     CDMConnector,
+    DBI (>= 1.0.0),
     CodelistGenerator,
     dplyr,
     DrugUtilisation,
