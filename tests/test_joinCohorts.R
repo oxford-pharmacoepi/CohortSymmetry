@@ -5,7 +5,7 @@ connectionDetails<- list(
 )
 
 
-test_that("test cohort tables and ids", {
+testthat::test_that("test cohort tables and ids", {
   library(CohortSymmetry)
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 2, 2, 1),
