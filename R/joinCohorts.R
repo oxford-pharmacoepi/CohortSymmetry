@@ -19,7 +19,7 @@
 #' @export
 #'
 #' @examples
-joinCohorts <- function(cdm, indexTable, indexId, markerTable, markerId, timeGap = 365){
+joinCohorts <- function(cdm, indexTable, indexId = NULL, markerTable, markerId = NULL, timeGap = 365){
 # 1. Check if cdm is found in the global environment
 # 2. Check if indexTable and markerTable are indeed tables in cdm
 # 3. Check if indexId and markerId are indeed in indexTable and markerTable respectively
@@ -69,7 +69,7 @@ joinCohorts <- function(cdm, indexTable, indexId, markerTable, markerId, timeGap
           dplyr::filter(!.data$gap==0) %>%
           dplyr::filter(-.env$timeGap <= .data$gap & .data$gap <= .env$timeGap) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate))%>%
+          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T))%>%
           dplyr::collect()
 
         data <- rbind(data, temp)
