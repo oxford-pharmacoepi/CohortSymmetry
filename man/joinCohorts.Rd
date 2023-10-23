@@ -4,7 +4,14 @@
 \alias{joinCohorts}
 \title{Table joining prior to calculating Sequence Symmetry Ratios}
 \usage{
-joinCohorts(cdm, indexTable, indexId, markerTable, markerId, timeGap = 365)
+joinCohorts(
+  cdm,
+  indexTable,
+  indexId = NULL,
+  markerTable,
+  markerId = NULL,
+  timeGap = 365
+)
 }
 \arguments{
 \item{cdm}{A CDM reference.}

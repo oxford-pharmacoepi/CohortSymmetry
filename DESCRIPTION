@@ -10,11 +10,11 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests:
-    testthat (>= 3.1.5)
+    testthat (>= 3.1.5),
+    DBI (>= 1.0.0),
+    duckdb
 Imports: 
     CDMConnector,
-    DBI (>= 1.0.0),
-    duckdb,
     CodelistGenerator,
     dplyr,
     DrugUtilisation,
@@ -26,3 +26,4 @@ Imports:
     rlang,
     tibble,
     tidyr
+Config/testthat/edition: 3

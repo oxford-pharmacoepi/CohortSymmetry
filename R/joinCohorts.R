@@ -48,8 +48,8 @@ joinCohorts <- function(cdm, indexTable, indexId = NULL, markerTable, markerId =
     }
   }
   if(is.finite(timeGap)){
-    for (j in (1:length(markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull()))){
-      for (i in (1:length(indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull()))){
+    for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
+      for (i in (indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
         temp <-
           indexCohort %>%
           dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date) %>%
