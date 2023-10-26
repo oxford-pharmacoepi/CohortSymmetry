@@ -69,7 +69,7 @@ joinCohorts <- function(cdm, indexTable, indexId = NULL, markerTable, markerId =
           dplyr::filter(!.data$gap==0) %>%
           dplyr::filter(-.env$timeGap <= .data$gap & .data$gap <= .env$timeGap) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T))%>%
+          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T)) %>%
           dplyr::collect()
 
         data <- rbind(data, temp)
@@ -96,7 +96,8 @@ joinCohorts <- function(cdm, indexTable, indexId = NULL, markerTable, markerId =
           dplyr::mutate(gap = .data$markerDate - .data$indexDate) %>%
           dplyr::filter(!.data$gap==0) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T))
+          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T)) %>%
+          dplyr::collect()
 
         data <- rbind(data, temp)
       }
