@@ -133,6 +133,18 @@ test_that("test cohort tables and ids", {
   expect_false(2 %in% (cdm$joined_cohorts %>% dplyr::pull(indexId)))
   expect_false(3 %in% (cdm$joined_cohorts %>% dplyr::pull(indexId)))
 
+  cdm <- joinCohorts(cdm,
+                     indexTable ="cohort1",
+                     markerTable = "cohort2",
+                     markerId = 1
+  )
+
+  expect_true((nrow(cdm$joined_cohorts %>% dplyr::filter(indexId==1 & markerId==1)) == 2) &
+                (nrow(cdm$joined_cohorts %>% dplyr::filter(indexId==3 & markerId==1)) == 1))
+
+  expect_false(2 %in% (cdm$joined_cohorts %>% dplyr::pull(markerId)))
+  expect_false(3 %in% (cdm$joined_cohorts %>% dplyr::pull(markerId)))
+
   # subset Ids vs subset Ids
   cdm <- joinCohorts(cdm,
                      indexTable ="cohort1",
@@ -148,5 +160,24 @@ test_that("test cohort tables and ids", {
 
   expect_false(3 %in% (cdm$joined_cohorts %>% dplyr::pull(indexId)))
   expect_false(1 %in% (cdm$joined_cohorts %>% dplyr::pull(markerId)))
+
+  # timeGap finiteness
+  cdm <- joinCohorts(cdm,
+                     indexTable ="cohort1",
+                     indexId = 1,
+                     markerTable = "cohort2",
+                     markerId = 3
+  )
+  expect_true(nrow(cdm$joined_cohorts) == 2) # default time, 2 entries
+
+  cdm <- joinCohorts(cdm,
+                     indexTable ="cohort1",
+                     indexId = 1,
+                     markerTable = "cohort2",
+                     markerId = 3,
+                     timeGap = Inf
+  )
+  expect_true(nrow(cdm$joined_cohorts) == 4)
+
   DBI::dbDisconnect(attr(cdm, "dbcon"), shutdown = TRUE)
 })
