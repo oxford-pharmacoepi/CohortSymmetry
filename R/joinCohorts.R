@@ -96,8 +96,12 @@ joinCohorts <- function(cdm, indexTable, indexId = NULL, markerTable, markerId =
           dplyr::mutate(gap = .data$markerDate - .data$indexDate) %>%
           dplyr::filter(!.data$gap==0) %>%
           dplyr::select(-.data$gap) %>%
+<<<<<<< Updated upstream
           dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T)) %>%
           dplyr::collect()
+=======
+          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T))
+>>>>>>> Stashed changes
 
         data <- rbind(data, temp)
       }
