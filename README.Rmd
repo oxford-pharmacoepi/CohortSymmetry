@@ -105,5 +105,4 @@ cdm <- CohortSymmetry::joinCohorts(cdm,
  
 cdm$joined_cohorts %>%
   dplyr::glimpse()
- 
 ```
