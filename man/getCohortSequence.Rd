@@ -35,6 +35,5 @@ A table in the cdm reference with subject_id, index_id, marker_id, index_date, m
 \description{
 Join two tables in the CDM (one for index and the other for marker cohorts)
 into a new table in the cdm taking into account the maximum time interval between events.
-Index and marker cohorts should be instantiated in advance
-by the user and should only contain first-ever events.
+Index and marker cohorts should be instantiated in advance by the user.
 }

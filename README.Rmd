@@ -87,7 +87,7 @@ cdm$cohort2 %>%
   dplyr::glimpse()
 ```
  
-### Step 1: JoinCohorts
+### Step 1: getCohortSequence
  
 In order to initiate the calculations, the two cohorts tables need to be combined together. The first cohort is considered to be the index cohort while the second is the marker.
  
@@ -95,14 +95,15 @@ This process will filter out the individuals who appeared on both tables accordi
  
 The user also has the freedom to specify more than 1 IDs from either table that can be considered for this process. More concretely, if an user specifies m IDs from the first cohort and n IDs from the second cohort, this process will output mn combinations. If IDs are not specified then all IDs will be considered.
  
-```{r Step 1: joinCohorts}
+```{r Step 1: getCohortSequence}
 library(CohortSymmetry)
  
-cdm <- CohortSymmetry::joinCohorts(cdm,
+cdm <- CohortSymmetry::getCohortSequence(cdm,
                    indexTable ="cohort1",
                    markerTable = "cohort2",
-                   timeGap = 3650)
+                   timeGap = Inf)
  
 cdm$joined_cohorts %>%
   dplyr::glimpse()
+ 
 ```

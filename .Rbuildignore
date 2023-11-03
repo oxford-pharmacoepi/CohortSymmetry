@@ -1,4 +1,6 @@
-^.*\.Rproj$
+^CohortSymmetry\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
-^README.Rmd
+^LICENSE\.md$
+^\.github$
+^LICENSE

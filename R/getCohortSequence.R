@@ -2,8 +2,7 @@
 #' @description
 #' Join two tables in the CDM (one for index and the other for marker cohorts)
 #' into a new table in the cdm taking into account the maximum time interval between events.
-#' Index and marker cohorts should be instantiated in advance
-#' by the user and should only contain first-ever events.
+#' Index and marker cohorts should be instantiated in advance by the user.
 #' @param cdm A CDM reference.
 #' @param indexTable A table in the CDM that the index cohorts should come from.
 #' @param indexId Cohort definition IDs in indexTable to be considered for the analysis.
