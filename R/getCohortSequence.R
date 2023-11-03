@@ -1,4 +1,4 @@
-#' Table joining prior to calculating Sequence Symmetry Ratios
+#' Intersecting the index and marker cohorts prior to calculating Sequence Symmetry Ratios
 #' @description
 #' Join two tables in the CDM (one for index and the other for marker cohorts)
 #' into a new table in the cdm taking into account the maximum time interval between events.
@@ -15,21 +15,20 @@
 #' Change to Inf if no constrains are imposed.
 #'
 #' @return
-#' A local table with subjectId, indexId, markerId, indexDate, markerDate and firstDate.
+#' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date, time_gap and cdm_name.
 #' @export
 #'
 #' @examples
-joinCohorts <- function(cdm, indexTable, indexId = NULL, markerTable, markerId = NULL, timeGap = 365){
-# 1. Check if cdm is found in the global environment
-# 2. Check if indexTable and markerTable are indeed tables in cdm
-# 3. Check if indexId and markerId are indeed in indexTable and markerTable respectively
-# 4. Check if timeGap is a numeric
-# 5. Check if indexIds and markerIds are numerics or NULL.
-# 6. Check if indexTable and markerTable are strings.
-# 7. Check if cdm[[indexTable]] and cdm[[markerTable]] have the four columns (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date) [last one is not necessary so it's up to you Berta.]
-# 8. Check if per cohort_definition_id, there is at most one person.
+getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, markerId = NULL, timeGap = 365){
+  # 1. Check if cdm is found in the global environment
+  # 2. Check if indexTable and markerTable are indeed tables in cdm
+  # 3. Check if indexId and markerId are indeed in indexTable and markerTable respectively
+  # 4. Check if timeGap is a numeric
+  # 5. Check if indexIds and markerIds are numerics or NULL.
+  # 6. Check if indexTable and markerTable are strings.
+  # 7. Check if cdm[[indexTable]] and cdm[[markerTable]] have the four columns (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date) [last one is not necessary so it's up to you Berta.]
 
-  data <- data.frame()
+  temp <- list()
   if (is.null(indexId)){
     if (is.null(markerId)){
       indexCohort <- cdm[[indexTable]]
@@ -50,62 +49,61 @@ joinCohorts <- function(cdm, indexTable, indexId = NULL, markerTable, markerId =
   if(is.finite(timeGap)){
     for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
       for (i in (indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
-        temp <-
+        temp[[(2^i)*(3^j)]] <-
           indexCohort %>%
           dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date) %>%
           dplyr::filter(.data$cohort_definition_id == i) %>%
-          dplyr::rename(indexId = .data$cohort_definition_id,
-                        indexDate = .data$cohort_start_date,
-                        subjectId = .data$subject_id) %>%
+          dplyr::rename(index_id = .data$cohort_definition_id,
+                        index_date = .data$cohort_start_date,
+                        subject_id = .data$subject_id) %>%
           dplyr::inner_join(markerCohort %>%
                               dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date) %>%
                               dplyr::filter(.data$cohort_definition_id == j) %>%
-                              dplyr::rename(markerId = .data$cohort_definition_id,
-                                            markerDate = .data$cohort_start_date,
-                                            subjectId = .data$subject_id),
-                            by = "subjectId") %>%
-          dplyr::select(.data$subjectId, .data$indexId, .data$markerId, .data$indexDate, .data$markerDate) %>%
-          dplyr::mutate(gap = .data$markerDate - .data$indexDate) %>%
+                              dplyr::rename(marker_id = .data$cohort_definition_id,
+                                            marker_date = .data$cohort_start_date,
+                                            subject_id = .data$subject_id),
+                            by = "subject_id") %>%
+          dplyr::select(.data$subject_id, .data$index_id, .data$marker_id, .data$index_date, .data$marker_date) %>%
+          dplyr::mutate(gap = .data$marker_date - .data$index_date) %>%
           dplyr::filter(!.data$gap==0) %>%
           dplyr::filter(-.env$timeGap <= .data$gap & .data$gap <= .env$timeGap) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T))%>%
-          dplyr::collect()
-
-        data <- rbind(data, temp)
+          dplyr::mutate(first_date = pmin(.data$index_date, .data$marker_date, na.rm = T))%>%
+          dplyr::compute()
       }
     }
   } else {
     for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
       for (i in (indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
-        temp <-
+        temp[[(2^i)*(3^j)]] <-
           indexCohort %>%
           dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date) %>%
           dplyr::filter(.data$cohort_definition_id == i) %>%
-          dplyr::rename(indexId = .data$cohort_definition_id,
-                        indexDate = .data$cohort_start_date,
-                        subjectId = .data$subject_id) %>%
+          dplyr::rename(index_id = .data$cohort_definition_id,
+                        index_date = .data$cohort_start_date,
+                        subject_id = .data$subject_id) %>%
           dplyr::inner_join(markerCohort %>%
                               dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date) %>%
                               dplyr::filter(.data$cohort_definition_id == j) %>%
-                              dplyr::rename(markerId = .data$cohort_definition_id,
-                                            markerDate = .data$cohort_start_date,
-                                            subjectId = .data$subject_id),
-                            by = "subjectId") %>%
-          dplyr::select(.data$subjectId, .data$indexId, .data$markerId, .data$indexDate, .data$markerDate) %>%
-          dplyr::mutate(gap = .data$markerDate - .data$indexDate) %>%
+                              dplyr::rename(marker_id = .data$cohort_definition_id,
+                                            marker_date = .data$cohort_start_date,
+                                            subject_id = .data$subject_id),
+                            by = "subject_id") %>%
+          dplyr::select(.data$subject_id, .data$index_id, .data$marker_id, .data$index_date, .data$marker_date) %>%
+          dplyr::mutate(gap = .data$marker_date - .data$index_date) %>%
           dplyr::filter(!.data$gap==0) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(firstDate = pmin(.data$indexDate, .data$markerDate, na.rm = T)) %>%
-          dplyr::collect()
-
-        data <- rbind(data, temp)
+          dplyr::mutate(first_date = pmin(.data$index_date, .data$marker_date, na.rm = T))%>%
+          dplyr::compute()
       }
     }
   }
+  temp <- temp[!sapply(temp, is.null)]
+  data <- Reduce(dplyr::union_all, temp)
+  cdm_name <- attr(cdm, "cdm_name")
   cdm[["joined_cohorts"]] <- data %>%
-    dplyr::mutate(timeGap = .env$timeGap,
-                  cdm_name = attr(cdm, "cdm_name")
-                  )
+    dplyr::mutate(time_gap = .env$timeGap,
+                  cdm_name = cdm_name
+    )
   return(cdm)
 }
