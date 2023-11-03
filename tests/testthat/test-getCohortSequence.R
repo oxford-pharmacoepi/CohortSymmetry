@@ -73,10 +73,11 @@ test_that("mock db: one ID against one ID, example 1", {
                      markerId=1)
   # check number of rows (timeGap=365d)
   expect_true((cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n)) == 2)
-  expect_true(all(abs(cdm$joined_cohorts$marker_date - cdm$joined_cohorts$index_date) <= 365))
+  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
 
   # check first Date
-  expect_true(all(cdm$joined_cohorts$first_date == pmin(cdm$joined_cohorts$index_date, cdm$joined_cohorts$marker_date)))
+  expect_true(all(loc$first_date == pmin(loc$index_date, loc$marker_date)))
 }
 )
 
@@ -88,7 +89,8 @@ test_that("mock db: one ID against one ID, example 2", {
                      markerTable = "cohort2",
                      markerId=2)
   # check number of rows (timeGap=365d)
-  expect_true(all(abs(cdm$joined_cohorts$marker_date - cdm$joined_cohorts$index_date) <= 365))
+  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
   expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==2 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n)) == 1)
   # we should have one row for subject id 2
 }
@@ -103,7 +105,8 @@ test_that("mock db: one ID against one ID, example 3", {
                      markerId=2)
 
   # check number of rows (timeGap=365d)
-  expect_true(all(abs(cdm$joined_cohorts$marker_date - cdm$joined_cohorts$index_date) <= 365))
+  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
   expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n))== 3)
 }
 )
@@ -117,7 +120,8 @@ test_that("mock db: change timeGap", {
                      markerId=2,
                      timeGap = 30)
 
-  expect_true(all(abs(cdm$joined_cohorts$marker_date - cdm$joined_cohorts$index_date) <= 30))
+  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  expect_true(all(abs(loc$marker_date - loc$index_date) <= 30))
   expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr:: tally() %>% dplyr:: pull(n)) == 1)
 }
 )
@@ -131,7 +135,8 @@ test_that("mock db: all IDs against all IDs", {
 
 
   # check number of rows (timeGap=90d)
-  expect_true(all(abs(cdm$joined_cohorts$marker_date - cdm$joined_cohorts$index_date) <= 90))
+  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  expect_true(all(abs(loc$marker_date - loc$index_date) <= 90))
   expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==1) %>% dplyr::tally() %>% dplyr::pull(n)) == 1 &
                 (cdm$joined_cohorts %>% dplyr::filter(index_id==2 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n)) == 1)
   # check the total number of combinations, should be 5
