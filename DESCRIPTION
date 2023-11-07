@@ -15,11 +15,8 @@ Suggests:
     duckdb,
     cli,
     checkmate
-
 Imports: 
     CDMConnector,
-    DBI (>= 1.0.0),
-    duckdb,
     CodelistGenerator,
     dplyr,
     DrugUtilisation,
@@ -31,3 +28,4 @@ Imports:
     rlang,
     tibble,
     tidyr
+Config/testthat/edition: 3

@@ -53,9 +53,6 @@ getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, mark
   checktimeGap(timeGap)
 
 
-
-
-
   temp <- list()
   if (is.null(indexId)){
     if (is.null(markerId)){
