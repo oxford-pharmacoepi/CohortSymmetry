@@ -14,7 +14,6 @@ getPSSA <- function(cdm,
                     end_date = NA # set both as NA for full
 ){
   if (!is.null(cohort_table)){
-    colChecks(cohort_table, c("cohort_definition_id", "subject_id", "cohort_start_date"))
     table <- cohort_table
   } else {
     table <- generateDrugCohortPSSA(cdm = cdm, index = index, marker = marker, table_name = table_name, prior_obs = prior_obs, start_date = start_date, end_date = end_date)
