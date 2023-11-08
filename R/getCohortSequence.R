@@ -19,13 +19,39 @@
 #'
 #' @examples
 getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, markerId = NULL, timeGap = 365){
-  # 1. Check if cdm is found in the global environment
-  # 2. Check if indexTable and markerTable are indeed tables in cdm
-  # 3. Check if indexId and markerId are indeed in indexTable and markerTable respectively
-  # 4. Check if timeGap is a numeric
-  # 5. Check if indexIds and markerIds are numerics or NULL.
-  # 6. Check if indexTable and markerTable are strings.
-  # 7. Check if cdm[[indexTable]] and cdm[[markerTable]] have the four columns (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date) [last one is not necessary so it's up to you Berta.]
+
+  # Check cdm objects, writing schema and index/marker tables
+  checkCdm(cdm, tables=c(indexTable, markerTable))
+  assertWriteSchema(cdm)
+
+
+  # Check markerId and indexId
+  check_marker_id <- is.numeric(markerId)
+  if(!is.null(markerId)){
+    if(!isTRUE(check_marker_id)){
+      cli::cli_abort("markerId must be of type 'numeric'")
+    }
+  }
+
+  check_index_id <- is.numeric(indexId)
+  if(!is.null(indexId)){
+    if(!isTRUE(check_index_id)){
+      cli::cli_abort("indexId must be of type 'numeric'")
+    }
+  }
+
+  # Checks that Index and Marker ids exist in Index and Marker tables
+  checkCohortIds(cdm,indexTable,indexId)
+  checkCohortIds(cdm,markerTable,markerId)
+
+  # Checks columns in Index and Marker tables
+  checkColumns(cdm,indexTable)
+  checkColumns(cdm,markerTable)
+
+  # Check timeGap
+  # Should we add a max upper limit for time Gap??
+  checktimeGap(timeGap)
+
 
   temp <- list()
   if (is.null(indexId)){
