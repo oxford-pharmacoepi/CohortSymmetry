@@ -1,6 +1,5 @@
 # CI
 getConfidenceInterval <- function(table, confidence_interval_level = 0.025){
-  colChecks(table, c("marker_first", "index_first"))
 
   counts <- tibble::tibble(
     index_first = table %>% dplyr::pull(.data$index_first) %>% sum(),

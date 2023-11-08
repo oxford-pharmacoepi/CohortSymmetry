@@ -1,8 +1,6 @@
 ### NSR (uses tableCleaning, days_first, marker_first and index_first)
 nullSequenceRatio <- function(table, restriction = 548) {
 
-  colChecks(table, c("days_first", "marker_first", "index_first"))
-
   n_index_before_marker <- table %>% dplyr::pull(.data$index_first) %>% sum()
   n_marker_before_index <- table %>% dplyr::pull(.data$marker_first) %>% sum()
 

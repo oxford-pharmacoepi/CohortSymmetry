@@ -55,7 +55,7 @@ checktimeGap <- function(timeGap){
   if (timeGap != Inf) {
   checkmate::assertIntegerish(
     timeGap,
-    lower = 1, upper = Inf, any.missing = FALSE, len = 1,
+    lower = 1, any.missing = FALSE, max.len = 4,
     null.ok = TRUE
   )
   }

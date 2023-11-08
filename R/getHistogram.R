@@ -1,5 +1,4 @@
 getHistogram <- function (pssa_output, time_scale = "weeks"){
-  colChecks(pssa_output[[1]], c("dateIndexDrug", "dateMarkerDrug"))
   # added in additional columns that calculate gap in days/weeks/months etc
   table <- pssa_output[[1]]
   prep <- table %>%
