@@ -48,8 +48,7 @@ getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, mark
   checkColumns(cdm,indexTable)
   checkColumns(cdm,markerTable)
 
-  # Check timeGap
-  # Should we add a max upper limit for time Gap??
+  # Check timeGapx
   checktimeGap(timeGap)
 
 
