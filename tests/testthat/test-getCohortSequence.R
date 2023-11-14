@@ -51,6 +51,21 @@ cdm <-
     cohort2 = markerCohort
   )
 
+# check output table name
+test_that("mock db: check output table name", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           name = "output",
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2")
+  expect_null(cdm$joined_cohorts)
+  expect_true(all(
+    c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
+      "first_date", "cdm_name") %in%
+      colnames(cdm$output)
+  ))
+}
+)
+
 # check colnames
 test_that("mock db: check output format", {
   cdm <- CohortSymmetry::getCohortSequence(cdm,
@@ -58,7 +73,7 @@ test_that("mock db: check output format", {
                      markerTable = "cohort2")
   expect_true(all(
     c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
-      "first_date", "time_gap", "cdm_name") %in%
+      "first_date", "cdm_name") %in%
       colnames(cdm$joined_cohorts)
   ))
 }

@@ -6,6 +6,7 @@
 \usage{
 getCohortSequence(
   cdm,
+  name = "joined_cohorts",
   indexTable,
   indexId = NULL,
   markerTable,
@@ -15,6 +16,8 @@ getCohortSequence(
 }
 \arguments{
 \item{cdm}{A CDM reference.}
+
+\item{name}{the name within the cdm that the output is called. Default is joined_cohorts}
 
 \item{indexTable}{A table in the CDM that the index cohorts should come from.}
 
@@ -30,7 +33,7 @@ Change to NULL if all markers are wished to be included.}
 Change to Inf if no constrains are imposed.}
 }
 \value{
-A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date, time_gap and cdm_name.
+A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
 }
 \description{
 Join two tables in the CDM (one for index and the other for marker cohorts)

@@ -5,6 +5,7 @@
 #' Index and marker cohorts should be instantiated in advance by the user.
 #' @param cdm A CDM reference.
 #' @param indexTable A table in the CDM that the index cohorts should come from.
+#' @param name the name within the cdm that the output is called. Default is joined_cohorts
 #' @param indexId Cohort definition IDs in indexTable to be considered for the analysis.
 #' Change to NULL if all indices are wished to be included.
 #' @param markerTable A table in the CDM that the marker cohorts should come from.
@@ -14,11 +15,11 @@
 #' Change to Inf if no constrains are imposed.
 #'
 #' @return
-#' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date, time_gap and cdm_name.
+#' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
 #' @export
 #'
 #' @examples
-getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, markerId = NULL, timeGap = 365){
+getCohortSequence <- function(cdm, name = "joined_cohorts", indexTable, indexId = NULL, markerTable, markerId = NULL, timeGap = 365){
 
   # Check cdm objects, writing schema and index/marker tables
   checkCdm(cdm, tables=c(indexTable, markerTable))
@@ -50,7 +51,6 @@ getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, mark
 
   # Check timeGapx
   checktimeGap(timeGap)
-
 
   temp <- list()
   if (is.null(indexId)){
@@ -127,11 +127,8 @@ getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, mark
     }
   }
   temp <- temp[!sapply(temp, is.null)]
-  data <- Reduce(dplyr::union_all, temp)
   cdm_name <- attr(cdm, "cdm_name")
-  cdm[["joined_cohorts"]] <- data %>%
-    dplyr::mutate(time_gap = .env$timeGap,
-                  cdm_name = cdm_name
-    )
+  cdm[[name]] <- Reduce(dplyr::union_all, temp) %>%
+    dplyr::mutate(cdm_name = cdm_name)
   return(cdm)
 }
