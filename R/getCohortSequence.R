@@ -88,12 +88,14 @@ getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, mark
                                             subject_id = .data$subject_id),
                             by = "subject_id") %>%
           dplyr::select(.data$subject_id, .data$index_id, .data$marker_id, .data$index_date, .data$marker_date) %>%
-          dplyr::mutate(gap = .data$marker_date - .data$index_date) %>%
+          dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
+                                                       interval = "day")) %>%
           dplyr::filter(!.data$gap==0) %>%
           dplyr::filter(-.env$timeGap <= .data$gap & .data$gap <= .env$timeGap) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(first_date = pmin(.data$index_date, .data$marker_date, na.rm = T))%>%
-          dplyr::compute()
+          dplyr::mutate(first_date = dplyr::if_else(.data$index_date<=.data$marker_date,
+                                                    .data$index_date, .data$marker_date)) %>%
+          CDMConnector::computeQuery()
       }
     }
   } else {
@@ -114,11 +116,13 @@ getCohortSequence <- function(cdm, indexTable, indexId = NULL, markerTable, mark
                                             subject_id = .data$subject_id),
                             by = "subject_id") %>%
           dplyr::select(.data$subject_id, .data$index_id, .data$marker_id, .data$index_date, .data$marker_date) %>%
-          dplyr::mutate(gap = .data$marker_date - .data$index_date) %>%
+          dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
+                                                       interval = "day")) %>%
           dplyr::filter(!.data$gap==0) %>%
           dplyr::select(-.data$gap) %>%
-          dplyr::mutate(first_date = pmin(.data$index_date, .data$marker_date, na.rm = T))%>%
-          dplyr::compute()
+          dplyr::mutate(first_date = dplyr::if_else(.data$index_date<=.data$marker_date,
+                                                    .data$index_date, .data$marker_date)) %>%
+          CDMConnector::computeQuery()
       }
     }
   }
