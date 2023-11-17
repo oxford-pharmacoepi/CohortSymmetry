@@ -222,14 +222,14 @@ test_that("mock db: example of timeGap being infinite", {
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 2) # default time, 2 entries
 
-  # cdm <- CohortSymmetry::getCohortSequence(cdm,
-  #                    indexTable ="cohort1",
-  #                    indexId = 1,
-  #                    markerTable = "cohort2",
-  #                    markerId = 3,
-  #                    timeGap = Inf
-  # )
-  # expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                     indexTable ="cohort1",
+                     indexId = 1,
+                     markerTable = "cohort2",
+                     markerId = 3,
+                     timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
 })
 
 DBI::dbDisconnect(attr(cdm, "dbcon"), shutdown = TRUE)
