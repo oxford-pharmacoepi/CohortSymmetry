@@ -40,7 +40,6 @@ getCohortSequence <- function(cdm,
                               firstEver = T){
 
   # change daysPriorObservation in the event of Inf
-# 1. daysPriorObservation has to be numeric
 
   if(!isTRUE(firstEver)){
     cli::cli_abort("error")
@@ -79,6 +78,15 @@ getCohortSequence <- function(cdm,
 
   # Check timeGapx
   checktimeGap(timeGap)
+
+  # Check indexWashout
+  checkindexWashout(indexWashout)
+
+  # Check markerWashout
+  checkmarkerWashout(markerWashout)
+
+  # Check daysPriorObservation
+  checkdaysPriorObservation(daysPriorObservation)
 
   # modify dateRange if necessary
   if(any(is.na(dateRange))){

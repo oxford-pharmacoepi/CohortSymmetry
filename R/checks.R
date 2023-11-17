@@ -26,7 +26,6 @@ assertWriteSchema <- function(cdm, call = rlang::env_parent()) {
   }
 }
 
-
 # Checks Index and Marker ids cohorts
 checkCohortIds <- function(cdm,CohortTable, CohortId) {
   if (!is.null(CohortId)) {
@@ -61,3 +60,38 @@ checktimeGap <- function(timeGap){
   }
 }
 
+# Check indexWashout (Inf or numeric)
+checkindexWashout <- function(indexWashout){
+  if (indexWashout != Inf) {
+    checkmate::assertIntegerish(
+      indexWashout,
+      lower = 0, any.missing = FALSE, max.len = 4,
+      null.ok = TRUE
+    )
+  }
+}
+#
+# Check markerWashout (Inf or numeric)
+checkmarkerWashout <- function(markerWashout){
+  if (markerWashout != Inf) {
+    checkmate::assertIntegerish(
+      markerWashout,
+      lower = 0, any.missing = FALSE, max.len = 4,
+      null.ok = TRUE
+    )
+  }
+}
+
+# Check daysPriorObservation (has to be numeric)
+checkdaysPriorObservation <- function(daysPriorObservation){
+  if (daysPriorObservation != Inf) {
+    checkmate::assertIntegerish(
+      daysPriorObservation,
+      lower = 0, any.missing = FALSE, max.len = 4,
+      null.ok = TRUE
+    )
+  }
+  if(!(is.finite(daysPriorObservation))){
+    cli::cli_abort("daysPriorObservation has to be finite")
+  }
+}
