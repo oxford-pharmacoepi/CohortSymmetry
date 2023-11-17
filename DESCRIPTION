@@ -14,16 +14,21 @@ Suggests:
     DBI (>= 1.0.0),
     duckdb,
     cli,
-    checkmate
+    checkmate,
+    odbc, 
+    RPostgres,
+    tidyselect
 Imports: 
     CDMConnector,
     CodelistGenerator,
+    dbplyr,
     dplyr,
     DrugUtilisation,
     ggplot2,
     IncidencePrevalence,
     lubridate,
     magrittr,
+    PatientProfiles,
     plyr,
     rlang,
     tibble,

@@ -1,0 +1,41 @@
+test_that("eunomia - getCohortSequence", {
+
+  if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") {
+    Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+  }
+  if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) {
+    dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+  }
+  if (!CDMConnector::eunomia_is_available()) {
+    invisible(utils::capture.output(CDMConnector::downloadEunomiaData(pathToData = Sys.getenv("EUNOMIA_DATA_FOLDER"))))
+  }
+
+  con <- DBI::dbConnect(duckdb::duckdb(),
+                        dbdir = CDMConnector::eunomia_dir())
+  cdm <- CDMConnector::cdm_from_con(con, cdm_schema = "main", write_schema = "main")
+
+  index_drug <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm,
+                                                          name = "celecoxib")
+  marker_drug <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm,
+                                                           name = "aspirin")
+
+  cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
+    cdm = cdm,
+    name = "cohort1",
+    conceptSet = index_drug
+  )
+  cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
+    cdm = cdm,
+    name = "cohort2",
+    conceptSet = marker_drug
+  )
+
+  expect_no_error(cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           timeGap = Inf))
+
+ expect_true(nrow(cdm$joined_cohorts %>% dplyr::collect()) > 0)
+
+  CDMConnector::cdm_disconnect(cdm)
+})

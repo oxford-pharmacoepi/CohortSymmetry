@@ -7,17 +7,25 @@
 getCohortSequence(
   cdm,
   name = "joined_cohorts",
+  dateRange = as.Date(c(NA, NA)),
   indexTable,
   indexId = NULL,
   markerTable,
   markerId = NULL,
-  timeGap = 365
+  daysPriorObservation = 0,
+  indexWashout = 0,
+  markerWashout = 0,
+  timeGap = 365,
+  firstEver = T
 )
 }
 \arguments{
 \item{cdm}{A CDM reference.}
 
-\item{name}{the name within the cdm that the output is called. Default is joined_cohorts}
+\item{name}{the name within the cdm that the output is called. Default is joined_cohorts.}
+
+\item{dateRange}{Two dates indicating study period and the sequences that the user wants
+to restrict to.}
 
 \item{indexTable}{A table in the CDM that the index cohorts should come from.}
 
@@ -29,8 +37,18 @@ Change to NULL if all indices are wished to be included.}
 \item{markerId}{Cohort definition IDs in markerTable to be considered for the analysis.
 Change to NULL if all markers are wished to be included.}
 
+\item{daysPriorObservation}{The minimum amount of prior observation required on both the index
+and marker cohorts per person.}
+
+\item{indexWashout}{Washout period to be applied to the index cohort event.}
+
+\item{markerWashout}{Washout period to be applied to the marker cohort event.}
+
 \item{timeGap}{The time between two initiations of index and marker. Default is 365.
 Change to Inf if no constrains are imposed.}
+
+\item{firstEver}{If TRUE then the first sequence is considered followed by assessing its eligibility.
+If false then all eligible sequences are assessed and then the first one is picked.}
 }
 \value{
 A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
