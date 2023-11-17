@@ -228,7 +228,11 @@ test_that("mock db: example of timeGap being infinite", {
                      markerId = 3,
                      timeGap = Inf
   )
+<<<<<<< Updated upstream
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 4)
+=======
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
+>>>>>>> Stashed changes
 })
 
 DBI::dbDisconnect(attr(cdm, "dbcon"), shutdown = TRUE)
