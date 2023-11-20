@@ -458,6 +458,7 @@ test_that("mock db: example of multiple entries per person - index washout (shou
                                            timeGap = Inf
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  index_date <- cdm$joined_cohorts %>% dplyr::pull(index_date)
   test_index <- cdm$cohort1 %>% dplyr::filter(cohort_start_date<=as.Date(index_date)) %>% dplyr::collect() %>% dplyr::filter(cohort_start_date+365 >= as.Date(index_date)) %>% dplyr::collect()
   expect_true(test_index %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 })
