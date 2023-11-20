@@ -34,16 +34,6 @@ markerCohort <- dplyr::tibble(
   )
 )
 
-attr(indexCohort, "cohort_set") <- dplyr::tibble(
-  cohort_definition_id = c(1, 2, 3),
-  cohort_name = c("amiodarone", "antipsychotics", "CCB")
-)
-
-attr(markerCohort, "cohort_set") <- dplyr::tibble(
-  cohort_definition_id = c(1, 2, 3),
-  cohort_name = c("levothyroxine", "anti-parkinson drugs", "diuretics")
-)
-
 cdm <-
   DrugUtilisation::mockDrugUtilisation(
     connectionDetails,
@@ -232,7 +222,7 @@ test_that("mock db: example of timeGap being infinite", {
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
 })
 
-################## Involving washout and priorObservation ###################
+################## Involving dateRange and priorObservation ###################
 # priorObservation
 indexCohort <- dplyr::tibble(
   cohort_definition_id = c(1, 1, 1, 1),
@@ -311,70 +301,201 @@ test_that("mock db: example of fixed timeGap being with non-zero daysPriorObserv
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 2)
 })
 
-####################### Unsuccessful examples #################################
-test_that("mock db: unsuccessful examples - Inf prior observation", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable ="cohort1",
-                                                 markerTable = "cohort2",
-                                                 daysPriorObservation = Inf
-  ))
+#dateRange
+test_that("mock db: example of given study period start date", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           dateRange = as.Date(c("2020-01-01", NA)),
+                                           daysPriorObservation = 0,
+                                           timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 2)
+  expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1,4)))
 })
 
-test_that("mock db: unsuccessful examples - indexTable not strings", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = cohort1,
-                                                 markerTable = "cohort2",
-                                                 daysPriorObservation = Inf
-  ))
+test_that("mock db: example of given study period start date wih daysPriorObservation and timeGap", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           dateRange = as.Date(c("2020-01-01", NA)),
+                                           daysPriorObservation = 365,
+                                           timeGap = 365
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(4)))
 })
 
-test_that("mock db: unsuccessful examples - markerTable not strings", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = "cohort1",
-                                                 markerTable = cohort2,
-                                                 daysPriorObservation = Inf
-  ))
+test_that("mock db: example of given study period start date wih daysPriorObservation", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           dateRange = as.Date(c("2000-01-01", "2020-01-01")),
+                                           daysPriorObservation = 365,
+                                           timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 2)
+  expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(3, 10)))
 })
 
-test_that("mock db: unsuccessful examples - daysPriorObservation is not numeric", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = "cohort1",
-                                                 markerTable = "cohort2",
-                                                 daysPriorObservation = "seven"
-  ))
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = "cohort1",
-                                                 markerTable = "cohort2",
-                                                 daysPriorObservation = 2.5
-  ))
+test_that("mock db: example of given study period start date wih daysPriorObservation", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           dateRange = as.Date(c("2000-01-01", "2023-01-01")),
+                                           daysPriorObservation = 365,
+                                           timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
+  expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(3, 4, 10)))
 })
 
-test_that("mock db: unsuccessful examples - Ids outside of range", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = "cohort1",
-                                                 markerTable = "cohort2",
-                                                 indexId = 2
-  ))
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = "cohort1",
-                                                 markerTable = "cohort2",
-                                                 markerId = 2
-  ))
+############################ Involving washouts ################################
+# indexWashout
+indexCohort <- dplyr::tibble(
+  cohort_definition_id = c(1, 1, 1, 1),
+  subject_id = c(3, 3, 3, 3),
+  cohort_start_date = as.Date(
+    c(
+      "2010-04-07", "2010-08-27", "1984-01-01", "2000-01-01"
+    )
+  ),
+  cohort_end_date = as.Date(
+    c(
+      "2010-04-08", "2010-08-27", "1984-01-01", "2000-01-02"
+    )
+  )
+)
+
+markerCohort <- dplyr::tibble(
+  cohort_definition_id = c(1, 1, 1, 1),
+  subject_id = c(3, 3, 3, 3),
+  cohort_start_date = as.Date(
+    c(
+      "2001-04-25", "2010-08-26","2002-01-02", "2006-03-01"
+    )
+  ),
+  cohort_end_date = as.Date(
+    c(
+      "2001-04-25","2010-08-27","2002-05-25", "2006-03-14"
+    )
+  )
+)
+
+cdm <-
+  DrugUtilisation::mockDrugUtilisation(
+    connectionDetails,
+    cohort1 = indexCohort,
+    cohort2 = markerCohort
+  )
+
+test_that("mock db: example of multiple entries per person", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  earliest_index_date <- cdm$cohort1 %>%
+    dbplyr::window_order(cohort_start_date) %>%
+    dplyr::filter(dplyr::row_number()==1) %>%
+    dplyr::pull(cohort_start_date)
+  earliest_marker_date <- cdm$cohort2 %>%
+    dbplyr::window_order(cohort_start_date) %>%
+    dplyr::filter(dplyr::row_number()==1) %>%
+    dplyr::pull(cohort_start_date)
+  expect_true(all(cdm$joined_cohorts %>% dplyr::pull(index_date) == earliest_index_date,
+                  cdm$joined_cohorts %>% dplyr::pull(marker_date) == earliest_marker_date))
 })
 
-test_that("mock db: unsuccessful examples - tables not in the CDM", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = "cohort1",
-                                                 markerTable = "cohort3",
-                                                 indexId = 2
-  ))
+test_that("mock db: example of multiple entries per person - exclusion based on timeGap", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           timeGap = 365
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
 })
 
-test_that("mock db: unsuccessful examples - tables not in the right format", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = "cohort1",
-                                                 markerTable = "drug_exposure"
-  ))
+test_that("mock db: example of multiple entries per person - exclusion based on prior observation", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           daysPriorObservation = 365,
+                                           timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
+})
+
+test_that("mock db: example of multiple entries per person - picking sequence in relation to dateRange", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           dateRange = as.Date(c("2000-01-01", NA)),
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           daysPriorObservation = 365,
+                                           timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  expect_true(cdm$joined_cohorts %>% dplyr::pull(first_date) >= as.Date("2000-01-01"))
+})
+
+test_that("mock db: example of multiple entries per person - picking sequence in relation to dateRange with fixed timeGap", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           dateRange = as.Date(c("2000-01-01", NA)),
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           daysPriorObservation = 365,
+                                           timeGap = 365
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
+})
+
+test_that("mock db: example of multiple entries per person - index washout (shouldn't affect the first event)", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           indexWashout = 365,
+                                           timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  index_date <- cdm$joined_cohorts %>% dplyr::pull(index_date)
+  test_index <- cdm$cohort1 %>% dplyr::filter(cohort_start_date<=as.Date(index_date)) %>% dplyr::collect() %>% dplyr::filter(cohort_start_date+365 >= as.Date(index_date)) %>% dplyr::collect()
+  expect_true(test_index %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+})
+
+test_that("mock db: example of multiple entries per person - exclusion based on marker washout", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           dateRange = as.Date(c("2002-01-01", NA)),
+                                           markerWashout = 365,
+                                           timeGap = Inf
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
+})
+
+test_that("mock db: example of multiple entries per person - all parameters are altered", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           name = "test_1",
+                                           indexTable ="cohort1",
+                                           markerTable = "cohort2",
+                                           dateRange = as.Date(c("2010-01-01", "2020-01-01")),
+                                           indexWashout = 365,
+                                           markerWashout = 365,
+                                           timeGap = 365
+  )
+  expect_null(cdm$joined_cohorts)
+  expect_true(cdm$test_1 %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  expect_true(cdm$test_1 %>% dplyr::pull(first_date) >= as.Date("2010-01-01"))
+  expect_true(cdm$test_1 %>% dplyr::pull(first_date) <= as.Date("2020-01-01"))
+  loc <- cdm$test_1 %>% dplyr::collect()
+  expect_true(abs(loc$marker_date - loc$index_date) <= 365)
+  marker_date <- cdm$test_1 %>% dplyr::pull(marker_date)
+  index_date <- cdm$test_1 %>% dplyr::pull(index_date)
+  test_index <- cdm$cohort1 %>% dplyr::filter(cohort_start_date<=as.Date(index_date)) %>% dplyr::collect() %>% dplyr::filter(cohort_start_date+365 >= as.Date(index_date)) %>% dplyr::collect()
+  expect_true(test_index %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  test_marker <- cdm$cohort2 %>% dplyr::filter(cohort_start_date<=as.Date(marker_date)) %>% dplyr::collect() %>% dplyr::filter(cohort_start_date+365 >= as.Date(marker_date)) %>% dplyr::collect()
+  expect_true(test_marker %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 })
 
 DBI::dbDisconnect(attr(cdm, "dbcon"), shutdown = TRUE)
