@@ -49,44 +49,19 @@ getCohortSequence <- function(cdm,
     timeGap <- 999999999
   }
 
-  # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables=c(indexTable, markerTable))
-  assertWriteSchema(cdm)
-
-  # Check markerId and indexId
-  check_marker_id <- is.numeric(markerId)
-  if(!is.null(markerId)){
-    if(!isTRUE(check_marker_id)){
-      cli::cli_abort("markerId must be of type 'numeric'")
-    }
-  }
-
-  check_index_id <- is.numeric(indexId)
-  if(!is.null(indexId)){
-    if(!isTRUE(check_index_id)){
-      cli::cli_abort("indexId must be of type 'numeric'")
-    }
-  }
-
-  # Checks that Index and Marker ids exist in Index and Marker tables
-  checkCohortIds(cdm,indexTable,indexId)
-  checkCohortIds(cdm,markerTable,markerId)
-
-  # Checks columns in Index and Marker tables
-  checkColumns(cdm,indexTable)
-  checkColumns(cdm,markerTable)
-
-  # Check timeGapx
-  checktimeGap(timeGap)
-
-  # Check indexWashout
-  checkindexWashout(indexWashout)
-
-  # Check markerWashout
-  checkmarkerWashout(markerWashout)
-
-  # Check daysPriorObservation
-  checkdaysPriorObservation(daysPriorObservation)
+  # checks
+  checkInputGetCohortSequence(cdm = cdm,
+                              name = name,
+                              dateRange = dateRange,
+                              indexTable = indexTable,
+                              indexId = indexId,
+                              markerTable = markerTable,
+                              markerId = markerId,
+                              daysPriorObservation = daysPriorObservation,
+                              indexWashout = indexWashout,
+                              markerWashout = markerWashout,
+                              timeGap = timeGap,
+                              firstEver = firstEver)
 
   # modify dateRange if necessary
   if(any(is.na(dateRange))){

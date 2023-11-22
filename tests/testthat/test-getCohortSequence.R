@@ -350,7 +350,7 @@ test_that("mock db: example of given study period start date wih daysPriorObserv
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(3, 4, 10)))
 })
 
-############################ Involving washouts ################################
+################################# Involving washouts ################################
 # indexWashout
 indexCohort <- dplyr::tibble(
   cohort_definition_id = c(1, 1, 1, 1),
@@ -496,6 +496,54 @@ test_that("mock db: example of multiple entries per person - all parameters are 
   expect_true(test_index %>% dplyr::tally() %>% dplyr::pull(n) == 1)
   test_marker <- cdm$cohort2 %>% dplyr::filter(cohort_start_date<=as.Date(marker_date)) %>% dplyr::collect() %>% dplyr::filter(cohort_start_date+365 >= as.Date(marker_date)) %>% dplyr::collect()
   expect_true(test_marker %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+})
+
+# outside of observation period
+indexCohort <- dplyr::tibble(
+  cohort_definition_id = c(1, 2),
+  subject_id = c(1, 2),
+  cohort_start_date = as.Date(
+    c(
+      "2019-09-01", "2020-06-22"
+    )
+  ),
+  cohort_end_date = as.Date(
+    c(
+      "2019-09-08", "2020-06-23"
+    )
+  )
+)
+
+markerCohort <- dplyr::tibble(
+  cohort_definition_id = c(1, 2),
+  subject_id = c(1, 2),
+  cohort_start_date = as.Date(
+    c(
+      "2020-06-22", "2021-06-01"
+    )
+  ),
+  cohort_end_date = as.Date(
+    c(
+      "2020-07-25","2021-08-27"
+    )
+  )
+)
+
+cdm <-
+  DrugUtilisation::mockDrugUtilisation(
+    connectionDetails,
+    cohort1 = indexCohort,
+    cohort2 = markerCohort
+  )
+
+test_that("mock db: example of excluding based on records outside of observation period", {
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           indexId = 1,
+                                           markerTable = "cohort2",
+                                           markerId = 1
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
 })
 
 DBI::dbDisconnect(attr(cdm, "dbcon"), shutdown = TRUE)
