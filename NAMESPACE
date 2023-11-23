@@ -2,6 +2,7 @@
 
 export("%>%")
 export(getCohortSequence)
+export(getSequenceRatios)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)
 importFrom(rlang,.env)

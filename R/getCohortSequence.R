@@ -136,11 +136,13 @@ getCohortSequence <- function(cdm,
     dplyr::filter(abs(.data$gap)<.env$timeGap) %>%
     dplyr::select(-.data$gap) %>%
     dplyr::mutate(first_date = dplyr::if_else(.data$index_date<=.data$marker_date,
+                                              .data$index_date, .data$marker_date),
+                  second_date = dplyr::if_else(.data$index_date>=.data$marker_date,
                                               .data$index_date, .data$marker_date)) %>%
     dplyr::filter(.data$prior_observation_marker >= .env$daysPriorObservation & .data$prior_observation_index >= .env$daysPriorObservation)%>%
     dplyr::filter(.data$gap_to_prior_index >= .env$indexWashout | is.na(.data$gap_to_prior_index)) %>%
     dplyr::filter(.data$gap_to_prior_marker >= .env$markerWashout | is.na(.data$gap_to_prior_marker)) %>%
-    dplyr::select(.data$index_id, .data$marker_id, .data$subject_id, .data$index_date, .data$marker_date, .data$first_date, .data$cdm_name)  %>%
+    dplyr::select(.data$index_id, .data$marker_id, .data$subject_id, .data$index_date, .data$marker_date, .data$first_date, .data$second_date, .data$cdm_name)  %>%
     CDMConnector::computeQuery(name = name,
                                temporary = FALSE,
                                schema = attr(cdm, "write_schema"),

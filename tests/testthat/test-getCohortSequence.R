@@ -83,6 +83,7 @@ test_that("mock db: one ID against one ID, example 1", {
 
   # check first Date
   expect_true(all(loc$first_date == pmin(loc$index_date, loc$marker_date)))
+  expect_true(all(loc$first_date < loc$second_date))
 }
 )
 
@@ -135,9 +136,9 @@ test_that("mock db: change timeGap", {
 test_that("mock db: all IDs against all IDs", {
   # Multiple id
   cdm <- CohortSymmetry::getCohortSequence(cdm,
-                     indexTable ="cohort1",
+                     indexTable = "cohort1",
                      markerTable = "cohort2",
-                     timeGap =90)
+                     timeGap = 90)
 
 
   # check number of rows (timeGap=90d)
