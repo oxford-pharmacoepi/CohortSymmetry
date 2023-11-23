@@ -14,8 +14,7 @@
 #' @examples
 getSequenceRatios <- function(cdm,
                               outcomeTable,
-                              confidence_interval_level = 0.025
-){
+                              confidence_interval_level = 0.025){
 
   temp <- list()
   results <- list()
@@ -54,7 +53,7 @@ getSequenceRatios <- function(cdm,
   results <- results[!sapply(results, is.null)]
   output <- Reduce(dplyr::union_all, results) %>%
     PatientProfiles::addCdmName(cdm) %>%
-    dplyr::select(.data$index_id, .data$marker_id, .data$index_first, .data$marker_first, .data$csr, .data$asr, .data$lowerCI, .data$upperCIM, .data$cdm_name)
+    dplyr::select(.data$index_id, .data$marker_id, .data$index_first, .data$marker_first, .data$csr, .data$asr, .data$lowerCI, .data$upperCI, .data$cdm_name)
 
   return(output)
 }
