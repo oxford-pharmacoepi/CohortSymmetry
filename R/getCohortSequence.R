@@ -37,11 +37,11 @@ getCohortSequence <- function(cdm,
                               indexWashout = 0,
                               markerWashout = 0,
                               timeGap = 365,
-                              firstEver = T){
+                              firstEver = F){
 
   # change daysPriorObservation in the event of Inf
 
-  if(!isTRUE(firstEver)){
+  if(isTRUE(firstEver)){
     cli::cli_abort("error")
   }
 
