@@ -16,7 +16,7 @@ getCohortSequence(
   indexWashout = 0,
   markerWashout = 0,
   timeGap = 365,
-  firstEver = T
+  firstEver = F
 )
 }
 \arguments{
