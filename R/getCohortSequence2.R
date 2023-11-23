@@ -117,6 +117,7 @@ getCohortSequence2 <- function(cdm,
     PatientProfiles::addCdmName() %>%
     dplyr::filter(.data$index_date <= !!dateRange[[2]] & .data$index_date >= !!dateRange[[1]]) %>%
     dplyr::filter(.data$marker_date <= !!dateRange[[2]] & .data$marker_date >= !!dateRange[[1]]) %>%
+    dplyr::select(.data$index_id, .data$marker_id, .data$subject_id, .data$index_date, .data$marker_date, .data$first_date, .data$second_date, .data$cdm_name) %>%
     CDMConnector::computeQuery(name = name,
                                temporary = FALSE,
                                schema = attr(cdm, "write_schema"),
