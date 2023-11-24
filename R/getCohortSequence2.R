@@ -108,7 +108,6 @@ getCohortSequence2 <- function(cdm,
         dplyr::filter(dplyr::row_number()==1) %>%
         dplyr::ungroup() %>%
         dbplyr::window_order() %>%
-        dplyr::select(-.data$second_date) %>%
         CDMConnector::computeQuery()
     }
   }
