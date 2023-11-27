@@ -194,3 +194,17 @@ checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
     cli::cli_abort("daysPriorObservation has to be finite")
   }
 }
+
+# Check confidenceInterval (has to be numeric)
+checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
+  if (daysPriorObservation != Inf) {
+    checkmate::assertIntegerish(
+      daysPriorObservation,
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage,
+      null.ok = TRUE
+    )
+  }
+  if(!(is.finite(daysPriorObservation))){
+    cli::cli_abort("daysPriorObservation has to be finite")
+  }
+}

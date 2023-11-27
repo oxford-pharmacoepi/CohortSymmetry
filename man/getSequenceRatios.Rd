@@ -4,14 +4,14 @@
 \alias{getSequenceRatios}
 \title{Sequence ratio calculations}
 \usage{
-getSequenceRatios(cdm, outcomeTable, confidence_interval_level = 0.025)
+getSequenceRatios(cdm, outcomeTable, confidenceIntervalLevel = 0.025)
 }
 \arguments{
 \item{cdm}{A CDM reference.}
 
 \item{outcomeTable}{A table in the CDM that the output of getCohortSequence resides.}
 
-\item{confidence_interval_level}{Default is 0.025, which is the central 95\% confidence interval.}
+\item{confidenceIntervalLevel}{Default is 0.025, which is the central 95\% confidence interval.}
 }
 \value{
 A local table with all analyses with
