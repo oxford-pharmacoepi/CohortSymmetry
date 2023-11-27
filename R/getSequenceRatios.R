@@ -24,6 +24,15 @@ getSequenceRatios <- function(cdm,
   # check relevant formats of the arguments
   checkmate::assertCharacter(outcomeTable, len = 1, any.missing = FALSE, add = errorMessage)
 
+  # Check confidenceIntervalLevel
+  checkconfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
+  daysCheck <- all(confidenceIntervalLevel >= 0)
+  if (!isTRUE(daysCheck)) {
+    errorMessage$push(
+      "- confidenceIntervalLevel cannot be negative"
+    )
+  }
+
   temp <- list()
   results <- list()
   for (i in (cdm[[outcomeTable]] %>% dplyr::distinct(.data$index_id) %>% dplyr::pull())){
