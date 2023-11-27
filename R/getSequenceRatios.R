@@ -5,7 +5,7 @@
 #'
 #' @param cdm A CDM reference.
 #' @param outcomeTable A table in the CDM that the output of getCohortSequence resides.
-#' @param confidence_interval_level Default is 0.025, which is the central 95% confidence interval.
+#' @param confidenceIntervalLevel Default is 0.025, which is the central 95% confidence interval.
 #'
 #' @return
 #' A local table with all analyses with
@@ -14,7 +14,24 @@
 #' @examples
 getSequenceRatios <- function(cdm,
                               outcomeTable,
-                              confidence_interval_level = 0.025){
+                              confidenceIntervalLevel = 0.025){
+
+  # Check cdm objects, writing schema and index/marker tables
+  checkCdm(cdm, tables=c(outcomeTable))
+  assertWriteSchema(cdm)
+
+  errorMessage <- checkmate::makeAssertCollection()
+  # check relevant formats of the arguments
+  checkmate::assertCharacter(outcomeTable, len = 1, any.missing = FALSE, add = errorMessage)
+
+  # Check confidenceIntervalLevel
+  checkconfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
+  daysCheck <- all(confidenceIntervalLevel >= 0)
+  if (!isTRUE(daysCheck)) {
+    errorMessage$push(
+      "- confidenceIntervalLevel cannot be negative"
+    )
+  }
 
   temp <- list()
   results <- list()
@@ -41,7 +58,7 @@ getSequenceRatios <- function(cdm,
 
       csr<-crudeSequenceRatio(temp[[(2^i)*(3^j)]])
       asr<-adjustedSequenceRatio(temp[[(2^i)*(3^j)]])
-      counts <- getConfidenceInterval(temp[[(2^i)*(3^j)]], confidence_interval_level = confidence_interval_level)
+      counts <- getConfidenceInterval(temp[[(2^i)*(3^j)]], confidence_interval_level = confidenceIntervalLevel)
 
       results[[(2^i)*(3^j)]] <- cbind(tibble::tibble(csr = csr,
                                       asr = asr),

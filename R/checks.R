@@ -194,3 +194,11 @@ checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
     cli::cli_abort("daysPriorObservation has to be finite")
   }
 }
+
+# Check confidenceInterval (has to be numeric)
+checkconfidenceIntervalLevel <- function(checkconfidenceIntervalLevel, errorMessage){
+    checkmate::assertNumeric(
+      checkconfidenceIntervalLevel,
+      lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage, null.ok = TRUE
+    )
+}
