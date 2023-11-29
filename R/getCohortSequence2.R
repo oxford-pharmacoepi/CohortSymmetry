@@ -1,3 +1,20 @@
+# getCohortSequence3 <- function(cdm,
+#                                name = "joined_cohorts",
+#                                dateRange = as.Date(c(NA, NA)),
+#                                indexTable,
+#                                indexId = NULL,
+#                                markerTable,
+#                                markerId = NULL,
+#                                ageGroup = list(c(0, 150)),
+#                                sex = "both",
+#                                daysPriorObservation = 0,
+#                                indexWashout = 0,
+#                                markerWashout = 0,
+#                                timeGap = 365,
+#                                firstEver = T){
+#
+# }
+
 getCohortSequence2 <- function(cdm,
                               name = "joined_cohorts",
                               dateRange = as.Date(c(NA, NA)),
