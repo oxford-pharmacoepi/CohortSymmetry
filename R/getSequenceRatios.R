@@ -6,15 +6,35 @@
 #' @param cdm A CDM reference.
 #' @param outcomeTable A table in the CDM that the output of getCohortSequence resides.
 #' @param confidenceIntervalLevel Default is 0.025, which is the central 95% confidence interval.
+#' @param restriction The moving window when calculating nSR, default is 548.
 #'
 #' @return
-#' A local table with all analyses with
+#' A local table with all the analyses
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' library(PatientProfiles)
+#' cohort1 <-
+#' dplyr::tibble("cohort_definition_id" = c(1,1,1,1,1),
+#' "subject_id" = c(1,2,1,2,1),
+#' "cohort_start_date" = seq(as.Date("2020-05-23"), as.Date("2020-05-27"), by = "day"),
+#' "cohort_end_date" = seq(as.Date("2020-05-24"), as.Date("2020-05-28"), by = "day"))
+#'
+#' cdm <- mockPatientProfiles(cohort1 = cohort1)
+#' cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+#'                                          indexTable = "cohort1",
+#'                                          markerTable = "cohort2")
+#' pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
+#'                                                   outcomeTable = "joined_cohorts")
+#'
+#' pssa_result
+#' }
+#'
 getSequenceRatios <- function(cdm,
                               outcomeTable,
-                              confidenceIntervalLevel = 0.025){
+                              confidenceIntervalLevel = 0.025,
+                              restriction = 548){
 
   # Check cdm objects, writing schema and index/marker tables
   checkCdm(cdm, tables=c(outcomeTable))
@@ -29,7 +49,7 @@ getSequenceRatios <- function(cdm,
   daysCheck <- all(confidenceIntervalLevel >= 0)
   if (!isTRUE(daysCheck)) {
     errorMessage$push(
-      "- confidenceIntervalLevel cannot be negative"
+      " - confidenceIntervalLevel cannot be negative"
     )
   }
 
@@ -57,7 +77,7 @@ getSequenceRatios <- function(cdm,
         dplyr::ungroup()
 
       csr<-crudeSequenceRatio(temp[[(2^i)*(3^j)]])
-      asr<-adjustedSequenceRatio(temp[[(2^i)*(3^j)]])
+      asr<-adjustedSequenceRatio(temp[[(2^i)*(3^j)]], restriction = restriction)
       counts <- getConfidenceInterval(temp[[(2^i)*(3^j)]], confidence_interval_level = confidenceIntervalLevel)
 
       results[[(2^i)*(3^j)]] <- cbind(tibble::tibble(csr = csr,

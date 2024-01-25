@@ -1,6 +1,6 @@
 ### ASR
-adjustedSequenceRatio <- function(table) {
+adjustedSequenceRatio <- function(table, restriction) {
 
-  return(crudeSequenceRatio(table) / nullSequenceRatio(table))
+  return(crudeSequenceRatio(table) / nullSequenceRatio(table, restriction))
 
 }

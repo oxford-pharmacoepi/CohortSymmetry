@@ -26,6 +26,16 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
+#' library(PatientProfiles)
+#' cdm <- mockPatientProfiles()
+#' cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+#'                                          indexTable = "cohort1",
+#'                                          markerTable = "cohort2")
+#' ## default name - joined_cohorts
+#' cdm$joined_cohorts
+#' }
+
 getCohortSequence <- function(cdm,
                               name = "joined_cohorts",
                               dateRange = as.Date(c(NA, NA)),

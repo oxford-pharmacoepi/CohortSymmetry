@@ -4,7 +4,12 @@
 \alias{getSequenceRatios}
 \title{Sequence ratio calculations}
 \usage{
-getSequenceRatios(cdm, outcomeTable, confidenceIntervalLevel = 0.025)
+getSequenceRatios(
+  cdm,
+  outcomeTable,
+  confidenceIntervalLevel = 0.025,
+  restriction = 548
+)
 }
 \arguments{
 \item{cdm}{A CDM reference.}
@@ -12,10 +17,32 @@ getSequenceRatios(cdm, outcomeTable, confidenceIntervalLevel = 0.025)
 \item{outcomeTable}{A table in the CDM that the output of getCohortSequence resides.}
 
 \item{confidenceIntervalLevel}{Default is 0.025, which is the central 95\% confidence interval.}
+
+\item{restriction}{The moving window when calculating nSR, default is 548.}
 }
 \value{
-A local table with all analyses with
+A local table with all the analyses
 }
 \description{
 Using getCohortSequence to obtain sequence ratios for the desired outcomes.
+}
+\examples{
+\donttest{
+library(PatientProfiles)
+cohort1 <-
+dplyr::tibble("cohort_definition_id" = c(1,1,1,1,1),
+"subject_id" = c(1,2,1,2,1),
+"cohort_start_date" = seq(as.Date("2020-05-23"), as.Date("2020-05-27"), by = "day"),
+"cohort_end_date" = seq(as.Date("2020-05-24"), as.Date("2020-05-28"), by = "day"))
+
+cdm <- mockPatientProfiles(cohort1 = cohort1)
+cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+                                         indexTable = "cohort1",
+                                         markerTable = "cohort2")
+pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
+                                                  outcomeTable = "joined_cohorts")
+
+pssa_result
+}
+
 }
