@@ -58,3 +58,14 @@ Join two tables in the CDM (one for index and the other for marker cohorts)
 into a new table in the cdm taking into account the maximum time interval between events.
 Index and marker cohorts should be instantiated in advance by the user.
 }
+\examples{
+\donttest{
+library(PatientProfiles)
+cdm <- mockPatientProfiles()
+cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+                                         indexTable = "cohort1",
+                                         markerTable = "cohort2")
+## default name - joined_cohorts
+cdm$joined_cohorts
+}
+}

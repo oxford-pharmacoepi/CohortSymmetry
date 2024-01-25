@@ -19,3 +19,27 @@ A local table with all analyses with
 \description{
 Using getCohortSequence to obtain sequence ratios for the desired outcomes.
 }
+\examples{
+\donttest{
+library(PatientProfiles)
+cohort1 <- dplyr::tibble("cohort_definition_id" = {set.seed(12345); sample.int(1, 100, replace = TRUE)},
+"subject_id" = {set.seed(12345); sample.int(30, 100, replace = TRUE)},
+"cohort_start_date" = {set.seed(12345); sample(seq(as.Date('2010/01/01'), as.Date('2011/01/01'), by="day"), 100, replace = TRUE)},
+"cohort_end_date" = {set.seed(12345); sample(seq(as.Date('2011/01/01'), as.Date('2012/01/01'), by="day"), 100, replace = TRUE)})
+
+cohort2 <- dplyr::tibble("cohort_definition_id" = {set.seed(12345); sample.int(2, 50, replace = TRUE)},
+"subject_id" = {set.seed(12345); sample.int(20, 50, replace = TRUE)},
+"cohort_start_date" = {set.seed(1234); sample(seq(as.Date('2010/01/01'), as.Date('2011/01/01'), by="day"), 50, replace = TRUE)},
+"cohort_end_date" = {set.seed(1234); sample(seq(as.Date('2011/01/01'), as.Date('2012/01/01'), by="day"), 50, replace = TRUE)})
+
+cdm <- mockPatientProfiles(cohort1 = cohort1, cohort2 = cohort2)
+cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+                                         indexTable = "cohort1",
+                                         markerTable = "cohort2")
+pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
+                                                  outcomeTable = "joined_cohorts")
+
+pssa_result
+}
+
+}
