@@ -21,6 +21,9 @@
 #' Change to Inf if no constrains are imposed.
 #' @param firstEver If TRUE then the first sequence is considered followed by assessing its eligibility.
 #' If false then all eligible sequences are assessed and then the first one is picked.
+#' @param blackOutPeriod The minimum time the ADR is expected to take place.
+#' Default is 1, meaning excluding the cases that see both dates on the same day.
+#'
 #' @return
 #' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
 #' @export
@@ -46,6 +49,7 @@ getCohortSequence <- function(cdm,
                               daysPriorObservation = 0,
                               indexWashout = 0,
                               markerWashout = 0,
+                              blackOutPeriod = 1,
                               timeGap = 365,
                               firstEver = F){
 
@@ -70,6 +74,7 @@ getCohortSequence <- function(cdm,
                               daysPriorObservation = daysPriorObservation,
                               indexWashout = indexWashout,
                               markerWashout = markerWashout,
+                              blackOutPeriod = blackOutPeriod,
                               timeGap = timeGap,
                               firstEver = firstEver)
 

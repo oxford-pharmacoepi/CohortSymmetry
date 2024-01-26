@@ -9,7 +9,7 @@
 #' @param restriction The moving window when calculating nSR, default is 548.
 #'
 #' @return
-#' A local table with all the analyses
+#' A local table with all the analyses.
 #' @export
 #'
 #' @examples

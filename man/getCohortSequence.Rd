@@ -15,6 +15,7 @@ getCohortSequence(
   daysPriorObservation = 0,
   indexWashout = 0,
   markerWashout = 0,
+  blackOutPeriod = 1,
   timeGap = 365,
   firstEver = F
 )
@@ -43,6 +44,9 @@ and marker cohorts per person.}
 \item{indexWashout}{Washout period to be applied to the index cohort event.}
 
 \item{markerWashout}{Washout period to be applied to the marker cohort event.}
+
+\item{blackOutPeriod}{The minimum time the ADR is expected to take place.
+Default is 1, meaning excluding the cases that see both dates on the same day.}
 
 \item{timeGap}{The time between two initiations of index and marker. Default is 365.
 Change to Inf if no constrains are imposed.}

@@ -21,7 +21,7 @@ getSequenceRatios(
 \item{restriction}{The moving window when calculating nSR, default is 548.}
 }
 \value{
-A local table with all the analyses
+A local table with all the analyses.
 }
 \description{
 Using getCohortSequence to obtain sequence ratios for the desired outcomes.

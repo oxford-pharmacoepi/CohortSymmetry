@@ -9,6 +9,7 @@ checkInputGetCohortSequence <- function(cdm,
                                         indexWashout,
                                         markerWashout,
                                         timeGap,
+                                        blackOutPeriod,
                                         firstEver) {
 
   # Check cdm objects, writing schema and index/marker tables
@@ -66,6 +67,15 @@ checkInputGetCohortSequence <- function(cdm,
   if (!isTRUE(gapCheck)) {
     errorMessage$push(
       "- timeGap cannot be negative"
+    )
+  }
+
+  # Check blackOutPeriod
+  checkblackOutPeriod(blackOutPeriod, errorMessage)
+  blackOutPeriodCheck <- all(blackOutPeriod >= 0)
+  if (!isTRUE(blackOutPeriodCheck)) {
+    errorMessage$push(
+      "- blackOutPeriod cannot be negative"
     )
   }
 
@@ -140,7 +150,7 @@ checkCohortIds <- function(cdm,CohortTable, CohortId) {
 
 # Checks columns of Index and Marker tables
 checkColumns <- function(cdm, CohortTable) {
-  col <- colnames( cdm[[CohortTable]])
+  col <- colnames(cdm[[CohortTable]])
   exp_col <- c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date")
   if(!isTRUE(all(exp_col %in% col))){
     cli::cli_abort(paste0("Some of the expected columns in ", CohortTable, " are missing (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)" ))
@@ -156,6 +166,20 @@ checktimeGap <- function(timeGap, errorMessage){
     lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage,
     null.ok = TRUE
   )
+  }
+}
+
+# Check blackOutPeriod (Inf, NULL or numeric >=1)
+checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
+  if (blackOutPeriod != Inf) {
+    checkmate::assertIntegerish(
+      blackOutPeriod,
+      lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage,
+      null.ok = TRUE
+    )
+  }
+  if(!(is.finite(blackOutPeriod))){
+    cli::cli_abort("blackOutPeriod has to be finite")
   }
 }
 
