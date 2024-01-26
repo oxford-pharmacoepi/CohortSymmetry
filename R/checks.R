@@ -129,7 +129,7 @@ checkCdm <- function(cdm, tables = NULL) {
 assertWriteSchema <- function(cdm, call = rlang::env_parent()) {
   if (!("write_schema" %in% names(attributes(cdm)))) {
     cli::cli_abort(
-      message = "write_schema must be provided in the cdm object to use this function.",
+      message = "write_schema must be provided in the cdm object to use this function",
       call = call
     )
   }
@@ -153,7 +153,7 @@ checkColumns <- function(cdm, CohortTable) {
   col <- colnames(cdm[[CohortTable]])
   exp_col <- c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date")
   if(!isTRUE(all(exp_col %in% col))){
-    cli::cli_abort(paste0("Some of the expected columns in ", CohortTable, " are missing (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)."))
+    cli::cli_abort(paste0("Some of the expected columns in ", CohortTable, " are missing (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)"))
   }
 }
 
@@ -174,12 +174,12 @@ checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
   if (blackOutPeriod != Inf) {
     checkmate::assertIntegerish(
       blackOutPeriod,
-      lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage,
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage,
       null.ok = TRUE
     )
   }
   if(!(is.finite(blackOutPeriod))){
-    cli::cli_abort("blackOutPeriod has to be finite.")
+    cli::cli_abort("blackOutPeriod has to be finite")
   }
 }
 

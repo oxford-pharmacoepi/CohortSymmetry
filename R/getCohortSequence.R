@@ -49,7 +49,7 @@ getCohortSequence <- function(cdm,
                               daysPriorObservation = 0,
                               indexWashout = 0,
                               markerWashout = 0,
-                              blackOutPeriod = 1,
+                              blackOutPeriod = 0,
                               timeGap = 365,
                               firstEver = F){
 
@@ -147,8 +147,7 @@ getCohortSequence <- function(cdm,
     PatientProfiles::addCdmName() %>%
     dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
                                                  interval = "day")) %>%
-    dplyr::filter(!.data$gap==0) %>%
-    dplyr::filter(abs(.data$gap)<.env$timeGap) %>%
+    dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<.env$timeGap) %>%
     dplyr::select(-.data$gap) %>%
     dplyr::mutate(first_date = dplyr::if_else(.data$index_date<=.data$marker_date,
                                               .data$index_date, .data$marker_date),

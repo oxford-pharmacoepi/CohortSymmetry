@@ -15,7 +15,7 @@ getCohortSequence(
   daysPriorObservation = 0,
   indexWashout = 0,
   markerWashout = 0,
-  blackOutPeriod = 1,
+  blackOutPeriod = 0,
   timeGap = 365,
   firstEver = F
 )
