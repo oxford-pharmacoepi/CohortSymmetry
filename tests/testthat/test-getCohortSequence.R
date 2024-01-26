@@ -133,6 +133,23 @@ test_that("mock db: change timeGap", {
 }
 )
 
+test_that("mock db: change blackOutPeriod", {
+  # change of defaulted timeGap
+  cdm <- CohortSymmetry::getCohortSequence(cdm,
+                                           indexTable ="cohort1",
+                                           indexId=1,
+                                           markerTable = "cohort2",
+                                           markerId=2,
+                                           blackOutPeriod = 7,
+                                           timeGap = 365)
+
+  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
+  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr:: tally() %>% dplyr:: pull(n)) == 2)
+  expect_true(all(loc$second_date-loc$first_date>7 & loc$second_date-loc$first_date<365))
+}
+)
+
 test_that("mock db: all IDs against all IDs", {
   # Multiple id
   cdm <- CohortSymmetry::getCohortSequence(cdm,

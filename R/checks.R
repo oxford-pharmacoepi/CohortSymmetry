@@ -9,6 +9,7 @@ checkInputGetCohortSequence <- function(cdm,
                                         indexWashout,
                                         markerWashout,
                                         timeGap,
+                                        blackOutPeriod,
                                         firstEver) {
 
   # Check cdm objects, writing schema and index/marker tables
@@ -69,6 +70,15 @@ checkInputGetCohortSequence <- function(cdm,
     )
   }
 
+  # Check blackOutPeriod
+  checkblackOutPeriod(blackOutPeriod, errorMessage)
+  blackOutPeriodCheck <- all(blackOutPeriod >= 0)
+  if (!isTRUE(blackOutPeriodCheck)) {
+    errorMessage$push(
+      "- blackOutPeriod cannot be negative"
+    )
+  }
+
   # Check indexWashout
   checkindexWashout(indexWashout, errorMessage)
   indexCheck <- all(indexWashout >= 0)
@@ -108,7 +118,7 @@ checkCdm <- function(cdm, tables = NULL) {
       cli::cli_abort(paste0(
         "tables: ",
         paste0(tables, collapse = ", "),
-        "are not present in the cdm object"
+        " are not present in the cdm object"
       ))
     }
   }
@@ -133,17 +143,17 @@ checkCohortIds <- function(cdm,CohortTable, CohortId) {
       dplyr::distinct()%>%
       dplyr::pull()
     if(!isTRUE(all(CohortId %in% ids))){
-      cli::cli_abort(paste0("Some of the cohort ids given do not exist in ", CohortTable ))
+      cli::cli_abort(paste0("Some of the cohort ids given do not exist in ", CohortTable))
     }
   }
 }
 
 # Checks columns of Index and Marker tables
 checkColumns <- function(cdm, CohortTable) {
-  col <- colnames( cdm[[CohortTable]])
+  col <- colnames(cdm[[CohortTable]])
   exp_col <- c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date")
   if(!isTRUE(all(exp_col %in% col))){
-    cli::cli_abort(paste0("Some of the expected columns in ", CohortTable, " are missing (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)" ))
+    cli::cli_abort(paste0("Some of the expected columns in ", CohortTable, " are missing (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)"))
   }
 }
 
@@ -156,6 +166,20 @@ checktimeGap <- function(timeGap, errorMessage){
     lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage,
     null.ok = TRUE
   )
+  }
+}
+
+# Check blackOutPeriod (Inf, NULL or numeric >=1)
+checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
+  if (blackOutPeriod != Inf) {
+    checkmate::assertIntegerish(
+      blackOutPeriod,
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage,
+      null.ok = TRUE
+    )
+  }
+  if(!(is.finite(blackOutPeriod))){
+    cli::cli_abort("blackOutPeriod has to be finite")
   }
 }
 
