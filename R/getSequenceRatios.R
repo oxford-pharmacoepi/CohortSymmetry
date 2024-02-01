@@ -77,8 +77,9 @@ getSequenceRatios <- function(cdm,
         dplyr::ungroup()
 
       csr<-crudeSequenceRatio(temp[[(2^i)*(3^j)]])
+      nsr<-nullSequenceRatio(temp[[(2^i)*(3^j)]], restriction = restriction)
       asr<-adjustedSequenceRatio(temp[[(2^i)*(3^j)]], restriction = restriction)
-      counts <- getConfidenceInterval(temp[[(2^i)*(3^j)]], confidence_interval_level = confidenceIntervalLevel)
+      counts <- getConfidenceInterval(temp[[(2^i)*(3^j)]], nsr, confidence_interval_level = confidenceIntervalLevel)
 
       results[[(2^i)*(3^j)]] <- cbind(tibble::tibble(csr = csr,
                                       asr = asr),
@@ -90,7 +91,7 @@ getSequenceRatios <- function(cdm,
   results <- results[!sapply(results, is.null)]
   output <- Reduce(dplyr::union_all, results) %>%
     PatientProfiles::addCdmName(cdm) %>%
-    dplyr::select(.data$index_id, .data$marker_id, .data$index_first, .data$marker_first, .data$csr, .data$asr, .data$lowerCI, .data$upperCI, .data$cdm_name)
+    dplyr::select(.data$index_id, .data$marker_id, .data$index_first, .data$marker_first, .data$csr, .data$asr, .data$lowerCSR_CI, .data$upperCSR_CI, .data$lowerASR_CI, .data$upperASR_CI, .data$cdm_name)
 
   return(output)
 }
