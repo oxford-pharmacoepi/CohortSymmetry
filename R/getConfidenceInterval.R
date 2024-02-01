@@ -1,5 +1,5 @@
 # CI
-getConfidenceInterval <- function(table, confidence_interval_level = 0.025){
+getConfidenceInterval <- function(table, nsr, confidence_interval_level = 0.025){
 
   counts <- tibble::tibble(
     index_first = table %>% dplyr::pull(.data$index_first) %>% sum(),
@@ -7,27 +7,39 @@ getConfidenceInterval <- function(table, confidence_interval_level = 0.025){
   )
 
   if (counts$index_first == 0 & counts$marker_first == 0){
-    counts$lowerCI <- counts$upperCI <- NA
+    counts$lowerCSR_CI <- counts$upperCSR_CI <- NA
+    counts$lowerASR_CI <- counts$upperASR_CI <- NA
   } else if (counts$index_first == 0){
     counts$index_first <-  0.5
-    counts$lowerCI <- stats::qbeta(confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
-    counts$upperCI <- stats::qbeta(1-confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
+    counts$lowerCSR_CI <- stats::qbeta(confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
+    counts$upperCSR_CI <- stats::qbeta(1-confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
 
-    counts$lowerCI <- counts$lowerCI/(1-counts$lowerCI)
-    counts$upperCI <- counts$upperCI/(1-counts$upperCI)
+    counts$lowerCSR_CI <- counts$lowerCSR_CI/(1-counts$lowerCSR_CI)
+    counts$upperCSR_CI <- counts$upperCSR_CI/(1-counts$upperCSR_CI)
+
+    counts$lowerASR_CI <- counts$lowerCSR_CI/nsr
+    counts$upperASR_CI <- counts$upperCSR_CI/nsr
+
   } else if (counts$marker_first == 0){
     counts$marker_first <-  0.5
-    counts$lowerCI <- stats::qbeta(confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
-    counts$upperCI <- stats::qbeta(1-confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
+    counts$lowerCSR_CI <- stats::qbeta(confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
+    counts$upperCSR_CI <- stats::qbeta(1-confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
 
-    counts$lowerCI <- counts$lowerCI/(1-counts$lowerCI)
-    counts$upperCI <- counts$upperCI/(1-counts$upperCI)
+    counts$lowerCSR_CI <- counts$lowerCSR_CI/(1-counts$lowerCSR_CI)
+    counts$upperCSR_CI <- counts$upperCSR_CI/(1-counts$upperCSR_CI)
+
+    counts$lowerASR_CI <- counts$lowerCSR_CI/nsr
+    counts$upperASR_CI <- counts$upperCSR_CI/nsr
+
   } else {
-    counts$lowerCI <- stats::qbeta(confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
-    counts$upperCI <- stats::qbeta(1-confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
+    counts$lowerCSR_CI <- stats::qbeta(confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
+    counts$upperCSR_CI <- stats::qbeta(1-confidence_interval_level, counts$index_first + 0.5, counts$marker_first + 0.5)
 
-    counts$lowerCI <- counts$lowerCI/(1-counts$lowerCI)
-    counts$upperCI <- counts$upperCI/(1-counts$upperCI)
+    counts$lowerCSR_CI <- counts$lowerCSR_CI/(1-counts$lowerCSR_CI)
+    counts$upperCSR_CI <- counts$upperCSR_CI/(1-counts$upperCSR_CI)
+
+    counts$lowerASR_CI <- counts$lowerCSR_CI/nsr
+    counts$upperASR_CI <- counts$upperCSR_CI/nsr
   }
   return(counts)
 }

@@ -10,9 +10,13 @@
 #' @param indexTable A table in the CDM that the index cohorts should come from.
 #' @param indexId Cohort definition IDs in indexTable to be considered for the analysis.
 #' Change to NULL if all indices are wished to be included.
+#' @param combineIndex A parameter to combine certain cohorts of the indexTable together.
+#' Default is Null, meaning every cohort_definition_id is considered separately.
 #' @param markerTable A table in the CDM that the marker cohorts should come from.
 #' @param markerId Cohort definition IDs in markerTable to be considered for the analysis.
 #' Change to NULL if all markers are wished to be included.
+#' @param combineMarker A parameter to combine certain cohorts of the markerTable together.
+#' Default is Null, meaning every cohort_definition_id is considered separately.
 #' @param daysPriorObservation The minimum amount of prior observation required on both the index
 #' and marker cohorts per person.
 #' @param indexWashout Washout period to be applied to the index cohort event.
@@ -22,7 +26,7 @@
 #' @param firstEver If TRUE then the first sequence is considered followed by assessing its eligibility.
 #' If false then all eligible sequences are assessed and then the first one is picked.
 #' @param blackOutPeriod The minimum time the ADR is expected to take place.
-#' Default is 1, meaning excluding the cases that see both dates on the same day.
+#' Default is 0, meaning excluding the cases that see both dates on the same day.
 #'
 #' @return
 #' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
@@ -44,8 +48,10 @@ getCohortSequence <- function(cdm,
                               dateRange = as.Date(c(NA, NA)),
                               indexTable,
                               indexId = NULL,
+                              combineIndex = NULL,
                               markerTable,
                               markerId = NULL,
+                              combineMarker = NULL,
                               daysPriorObservation = 0,
                               indexWashout = 0,
                               markerWashout = 0,
@@ -60,7 +66,7 @@ getCohortSequence <- function(cdm,
   }
 
   if(!is.finite(timeGap)){
-    timeGap <- 999999999
+    timeGap <- 9999
   }
 
   # checks
@@ -101,6 +107,54 @@ getCohortSequence <- function(cdm,
       indexCohort <- cdm[[indexTable]] %>% dplyr::filter(.data$cohort_definition_id %in% indexId)
       markerCohort <- cdm[[markerTable]] %>% dplyr::filter(.data$cohort_definition_id %in% markerId)
     }
+  }
+
+  if (is.null(combineIndex)){
+    indexCohort <- indexCohort
+  } else if (identical(combineIndex, c("All"))){
+    indexCohort <- indexCohort %>% dplyr::mutate(cohort_definition_id = 1)
+  } else if (is.list(combineIndex)){
+    checkcombineIndexList(combineIndex = combineIndex)
+    input_ids <- c()
+    for (i in (1:length(combineIndex))){
+      input_ids <- c(input_ids, combineIndex[[i]]) %>% unique()
+    }
+    current_ids <- indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull(.data$cohort_definition_id)
+    if(identical(input_ids, current_ids) == FALSE){
+      cli::cli_abort("your inputted ids are not the same as cohort_definition_id in the indexTable, please double check")
+    }
+    for (k in 1:length(combineIndex)){
+      rq_id <- combineIndex[[k]]
+      indexCohort <- indexCohort %>% dplyr::mutate(cohort_definition_id2 = dplyr::case_when(as.integer(.data$cohort_definition_id) %in% test ~ k))
+    }
+    indexCohort <- indexCohort %>%
+      dplyr::select(-.data$cohort_definition_id) %>%
+      dplyr::rename("cohort_definition_id" = "cohort_definition_id2") %>%
+      dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date)
+  }
+
+  if (is.null(combineMarker)){
+    markerCohort <- markerCohort
+  } else if (identical(combineMarker, c("All"))){
+    markerCohort <- markerCohort %>% dplyr::mutate(cohort_definition_id = 1)
+  } else if (is.list(combineMarker)){
+    checkcombineMarkerList(combineMarker = combineMarker)
+    input_ids <- c()
+    for (i in (1:length(combineMarker))){
+      input_ids <- c(input_ids, combineMarker[[i]]) %>% unique()
+    }
+    current_ids <- markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull(.data$cohort_definition_id)
+    if(identical(input_ids, current_ids) == FALSE){
+      cli::cli_abort("your inputted ids are not the same as cohort_definition_id in the markerTable, please double check")
+    }
+    for (k in 1:length(combineMarker)){
+      rq_id <- combineMarker[[k]]
+      markerCohort <- markerCohort %>% dplyr::mutate(cohort_definition_id2 = dplyr::case_when(as.integer(.data$cohort_definition_id) %in% test ~ k))
+    }
+    markerCohort <- markerCohort %>%
+      dplyr::select(-.data$cohort_definition_id) %>%
+      dplyr::rename("cohort_definition_id" = "cohort_definition_id2") %>%
+      dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date)
   }
 
   for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){

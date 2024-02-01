@@ -10,8 +10,10 @@ getCohortSequence(
   dateRange = as.Date(c(NA, NA)),
   indexTable,
   indexId = NULL,
+  combineIndex = NULL,
   markerTable,
   markerId = NULL,
+  combineMarker = NULL,
   daysPriorObservation = 0,
   indexWashout = 0,
   markerWashout = 0,
@@ -33,10 +35,16 @@ to restrict to.}
 \item{indexId}{Cohort definition IDs in indexTable to be considered for the analysis.
 Change to NULL if all indices are wished to be included.}
 
+\item{combineIndex}{A parameter to combine certain cohorts of the indexTable together.
+Default is Null, meaning every cohort_definition_id is considered separately.}
+
 \item{markerTable}{A table in the CDM that the marker cohorts should come from.}
 
 \item{markerId}{Cohort definition IDs in markerTable to be considered for the analysis.
 Change to NULL if all markers are wished to be included.}
+
+\item{combineMarker}{A parameter to combine certain cohorts of the markerTable together.
+Default is Null, meaning every cohort_definition_id is considered separately.}
 
 \item{daysPriorObservation}{The minimum amount of prior observation required on both the index
 and marker cohorts per person.}
@@ -46,7 +54,7 @@ and marker cohorts per person.}
 \item{markerWashout}{Washout period to be applied to the marker cohort event.}
 
 \item{blackOutPeriod}{The minimum time the ADR is expected to take place.
-Default is 1, meaning excluding the cases that see both dates on the same day.}
+Default is 0, meaning excluding the cases that see both dates on the same day.}
 
 \item{timeGap}{The time between two initiations of index and marker. Default is 365.
 Change to Inf if no constrains are imposed.}
