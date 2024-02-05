@@ -50,7 +50,7 @@ test_that("mock db: check output table name", {
   expect_null(cdm$joined_cohorts)
   expect_true(all(
     c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
-      "first_date", "cdm_name") %in%
+      "first_date") %in%
       colnames(cdm$output)
   ))
 }
@@ -63,7 +63,7 @@ test_that("mock db: check output format", {
                      markerTable = "cohort2")
   expect_true(all(
     c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
-      "first_date", "cdm_name") %in%
+      "first_date") %in%
       colnames(cdm$joined_cohorts)
   ))
 }

@@ -12,7 +12,7 @@ cdm$cohort1 %>%
   dplyr::filter(dplyr::row_number()==1) %>%
   dplyr::ungroup() %>%
   dbplyr::window_order() %>%
-  CDMConnector::computeQuery()
+  dplyr::compute()
 
 cdm$cohort2_temp <-
 cdm$cohort2 %>%
@@ -22,7 +22,7 @@ cdm$cohort2 %>%
   dplyr::filter(dplyr::row_number()==1) %>%
   dplyr::ungroup() %>%
   dbplyr::window_order() %>%
-  CDMConnector::computeQuery()
+  dplyr::compute()
 
 group1 <- cdm$cohort1_temp %>% dplyr::select(age_group) %>% dplyr::distinct() %>% dplyr::pull()
 group2 <- cdm$cohort2_temp %>% dplyr::select(age_group) %>% dplyr::distinct() %>% dplyr::pull()
@@ -55,7 +55,7 @@ cdm$cohort1_temp <-
   dplyr::filter(dplyr::row_number()==1) %>%
   dplyr::ungroup() %>%
   dbplyr::window_order() %>%
-  CDMConnector::computeQuery()
+  dplyr::compute()
 
 cdm$cohort2_temp <-
   cdm$cohort2 %>%
@@ -65,7 +65,7 @@ cdm$cohort2_temp <-
   dplyr::filter(dplyr::row_number()==1) %>%
   dplyr::ungroup() %>%
   dbplyr::window_order() %>%
-  CDMConnector::computeQuery()
+  dplyr::compute()
 
 results <- list()
 

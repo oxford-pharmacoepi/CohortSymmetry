@@ -19,7 +19,6 @@ Suggests:
     RPostgres,
     tidyselect
 Imports: 
-    CDMConnector,
     CodelistGenerator,
     dbplyr,
     dplyr,
