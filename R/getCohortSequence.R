@@ -210,9 +210,7 @@ getCohortSequence <- function(cdm,
     dplyr::filter(.data$gap_to_prior_index >= .env$indexWashout | is.na(.data$gap_to_prior_index)) %>%
     dplyr::filter(.data$gap_to_prior_marker >= .env$markerWashout | is.na(.data$gap_to_prior_marker)) %>%
     dplyr::select(.data$index_id, .data$marker_id, .data$subject_id, .data$index_date, .data$marker_date, .data$first_date, .data$second_date)  %>%
-    dplyr::compute(name = name,
-                               temporary = FALSE,
-                               overwrite = TRUE)
+    dplyr::compute()
   return(cdm)
 }
 
