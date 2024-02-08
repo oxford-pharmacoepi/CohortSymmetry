@@ -111,7 +111,7 @@ getCohortSequence2 <- function(cdm,
                             dplyr::select(.data$marker_id, .data$subject_id, .data$marker_date) %>%
                             dplyr::compute(),
                           by = "subject_id") %>%
-        dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
+        dplyr::mutate(gap = !!CDMConnector::datepart("index_date", "marker_date",
                                                      interval = "day")) %>%
         dplyr::filter(!.data$gap==0) %>%
         dplyr::filter(abs(.data$gap)<.env$timeGap) %>%

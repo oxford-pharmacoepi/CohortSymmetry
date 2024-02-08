@@ -198,7 +198,7 @@ getCohortSequence <- function(cdm,
   }
   temp <- temp[!sapply(temp, is.null)]
   cdm[[name]] <- Reduce(dplyr::union_all, temp) %>%
-    dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
+    dplyr::mutate(gap = !!CDMConnector::datepart("index_date", "marker_date",
                                                  interval = "day")) %>%
     dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<.env$timeGap) %>%
     dplyr::select(-.data$gap) %>%

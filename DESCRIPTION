@@ -19,10 +19,11 @@ Suggests:
     RPostgres,
     tidyselect
 Imports: 
+    CDMConnector (>= 1.3.0),
     CodelistGenerator,
     dbplyr,
     dplyr,
-    DrugUtilisation,
+    DrugUtilisation (>= 0.4.1),
     ggplot2,
     IncidencePrevalence,
     lubridate,
@@ -33,6 +34,4 @@ Imports:
     stringr,
     tibble,
     tidyr
-Remotes:
-    darwin-eu/CDMConnector
 Config/testthat/edition: 3

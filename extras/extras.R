@@ -133,3 +133,4 @@ counts$upperCSR_CI <- counts$upperCSR_CI/(1-counts$upperCSR_CI)
 counts$lowerASR_CI <- counts$lowerCSR_CI/nsr
 counts$upperASR_CI <- counts$upperCSR_CI/nsr
 counts
+
