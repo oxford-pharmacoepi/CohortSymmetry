@@ -79,7 +79,7 @@ getCohortSequence2 <- function(cdm,
 
   for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
     for (i in (indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
-      temp[[(2^i)*(3^j)]] <-
+      temp[[paste0("(",i,",",j,")")]] <-
         indexCohort %>%
         dplyr::filter(.data$cohort_definition_id == i) %>%
         dplyr::rename(index_id = .data$cohort_definition_id,
