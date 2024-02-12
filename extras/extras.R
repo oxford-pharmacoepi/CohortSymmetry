@@ -116,21 +116,3 @@ if("Female" %in% sex){
 
 results <- Reduce(dplyr::union_all, results)
 #######################################################################################
-#####CI?
-index_first = 812
-marker_first = 695
-nsr = 0.57
-confidence_interval_level = 0.0025
-
-counts <- tibble(index_first = index_first,
-                 marker_first = marker_first,
-                 csr = index_first/marker_first,
-                 asr = csr/nsr,
-                 lowerCSR_CI = stats::qbeta(confidence_interval_level, index_first + 0.5, marker_first + 0.5),
-                 upperCSR_CI = stats::qbeta(1-confidence_interval_level, index_first + 0.5, marker_first + 0.5))
-counts$lowerCSR_CI <- counts$lowerCSR_CI/(1-counts$lowerCSR_CI)
-counts$upperCSR_CI <- counts$upperCSR_CI/(1-counts$upperCSR_CI)
-counts$lowerASR_CI <- counts$lowerCSR_CI/nsr
-counts$upperASR_CI <- counts$upperCSR_CI/nsr
-counts
-

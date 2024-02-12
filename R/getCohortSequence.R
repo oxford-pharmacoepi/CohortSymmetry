@@ -159,7 +159,7 @@ getCohortSequence <- function(cdm,
 
   for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
     for (i in (indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
-      temp[[(2^i)*(3^j)]] <-
+      temp[[paste0("(", i,", ", j, ")")]] <-
         indexCohort %>%
         dplyr::filter(.data$cohort_definition_id == i) %>%
         dplyr::group_by(.data$subject_id) %>%
@@ -198,7 +198,7 @@ getCohortSequence <- function(cdm,
   }
   temp <- temp[!sapply(temp, is.null)]
   cdm[[name]] <- Reduce(dplyr::union_all, temp) %>%
-    dplyr::mutate(gap = !!CDMConnector::datepart("index_date", "marker_date",
+    dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
                                                  interval = "day")) %>%
     dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<.env$timeGap) %>%
     dplyr::select(-.data$gap) %>%
