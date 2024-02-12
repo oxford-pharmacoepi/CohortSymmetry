@@ -159,7 +159,7 @@ getCohortSequence <- function(cdm,
 
   for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
     for (i in (indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
-      temp[[(2^i)*(3^j)]] <-
+      temp[[paste0("(", i,", ", j, ")")]] <-
         indexCohort %>%
         dplyr::filter(.data$cohort_definition_id == i) %>%
         dplyr::group_by(.data$subject_id) %>%
@@ -175,7 +175,7 @@ getCohortSequence <- function(cdm,
         dbplyr::window_order() %>%
         PatientProfiles::addPriorObservation(indexDate = "index_date",
                                              priorObservationName = "prior_observation_index") %>%
-        CDMConnector::computeQuery()%>%
+        dplyr::compute()%>%
         dplyr::inner_join(markerCohort %>%
                             dplyr::filter(.data$cohort_definition_id == j) %>%
                             dplyr::group_by(.data$subject_id) %>%
@@ -191,14 +191,13 @@ getCohortSequence <- function(cdm,
                             dbplyr::window_order() %>%
                             PatientProfiles::addPriorObservation(indexDate = "marker_date",
                                                                  priorObservationName = "prior_observation_marker") %>%
-                            CDMConnector::computeQuery(),
+                            dplyr::compute(),
                           by = "subject_id") %>%
-        CDMConnector::computeQuery()
+        dplyr::compute()
     }
   }
   temp <- temp[!sapply(temp, is.null)]
   cdm[[name]] <- Reduce(dplyr::union_all, temp) %>%
-    PatientProfiles::addCdmName() %>%
     dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
                                                  interval = "day")) %>%
     dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<.env$timeGap) %>%
@@ -210,11 +209,8 @@ getCohortSequence <- function(cdm,
     dplyr::filter(.data$prior_observation_marker >= .env$daysPriorObservation & .data$prior_observation_index >= .env$daysPriorObservation)%>%
     dplyr::filter(.data$gap_to_prior_index >= .env$indexWashout | is.na(.data$gap_to_prior_index)) %>%
     dplyr::filter(.data$gap_to_prior_marker >= .env$markerWashout | is.na(.data$gap_to_prior_marker)) %>%
-    dplyr::select(.data$index_id, .data$marker_id, .data$subject_id, .data$index_date, .data$marker_date, .data$first_date, .data$second_date, .data$cdm_name)  %>%
-    CDMConnector::computeQuery(name = name,
-                               temporary = FALSE,
-                               schema = attr(cdm, "write_schema"),
-                               overwrite = TRUE)
+    dplyr::select(.data$index_id, .data$marker_id, .data$subject_id, .data$index_date, .data$marker_date, .data$first_date, .data$second_date)  %>%
+    dplyr::compute()
   return(cdm)
 }
 

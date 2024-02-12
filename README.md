@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# CohortSymmetry
+# CohortSymmetry <img src="man/figures/CSHex.png" align="right" height="139"/>
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -71,36 +71,20 @@ marker_drug <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm, name = "levo
 cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     cdm = cdm,
     name = "cohort1",
-    conceptSetList = index_drug,
-    summariseMode = "FirstEra"
+    conceptSet = index_drug
   )
  
 cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     cdm = cdm,
     name = "cohort2",
-    conceptSetList = marker_drug,
-    summariseMode = "FirstEra"
+    conceptSet = marker_drug
   )
  
 cdm$cohort1 %>%
   dplyr::glimpse()
-#> Rows: ??
-#> Columns: 4
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCUs87o\file555843c829a8.duckdb]
-#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-#> $ subject_id           <dbl> 1101, 1169, 1605, 1632, 1635, 4668, 123, 1015, 10…
-#> $ cohort_start_date    <date> 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-13, …
-#> $ cohort_end_date      <date> 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-14, …
  
 cdm$cohort2 %>%
   dplyr::glimpse()
-#> Rows: ??
-#> Columns: 4
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCUs87o\file555843c829a8.duckdb]
-#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-#> $ subject_id           <dbl> 2909, 1079, 4532, 1537, 3224, 4960, 19, 2829, 430…
-#> $ cohort_start_date    <date> 1999-02-12, 2016-03-05, 1964-04-03, 2010-05-31, …
-#> $ cohort_end_date      <date> 1999-02-12, 2016-03-05, 1964-04-03, 2010-05-31, …
 ```
 
 ### Step 1: getCohortSequence
@@ -129,15 +113,5 @@ cdm <- CohortSymmetry::getCohortSequence(cdm,
  
 cdm$joined_cohorts %>%
   dplyr::glimpse()
-#> Rows: ??
-#> Columns: 8
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCUs87o\file555843c829a8.duckdb]
-#> $ subject_id  <dbl> 2006
-#> $ index_id    <int> 1
-#> $ marker_id   <int> 1
-#> $ index_date  <date> 2014-01-17
-#> $ marker_date <date> 2017-12-31
-#> $ first_date  <date> 2014-01-17
-#> $ time_gap    <chr> "Infinity"
-#> $ cdm_name    <chr> "Synthea synthetic health database"
+ 
 ```

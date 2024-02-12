@@ -136,4 +136,4 @@ test_that("mock db: unsuccessful examples - negative parameters", {
   ))
 })
 
-DBI::dbDisconnect(attr(cdm, "dbcon"), shutdown = TRUE)
+CDMConnector::cdmDisconnect(cdm)
