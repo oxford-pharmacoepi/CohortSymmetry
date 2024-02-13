@@ -8,7 +8,7 @@ getPSSAStrata <- function(cdm,
                           end_date = NA,
                           table_name = "pssa",
                           study_time = NULL,
-                          confidence_interval_level = 0.025){
+                          confidenceIntervalLevel = 0.025){
 
   cdm <- IncidencePrevalence::generateDenominatorCohortSet(cdm = cdm,
                                                            ageGroup = ageGroup,
@@ -28,7 +28,7 @@ getPSSAStrata <- function(cdm,
 
     cohort_groups <- CDMConnector::cohortSet(cdm$denominator) %>% dplyr::mutate(group = paste(.data$age_group, " ", sex))
 
-    strata_results[[cohort_groups %>% dplyr::filter(.data$cohort_definition_id == i) %>% dplyr::pull(.data$group)]]<-getPSSA(cohort_table = drug_cohort, study_time = study_time, confidence_interval_level = confidence_interval_level)
+    strata_results[[cohort_groups %>% dplyr::filter(.data$cohort_definition_id == i) %>% dplyr::pull(.data$group)]]<-getPSSA(cohort_table = drug_cohort, study_time = study_time, confidenceIntervalLevel = confidenceIntervalLevel)
 
   }
   return(strata_results)

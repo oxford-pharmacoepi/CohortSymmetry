@@ -8,7 +8,7 @@ getPSSA <- function(cdm,
                     cohort_table = NULL,
                     table_name = "pssa",
                     study_time = NULL,
-                    confidence_interval_level = 0.025,
+                    confidenceIntervalLevel = 0.025,
                     prior_obs = 365,
                     start_date = NA,
                     end_date = NA # set both as NA for full
@@ -21,7 +21,7 @@ getPSSA <- function(cdm,
   table_cleaned <- tableCleaning(table = table, study_time = study_time)
   csr<-crudeSequenceRatio(table_cleaned[[2]])
   asr<-adjustedSequenceRatio(table_cleaned[[2]])
-  counts <- getConfidenceInterval(table_cleaned[[2]], confidence_interval_level = confidence_interval_level)
+  counts <- getConfidenceInterval(table_cleaned[[2]], confidenceIntervalLevel = confidenceIntervalLevel)
 
   results <- tibble::tibble(name = table_name,
                     csr = csr,

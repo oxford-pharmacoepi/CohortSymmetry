@@ -38,22 +38,11 @@ getSequenceRatios <- function(cdm,
                               confidenceIntervalLevel = 0.025,
                               restriction = 548){
 
-  # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables=c(outcomeTable))
-  assertWriteSchema(cdm)
-
-  errorMessage <- checkmate::makeAssertCollection()
-  # check relevant formats of the arguments
-  checkmate::assertCharacter(outcomeTable, len = 1, any.missing = FALSE, add = errorMessage)
-
-  # Check confidenceIntervalLevel
-  checkconfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
-  daysCheck <- all(confidenceIntervalLevel >= 0)
-  if (!isTRUE(daysCheck)) {
-    errorMessage$push(
-      " - confidenceIntervalLevel cannot be negative"
-    )
-  }
+  # checks
+  checkInputGetSequenceRatios(cdm = cdm,
+                              outcomeTable = outcomeTable,
+                              confidenceIntervalLevel = confidenceIntervalLevel,
+                              restriction = restriction)
 
   temp <- list()
   results <- list()
@@ -81,7 +70,7 @@ getSequenceRatios <- function(cdm,
       csr<-crudeSequenceRatio(temp[[paste0("(",i,",",j,")")]])
       nsr<-nullSequenceRatio(temp[[paste0("(",i,",",j,")")]], restriction = restriction)
       asr<-adjustedSequenceRatio(temp[[paste0("(",i,",",j,")")]], restriction = restriction)
-      counts <- getConfidenceInterval(temp[[paste0("(",i,",",j,")")]], nsr, confidence_interval_level = confidenceIntervalLevel)
+      counts <- getConfidenceInterval(temp[[paste0("(",i,",",j,")")]], nsr, confidenceIntervalLevel = confidenceIntervalLevel)
 
       results[[paste0("(",i,",",j,")")]] <- cbind(tibble::tibble(csr = csr,
                                       asr = asr),

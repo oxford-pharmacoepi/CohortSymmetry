@@ -21,7 +21,7 @@ markerCohort <- dplyr::tibble(
       "2020-12-30", "2010-01-01","2021-05-25","2022-05-31", "2020-05-25", "2019-05-25", "2022-05-25", "2010-09-30", "2022-05-25", "2020-02-29", "2021-01-01"
     )
   ),
-  cohort_end_date =cohort_start_date
+  cohort_end_date = cohort_start_date
 )
 
 cdm <-

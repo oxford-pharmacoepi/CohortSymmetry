@@ -56,7 +56,7 @@ getCohortSequence <- function(cdm,
                               daysPriorObservation = 0,
                               indexWashout = 0,
                               markerWashout = 0,
-                              continuedExposureInterval = Inf,
+                              continuedExposureInterval = NULL,
                               blackOutPeriod = 0,
                               timeGap = 365){
 
@@ -79,7 +79,7 @@ getCohortSequence <- function(cdm,
     timeGap <- 99999999999
   }
 
-  if(!is.finite(continuedExposureInterval)){
+  if(is.null(continuedExposureInterval)){
     continuedExposureInterval <- timeGap
   }
 
@@ -162,7 +162,7 @@ getCohortSequence <- function(cdm,
 
   for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
     for (i in (indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
-      temp[[paste0("(", i,", ", j, ")")]] <-
+      temp[[paste0("(", i,",", j, ")")]] <-
         indexCohort %>%
         dplyr::filter(.data$cohort_definition_id == i) %>%
         dplyr::group_by(.data$subject_id) %>%
