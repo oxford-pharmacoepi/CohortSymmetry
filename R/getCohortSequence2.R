@@ -1,20 +1,3 @@
-# getCohortSequence3 <- function(cdm,
-#                                name = "joined_cohorts",
-#                                dateRange = as.Date(c(NA, NA)),
-#                                indexTable,
-#                                indexId = NULL,
-#                                markerTable,
-#                                markerId = NULL,
-#                                ageGroup = list(c(0, 150)),
-#                                sex = "both",
-#                                daysPriorObservation = 0,
-#                                indexWashout = 0,
-#                                markerWashout = 0,
-#                                timeGap = 365,
-#                                firstEver = T){
-#
-# }
-
 getCohortSequence2 <- function(cdm,
                               name = "joined_cohorts",
                               dateRange = as.Date(c(NA, NA)),
@@ -25,14 +8,7 @@ getCohortSequence2 <- function(cdm,
                               daysPriorObservation = 0,
                               indexWashout = 0,
                               markerWashout = 0,
-                              timeGap = 365,
-                              firstEver = T){
-
-  # change daysPriorObservation in the event of Inf
-
-  if(!isTRUE(firstEver)){
-    cli::cli_abort("error")
-  }
+                              timeGap = 365){
 
   if(!is.finite(timeGap)){
     timeGap <- 999999999
@@ -49,8 +25,7 @@ getCohortSequence2 <- function(cdm,
                               daysPriorObservation = daysPriorObservation,
                               indexWashout = indexWashout,
                               markerWashout = markerWashout,
-                              timeGap = timeGap,
-                              firstEver = firstEver)
+                              timeGap = timeGap)
 
   # modify dateRange if necessary
   if(any(is.na(dateRange))){

@@ -3,14 +3,17 @@ checkInputGetCohortSequence <- function(cdm,
                                         dateRange,
                                         indexTable,
                                         indexId,
+                                        combineIndex,
                                         markerTable,
                                         markerId,
+                                        combineMarker,
                                         daysPriorObservation,
                                         indexWashout,
                                         markerWashout,
-                                        timeGap,
+                                        continuedExposureInterval,
                                         blackOutPeriod,
-                                        firstEver) {
+                                        timeGap
+                                        ){
 
   # Check cdm objects, writing schema and index/marker tables
   checkCdm(cdm, tables=c(indexTable, markerTable))
@@ -79,6 +82,15 @@ checkInputGetCohortSequence <- function(cdm,
     )
   }
 
+  # Check continuedExposureInterval
+  checkcontinuedExposureInterval(continuedExposureInterval, errorMessage)
+  continuedExposureIntervalCheck <- all(continuedExposureInterval >= 0)
+  if (!isTRUE(continuedExposureIntervalCheck)) {
+    errorMessage$push(
+      "- continuedExposureInterval cannot be negative"
+    )
+  }
+
   # Check indexWashout
   checkindexWashout(indexWashout, errorMessage)
   indexCheck <- all(indexWashout >= 0)
@@ -96,17 +108,10 @@ checkInputGetCohortSequence <- function(cdm,
       "- markerWashout cannot be negative"
     )
   }
-
-  checkmate::assert_logical(firstEver,
-                            len = 1,
-                            add = errorMessage
-  )
-
   return(checkmate::reportAssertions(collection = errorMessage))
 }
 
-#######################################################################################
-
+####################################################################
 # Check cdm object and index/marker tables
 checkCdm <- function(cdm, tables = NULL) {
   if (!isTRUE(inherits(cdm, "cdm_reference"))) {
@@ -116,8 +121,7 @@ checkCdm <- function(cdm, tables = NULL) {
     tables <- tables[!(tables %in% names(cdm))]
     if (length(tables) > 0) {
       cli::cli_abort(paste0(
-        "tables: ",
-        paste0(tables, collapse = ", "),
+        "tables: ", tables,
         " are not present in the cdm object"
       ))
     }
@@ -169,7 +173,7 @@ checktimeGap <- function(timeGap, errorMessage){
   }
 }
 
-# Check blackOutPeriod (Inf, NULL or numeric >=1)
+# Check blackOutPeriod (NULL or numeric >=1)
 checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
   if (blackOutPeriod != Inf) {
     checkmate::assertIntegerish(
@@ -180,6 +184,17 @@ checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
   }
   if(!(is.finite(blackOutPeriod))){
     cli::cli_abort("blackOutPeriod has to be finite")
+  }
+}
+
+# Check continuedExposureInterval (Inf or numeric >=1)
+checkcontinuedExposureInterval <- function(continuedExposureInterval, errorMessage){
+  if (continuedExposureInterval != Inf) {
+    checkmate::assertIntegerish(
+      continuedExposureInterval,
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage,
+      null.ok = TRUE
+    )
   }
 }
 
