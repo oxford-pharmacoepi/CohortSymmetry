@@ -168,9 +168,10 @@ getCohortSequence <- function(cdm,
         dplyr::group_by(.data$subject_id) %>%
         dbplyr::window_order(.data$cohort_start_date) %>%
         dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
-        dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$gap_to_prior) %>%
+        dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date, .data$gap_to_prior) %>%
         dplyr::rename(index_id = .data$cohort_definition_id,
                       index_date = .data$cohort_start_date,
+                      index_end_date = .data$cohort_end_date,
                       gap_to_prior_index = .data$gap_to_prior) %>%
         dplyr::filter(.data$index_date <= !!dateRange[[2]] & .data$index_date >= !!dateRange[[1]]) %>%
         dplyr::filter(dplyr::row_number()==1) %>%
@@ -184,9 +185,10 @@ getCohortSequence <- function(cdm,
                             dplyr::group_by(.data$subject_id) %>%
                             dbplyr::window_order(.data$cohort_start_date) %>%
                             dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
-                            dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$gap_to_prior) %>%
+                            dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date, .data$gap_to_prior) %>%
                             dplyr::rename(marker_id = .data$cohort_definition_id,
                                           marker_date = .data$cohort_start_date,
+                                          marker_end_date = .data$cohort_end_date,
                                           gap_to_prior_marker = .data$gap_to_prior) %>%
                             dplyr::filter(.data$marker_date <= !!dateRange[[2]] & .data$marker_date >= !!dateRange[[1]]) %>%
                             dplyr::filter(dplyr::row_number()==1) %>%
@@ -202,9 +204,11 @@ getCohortSequence <- function(cdm,
   temp <- temp[!sapply(temp, is.null)]
   cdm[[name]] <- Reduce(dplyr::union_all, temp) %>%
     dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
-                                                 interval = "day")) %>%
-    dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<.env$timeGap) %>%
-    dplyr::select(-.data$gap) %>%
+                                                 interval = "day"),
+                  cei = ifelse((.data$index_date < .data$marker_date), .data$marker_date - .data$index_end_date, .data$index_date - .data$marker_end_date)) %>%
+    dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<=.env$timeGap) %>%
+    dplyr::filter(.data$cei <= .env$continuedExposureInterval) %>%
+    dplyr::select(-.data$gap, -.data$cei) %>%
     dplyr::mutate(first_date = dplyr::if_else(.data$index_date<=.data$marker_date,
                                               .data$index_date, .data$marker_date),
                   second_date = dplyr::if_else(.data$index_date>=.data$marker_date,
