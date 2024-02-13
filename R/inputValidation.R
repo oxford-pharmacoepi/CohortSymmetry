@@ -3,14 +3,17 @@ checkInputGetCohortSequence <- function(cdm,
                                         dateRange,
                                         indexTable,
                                         indexId,
+                                        combineIndex,
                                         markerTable,
                                         markerId,
+                                        combineMarker,
                                         daysPriorObservation,
                                         indexWashout,
                                         markerWashout,
-                                        timeGap,
+                                        continuedExposureInterval,
                                         blackOutPeriod,
-                                        firstEver) {
+                                        timeGap
+                                        ){
 
   # Check cdm objects, writing schema and index/marker tables
   checkCdm(cdm, tables=c(indexTable, markerTable))
@@ -79,6 +82,15 @@ checkInputGetCohortSequence <- function(cdm,
     )
   }
 
+  # Check continuedExposureInterval
+  checkcontinuedExposureInterval(continuedExposureInterval, errorMessage)
+  continuedExposureIntervalCheck <- all(continuedExposureInterval >= 0)
+  if (!isTRUE(continuedExposureIntervalCheck)) {
+    errorMessage$push(
+      "- continuedExposureInterval cannot be negative"
+    )
+  }
+
   # Check indexWashout
   checkindexWashout(indexWashout, errorMessage)
   indexCheck <- all(indexWashout >= 0)
@@ -96,17 +108,41 @@ checkInputGetCohortSequence <- function(cdm,
       "- markerWashout cannot be negative"
     )
   }
-
-  checkmate::assert_logical(firstEver,
-                            len = 1,
-                            add = errorMessage
-  )
-
   return(checkmate::reportAssertions(collection = errorMessage))
 }
 
-#######################################################################################
+checkInputGetSequenceRatios <- function(cdm,
+                                        outcomeTable,
+                                        confidenceIntervalLevel,
+                                        restriction){
+  # Check cdm objects, writing schema and index/marker tables
+  checkCdm(cdm, tables=c(outcomeTable))
+  assertWriteSchema(cdm)
 
+  errorMessage <- checkmate::makeAssertCollection()
+  # check relevant formats of the arguments
+  checkmate::assertCharacter(outcomeTable, len = 1, any.missing = FALSE, add = errorMessage)
+
+  # Check confidenceIntervalLevel
+  checkconfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
+  daysCheck <- all(confidenceIntervalLevel >= 0)
+  if (!isTRUE(daysCheck)) {
+    errorMessage$push(
+      " - confidenceIntervalLevel cannot be negative"
+    )
+  }
+
+  # Check restriction
+  checkrestriction(restriction, errorMessage)
+  restrictionCheck <- all(restriction >= 0)
+  if (!isTRUE(restrictionCheck)) {
+    errorMessage$push(
+      "- restriction cannot be negative"
+    )
+  }
+
+}
+####################################################################
 # Check cdm object and index/marker tables
 checkCdm <- function(cdm, tables = NULL) {
   if (!isTRUE(inherits(cdm, "cdm_reference"))) {
@@ -116,8 +152,7 @@ checkCdm <- function(cdm, tables = NULL) {
     tables <- tables[!(tables %in% names(cdm))]
     if (length(tables) > 0) {
       cli::cli_abort(paste0(
-        "tables: ",
-        paste0(tables, collapse = ", "),
+        "tables: ", tables,
         " are not present in the cdm object"
       ))
     }
@@ -163,19 +198,17 @@ checktimeGap <- function(timeGap, errorMessage){
   if (timeGap != Inf) {
   checkmate::assertIntegerish(
     timeGap,
-    lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage,
-    null.ok = TRUE
+    lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage
   )
   }
 }
 
-# Check blackOutPeriod (Inf, NULL or numeric >=1)
+# Check blackOutPeriod (NULL or numeric >=1)
 checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
   if (blackOutPeriod != Inf) {
     checkmate::assertIntegerish(
       blackOutPeriod,
-      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage,
-      null.ok = TRUE
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
   if(!(is.finite(blackOutPeriod))){
@@ -183,24 +216,44 @@ checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
   }
 }
 
+# Check continuedExposureInterval (Inf or numeric >=1)
+checkcontinuedExposureInterval <- function(continuedExposureInterval, errorMessage){
+  if (!is.null(continuedExposureInterval)){
+    if (continuedExposureInterval != Inf ) {
+      checkmate::assertIntegerish(
+        continuedExposureInterval,
+        lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
+      )
+    }
+  }
+  }
+
 # Check indexWashout (Inf or numeric)
 checkindexWashout <- function(indexWashout, errorMessage){
   if (indexWashout != Inf) {
     checkmate::assertIntegerish(
       indexWashout,
-      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage,
-      null.ok = TRUE
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
 }
-#
+
+# Check restriction (Inf or numeric)
+checkrestriction <- function(restriction, errorMessage){
+  if (restriction != Inf) {
+    checkmate::assertIntegerish(
+      restriction,
+      lower = 0, any.missing = FALSE, max.len = 10, add = errorMessage
+    )
+  }
+}
+
 # Check markerWashout (Inf or numeric)
 checkmarkerWashout <- function(markerWashout, errorMessage){
   if (markerWashout != Inf) {
     checkmate::assertIntegerish(
       markerWashout,
-      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage,
-      null.ok = TRUE
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
 }
@@ -210,8 +263,7 @@ checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
   if (daysPriorObservation != Inf) {
     checkmate::assertIntegerish(
       daysPriorObservation,
-      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage,
-      null.ok = TRUE
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
   if(!(is.finite(daysPriorObservation))){
@@ -223,7 +275,7 @@ checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
 checkconfidenceIntervalLevel <- function(checkconfidenceIntervalLevel, errorMessage){
     checkmate::assertNumeric(
       checkconfidenceIntervalLevel,
-      lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage, null.ok = TRUE
+      lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage
     )
 }
 

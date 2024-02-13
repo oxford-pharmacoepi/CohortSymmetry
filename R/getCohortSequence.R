@@ -21,12 +21,13 @@
 #' and marker cohorts per person.
 #' @param indexWashout Washout period to be applied to the index cohort event.
 #' @param markerWashout Washout period to be applied to the marker cohort event.
-#' @param timeGap The time between two initiations of index and marker. Default is 365.
-#' Change to Inf if no constrains are imposed.
-#' @param firstEver If TRUE then the first sequence is considered followed by assessing its eligibility.
-#' If false then all eligible sequences are assessed and then the first one is picked.
 #' @param blackOutPeriod The minimum time the ADR is expected to take place.
 #' Default is 0, meaning excluding the cases that see both dates on the same day.
+#' @param continuedExposureInterval The time before the start of the second episode
+#' of the drug (could be either marker or index) and the time after the end of the first
+#' episode (could be either marker or index).
+#' @param timeGap The time between two initiations of index and marker. Default is 365.
+#' Change to Inf if no constrains are imposed.
 #'
 #' @return
 #' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
@@ -55,19 +56,9 @@ getCohortSequence <- function(cdm,
                               daysPriorObservation = 0,
                               indexWashout = 0,
                               markerWashout = 0,
+                              continuedExposureInterval = NULL,
                               blackOutPeriod = 0,
-                              timeGap = 365,
-                              firstEver = F){
-
-  # change daysPriorObservation in the event of Inf
-
-  if(isTRUE(firstEver)){
-    cli::cli_abort("error")
-  }
-
-  if(!is.finite(timeGap)){
-    timeGap <- 9999
-  }
+                              timeGap = 365){
 
   # checks
   checkInputGetCohortSequence(cdm = cdm,
@@ -81,8 +72,16 @@ getCohortSequence <- function(cdm,
                               indexWashout = indexWashout,
                               markerWashout = markerWashout,
                               blackOutPeriod = blackOutPeriod,
-                              timeGap = timeGap,
-                              firstEver = firstEver)
+                              continuedExposureInterval = continuedExposureInterval,
+                              timeGap = timeGap)
+
+  if(!is.finite(timeGap)){
+    timeGap <- 99999999999
+  }
+
+  if(is.null(continuedExposureInterval)){
+    continuedExposureInterval <- timeGap
+  }
 
   # modify dateRange if necessary
   if(any(is.na(dateRange))){
@@ -131,6 +130,8 @@ getCohortSequence <- function(cdm,
       dplyr::select(-.data$cohort_definition_id) %>%
       dplyr::rename("cohort_definition_id" = "cohort_definition_id2") %>%
       dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date)
+  } else {
+    cli::cli_abort("combineIndex has to be either NULL or 'ALL' or a list")
   }
 
   if (is.null(combineMarker)){
@@ -155,19 +156,22 @@ getCohortSequence <- function(cdm,
       dplyr::select(-.data$cohort_definition_id) %>%
       dplyr::rename("cohort_definition_id" = "cohort_definition_id2") %>%
       dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date)
+  } else {
+    cli::cli_abort("combineMarker has to be either NULL or 'ALL' or a list")
   }
 
   for (j in (markerCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
     for (i in (indexCohort %>% dplyr::select(.data$cohort_definition_id) %>% dplyr::distinct() %>% dplyr::pull())){
-      temp[[paste0("(", i,", ", j, ")")]] <-
+      temp[[paste0("(", i,",", j, ")")]] <-
         indexCohort %>%
         dplyr::filter(.data$cohort_definition_id == i) %>%
         dplyr::group_by(.data$subject_id) %>%
         dbplyr::window_order(.data$cohort_start_date) %>%
         dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
-        dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$gap_to_prior) %>%
+        dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date, .data$gap_to_prior) %>%
         dplyr::rename(index_id = .data$cohort_definition_id,
                       index_date = .data$cohort_start_date,
+                      index_end_date = .data$cohort_end_date,
                       gap_to_prior_index = .data$gap_to_prior) %>%
         dplyr::filter(.data$index_date <= !!dateRange[[2]] & .data$index_date >= !!dateRange[[1]]) %>%
         dplyr::filter(dplyr::row_number()==1) %>%
@@ -181,9 +185,10 @@ getCohortSequence <- function(cdm,
                             dplyr::group_by(.data$subject_id) %>%
                             dbplyr::window_order(.data$cohort_start_date) %>%
                             dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
-                            dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$gap_to_prior) %>%
+                            dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date, .data$gap_to_prior) %>%
                             dplyr::rename(marker_id = .data$cohort_definition_id,
                                           marker_date = .data$cohort_start_date,
+                                          marker_end_date = .data$cohort_end_date,
                                           gap_to_prior_marker = .data$gap_to_prior) %>%
                             dplyr::filter(.data$marker_date <= !!dateRange[[2]] & .data$marker_date >= !!dateRange[[1]]) %>%
                             dplyr::filter(dplyr::row_number()==1) %>%
@@ -199,9 +204,11 @@ getCohortSequence <- function(cdm,
   temp <- temp[!sapply(temp, is.null)]
   cdm[[name]] <- Reduce(dplyr::union_all, temp) %>%
     dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
-                                                 interval = "day")) %>%
-    dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<.env$timeGap) %>%
-    dplyr::select(-.data$gap) %>%
+                                                 interval = "day"),
+                  cei = ifelse((.data$index_date < .data$marker_date), .data$marker_date - .data$index_end_date, .data$index_date - .data$marker_end_date)) %>%
+    dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<=.env$timeGap) %>%
+    dplyr::filter(.data$cei <= .env$continuedExposureInterval) %>%
+    dplyr::select(-.data$gap, -.data$cei) %>%
     dplyr::mutate(first_date = dplyr::if_else(.data$index_date<=.data$marker_date,
                                               .data$index_date, .data$marker_date),
                   second_date = dplyr::if_else(.data$index_date>=.data$marker_date,

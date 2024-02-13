@@ -38,36 +38,25 @@ getSequenceRatios <- function(cdm,
                               confidenceIntervalLevel = 0.025,
                               restriction = 548){
 
-  # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables=c(outcomeTable))
-  assertWriteSchema(cdm)
-
-  errorMessage <- checkmate::makeAssertCollection()
-  # check relevant formats of the arguments
-  checkmate::assertCharacter(outcomeTable, len = 1, any.missing = FALSE, add = errorMessage)
-
-  # Check confidenceIntervalLevel
-  checkconfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
-  daysCheck <- all(confidenceIntervalLevel >= 0)
-  if (!isTRUE(daysCheck)) {
-    errorMessage$push(
-      " - confidenceIntervalLevel cannot be negative"
-    )
-  }
+  # checks
+  checkInputGetSequenceRatios(cdm = cdm,
+                              outcomeTable = outcomeTable,
+                              confidenceIntervalLevel = confidenceIntervalLevel,
+                              restriction = restriction)
 
   temp <- list()
   results <- list()
   for (i in (cdm[[outcomeTable]] %>% dplyr::distinct(.data$index_id) %>% dplyr::pull())){
     for (j in (cdm[[outcomeTable]] %>% dplyr::filter(.data$index_id == i) %>% dplyr::distinct(.data$marker_id) %>% dplyr::pull())){
-      temp[[(2^i)*(3^j)]] <-
+      temp[[paste0("(",i,",",j,")")]] <-
         cdm[[outcomeTable]] %>%
         dplyr::filter(.data$index_id == i & .data$marker_id == j) %>%
         dplyr::collect()
 
-      date_start <- min(temp[[(2^i)*(3^j)]]$index_date, temp[[(2^i)*(3^j)]]$marker_date)
+      date_start <- min(temp[[paste0("(",i,",",j,")")]]$index_date, temp[[paste0("(",i,",",j,")")]]$marker_date)
 
-      temp[[(2^i)*(3^j)]] <-
-        temp[[(2^i)*(3^j)]] %>%
+      temp[[paste0("(",i,",",j,")")]] <-
+        temp[[paste0("(",i,",",j,")")]] %>%
         dplyr::mutate(
           orderBA = .data$index_date >= .data$marker_date,
           days_first = as.integer((lubridate::interval(date_start, .data$first_date)) / lubridate::days(1)), # gap between the first drug of a person and the first drug of the whole population
@@ -78,12 +67,12 @@ getSequenceRatios <- function(cdm,
         dplyr::mutate(index_id = i, marker_id = j) %>%
         dplyr::ungroup()
 
-      csr<-crudeSequenceRatio(temp[[(2^i)*(3^j)]])
-      nsr<-nullSequenceRatio(temp[[(2^i)*(3^j)]], restriction = restriction)
-      asr<-adjustedSequenceRatio(temp[[(2^i)*(3^j)]], restriction = restriction)
-      counts <- getConfidenceInterval(temp[[(2^i)*(3^j)]], nsr, confidence_interval_level = confidenceIntervalLevel)
+      csr<-crudeSequenceRatio(temp[[paste0("(",i,",",j,")")]])
+      nsr<-nullSequenceRatio(temp[[paste0("(",i,",",j,")")]], restriction = restriction)
+      asr<-adjustedSequenceRatio(temp[[paste0("(",i,",",j,")")]], restriction = restriction)
+      counts <- getConfidenceInterval(temp[[paste0("(",i,",",j,")")]], nsr, confidenceIntervalLevel = confidenceIntervalLevel)
 
-      results[[(2^i)*(3^j)]] <- cbind(tibble::tibble(csr = csr,
+      results[[paste0("(",i,",",j,")")]] <- cbind(tibble::tibble(csr = csr,
                                       asr = asr),
                                       counts) %>%
         dplyr::mutate(index_id = i, marker_id = j)

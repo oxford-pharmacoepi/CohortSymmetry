@@ -17,9 +17,9 @@ getCohortSequence(
   daysPriorObservation = 0,
   indexWashout = 0,
   markerWashout = 0,
+  continuedExposureInterval = NULL,
   blackOutPeriod = 0,
-  timeGap = 365,
-  firstEver = F
+  timeGap = 365
 )
 }
 \arguments{
@@ -53,14 +53,15 @@ and marker cohorts per person.}
 
 \item{markerWashout}{Washout period to be applied to the marker cohort event.}
 
+\item{continuedExposureInterval}{The time before the start of the second episode
+of the drug (could be either marker or index) and the time after the end of the first
+episode (could be either marker or index).}
+
 \item{blackOutPeriod}{The minimum time the ADR is expected to take place.
 Default is 0, meaning excluding the cases that see both dates on the same day.}
 
 \item{timeGap}{The time between two initiations of index and marker. Default is 365.
 Change to Inf if no constrains are imposed.}
-
-\item{firstEver}{If TRUE then the first sequence is considered followed by assessing its eligibility.
-If false then all eligible sequences are assessed and then the first one is picked.}
 }
 \value{
 A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
