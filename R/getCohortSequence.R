@@ -166,7 +166,7 @@ getCohortSequence <- function(cdm,
         indexCohort %>%
         dplyr::filter(.data$cohort_definition_id == i) %>%
         dplyr::group_by(.data$subject_id) %>%
-        dbplyr::window_order(.data$cohort_start_date) %>%
+        dplyr::arrange(.data$cohort_start_date) %>%
         dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
         dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date, .data$gap_to_prior) %>%
         dplyr::rename(index_id = .data$cohort_definition_id,
@@ -176,14 +176,13 @@ getCohortSequence <- function(cdm,
         dplyr::filter(.data$index_date <= !!dateRange[[2]] & .data$index_date >= !!dateRange[[1]]) %>%
         dplyr::filter(dplyr::row_number()==1) %>%
         dplyr::ungroup() %>%
-        dbplyr::window_order() %>%
         PatientProfiles::addPriorObservation(indexDate = "index_date",
                                              priorObservationName = "prior_observation_index") %>%
         dplyr::compute()%>%
         dplyr::inner_join(markerCohort %>%
                             dplyr::filter(.data$cohort_definition_id == j) %>%
                             dplyr::group_by(.data$subject_id) %>%
-                            dbplyr::window_order(.data$cohort_start_date) %>%
+                            dplyr::arrange(.data$cohort_start_date) %>%
                             dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
                             dplyr::select(.data$cohort_definition_id, .data$subject_id, .data$cohort_start_date, .data$cohort_end_date, .data$gap_to_prior) %>%
                             dplyr::rename(marker_id = .data$cohort_definition_id,
@@ -193,7 +192,6 @@ getCohortSequence <- function(cdm,
                             dplyr::filter(.data$marker_date <= !!dateRange[[2]] & .data$marker_date >= !!dateRange[[1]]) %>%
                             dplyr::filter(dplyr::row_number()==1) %>%
                             dplyr::ungroup() %>%
-                            dbplyr::window_order() %>%
                             PatientProfiles::addPriorObservation(indexDate = "marker_date",
                                                                  priorObservationName = "prior_observation_marker") %>%
                             dplyr::compute(),
