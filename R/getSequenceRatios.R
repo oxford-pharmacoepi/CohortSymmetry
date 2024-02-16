@@ -79,10 +79,9 @@ getSequenceRatios <- function(cdm,
     }
   }
 
-  results <- results[!sapply(results, is.null)]
   output <- Reduce(dplyr::union_all, results) %>%
     PatientProfiles::addCdmName(cdm) %>%
-    dplyr::select(.data$index_id, .data$marker_id, .data$index_first, .data$marker_first, .data$csr, .data$asr, .data$lowerCSR_CI, .data$upperCSR_CI, .data$lowerASR_CI, .data$upperASR_CI, .data$cdm_name)
+    dplyr::select("index_id", "marker_id", "index_first", "marker_first", "csr", "asr", "lowerCSR_CI", "upperCSR_CI", "lowerASR_CI", "upperASR_CI", "cdm_name")
 
   return(output)
 }
