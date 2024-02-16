@@ -6,12 +6,12 @@
 \usage{
 getCohortSequence(
   cdm,
+  indexTable,
+  markerTable,
   name = "joined_cohorts",
   dateRange = as.Date(c(NA, NA)),
-  indexTable,
   indexId = NULL,
   combineIndex = NULL,
-  markerTable,
   markerId = NULL,
   combineMarker = NULL,
   daysPriorObservation = 0,
@@ -25,20 +25,20 @@ getCohortSequence(
 \arguments{
 \item{cdm}{A CDM reference.}
 
+\item{indexTable}{A table in the CDM that the index cohorts should come from.}
+
+\item{markerTable}{A table in the CDM that the marker cohorts should come from.}
+
 \item{name}{the name within the cdm that the output is called. Default is joined_cohorts.}
 
 \item{dateRange}{Two dates indicating study period and the sequences that the user wants
 to restrict to.}
-
-\item{indexTable}{A table in the CDM that the index cohorts should come from.}
 
 \item{indexId}{Cohort definition IDs in indexTable to be considered for the analysis.
 Change to NULL if all indices are wished to be included.}
 
 \item{combineIndex}{A parameter to combine certain cohorts of the indexTable together.
 Default is Null, meaning every cohort_definition_id is considered separately.}
-
-\item{markerTable}{A table in the CDM that the marker cohorts should come from.}
 
 \item{markerId}{Cohort definition IDs in markerTable to be considered for the analysis.
 Change to NULL if all markers are wished to be included.}

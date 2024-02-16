@@ -398,11 +398,11 @@ test_that("mock db: example of multiple entries per person", {
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
   earliest_index_date <- cdm$cohort1 %>%
-    dbplyr::window_order(cohort_start_date) %>%
+    dplyr::arrange(cohort_start_date) %>%
     dplyr::filter(dplyr::row_number()==1) %>%
     dplyr::pull(cohort_start_date)
   earliest_marker_date <- cdm$cohort2 %>%
-    dbplyr::window_order(cohort_start_date) %>%
+    dplyr::arrange(cohort_start_date) %>%
     dplyr::filter(dplyr::row_number()==1) %>%
     dplyr::pull(cohort_start_date)
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(index_date) == earliest_index_date,

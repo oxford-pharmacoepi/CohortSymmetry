@@ -1,10 +1,10 @@
 checkInputGetCohortSequence <- function(cdm,
+                                        indexTable,
+                                        markerTable,
                                         name,
                                         dateRange,
-                                        indexTable,
                                         indexId,
                                         combineIndex,
-                                        markerTable,
                                         markerId,
                                         combineMarker,
                                         daysPriorObservation,
@@ -174,7 +174,7 @@ assertWriteSchema <- function(cdm, call = rlang::env_parent()) {
 checkCohortIds <- function(cdm,CohortTable, CohortId) {
   if (!is.null(CohortId)) {
     ids <- cdm[[CohortTable]] %>%
-      dplyr::select(.data$cohort_definition_id) %>%
+      dplyr::select("cohort_definition_id") %>%
       dplyr::distinct()%>%
       dplyr::pull()
     if(!isTRUE(all(CohortId %in% ids))){
