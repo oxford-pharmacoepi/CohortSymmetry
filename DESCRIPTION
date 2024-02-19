@@ -32,3 +32,4 @@ Imports:
     stringr,
     tibble
 Config/testthat/edition: 3
+URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
