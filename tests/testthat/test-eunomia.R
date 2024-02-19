@@ -33,7 +33,7 @@ test_that("eunomia - getCohortSequence", {
   expect_no_error(cdm <- CohortSymmetry::getCohortSequence(cdm,
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           timeGap = Inf))
+                                           combinationWindow = c(0,Inf)))
 
  expect_true(nrow(cdm$joined_cohorts %>% dplyr::collect()) > 0)
 

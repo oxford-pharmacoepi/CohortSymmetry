@@ -4,15 +4,11 @@ checkInputGetCohortSequence <- function(cdm,
                                         name,
                                         dateRange,
                                         indexId,
-                                        combineIndex,
                                         markerId,
-                                        combineMarker,
                                         daysPriorObservation,
-                                        indexWashout,
-                                        markerWashout,
-                                        continuedExposureInterval,
-                                        blackOutPeriod,
-                                        timeGap
+                                        washoutWindow,
+                                        indexMarkerGap,
+                                        combinationWindow
                                         ){
 
   # Check cdm objects, writing schema and index/marker tables
@@ -64,50 +60,42 @@ checkInputGetCohortSequence <- function(cdm,
     )
   }
 
-  # Check timeGap
-  checktimeGap(timeGap, errorMessage)
-  gapCheck <- all(timeGap >= 0)
-  if (!isTRUE(gapCheck)) {
+  # check combinationWindow
+  checkmate::assert_numeric(combinationWindow, len = 2, any.missing = FALSE, add = errorMessage)
+  combinationWindowCheck <- all(combinationWindow >= 0)
+  if (!isTRUE(combinationWindowCheck)) {
     errorMessage$push(
-      "- timeGap cannot be negative"
+      "- one or more value of combinationWindow cannot be negative"
     )
   }
 
-  # Check blackOutPeriod
-  checkblackOutPeriod(blackOutPeriod, errorMessage)
-  blackOutPeriodCheck <- all(blackOutPeriod >= 0)
-  if (!isTRUE(blackOutPeriodCheck)) {
+  if (!isTRUE(combinationWindow[2]>combinationWindow[1])) {
     errorMessage$push(
-      "- blackOutPeriod cannot be negative"
+      "- the second argument of combinationWindow has to be larger than the first argument in combinationWindow."
     )
   }
 
-  # Check continuedExposureInterval
-  checkcontinuedExposureInterval(continuedExposureInterval, errorMessage)
-  continuedExposureIntervalCheck <- all(continuedExposureInterval >= 0)
-  if (!isTRUE(continuedExposureIntervalCheck)) {
+  # Check combinationWindow
+  checkcombinationWindow(combinationWindow, errorMessage)
+
+  # Check indexMarkerGap
+  checkindexMarkerGap(indexMarkerGap, errorMessage)
+  indexMarkerGapCheck <- all(indexMarkerGap >= 0)
+  if (!isTRUE(indexMarkerGapCheck)) {
     errorMessage$push(
-      "- continuedExposureInterval cannot be negative"
+      "- indexMarkerGap cannot be negative"
     )
   }
 
-  # Check indexWashout
-  checkindexWashout(indexWashout, errorMessage)
-  indexCheck <- all(indexWashout >= 0)
-  if (!isTRUE(indexCheck)) {
+  # Check washoutWindow
+  checkwashoutWindow(washoutWindow, errorMessage)
+  washoutCheck <- all(washoutWindow >= 0)
+  if (!isTRUE(washoutCheck)) {
     errorMessage$push(
-      "- indexWashout cannot be negative"
+      "- washoutWindow cannot be negative"
     )
   }
 
-  # Check markerWashout
-  checkmarkerWashout(markerWashout, errorMessage)
-  markerCheck <- all(markerWashout >= 0)
-  if (!isTRUE(markerCheck)) {
-    errorMessage$push(
-      "- markerWashout cannot be negative"
-    )
-  }
   return(checkmate::reportAssertions(collection = errorMessage))
 }
 
@@ -193,46 +181,40 @@ checkColumns <- function(cdm, CohortTable) {
 }
 
 
-# Check timeGap (Inf, NULL or numeric >=1)
-checktimeGap <- function(timeGap, errorMessage){
-  if (timeGap != Inf) {
-  checkmate::assertIntegerish(
-    timeGap,
-    lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage
-  )
+# Check combinationWindow (a numeric of length 2)
+checkcombinationWindow <- function(combinationWindow, errorMessage){
+  if (combinationWindow[1] == Inf) {
+  cli::cli_abort("the first argument of combinationWindow cannot be infinite.")
   }
-}
-
-# Check blackOutPeriod (NULL or numeric >=1)
-checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
-  if (blackOutPeriod != Inf) {
+  if (combinationWindow[2] != Inf){
     checkmate::assertIntegerish(
-      blackOutPeriod,
+      combinationWindow[1],
       lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
-  }
-  if(!(is.finite(blackOutPeriod))){
-    cli::cli_abort("blackOutPeriod has to be finite")
+    checkmate::assertIntegerish(
+      combinationWindow[2],
+      lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage
+    )
   }
 }
 
-# Check continuedExposureInterval (Inf or numeric >=1)
-checkcontinuedExposureInterval <- function(continuedExposureInterval, errorMessage){
-  if (!is.null(continuedExposureInterval)){
-    if (continuedExposureInterval != Inf ) {
+# Check indexMarkerGap (Inf or numeric >=1)
+checkindexMarkerGap <- function(indexMarkerGap, errorMessage){
+  if (!is.null(indexMarkerGap)){
+    if (indexMarkerGap != Inf) {
       checkmate::assertIntegerish(
-        continuedExposureInterval,
+        indexMarkerGap,
         lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
       )
     }
   }
   }
 
-# Check indexWashout (Inf or numeric)
-checkindexWashout <- function(indexWashout, errorMessage){
-  if (indexWashout != Inf) {
+# Check washoutWindow (Inf or numeric)
+checkwashoutWindow <- function(washoutWindow, errorMessage){
+  if (washoutWindow != Inf) {
     checkmate::assertIntegerish(
-      indexWashout,
+      washoutWindow,
       lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
@@ -244,16 +226,6 @@ checkrestriction <- function(restriction, errorMessage){
     checkmate::assertIntegerish(
       restriction,
       lower = 0, any.missing = FALSE, max.len = 10, add = errorMessage
-    )
-  }
-}
-
-# Check markerWashout (Inf or numeric)
-checkmarkerWashout <- function(markerWashout, errorMessage){
-  if (markerWashout != Inf) {
-    checkmate::assertIntegerish(
-      markerWashout,
-      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
 }
@@ -288,22 +260,4 @@ checkIntersect <- function(list_input){
     }
   }
   return(intersection)
-}
-
-# Check combineIndex
-checkcombineIndexList <- function(combineIndex){
-  if(length(combineIndex) == 0){
-    cli::cli_abort("length of the combineIndex list must be positive")
-  } else if(length(checkIntersect(combineIndex))>0) {
-    cli::cli_abort("there are overlaps in your combineIndex, please double check")
-  }
-}
-
-# Check combineMarker
-checkcombineMarkerList <- function(combineMarker){
-  if(length(combineMarker) == 0){
-    cli::cli_abort("length of the combineMarker list must be positive")
-  } else if(length(checkIntersect(combineMarker))>0) {
-    cli::cli_abort("there are overlaps in your combineMarker, please double check")
-  }
 }

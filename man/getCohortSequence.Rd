@@ -11,15 +11,11 @@ getCohortSequence(
   name = "joined_cohorts",
   dateRange = as.Date(c(NA, NA)),
   indexId = NULL,
-  combineIndex = NULL,
   markerId = NULL,
-  combineMarker = NULL,
   daysPriorObservation = 0,
-  indexWashout = 0,
-  markerWashout = 0,
-  continuedExposureInterval = NULL,
-  blackOutPeriod = 0,
-  timeGap = 365
+  washoutWindow = 0,
+  indexMarkerGap = NULL,
+  combinationWindow = c(0, 365)
 )
 }
 \arguments{
@@ -37,34 +33,23 @@ to restrict to.}
 \item{indexId}{Cohort definition IDs in indexTable to be considered for the analysis.
 Change to NULL if all indices are wished to be included.}
 
-\item{combineIndex}{A parameter to combine certain cohorts of the indexTable together.
-Default is Null, meaning every cohort_definition_id is considered separately.}
-
 \item{markerId}{Cohort definition IDs in markerTable to be considered for the analysis.
 Change to NULL if all markers are wished to be included.}
-
-\item{combineMarker}{A parameter to combine certain cohorts of the markerTable together.
-Default is Null, meaning every cohort_definition_id is considered separately.}
 
 \item{daysPriorObservation}{The minimum amount of prior observation required on both the index
 and marker cohorts per person.}
 
-\item{indexWashout}{Washout period to be applied to the index cohort event.}
+\item{washoutWindow}{A washout window to be applied on both the index cohort event and marker cohort.}
 
-\item{markerWashout}{Washout period to be applied to the marker cohort event.}
-
-\item{continuedExposureInterval}{The time before the start of the second episode
+\item{indexMarkerGap}{The time before the start of the second episode
 of the drug (could be either marker or index) and the time after the end of the first
 episode (could be either marker or index).}
 
-\item{blackOutPeriod}{The minimum time the ADR is expected to take place.
-Default is 0, meaning excluding the cases that see both dates on the same day.}
-
-\item{timeGap}{The time between two initiations of index and marker. Default is 365.
-Change to Inf if no constrains are imposed.}
+\item{combinationWindow}{a constrain to be placed on the gap between two iniations.
+Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.}
 }
 \value{
-A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
+A table in the cdm reference with subject_id, index_id, index_name, marker_id, marker_name, index_date, marker_date, first_date and cdm_name.
 }
 \description{
 Join two tables in the CDM (one for index and the other for marker cohorts)
