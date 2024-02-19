@@ -37,13 +37,14 @@
 #' \donttest{
 #' library(PatientProfiles)
 #' cdm <- mockPatientProfiles()
-#' cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
-#'                                          indexTable = "cohort1",
-#'                                          markerTable = "cohort2")
+#' cdm <- CohortSymmetry::getCohortSequence(
+#'   cdm = cdm,
+#'   indexTable = "cohort1",
+#'   markerTable = "cohort2"
+#' )
 #' ## default name - joined_cohorts
 #' cdm$joined_cohorts
 #' }
-
 getCohortSequence <- function(cdm,
                               indexTable,
                               markerTable,
@@ -58,48 +59,51 @@ getCohortSequence <- function(cdm,
                               markerWashout = 0,
                               continuedExposureInterval = NULL,
                               blackOutPeriod = 0,
-                              timeGap = 365){
-
+                              timeGap = 365) {
   # checks
-  checkInputGetCohortSequence(cdm = cdm,
-                              indexTable = indexTable,
-                              markerTable = markerTable,
-                              name = name,
-                              dateRange = dateRange,
-                              indexId = indexId,
-                              markerId = markerId,
-                              daysPriorObservation = daysPriorObservation,
-                              indexWashout = indexWashout,
-                              markerWashout = markerWashout,
-                              blackOutPeriod = blackOutPeriod,
-                              continuedExposureInterval = continuedExposureInterval,
-                              timeGap = timeGap)
+  checkInputGetCohortSequence(
+    cdm = cdm,
+    indexTable = indexTable,
+    markerTable = markerTable,
+    name = name,
+    dateRange = dateRange,
+    indexId = indexId,
+    markerId = markerId,
+    daysPriorObservation = daysPriorObservation,
+    indexWashout = indexWashout,
+    markerWashout = markerWashout,
+    blackOutPeriod = blackOutPeriod,
+    continuedExposureInterval = continuedExposureInterval,
+    timeGap = timeGap
+  )
   temp <- list()
 
-  if(!is.finite(timeGap)){
+  if (!is.finite(timeGap)) {
     timeGap <- 99999999999
   }
 
-  if(is.null(continuedExposureInterval)){
+  if (is.null(continuedExposureInterval)) {
     continuedExposureInterval <- timeGap
   }
 
   # modify dateRange if necessary
-  if(any(is.na(dateRange))){
-    dateRange <- getDateRange(cdm = cdm,
-                              dateRange = dateRange)
+  if (any(is.na(dateRange))) {
+    dateRange <- getDateRange(
+      cdm = cdm,
+      dateRange = dateRange
+    )
   }
 
-  if (is.null(indexId)){
-    if (is.null(markerId)){
+  if (is.null(indexId)) {
+    if (is.null(markerId)) {
       indexCohort <- cdm[[indexTable]]
       markerCohort <- cdm[[markerTable]]
-    } else{
+    } else {
       indexCohort <- cdm[[indexTable]]
       markerCohort <- cdm[[markerTable]] %>% dplyr::filter(.data$cohort_definition_id %in% markerId)
     }
-  } else{
-    if (is.null(markerId)){
+  } else {
+    if (is.null(markerId)) {
       indexCohort <- cdm[[indexTable]] %>% dplyr::filter(.data$cohort_definition_id %in% indexId)
       markerCohort <- cdm[[markerTable]]
     } else {
@@ -108,21 +112,24 @@ getCohortSequence <- function(cdm,
     }
   }
 
-  if (is.null(combineIndex)){
+  if (is.null(combineIndex)) {
     indexCohort <- indexCohort
-  } else if (identical(combineIndex, c("All"))){
+  } else if (identical(combineIndex, c("All"))) {
     indexCohort <- indexCohort %>% dplyr::mutate(cohort_definition_id = 1)
-  } else if (is.list(combineIndex)){
+  } else if (is.list(combineIndex)) {
     checkcombineIndexList(combineIndex = combineIndex)
     input_ids <- c()
-    for (i in (1:length(combineIndex))){
+    for (i in (1:length(combineIndex))) {
       input_ids <- c(input_ids, combineIndex[[i]]) %>% unique()
     }
-    current_ids <- indexCohort %>% dplyr::select("cohort_definition_id") %>% dplyr::distinct() %>% dplyr::pull("cohort_definition_id")
-    if(identical(input_ids, current_ids) == FALSE){
+    current_ids <- indexCohort %>%
+      dplyr::select("cohort_definition_id") %>%
+      dplyr::distinct() %>%
+      dplyr::pull("cohort_definition_id")
+    if (identical(input_ids, current_ids) == FALSE) {
       cli::cli_abort("your inputted ids are not the same as cohort_definition_id in the indexTable, please double check")
     }
-    for (k in 1:length(combineIndex)){
+    for (k in 1:length(combineIndex)) {
       rq_id <- combineIndex[[k]]
       indexCohort <- indexCohort %>% dplyr::mutate(cohort_definition_id2 = dplyr::case_when(as.integer(.data$cohort_definition_id) %in% test ~ k))
     }
@@ -134,21 +141,24 @@ getCohortSequence <- function(cdm,
     cli::cli_abort("combineIndex has to be either NULL or 'ALL' or a list")
   }
 
-  if (is.null(combineMarker)){
+  if (is.null(combineMarker)) {
     markerCohort <- markerCohort
-  } else if (identical(combineMarker, c("All"))){
+  } else if (identical(combineMarker, c("All"))) {
     markerCohort <- markerCohort %>% dplyr::mutate(cohort_definition_id = 1)
-  } else if (is.list(combineMarker)){
+  } else if (is.list(combineMarker)) {
     checkcombineMarkerList(combineMarker = combineMarker)
     input_ids <- c()
-    for (i in (1:length(combineMarker))){
+    for (i in (1:length(combineMarker))) {
       input_ids <- c(input_ids, combineMarker[[i]]) %>% unique()
     }
-    current_ids <- markerCohort %>% dplyr::select("cohort_definition_id") %>% dplyr::distinct() %>% dplyr::pull("cohort_definition_id")
-    if(identical(input_ids, current_ids) == FALSE){
+    current_ids <- markerCohort %>%
+      dplyr::select("cohort_definition_id") %>%
+      dplyr::distinct() %>%
+      dplyr::pull("cohort_definition_id")
+    if (identical(input_ids, current_ids) == FALSE) {
       cli::cli_abort("your inputted ids are not the same as cohort_definition_id in the markerTable, please double check")
     }
-    for (k in 1:length(combineMarker)){
+    for (k in 1:length(combineMarker)) {
       rq_id <- combineMarker[[k]]
       markerCohort <- markerCohort %>% dplyr::mutate(cohort_definition_id2 = dplyr::case_when(as.integer(.data$cohort_definition_id) %in% test ~ k))
     }
@@ -160,88 +170,94 @@ getCohortSequence <- function(cdm,
     cli::cli_abort("combineMarker has to be either NULL or 'ALL' or a list")
   }
 
-  for (j in (markerCohort %>% dplyr::select("cohort_definition_id") %>% dplyr::distinct() %>% dplyr::pull())){
-    for (i in (indexCohort %>% dplyr::select("cohort_definition_id") %>% dplyr::distinct() %>% dplyr::pull())){
-      temp[[paste0("index_", i,"_marker_", j)]] <-
-        indexCohort %>%
-        dplyr::filter(.data$cohort_definition_id == i) %>%
-        dplyr::group_by(.data$subject_id) %>%
-        dplyr::arrange(.data$cohort_start_date) %>%
-        dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
-        dplyr::select("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "gap_to_prior") %>%
-        dplyr::rename(index_id = .data$cohort_definition_id,
-                      index_date = .data$cohort_start_date,
-                      index_end_date = .data$cohort_end_date,
-                      gap_to_prior_index = .data$gap_to_prior) %>%
-        dplyr::filter(.data$index_date <= !!dateRange[[2]] & .data$index_date >= !!dateRange[[1]]) %>%
-        dplyr::filter(dplyr::row_number()==1) %>%
-        dplyr::ungroup() %>%
-        PatientProfiles::addPriorObservation(indexDate = "index_date",
-                                             priorObservationName = "prior_observation_index") %>%
-        dplyr::inner_join(markerCohort %>%
-                            dplyr::filter(.data$cohort_definition_id == j) %>%
-                            dplyr::group_by(.data$subject_id) %>%
-                            dplyr::arrange(.data$cohort_start_date) %>%
-                            dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
-                            dplyr::select("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "gap_to_prior") %>%
-                            dplyr::rename(marker_id = .data$cohort_definition_id,
-                                          marker_date = .data$cohort_start_date,
-                                          marker_end_date = .data$cohort_end_date,
-                                          gap_to_prior_marker = .data$gap_to_prior) %>%
-                            dplyr::filter(.data$marker_date <= !!dateRange[[2]] & .data$marker_date >= !!dateRange[[1]]) %>%
-                            dplyr::filter(dplyr::row_number()==1) %>%
-                            dplyr::ungroup() %>%
-                            PatientProfiles::addPriorObservation(indexDate = "marker_date",
-                                                                 priorObservationName = "prior_observation_marker") %>%
-                            dplyr::compute(),
-                          by = "subject_id") %>%
-        dplyr::compute()
-    }
+
+
+  preprocessCohort <- function(cohort, dateRange) {
+    cohort %>%
+      dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
+      dbplyr::window_order(.data$cohort_start_date) %>%
+      dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
+      dplyr::filter(.data$cohort_start_date <= !!dateRange[[2]] & .data$cohort_start_date >= !!dateRange[[1]]) %>%
+      dplyr::filter(dplyr::row_number() == 1) %>%
+      dplyr::ungroup() %>%
+      PatientProfiles::addPriorObservation(indexDate = "cohort_start_date", priorObservationName = "prior_observation") %>%
+      dplyr::compute()
   }
 
-  cdm[[name]] <- Reduce(dplyr::union_all, temp) %>%
-    dplyr::mutate(gap = !!CDMConnector::datediff("index_date", "marker_date",
-                                                 interval = "day"),
-                  cei = ifelse((.data$index_date < .data$marker_date), .data$marker_date - .data$index_end_date, .data$index_date - .data$marker_end_date)) %>%
-    dplyr::filter(abs(.data$gap)>.env$blackOutPeriod & abs(.data$gap)<=.env$timeGap) %>%
-    dplyr::filter(.data$cei <= .env$continuedExposureInterval) %>%
-    dplyr::select(-"gap", -"cei") %>%
-    dplyr::mutate(first_date = dplyr::if_else(.data$index_date<=.data$marker_date,
-                                              .data$index_date, .data$marker_date),
-                  second_date = dplyr::if_else(.data$index_date>=.data$marker_date,
-                                              .data$index_date, .data$marker_date)) %>%
-    dplyr::filter(.data$prior_observation_marker >= .env$daysPriorObservation & .data$prior_observation_index >= .env$daysPriorObservation)%>%
-    dplyr::filter(.data$gap_to_prior_index >= .env$indexWashout | is.na(.data$gap_to_prior_index)) %>%
-    dplyr::filter(.data$gap_to_prior_marker >= .env$markerWashout | is.na(.data$gap_to_prior_marker)) %>%
-    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")  %>%
-    dplyr::compute(name = name,
-                   temporary = FALSE)
+  # Preprocess both cohorts
+  indexPreprocessed <- preprocessCohort(indexCohort, dateRange)
+  markerPreprocessed <- preprocessCohort(markerCohort, dateRange)
+
+
+  joinedData <- indexPreprocessed %>%
+    dplyr::rename(
+      "index_id" = "cohort_definition_id", "index_date" = "cohort_start_date",
+      "index_end_date" = "cohort_end_date", "prior_observation_index" = "prior_observation",
+      "gap_to_prior_index" = "gap_to_prior"
+    ) %>%
+    dplyr::inner_join(
+      markerPreprocessed %>%
+        dplyr::rename(
+          "marker_id" = "cohort_definition_id", "marker_date" = "cohort_start_date",
+          "marker_end_date" = "cohort_end_date", "prior_observation_marker" = "prior_observation",
+          "gap_to_prior_marker" = "gap_to_prior"
+        ),
+      by = "subject_id"
+    )
+
+  # Post-join processing
+  cdm[[name]] <- joinedData %>%
+    dplyr::mutate(
+      gap = CDMConnector::datediff("index_date", "marker_date", interval = "day"),
+      cei = dplyr::if_else(.data$index_date < .data$marker_date,
+        .data$marker_date - .data$index_end_date, #
+        .data$index_date - .data$marker_end_date
+      ),
+      first_date = dplyr::if_else(.data$index_date <= .data$marker_date,
+        .data$index_date,
+        .data$marker_date
+      ),
+      second_date = dplyr::if_else(.data$index_date >= .data$marker_date,
+        .data$index_date,
+        .data$marker_date
+      )
+    ) %>%
+    dplyr::filter(
+      abs(.data$gap) > .env$blackOutPeriod & abs(.data$gap) <= .env$timeGap,
+      .data$cei <= .env$continuedExposureInterval,
+      .data$prior_observation_marker >= .env$daysPriorObservation &
+        .data$prior_observation_index >= .env$daysPriorObservation,
+      .data$gap_to_prior_index >= .env$indexWashout | is.na(.data$gap_to_prior_index),
+      .data$gap_to_prior_marker >= .env$markerWashout | is.na(.data$gap_to_prior_marker)
+    ) %>%
+    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")
+
+
   return(cdm)
 }
-
 ### extra functions
 # If the user doesn't specify date range
 # range to min and max of obs period
-getDateRange <- function(cdm, dateRange){
+getDateRange <- function(cdm, dateRange) {
   if (is.na(dateRange[1])) {
     dateRange[1] <- as.Date(cdm[["observation_period"]] %>%
-                                    dplyr::summarise(
-                                      min(.data$observation_period_start_date,
-                                          na.rm = TRUE
-                                      )
-                                    ) %>%
-                                    dplyr::collect() %>%
-                                    dplyr::pull())
+      dplyr::summarise(
+        min(.data$observation_period_start_date,
+          na.rm = TRUE
+        )
+      ) %>%
+      dplyr::collect() %>%
+      dplyr::pull())
   }
   if (is.na(dateRange[2])) {
     dateRange[2] <- as.Date(cdm[["observation_period"]] %>%
-                                    dplyr::summarise(
-                                      max(.data$observation_period_end_date,
-                                          na.rm = TRUE
-                                      )
-                                    ) %>%
-                                    dplyr::collect() %>%
-                                    dplyr::pull())
+      dplyr::summarise(
+        max(.data$observation_period_end_date,
+          na.rm = TRUE
+        )
+      ) %>%
+      dplyr::collect() %>%
+      dplyr::pull())
   }
   return(dateRange)
 }
