@@ -7,7 +7,7 @@ checkInputGetCohortSequence <- function(cdm,
                                         markerId,
                                         daysPriorObservation,
                                         washoutWindow,
-                                        continuedExposureInterval,
+                                        indexMarkerGap,
                                         blackOutPeriod,
                                         timeGap
                                         ){
@@ -79,12 +79,12 @@ checkInputGetCohortSequence <- function(cdm,
     )
   }
 
-  # Check continuedExposureInterval
-  checkcontinuedExposureInterval(continuedExposureInterval, errorMessage)
-  continuedExposureIntervalCheck <- all(continuedExposureInterval >= 0)
-  if (!isTRUE(continuedExposureIntervalCheck)) {
+  # Check indexMarkerGap
+  checkindexMarkerGap(indexMarkerGap, errorMessage)
+  indexMarkerGapCheck <- all(indexMarkerGap >= 0)
+  if (!isTRUE(indexMarkerGapCheck)) {
     errorMessage$push(
-      "- continuedExposureInterval cannot be negative"
+      "- indexMarkerGap cannot be negative"
     )
   }
 
@@ -204,12 +204,12 @@ checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
   }
 }
 
-# Check continuedExposureInterval (Inf or numeric >=1)
-checkcontinuedExposureInterval <- function(continuedExposureInterval, errorMessage){
-  if (!is.null(continuedExposureInterval)){
-    if (continuedExposureInterval != Inf ) {
+# Check indexMarkerGap (Inf or numeric >=1)
+checkindexMarkerGap <- function(indexMarkerGap, errorMessage){
+  if (!is.null(indexMarkerGap)){
+    if (indexMarkerGap != Inf ) {
       checkmate::assertIntegerish(
-        continuedExposureInterval,
+        indexMarkerGap,
         lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
       )
     }

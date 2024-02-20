@@ -16,7 +16,7 @@
 #' @param daysPriorObservation The minimum amount of prior observation required on both the index
 #' and marker cohorts per person.
 #' @param washoutWindow A washout window to be applied on both the index cohort event and marker cohort.
-#' @param continuedExposureInterval The time before the start of the second episode
+#' @param indexMarkerGap The time before the start of the second episode
 #' of the drug (could be either marker or index) and the time after the end of the first
 #' episode (could be either marker or index).
 #' @param blackOutPeriod The minimum time the ADR is expected to take place.
@@ -49,7 +49,7 @@ getCohortSequence <- function(cdm,
                               markerId = NULL,
                               daysPriorObservation = 0,
                               washoutWindow = 0,
-                              continuedExposureInterval = NULL,
+                              indexMarkerGap = NULL,
                               blackOutPeriod = 0,
                               timeGap = 365) {
   # checks
@@ -64,7 +64,7 @@ getCohortSequence <- function(cdm,
     daysPriorObservation = daysPriorObservation,
     washoutWindow = washoutWindow,
     blackOutPeriod = blackOutPeriod,
-    continuedExposureInterval = continuedExposureInterval,
+    indexMarkerGap = indexMarkerGap,
     timeGap = timeGap
   )
   temp <- list()
@@ -73,8 +73,8 @@ getCohortSequence <- function(cdm,
     timeGap <- 99999999999
   }
 
-  if (is.null(continuedExposureInterval)) {
-    continuedExposureInterval <- timeGap
+  if (is.null(indexMarkerGap)) {
+    indexMarkerGap <- timeGap
   }
 
   # modify dateRange if necessary
@@ -155,7 +155,7 @@ getCohortSequence <- function(cdm,
     ) %>%
     dplyr::filter(
       abs(.data$gap) > .env$blackOutPeriod & abs(.data$gap) <= .env$timeGap,
-      .data$cei <= .env$continuedExposureInterval,
+      .data$cei <= .env$indexMarkerGap,
       .data$prior_observation_marker >= .env$daysPriorObservation &
         .data$prior_observation_index >= .env$daysPriorObservation,
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
