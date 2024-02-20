@@ -352,7 +352,7 @@ test_that("mock db: example of given study period start date wih daysPriorObserv
 })
 CDMConnector::cdmDisconnect(cdm)
 ################################# Involving washouts ################################
-# indexWashout
+# washoutWindow
 indexCohort <- dplyr::tibble(
   cohort_definition_id = c(1, 1, 1, 1),
   subject_id = c(3, 3, 3, 3),
@@ -455,7 +455,7 @@ test_that("mock db: example of multiple entries per person - index washout (shou
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           indexWashout = 365,
+                                           washoutWindow = 365,
                                            timeGap = Inf
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
@@ -469,7 +469,7 @@ test_that("mock db: example of multiple entries per person - exclusion based on 
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            dateRange = as.Date(c("2002-01-01", NA)),
-                                           markerWashout = 365,
+                                           washoutWindow = 365,
                                            timeGap = Inf
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)

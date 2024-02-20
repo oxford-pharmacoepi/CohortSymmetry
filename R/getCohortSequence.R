@@ -15,8 +15,7 @@
 #' Change to NULL if all markers are wished to be included.
 #' @param daysPriorObservation The minimum amount of prior observation required on both the index
 #' and marker cohorts per person.
-#' @param indexWashout Washout period to be applied to the index cohort event.
-#' @param markerWashout Washout period to be applied to the marker cohort event.
+#' @param washoutWindow A washout window to be applied on both the index cohort event and marker cohort.
 #' @param continuedExposureInterval The time before the start of the second episode
 #' of the drug (could be either marker or index) and the time after the end of the first
 #' episode (could be either marker or index).
@@ -49,8 +48,7 @@ getCohortSequence <- function(cdm,
                               indexId = NULL,
                               markerId = NULL,
                               daysPriorObservation = 0,
-                              indexWashout = 0,
-                              markerWashout = 0,
+                              washoutWindow = 0,
                               continuedExposureInterval = NULL,
                               blackOutPeriod = 0,
                               timeGap = 365) {
@@ -64,8 +62,7 @@ getCohortSequence <- function(cdm,
     indexId = indexId,
     markerId = markerId,
     daysPriorObservation = daysPriorObservation,
-    indexWashout = indexWashout,
-    markerWashout = markerWashout,
+    washoutWindow = washoutWindow,
     blackOutPeriod = blackOutPeriod,
     continuedExposureInterval = continuedExposureInterval,
     timeGap = timeGap
@@ -161,8 +158,8 @@ getCohortSequence <- function(cdm,
       .data$cei <= .env$continuedExposureInterval,
       .data$prior_observation_marker >= .env$daysPriorObservation &
         .data$prior_observation_index >= .env$daysPriorObservation,
-      .data$gap_to_prior_index >= .env$indexWashout | is.na(.data$gap_to_prior_index),
-      .data$gap_to_prior_marker >= .env$markerWashout | is.na(.data$gap_to_prior_marker)
+      .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
+      .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) %>%
     dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")
 

@@ -6,8 +6,7 @@ checkInputGetCohortSequence <- function(cdm,
                                         indexId,
                                         markerId,
                                         daysPriorObservation,
-                                        indexWashout,
-                                        markerWashout,
+                                        washoutWindow,
                                         continuedExposureInterval,
                                         blackOutPeriod,
                                         timeGap
@@ -89,21 +88,12 @@ checkInputGetCohortSequence <- function(cdm,
     )
   }
 
-  # Check indexWashout
-  checkindexWashout(indexWashout, errorMessage)
-  indexCheck <- all(indexWashout >= 0)
-  if (!isTRUE(indexCheck)) {
+  # Check washoutWindow
+  checkwashoutWindow (washoutWindow , errorMessage)
+  washoutWindowCheck <- all(washoutWindow  >= 0)
+  if (!isTRUE(washoutWindowCheck)) {
     errorMessage$push(
-      "- indexWashout cannot be negative"
-    )
-  }
-
-  # Check markerWashout
-  checkmarkerWashout(markerWashout, errorMessage)
-  markerCheck <- all(markerWashout >= 0)
-  if (!isTRUE(markerCheck)) {
-    errorMessage$push(
-      "- markerWashout cannot be negative"
+      "- washoutWindow cannot be negative"
     )
   }
   return(checkmate::reportAssertions(collection = errorMessage))
@@ -226,11 +216,11 @@ checkcontinuedExposureInterval <- function(continuedExposureInterval, errorMessa
   }
   }
 
-# Check indexWashout (Inf or numeric)
-checkindexWashout <- function(indexWashout, errorMessage){
-  if (indexWashout != Inf) {
+# Check washoutWindow (Inf or numeric)
+checkwashoutWindow <- function(washoutWindow, errorMessage){
+  if (washoutWindow != Inf) {
     checkmate::assertIntegerish(
-      indexWashout,
+      washoutWindow,
       lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
@@ -242,16 +232,6 @@ checkrestriction <- function(restriction, errorMessage){
     checkmate::assertIntegerish(
       restriction,
       lower = 0, any.missing = FALSE, max.len = 10, add = errorMessage
-    )
-  }
-}
-
-# Check markerWashout (Inf or numeric)
-checkmarkerWashout <- function(markerWashout, errorMessage){
-  if (markerWashout != Inf) {
-    checkmate::assertIntegerish(
-      markerWashout,
-      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
 }

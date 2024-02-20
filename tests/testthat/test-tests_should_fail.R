@@ -122,12 +122,7 @@ test_that("mock db: unsuccessful examples - negative parameters", {
   expect_error(CohortSymmetry::getCohortSequence(cdm,
                                                  indexTable = "cohort1",
                                                  markerTable = "drug_exposure",
-                                                 indexWashout = -100
-  ))
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
-                                                 indexTable = "cohort1",
-                                                 markerTable = "drug_exposure",
-                                                 markerWashout = -100
+                                                 washoutWindow = -100
   ))
   expect_error(CohortSymmetry::getCohortSequence(cdm,
                                                  indexTable = "cohort1",

@@ -13,8 +13,7 @@ getCohortSequence(
   indexId = NULL,
   markerId = NULL,
   daysPriorObservation = 0,
-  indexWashout = 0,
-  markerWashout = 0,
+  washoutWindow = 0,
   continuedExposureInterval = NULL,
   blackOutPeriod = 0,
   timeGap = 365
@@ -41,9 +40,7 @@ Change to NULL if all markers are wished to be included.}
 \item{daysPriorObservation}{The minimum amount of prior observation required on both the index
 and marker cohorts per person.}
 
-\item{indexWashout}{Washout period to be applied to the index cohort event.}
-
-\item{markerWashout}{Washout period to be applied to the marker cohort event.}
+\item{washoutWindow}{A washout window to be applied on both the index cohort event and marker cohort.}
 
 \item{continuedExposureInterval}{The time before the start of the second episode
 of the drug (could be either marker or index) and the time after the end of the first
