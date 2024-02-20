@@ -37,7 +37,7 @@ This is a basic example which carries out the necessary calculations for Sequenc
 The CohortSymmetry package is designed to work with data in the OMOP CDM (Common Data Model) format, so our first step is to create a reference to the data using the CDMConnector package.
  
 As an example, we will be utilising the Eunomia data set.
-```{r, message=FALSE, eval=FALSE}
+```{r, message=FALSE, eval=TRUE, warning=FALSE}
 library(CDMConnector)
 library(dplyr)
 library(DBI)
@@ -56,9 +56,9 @@ cdm <- cdm_from_con(
  
 This will be entirely user's choice on how to generate such cohorts. Minimally, this package requires two tables in the cdm reference to be cohort tables; in other words, the columns of these tables should contain cohort_definition_id, subject_id, cohort_start_date and cohort_end_date.
  
-If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. As an example, amiodarone and levothyroxine are used. Famously, this is a known positive control in [Pratt et al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4690514/)
+If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. As an example, amiodarone and levothyroxine are used. Famously, this is a known positive benchmark in [Pratt et al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4690514/)
  
-```{r Example - Step 0: Using DrugUtilisation, eval=FALSE}
+```{r Example - Step 0: Using DrugUtilisation, eval=TRUE, warning=FALSE}
 library(DrugUtilisation)
 library(CodelistGenerator)
 library(dplyr)
@@ -68,20 +68,20 @@ marker_drug <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm, name = "levo
  
 cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     cdm = cdm,
-    name = "cohort1",
+    name = "cohort_index",
     conceptSet = index_drug
   )
  
 cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     cdm = cdm,
-    name = "cohort2",
+    name = "cohort_marker",
     conceptSet = marker_drug
   )
  
-cdm$cohort1 %>%
+cdm$cohort_index %>%
   dplyr::glimpse()
  
-cdm$cohort2 %>%
+cdm$cohort_marker %>%
   dplyr::glimpse()
 ```
  
@@ -93,15 +93,17 @@ This process will filter out the individuals who appeared on both tables accordi
  
 The user also has the freedom to specify more than 1 IDs from either table that can be considered for this process. More concretely, if an user specifies m IDs from the first cohort and n IDs from the second cohort, this process will output mn combinations. If IDs are not specified then all IDs will be considered.
  
-```{r Step 1: getCohortSequence, eval=FALSE}
+```{r Step 1: getCohortSequence, eval=TRUE, warning=FALSE}
 library(CohortSymmetry)
  
 cdm <- CohortSymmetry::getCohortSequence(cdm,
-                   indexTable ="cohort1",
-                   markerTable = "cohort2",
+                   indexTable ="cohort_index",
+                   markerTable = "cohort_marker",
                    timeGap = Inf)
  
 cdm$joined_cohorts %>%
   dplyr::glimpse()
+
+cdm$joined_cohorts
  
 ```
