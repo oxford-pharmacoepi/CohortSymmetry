@@ -8,8 +8,34 @@
 \description{
 Calculating crude sequence ratio (csr), adjusted sequence ratio (asr) and confidence intervals using data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Calculations can also be done in a particular disease strata and stratification cohorts.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://oxford-pharmacoepi.github.io/CohortSymmetry/}
+}
+
+}
 \author{
-\strong{Maintainer}: Xihang Chen \email{xihang.chen@ndorms.ox.ac.uk} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Xihang Chen \email{xihang.chen@ndorms.ox.ac.uk} (\href{https://orcid.org/0009-0001-8112-8959}{ORCID})
+
+Authors:
+\itemize{
+  \item Ty Stanford \email{tyman.stanford@unisa.edu.au} (\href{https://orcid.org/0000-0002-8570-5493}{ORCID})
+  \item Berta Raventos \email{braventos@idiapjgol.info} (\href{https://orcid.org/0000-0002-4668-2970}{ORCID})
+  \item Nicole Pratt \email{Nicole.Pratt@unisa.edu.au} (\href{https://orcid.org/0000-0001-8730-8910}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Ed Burn \email{ed.burn@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-9286-1128}{ORCID}) [contributor]
+  \item Marti Catala \email{marti.catalasabate@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0003-3308-9905}{ORCID}) [contributor]
+  \item Danielle Newby \email{danielle.newby@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-3001-1478}{ORCID}) [contributor]
+  \item Núria Mercadé-Besora \email{nuria.mercadebesora@ndorms.ox.ac.uk} (\href{https://orcid.org/0009-0006-7948-3747}{ORCID}) [contributor]
+  \item Marta Alcalde \email{marta.alcaldeherraiz@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0000-0000-0000}{ORCID}) [contributor]
+  \item Mike Du \email{mike.du@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-9517-8834}{ORCID}) [contributor]
+  \item Yuchen Guo \email{yuchen.guo@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-0847-4855}{ORCID}) [contributor]
+  \item Kim Lopez \email{kim.lopez@spc.ox.ac.uk} (\href{https://orcid.org/0000-0002-8462-8668}{ORCID}) [contributor]
+}
 
 }
 \keyword{internal}
