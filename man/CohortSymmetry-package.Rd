@@ -8,6 +8,13 @@
 \description{
 Calculating crude sequence ratio (csr), adjusted sequence ratio (asr) and confidence intervals using data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Calculations can also be done in a particular disease strata and stratification cohorts.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://oxford-pharmacoepi.github.io/CohortSymmetry/}
+}
+
+}
 \author{
 \strong{Maintainer}: Xihang Chen \email{xihang.chen@ndorms.ox.ac.uk} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
 

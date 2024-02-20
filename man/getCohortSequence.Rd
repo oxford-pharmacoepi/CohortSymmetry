@@ -81,6 +81,6 @@ cdm <- CohortSymmetry::getCohortSequence(
   markerTable = "cohort2"
 )
 ## default name - joined_cohorts
-cdm$joined_cohorts
+ cdm$joined_cohorts
 }
 }
