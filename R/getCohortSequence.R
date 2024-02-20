@@ -19,10 +19,8 @@
 #' @param indexMarkerGap The time before the start of the second episode
 #' of the drug (could be either marker or index) and the time after the end of the first
 #' episode (could be either marker or index).
-#' @param blackOutPeriod The minimum time the ADR is expected to take place.
-#' Default is 0, meaning excluding the cases that see both dates on the same day.
-#' @param timeGap The time between two initiations of index and marker. Default is 365.
-#' Change to Inf if no constrains are imposed.
+#' @param combinationWindow a constrain to be placed on the gap between two iniations.
+#' Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.
 #'
 #' @return
 #' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
@@ -50,8 +48,7 @@ getCohortSequence <- function(cdm,
                               daysPriorObservation = 0,
                               washoutWindow = 0,
                               indexMarkerGap = NULL,
-                              blackOutPeriod = 0,
-                              timeGap = 365) {
+                              combinationWindow = c(0,365)) {
   # checks
   checkInputGetCohortSequence(
     cdm = cdm,
@@ -63,18 +60,17 @@ getCohortSequence <- function(cdm,
     markerId = markerId,
     daysPriorObservation = daysPriorObservation,
     washoutWindow = washoutWindow,
-    blackOutPeriod = blackOutPeriod,
     indexMarkerGap = indexMarkerGap,
-    timeGap = timeGap
+    combinationWindow = combinationWindow
   )
   temp <- list()
 
-  if (!is.finite(timeGap)) {
-    timeGap <- 99999999999
+  if(!is.finite(combinationWindow[2])){
+    combinationWindow[2] <- 99999999999
   }
 
-  if (is.null(indexMarkerGap)) {
-    indexMarkerGap <- timeGap
+  if(is.null(indexMarkerGap)){
+    indexMarkerGap <- combinationWindow[2]
   }
 
   # modify dateRange if necessary
@@ -119,6 +115,8 @@ getCohortSequence <- function(cdm,
   indexPreprocessed <- preprocessCohort(indexCohort, dateRange)
   markerPreprocessed <- preprocessCohort(markerCohort, dateRange)
 
+  time_1 <- combinationWindow[1]
+  time_2 <- combinationWindow[2]
 
   joinedData <- indexPreprocessed %>%
     dplyr::rename(
@@ -154,7 +152,7 @@ getCohortSequence <- function(cdm,
       )
     ) %>%
     dplyr::filter(
-      abs(.data$gap) > .env$blackOutPeriod & abs(.data$gap) <= .env$timeGap,
+      abs(.data$gap) > .env$time_1 & abs(.data$gap) <= .env$time_2,
       .data$cei <= .env$indexMarkerGap,
       .data$prior_observation_marker >= .env$daysPriorObservation &
         .data$prior_observation_index >= .env$daysPriorObservation,

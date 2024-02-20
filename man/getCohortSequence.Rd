@@ -15,8 +15,7 @@ getCohortSequence(
   daysPriorObservation = 0,
   washoutWindow = 0,
   indexMarkerGap = NULL,
-  blackOutPeriod = 0,
-  timeGap = 365
+  combinationWindow = c(0, 365)
 )
 }
 \arguments{
@@ -46,11 +45,8 @@ and marker cohorts per person.}
 of the drug (could be either marker or index) and the time after the end of the first
 episode (could be either marker or index).}
 
-\item{blackOutPeriod}{The minimum time the ADR is expected to take place.
-Default is 0, meaning excluding the cases that see both dates on the same day.}
-
-\item{timeGap}{The time between two initiations of index and marker. Default is 365.
-Change to Inf if no constrains are imposed.}
+\item{combinationWindow}{a constrain to be placed on the gap between two iniations.
+Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.}
 }
 \value{
 A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.

@@ -8,8 +8,7 @@ checkInputGetCohortSequence <- function(cdm,
                                         daysPriorObservation,
                                         washoutWindow,
                                         indexMarkerGap,
-                                        blackOutPeriod,
-                                        timeGap
+                                        combinationWindow
                                         ){
 
   # Check cdm objects, writing schema and index/marker tables
@@ -61,23 +60,8 @@ checkInputGetCohortSequence <- function(cdm,
     )
   }
 
-  # Check timeGap
-  checktimeGap(timeGap, errorMessage)
-  gapCheck <- all(timeGap >= 0)
-  if (!isTRUE(gapCheck)) {
-    errorMessage$push(
-      "- timeGap cannot be negative"
-    )
-  }
-
-  # Check blackOutPeriod
-  checkblackOutPeriod(blackOutPeriod, errorMessage)
-  blackOutPeriodCheck <- all(blackOutPeriod >= 0)
-  if (!isTRUE(blackOutPeriodCheck)) {
-    errorMessage$push(
-      "- blackOutPeriod cannot be negative"
-    )
-  }
+  # Check combinationWindow
+  checkcombinationWindow(combinationWindow, errorMessage)
 
   # Check indexMarkerGap
   checkindexMarkerGap(indexMarkerGap, errorMessage)
@@ -180,30 +164,6 @@ checkColumns <- function(cdm, CohortTable) {
   }
 }
 
-
-# Check timeGap (Inf, NULL or numeric >=1)
-checktimeGap <- function(timeGap, errorMessage){
-  if (timeGap != Inf) {
-  checkmate::assertIntegerish(
-    timeGap,
-    lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage
-  )
-  }
-}
-
-# Check blackOutPeriod (NULL or numeric >=1)
-checkblackOutPeriod <- function(blackOutPeriod, errorMessage){
-  if (blackOutPeriod != Inf) {
-    checkmate::assertIntegerish(
-      blackOutPeriod,
-      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
-    )
-  }
-  if(!(is.finite(blackOutPeriod))){
-    cli::cli_abort("blackOutPeriod has to be finite")
-  }
-}
-
 # Check indexMarkerGap (Inf or numeric >=1)
 checkindexMarkerGap <- function(indexMarkerGap, errorMessage){
   if (!is.null(indexMarkerGap)){
@@ -246,6 +206,24 @@ checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
   }
   if(!(is.finite(daysPriorObservation))){
     cli::cli_abort("daysPriorObservation has to be finite")
+  }
+}
+
+# Check combinationWindow (a numeric of length 2)
+checkcombinationWindow <- function(combinationWindow, errorMessage){
+  checkmate::assert_numeric(combinationWindow, len = 2, any.missing = FALSE, add = errorMessage)
+  if (combinationWindow[1] == Inf) {
+    cli::cli_abort("the first argument of combinationWindow cannot be infinite.")
+  }
+  if (combinationWindow[2] != Inf){
+    checkmate::assertIntegerish(
+      combinationWindow[1],
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
+    )
+    checkmate::assertIntegerish(
+      combinationWindow[2],
+      lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage
+    )
   }
 }
 
