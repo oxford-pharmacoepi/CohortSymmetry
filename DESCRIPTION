@@ -31,6 +31,7 @@ Imports:
     rlang,
     stringr,
     tibble,
-    dbplyr
+    dbplyr,
+    omopgenerics
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
