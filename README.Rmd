@@ -99,7 +99,7 @@ library(CohortSymmetry)
 cdm <- CohortSymmetry::getCohortSequence(cdm,
                    indexTable ="cohort_index",
                    markerTable = "cohort_marker",
-                   timeGap = Inf)
+                   combinationWindow = c(0,Inf))
  
 cdm$joined_cohorts %>%
   dplyr::glimpse()

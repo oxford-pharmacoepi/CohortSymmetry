@@ -11,23 +11,16 @@
 #' to restrict to.
 #' @param indexId Cohort definition IDs in indexTable to be considered for the analysis.
 #' Change to NULL if all indices are wished to be included.
-#' @param combineIndex A parameter to combine certain cohorts of the indexTable together.
-#' Default is Null, meaning every cohort_definition_id is considered separately.
 #' @param markerId Cohort definition IDs in markerTable to be considered for the analysis.
 #' Change to NULL if all markers are wished to be included.
-#' @param combineMarker A parameter to combine certain cohorts of the markerTable together.
-#' Default is Null, meaning every cohort_definition_id is considered separately.
 #' @param daysPriorObservation The minimum amount of prior observation required on both the index
 #' and marker cohorts per person.
-#' @param indexWashout Washout period to be applied to the index cohort event.
-#' @param markerWashout Washout period to be applied to the marker cohort event.
-#' @param continuedExposureInterval The time before the start of the second episode
+#' @param washoutWindow A washout window to be applied on both the index cohort event and marker cohort.
+#' @param indexMarkerGap The time before the start of the second episode
 #' of the drug (could be either marker or index) and the time after the end of the first
 #' episode (could be either marker or index).
-#' @param blackOutPeriod The minimum time the ADR is expected to take place.
-#' Default is 0, meaning excluding the cases that see both dates on the same day.
-#' @param timeGap The time between two initiations of index and marker. Default is 365.
-#' Change to Inf if no constrains are imposed.
+#' @param combinationWindow a constrain to be placed on the gap between two iniations.
+#' Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.
 #'
 #' @return
 #' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
@@ -43,7 +36,7 @@
 #'   markerTable = "cohort2"
 #' )
 #' ## default name - joined_cohorts
-#' cdm$joined_cohorts
+#'  cdm$joined_cohorts
 #' }
 getCohortSequence <- function(cdm,
                               indexTable,
@@ -51,15 +44,11 @@ getCohortSequence <- function(cdm,
                               name = "joined_cohorts",
                               dateRange = as.Date(c(NA, NA)),
                               indexId = NULL,
-                              combineIndex = NULL,
                               markerId = NULL,
-                              combineMarker = NULL,
                               daysPriorObservation = 0,
-                              indexWashout = 0,
-                              markerWashout = 0,
-                              continuedExposureInterval = NULL,
-                              blackOutPeriod = 0,
-                              timeGap = 365) {
+                              washoutWindow = 0,
+                              indexMarkerGap = NULL,
+                              combinationWindow = c(0,365)) {
   # checks
   checkInputGetCohortSequence(
     cdm = cdm,
@@ -70,20 +59,18 @@ getCohortSequence <- function(cdm,
     indexId = indexId,
     markerId = markerId,
     daysPriorObservation = daysPriorObservation,
-    indexWashout = indexWashout,
-    markerWashout = markerWashout,
-    blackOutPeriod = blackOutPeriod,
-    continuedExposureInterval = continuedExposureInterval,
-    timeGap = timeGap
+    washoutWindow = washoutWindow,
+    indexMarkerGap = indexMarkerGap,
+    combinationWindow = combinationWindow
   )
   temp <- list()
 
-  if (!is.finite(timeGap)) {
-    timeGap <- 99999999999
+  if(!is.finite(combinationWindow[2])){
+    combinationWindow[2] <- 99999999999
   }
 
-  if (is.null(continuedExposureInterval)) {
-    continuedExposureInterval <- timeGap
+  if(is.null(indexMarkerGap)){
+    indexMarkerGap <- combinationWindow[2]
   }
 
   # modify dateRange if necessary
@@ -112,66 +99,6 @@ getCohortSequence <- function(cdm,
     }
   }
 
-  if (is.null(combineIndex)) {
-    indexCohort <- indexCohort
-  } else if (identical(combineIndex, c("All"))) {
-    indexCohort <- indexCohort %>% dplyr::mutate(cohort_definition_id = 1)
-  } else if (is.list(combineIndex)) {
-    checkcombineIndexList(combineIndex = combineIndex)
-    input_ids <- c()
-    for (i in (1:length(combineIndex))) {
-      input_ids <- c(input_ids, combineIndex[[i]]) %>% unique()
-    }
-    current_ids <- indexCohort %>%
-      dplyr::select("cohort_definition_id") %>%
-      dplyr::distinct() %>%
-      dplyr::pull("cohort_definition_id")
-    if (identical(input_ids, current_ids) == FALSE) {
-      cli::cli_abort("your inputted ids are not the same as cohort_definition_id in the indexTable, please double check")
-    }
-    for (k in 1:length(combineIndex)) {
-      rq_id <- combineIndex[[k]]
-      indexCohort <- indexCohort %>% dplyr::mutate(cohort_definition_id2 = dplyr::case_when(as.integer(.data$cohort_definition_id) %in% test ~ k))
-    }
-    indexCohort <- indexCohort %>%
-      dplyr::select(-"cohort_definition_id") %>%
-      dplyr::rename("cohort_definition_id" = "cohort_definition_id2") %>%
-      dplyr::select("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date")
-  } else {
-    cli::cli_abort("combineIndex has to be either NULL or 'ALL' or a list")
-  }
-
-  if (is.null(combineMarker)) {
-    markerCohort <- markerCohort
-  } else if (identical(combineMarker, c("All"))) {
-    markerCohort <- markerCohort %>% dplyr::mutate(cohort_definition_id = 1)
-  } else if (is.list(combineMarker)) {
-    checkcombineMarkerList(combineMarker = combineMarker)
-    input_ids <- c()
-    for (i in (1:length(combineMarker))) {
-      input_ids <- c(input_ids, combineMarker[[i]]) %>% unique()
-    }
-    current_ids <- markerCohort %>%
-      dplyr::select("cohort_definition_id") %>%
-      dplyr::distinct() %>%
-      dplyr::pull("cohort_definition_id")
-    if (identical(input_ids, current_ids) == FALSE) {
-      cli::cli_abort("your inputted ids are not the same as cohort_definition_id in the markerTable, please double check")
-    }
-    for (k in 1:length(combineMarker)) {
-      rq_id <- combineMarker[[k]]
-      markerCohort <- markerCohort %>% dplyr::mutate(cohort_definition_id2 = dplyr::case_when(as.integer(.data$cohort_definition_id) %in% test ~ k))
-    }
-    markerCohort <- markerCohort %>%
-      dplyr::select(-"cohort_definition_id") %>%
-      dplyr::rename("cohort_definition_id" = "cohort_definition_id2") %>%
-      dplyr::select("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date")
-  } else {
-    cli::cli_abort("combineMarker has to be either NULL or 'ALL' or a list")
-  }
-
-
-
   preprocessCohort <- function(cohort, dateRange) {
     cohort %>%
       dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
@@ -188,6 +115,8 @@ getCohortSequence <- function(cdm,
   indexPreprocessed <- preprocessCohort(indexCohort, dateRange)
   markerPreprocessed <- preprocessCohort(markerCohort, dateRange)
 
+  time_1 <- combinationWindow[1]
+  time_2 <- combinationWindow[2]
 
   joinedData <- indexPreprocessed %>%
     dplyr::rename(
@@ -223,12 +152,12 @@ getCohortSequence <- function(cdm,
       )
     ) %>%
     dplyr::filter(
-      abs(.data$gap) > .env$blackOutPeriod & abs(.data$gap) <= .env$timeGap,
-      .data$cei <= .env$continuedExposureInterval,
+      abs(.data$gap) > .env$time_1 & abs(.data$gap) <= .env$time_2,
+      .data$cei <= .env$indexMarkerGap,
       .data$prior_observation_marker >= .env$daysPriorObservation &
         .data$prior_observation_index >= .env$daysPriorObservation,
-      .data$gap_to_prior_index >= .env$indexWashout | is.na(.data$gap_to_prior_index),
-      .data$gap_to_prior_marker >= .env$markerWashout | is.na(.data$gap_to_prior_marker)
+      .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
+      .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) %>%
     dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")
 
