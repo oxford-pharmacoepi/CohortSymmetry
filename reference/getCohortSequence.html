@@ -151,18 +151,21 @@ Change to Inf if no constrains are imposed.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu-dev.github.io/PatientProfiles/" class="external-link">PatientProfiles</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu-dev.github.io/PatientProfiles/reference/mockPatientProfiles.html" class="external-link">mockPatientProfiles</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu">getCohortSequence</span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
-<span class="r-in"><span>                                         indexTable <span class="op">=</span> <span class="st">"cohort1"</span>,</span></span>
-<span class="r-in"><span>                                         markerTable <span class="op">=</span> <span class="st">"cohort2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu">getCohortSequence</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
+<span class="r-in"><span>  indexTable <span class="op">=</span> <span class="st">"cohort1"</span>,</span></span>
+<span class="r-in"><span>  markerTable <span class="op">=</span> <span class="st">"cohort2"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: testthat</span>
 <span class="r-in"><span><span class="co">## default name - joined_cohorts</span></span></span>
 <span class="r-in"><span><span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohorts</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;joined_cohorts&gt; [2 x 7]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB v0.9.2 [unknown@Linux 6.2.0-1019-azure:R 4.3.2/:memory:]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:     SQL [2 x 7]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database:   DuckDB v0.9.2 [unknown@Linux 6.2.0-1019-azure:R 4.3.2/:memory:]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Ordered by: index_date</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   index_id marker_id subject_id index_date marker_date first_date second_date</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>        1         2          1 2020-01-01 2020-05-25  2020-01-01 2020-05-25 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>        1         1          1 2020-01-01 2019-12-30  2019-12-30 2020-01-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>        1         1          1 2020-01-01 2019-12-30  2019-12-30 2020-01-01 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>        1         2          1 2020-01-01 2020-05-25  2020-01-01 2020-05-25 </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
