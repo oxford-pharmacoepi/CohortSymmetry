@@ -30,13 +30,14 @@
 #' \donttest{
 #' library(PatientProfiles)
 #' cdm <- mockPatientProfiles()
-#' cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
-#'                                          indexTable = "cohort1",
-#'                                          markerTable = "cohort2")
+#' cdm <- CohortSymmetry::getCohortSequence(
+#'   cdm = cdm,
+#'   indexTable = "cohort1",
+#'   markerTable = "cohort2"
+#' )
 #' ## default name - joined_cohorts
 #' cdm$joined_cohorts
 #' }
-
 getCohortSequence <- function(cdm,
                               indexTable,
                               markerTable,
@@ -72,21 +73,23 @@ getCohortSequence <- function(cdm,
   }
 
   # modify dateRange if necessary
-  if(any(is.na(dateRange))){
-    dateRange <- getDateRange(cdm = cdm,
-                              dateRange = dateRange)
+  if (any(is.na(dateRange))) {
+    dateRange <- getDateRange(
+      cdm = cdm,
+      dateRange = dateRange
+    )
   }
 
-  if (is.null(indexId)){
-    if (is.null(markerId)){
+  if (is.null(indexId)) {
+    if (is.null(markerId)) {
       indexCohort <- cdm[[indexTable]]
       markerCohort <- cdm[[markerTable]]
-    } else{
+    } else {
       indexCohort <- cdm[[indexTable]]
       markerCohort <- cdm[[markerTable]] %>% dplyr::filter(.data$cohort_definition_id %in% markerId)
     }
-  } else{
-    if (is.null(markerId)){
+  } else {
+    if (is.null(markerId)) {
       indexCohort <- cdm[[indexTable]] %>% dplyr::filter(.data$cohort_definition_id %in% indexId)
       markerCohort <- cdm[[markerTable]]
     } else {
@@ -166,32 +169,32 @@ joinedData <- indexPreprocessed %>%
 
   cdm <- omopgenerics::dropTable(cdm = cdm,
                                  name = c("index_name", "marker_name"))
+
   return(cdm)
 }
-
 ### extra functions
 # If the user doesn't specify date range
 # range to min and max of obs period
-getDateRange <- function(cdm, dateRange){
+getDateRange <- function(cdm, dateRange) {
   if (is.na(dateRange[1])) {
     dateRange[1] <- as.Date(cdm[["observation_period"]] %>%
-                                    dplyr::summarise(
-                                      min(.data$observation_period_start_date,
-                                          na.rm = TRUE
-                                      )
-                                    ) %>%
-                                    dplyr::collect() %>%
-                                    dplyr::pull())
+      dplyr::summarise(
+        min(.data$observation_period_start_date,
+          na.rm = TRUE
+        )
+      ) %>%
+      dplyr::collect() %>%
+      dplyr::pull())
   }
   if (is.na(dateRange[2])) {
     dateRange[2] <- as.Date(cdm[["observation_period"]] %>%
-                                    dplyr::summarise(
-                                      max(.data$observation_period_end_date,
-                                          na.rm = TRUE
-                                      )
-                                    ) %>%
-                                    dplyr::collect() %>%
-                                    dplyr::pull())
+      dplyr::summarise(
+        max(.data$observation_period_end_date,
+          na.rm = TRUE
+        )
+      ) %>%
+      dplyr::collect() %>%
+      dplyr::pull())
   }
   return(dateRange)
 }
