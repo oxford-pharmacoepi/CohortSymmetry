@@ -11,9 +11,7 @@ getCohortSequence(
   name = "joined_cohorts",
   dateRange = as.Date(c(NA, NA)),
   indexId = NULL,
-  combineIndex = NULL,
   markerId = NULL,
-  combineMarker = NULL,
   daysPriorObservation = 0,
   indexWashout = 0,
   markerWashout = 0,
@@ -37,14 +35,8 @@ to restrict to.}
 \item{indexId}{Cohort definition IDs in indexTable to be considered for the analysis.
 Change to NULL if all indices are wished to be included.}
 
-\item{combineIndex}{A parameter to combine certain cohorts of the indexTable together.
-Default is Null, meaning every cohort_definition_id is considered separately.}
-
 \item{markerId}{Cohort definition IDs in markerTable to be considered for the analysis.
 Change to NULL if all markers are wished to be included.}
-
-\item{combineMarker}{A parameter to combine certain cohorts of the markerTable together.
-Default is Null, meaning every cohort_definition_id is considered separately.}
 
 \item{daysPriorObservation}{The minimum amount of prior observation required on both the index
 and marker cohorts per person.}

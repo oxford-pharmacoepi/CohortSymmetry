@@ -4,9 +4,7 @@ checkInputGetCohortSequence <- function(cdm,
                                         name,
                                         dateRange,
                                         indexId,
-                                        combineIndex,
                                         markerId,
-                                        combineMarker,
                                         daysPriorObservation,
                                         indexWashout,
                                         markerWashout,
@@ -277,33 +275,4 @@ checkconfidenceIntervalLevel <- function(checkconfidenceIntervalLevel, errorMess
       checkconfidenceIntervalLevel,
       lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage
     )
-}
-
-## Check intersect
-checkIntersect <- function(list_input){
-  intersection <- c()
-  for (i in (1:(length(list_input)-1))){
-    for (j in ((i+1):length(list_input))){
-      intersection <- c(intersection, intersect(list_input[[i]], list_input[[j]]))
-    }
-  }
-  return(intersection)
-}
-
-# Check combineIndex
-checkcombineIndexList <- function(combineIndex){
-  if(length(combineIndex) == 0){
-    cli::cli_abort("length of the combineIndex list must be positive")
-  } else if(length(checkIntersect(combineIndex))>0) {
-    cli::cli_abort("there are overlaps in your combineIndex, please double check")
-  }
-}
-
-# Check combineMarker
-checkcombineMarkerList <- function(combineMarker){
-  if(length(combineMarker) == 0){
-    cli::cli_abort("length of the combineMarker list must be positive")
-  } else if(length(checkIntersect(combineMarker))>0) {
-    cli::cli_abort("there are overlaps in your combineMarker, please double check")
-  }
 }
