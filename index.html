@@ -76,8 +76,11 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu.github.io/CDMConnector/" class="external-link">CDMConnector</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'dplyr' was built under R version 4.1.3</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'DBI' was built under R version 4.1.3</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'duckdb' was built under R version 4.1.3</span></span>
 <span> </span>
 <span><span class="va">db</span> <span class="op">&lt;-</span> <span class="fu">DBI</span><span class="fu">::</span><span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/duckdb/man/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span>, </span>
 <span>                     dbdir <span class="op">=</span> <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/eunomiaDir.html" class="external-link">eunomia_dir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -102,21 +105,39 @@
 <span> </span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">DrugUtilisation</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/reference/generateDrugUtilisationCohortSet.html" class="external-link">generateDrugUtilisationCohortSet</a></span><span class="op">(</span></span>
 <span>    cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"cohort1"</span>,</span>
+<span>    name <span class="op">=</span> <span class="st">"cohort_index"</span>,</span>
 <span>    conceptSet <span class="op">=</span> <span class="va">index_drug</span></span>
 <span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: cohort_name must be snake case, the following cohorts will be renamed:</span></span>
+<span><span class="co">#&gt; * Ingredient: Amiodarone (1309944) -&gt; ingredient_amiodarone_1309944</span></span>
 <span> </span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">DrugUtilisation</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/reference/generateDrugUtilisationCohortSet.html" class="external-link">generateDrugUtilisationCohortSet</a></span><span class="op">(</span></span>
 <span>    cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"cohort2"</span>,</span>
+<span>    name <span class="op">=</span> <span class="st">"cohort_marker"</span>,</span>
 <span>    conceptSet <span class="op">=</span> <span class="va">marker_drug</span></span>
 <span>  <span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: cohort_name must be snake case, the following cohorts will be renamed:</span></span>
+<span><span class="co">#&gt; * Ingredient: levothyroxine (1501700) -&gt; ingredient_levothyroxine_1501700</span></span>
 <span> </span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">cohort1</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">cohort_index</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: ??</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\Rtmp0eRJF5\file1a1046e02ed2.duckdb]</span></span>
+<span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~</span></span>
+<span><span class="co">#&gt; $ subject_id           &lt;int&gt; 651, 712, 752, 918, 1410, 2518, 2602, 2955, 2985,~</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 1999-01-28, 2011-04-14, 1979-02-04, 2016-05-20, ~</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      &lt;date&gt; 1999-01-28, 2011-04-14, 1979-02-04, 2016-05-20, ~</span></span>
 <span> </span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">cohort2</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">cohort_marker</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: ??</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\Rtmp0eRJF5\file1a1046e02ed2.duckdb]</span></span>
+<span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~</span></span>
+<span><span class="co">#&gt; $ subject_id           &lt;int&gt; 1079, 515, 3866, 19, 2487, 2752, 4375, 4532, 3224~</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 2016-03-05, 2009-03-05, 2017-09-24, 2004-01-17, ~</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      &lt;date&gt; 2016-03-05, 2009-03-05, 2017-09-24, 2004-01-17, ~</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-1-getcohortsequence">Step 1: getCohortSequence<a class="anchor" aria-label="anchor" href="#step-1-getcohortsequence"></a>
@@ -128,13 +149,31 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span>
 <span> </span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/getCohortSequence.html">getCohortSequence</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
-<span>                   indexTable <span class="op">=</span><span class="st">"cohort1"</span>,</span>
-<span>                   markerTable <span class="op">=</span> <span class="st">"cohort2"</span>,</span>
+<span>                   indexTable <span class="op">=</span><span class="st">"cohort_index"</span>,</span>
+<span>                   markerTable <span class="op">=</span> <span class="st">"cohort_marker"</span>,</span>
 <span>                   timeGap <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span> </span>
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohorts</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span> </span></code></pre></div>
+<span><span class="co">#&gt; Rows: ??</span></span>
+<span><span class="co">#&gt; Columns: 8</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\Rtmp0eRJF5\file1a1046e02ed2.duckdb]</span></span>
+<span><span class="co">#&gt; $ subject_id  &lt;int&gt; 2006</span></span>
+<span><span class="co">#&gt; $ index_id    &lt;int&gt; 1</span></span>
+<span><span class="co">#&gt; $ marker_id   &lt;int&gt; 1</span></span>
+<span><span class="co">#&gt; $ index_date  &lt;date&gt; 2014-01-17</span></span>
+<span><span class="co">#&gt; $ marker_date &lt;date&gt; 2017-12-31</span></span>
+<span><span class="co">#&gt; $ first_date  &lt;date&gt; 2014-01-17</span></span>
+<span><span class="co">#&gt; $ time_gap    &lt;chr&gt; "Infinity"</span></span>
+<span><span class="co">#&gt; $ cdm_name    &lt;chr&gt; "Synthea synthetic health database"</span></span>
+<span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohorts</span></span>
+<span><span class="co">#&gt; # Source:   SQL [1 x 8]</span></span>
+<span><span class="co">#&gt; # Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\Rtmp0eRJF5\file1a1046e02ed2.duckdb]</span></span>
+<span><span class="co">#&gt;   subject_id index_id marker_id index_date marker_date first_date time_gap</span></span>
+<span><span class="co">#&gt;        &lt;int&gt;    &lt;int&gt;     &lt;int&gt; &lt;date&gt;     &lt;date&gt;      &lt;date&gt;     &lt;chr&gt;   </span></span>
+<span><span class="co">#&gt; 1       2006        1         1 2014-01-17 2017-12-31  2014-01-17 Infinity</span></span>
+<span><span class="co">#&gt; # i 1 more variable: cdm_name &lt;chr&gt;</span></span></code></pre></div>
 </div>
 </div>
 </div>
