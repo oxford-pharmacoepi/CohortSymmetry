@@ -118,6 +118,14 @@ getCohortSequence <- function(cdm,
   time_1 <- combinationWindow[1]
   time_2 <- combinationWindow[2]
 
+  index_name <- CDMConnector::settings(cdm[[indexTable]]) %>%
+    dplyr::select(.data$cohort_definition_id, .data$cohort_name) %>%
+    dplyr::rename("index_id" = "cohort_definition_id",
+                  "index_name" = "cohort_name")
+
+  #prefix <- omopgenerics::tmpPrefix() - prefix
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "index_name", table = index_name)
+
   joinedData <- indexPreprocessed %>%
     dplyr::rename(
       "index_id" = "cohort_definition_id", "index_date" = "cohort_start_date",
@@ -161,7 +169,7 @@ getCohortSequence <- function(cdm,
     ) %>%
     dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")
 
-
+  cdm <- CDMConnector::dropTable(cdm = cdm, name = "index_name")
   return(cdm)
 }
 ### extra functions
