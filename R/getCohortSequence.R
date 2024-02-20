@@ -43,7 +43,7 @@
 #'   markerTable = "cohort2"
 #' )
 #' ## default name - joined_cohorts
-#' cdm$joined_cohorts
+#'  cdm$joined_cohorts
 #' }
 getCohortSequence <- function(cdm,
                               indexTable,
