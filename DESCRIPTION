@@ -1,19 +1,43 @@
 Package: CohortSymmetry
 Title: Sequence Symmetry Analysis using OMOP CDM (Common Data Model)
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R: c(
     person("Xihang", "Chen", , "xihang.chen@ndorms.ox.ac.uk", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+           comment = c(ORCID = "0009-0001-8112-8959")),
+    person("Tyman", "Stanford", , "tyman.stanford@unisa.edu.au", role = "aut",
+           comment = c(ORCID = "0000-0002-8570-5493")),
+    person("Berta", "Raventós", , "braventos@idiapjgol.info", role = "aut",
+           comment = c(ORCID = "0000-0002-4668-2970")),
+    person("Nicole", "Pratt", , "Nicole.Pratt@unisa.edu.au", role = "aut",
+           comment = c(ORCID = "0000-0001-8730-8910")),
+    person("Ed", "Burn", , "ed.burn@ndorms.ox.ac.uk", role = "aut",
+           comment = c(ORCID = "0000-0002-9286-1128")),
+    person("Marti", "Català", , "marti.catalasabate@ndorms.ox.ac.uk", role = "aut",
+           comment = c(ORCID = "0000-0003-3308-9905")),
+    person("Danielle", "Newby", , "danielle.newby@ndorms.ox.ac.uk", role = "aut",
+           comment = c(ORCID = "0000-0002-3001-1478")),
+    person("Núria", "Mercadé-Besora", , "nuria.mercadebesora@ndorms.ox.ac.uk", role = "aut",
+           comment = c(ORCID = "0009-0006-7948-3747")),
+    person("Mike", "Du", , "mike.du@ndorms.ox.ac.uk", role = "aut",
+           comment = c(ORCID = "0000-0002-9517-8834")),
+    person("Yuchen", "Guo", , "yuchen.guo@ndorms.ox.ac.uk", role = "aut",
+           comment = c(ORCID = "0000-0002-0847-4855")),
+    person("Kim", "Lopez", , "kim.lopez@spc.ox.ac.uk", role = "aut",
+           comment = c(ORCID = "0000-0002-8462-8668")),
+    person("Marta", "Alcalde-Herraiz", , "marta.alcaldeherraiz@ndorms.ox.ac.uk", role = "aut",
+           comment = c(ORCID = "0009-0002-4405-1814"))
+  )
+Maintainer: Xihang Chen <xihang.chen@ndorms.ox.ac.uk>
 Description: Calculating crude sequence ratio (csr), adjusted sequence ratio (asr) and confidence intervals using data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Calculations can also be done in a particular disease strata and stratification cohorts.
 License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests:
-    DrugUtilisation (>= 0.5.0),
     testthat (>= 3.1.5),
     DBI (>= 1.0.0),
     CodelistGenerator (>= 2.2.2),
+    DrugUtilisation (>= 0.5.0),
     duckdb,
     cli,
     checkmate,
@@ -34,3 +58,4 @@ Imports:
     dbplyr,
     omopgenerics
 Config/testthat/edition: 3
+URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/

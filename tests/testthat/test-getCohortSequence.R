@@ -66,7 +66,6 @@ test_that("mock db: one ID against one ID, example 1", {
                      indexId=1,
                      markerTable = "cohort2",
                      markerId=1)
-  # check number of rows (timeGap=365d)
   expect_true((cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n)) == 2)
   loc <- cdm$joined_cohorts %>% dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
@@ -84,7 +83,6 @@ test_that("mock db: one ID against one ID, example 2", {
                      indexId=2,
                      markerTable = "cohort2",
                      markerId=2)
-  # check number of rows (timeGap=365d)
   loc <- cdm$joined_cohorts %>% dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
   expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==2 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n)) == 1)
@@ -101,21 +99,20 @@ test_that("mock db: one ID against one ID, example 3", {
                      markerTable = "cohort2",
                      markerId=2)
 
-  # check number of rows (timeGap=365d)
   loc <- cdm$joined_cohorts %>% dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
   expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n))== 3)
 }
 )
 
-test_that("mock db: change timeGap", {
-  # change of defaulted timeGap
+test_that("mock db: change combinationWindow ", {
+  # change of defaulted combinationWindow
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                      indexTable ="cohort1",
                      indexId=1,
                      markerTable = "cohort2",
                      markerId=2,
-                     timeGap = 30)
+                     combinationWindow = c(0,30))
 
   loc <- cdm$joined_cohorts %>% dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 30))
@@ -124,14 +121,12 @@ test_that("mock db: change timeGap", {
 )
 
 test_that("mock db: change blackOutPeriod", {
-  # change of defaulted timeGap
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                                            indexTable ="cohort1",
                                            indexId=1,
                                            markerTable = "cohort2",
                                            markerId=2,
-                                           blackOutPeriod = 7,
-                                           timeGap = 365)
+                                           combinationWindow = c(7,365))
 
   loc <- cdm$joined_cohorts %>% dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
@@ -145,7 +140,7 @@ test_that("mock db: all IDs against all IDs", {
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                      indexTable = "cohort1",
                      markerTable = "cohort2",
-                     timeGap = 90)
+                     combinationWindow = c(0,90))
 
 
   # check number of rows (timeGap=90d)
@@ -225,7 +220,7 @@ test_that("mock db: example of timeGap being infinite", {
                      indexId = 1,
                      markerTable = "cohort2",
                      markerId = 3,
-                     timeGap = Inf
+                     combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 4) #inf gives more values
 })
@@ -267,7 +262,7 @@ test_that("mock db: example of timeGap being infinite with 0 daysPriorObservatio
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 0,
-                                           timeGap = Inf
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
 })
@@ -277,7 +272,7 @@ test_that("mock db: example of fixed timeGap being with 0 daysPriorObservation",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 0,
-                                           timeGap = 730
+                                           combinationWindow = c(0,730)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
 })
@@ -287,7 +282,7 @@ test_that("mock db: example of infinite timeGap being with non-zero daysPriorObs
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 30,
-                                           timeGap = Inf
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
 })
@@ -297,7 +292,7 @@ test_that("mock db: example of fixed timeGap being with non-zero daysPriorObserv
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 30,
-                                           timeGap = 365
+                                           combinationWindow = c(0,365)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
 })
@@ -309,7 +304,7 @@ test_that("mock db: example of given study period start date", {
                                            markerTable = "cohort2",
                                            dateRange = as.Date(c("2020-01-01", NA)),
                                            daysPriorObservation = 0,
-                                           timeGap = Inf
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1,2,4)))
@@ -320,8 +315,7 @@ test_that("mock db: example of given study period start date wih daysPriorObserv
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            dateRange = as.Date(c("2020-01-01", NA)),
-                                           daysPriorObservation = 365,
-                                           timeGap = 365
+                                           daysPriorObservation = 365
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1,2,4)))
@@ -333,7 +327,7 @@ test_that("mock db: example of given study period start date wih daysPriorObserv
                                            markerTable = "cohort2",
                                            dateRange = as.Date(c("2000-01-01", "2022-01-01")),
                                            daysPriorObservation = 30,
-                                           timeGap = Inf
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 2)
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1,4)))
@@ -345,14 +339,14 @@ test_that("mock db: example of given study period start date wih daysPriorObserv
                                            markerTable = "cohort2",
                                            dateRange = as.Date(c("2000-01-01", "2023-01-01")),
                                            daysPriorObservation = 365,
-                                           timeGap = Inf
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1, 2, 4)))
 })
 CDMConnector::cdmDisconnect(cdm)
 ################################# Involving washouts ################################
-# indexWashout
+# washoutWindow
 indexCohort <- dplyr::tibble(
   cohort_definition_id = c(1, 1, 1, 1),
   subject_id = c(3, 3, 3, 3),
@@ -394,7 +388,7 @@ test_that("mock db: example of multiple entries per person", {
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           timeGap = Inf
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
   earliest_index_date <- cdm$cohort1 %>%
@@ -412,8 +406,7 @@ test_that("mock db: example of multiple entries per person", {
 test_that("mock db: example of multiple entries per person - exclusion based on timeGap", {
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                                            indexTable ="cohort1",
-                                           markerTable = "cohort2",
-                                           timeGap = 365
+                                           markerTable = "cohort2"
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
 })
@@ -423,7 +416,7 @@ test_that("mock db: example of multiple entries per person - exclusion based on 
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 365,
-                                           timeGap = Inf
+                                           combinationWindow = c(0, Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 })
@@ -434,7 +427,7 @@ test_that("mock db: example of multiple entries per person - picking sequence in
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 365,
-                                           timeGap = Inf
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
   expect_true(cdm$joined_cohorts %>% dplyr::pull(first_date) >= as.Date("2000-01-01"))
@@ -445,8 +438,7 @@ test_that("mock db: example of multiple entries per person - picking sequence in
                                            dateRange = as.Date(c("2000-01-01", NA)),
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           daysPriorObservation = 365,
-                                           timeGap = 365
+                                           daysPriorObservation = 365
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
 })
@@ -455,8 +447,8 @@ test_that("mock db: example of multiple entries per person - index washout (shou
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           indexWashout = 365,
-                                           timeGap = Inf
+                                           washoutWindow = 365,
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
   index_date <- cdm$joined_cohorts %>% dplyr::pull(index_date)
@@ -469,8 +461,8 @@ test_that("mock db: example of multiple entries per person - exclusion based on 
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            dateRange = as.Date(c("2002-01-01", NA)),
-                                           markerWashout = 365,
-                                           timeGap = Inf
+                                           washoutWindow = 365,
+                                           combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 })
