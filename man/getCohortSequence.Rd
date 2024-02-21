@@ -14,7 +14,7 @@ getCohortSequence(
   markerId = NULL,
   daysPriorObservation = 0,
   washoutWindow = 0,
-  indexMarkerGap = NULL,
+  indexMarkerGap = 365,
   combinationWindow = c(0, 365)
 )
 }

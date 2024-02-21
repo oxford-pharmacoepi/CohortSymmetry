@@ -47,7 +47,7 @@ getCohortSequence <- function(cdm,
                               markerId = NULL,
                               daysPriorObservation = 0,
                               washoutWindow = 0,
-                              indexMarkerGap = NULL,
+                              indexMarkerGap = 365,
                               combinationWindow = c(0,365)) {
   # checks
   checkInputGetCohortSequence(
@@ -67,10 +67,6 @@ getCohortSequence <- function(cdm,
 
   if(!is.finite(combinationWindow[2])){
     combinationWindow[2] <- 99999999999
-  }
-
-  if(is.null(indexMarkerGap)){
-    indexMarkerGap <- combinationWindow[2]
   }
 
   # modify dateRange if necessary
@@ -174,10 +170,10 @@ getCohortSequence <- function(cdm,
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) %>%
-    # dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
-    #               washout_window = .env$washoutWindow,
-    #               index_marker_gap = .env$indexMarkerGap,
-    #               combination_window = .env$combinationWindow) %>%
+    dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
+                  washout_window = .env$washoutWindow,
+                  index_marker_gap = .env$indexMarkerGap,
+                  combination_window = .env$combinationWindow) %>%
     dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")  %>%
     dplyr::compute(name = name,
                    temporary = FALSE)

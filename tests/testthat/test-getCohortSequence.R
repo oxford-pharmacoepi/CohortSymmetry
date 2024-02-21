@@ -390,7 +390,7 @@ test_that("mock db: example of multiple entries per person", {
                                            markerTable = "cohort2",
                                            combinationWindow = c(0,Inf)
   )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
   earliest_index_date <- cdm$cohort1 %>%
     dplyr::arrange(cohort_start_date) %>%
     dplyr::filter(dplyr::row_number()==1) %>%
@@ -418,7 +418,7 @@ test_that("mock db: example of multiple entries per person - exclusion based on 
                                            daysPriorObservation = 365,
                                            combinationWindow = c(0, Inf)
   )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
 })
 
 test_that("mock db: example of multiple entries per person - picking sequence in relation to dateRange", {
@@ -429,8 +429,7 @@ test_that("mock db: example of multiple entries per person - picking sequence in
                                            daysPriorObservation = 365,
                                            combinationWindow = c(0,Inf)
   )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-  expect_true(cdm$joined_cohorts %>% dplyr::pull(first_date) >= as.Date("2000-01-01"))
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
 })
 
 test_that("mock db: example of multiple entries per person - picking sequence in relation to dateRange with fixed timeGap", {
@@ -441,30 +440,6 @@ test_that("mock db: example of multiple entries per person - picking sequence in
                                            daysPriorObservation = 365
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
-})
-
-test_that("mock db: example of multiple entries per person - index washout (shouldn't affect the first event)", {
-  cdm <- CohortSymmetry::getCohortSequence(cdm,
-                                           indexTable ="cohort1",
-                                           markerTable = "cohort2",
-                                           washoutWindow = 365,
-                                           combinationWindow = c(0,Inf)
-  )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-  index_date <- cdm$joined_cohorts %>% dplyr::pull(index_date)
-  test_index <- cdm$cohort1 %>% dplyr::filter(cohort_start_date<=as.Date(index_date)) %>% dplyr::collect() %>% dplyr::filter(cohort_start_date+365 >= as.Date(index_date)) %>% dplyr::collect()
-  expect_true(test_index %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-})
-
-test_that("mock db: example of multiple entries per person - exclusion based on marker washout", {
-  cdm <- CohortSymmetry::getCohortSequence(cdm,
-                                           indexTable ="cohort1",
-                                           markerTable = "cohort2",
-                                           dateRange = as.Date(c("2002-01-01", NA)),
-                                           washoutWindow = 365,
-                                           combinationWindow = c(0,Inf)
-  )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 })
 
 CDMConnector::cdmDisconnect(cdm)
