@@ -17,9 +17,11 @@ Suggests:
     duckdb,
     cli,
     checkmate,
-    odbc, 
+    odbc,
     RPostgres,
-    tidyselect
+    tidyselect,
+    knitr,
+    rmarkdown
 Imports: 
     CDMConnector (>= 1.3.0),
     dplyr,
@@ -35,3 +37,4 @@ Imports:
     omopgenerics
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
+VignetteBuilder: knitr

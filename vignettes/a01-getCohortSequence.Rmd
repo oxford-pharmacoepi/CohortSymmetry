@@ -1,0 +1,28 @@
+---
+title: "How to create the cohort sequence"
+author: Xihang Chen, Tyman Stanford, Berta Raventós, Nicole Pratt, Ed Burn, Marti Catala, Danielle Newby, Nuria Mercade-Besora, Mike Du, Yuchen Guo, Kim Lopez, Marta Alcalde-Herraiz
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{How to create the cohort sequence}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+editor_options: 
+  chunk_output_type: console
+  markdown: 
+    wrap: 72
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CohortSymmetry)
+library(dplyr)
+```
+
+# Introduction
+
