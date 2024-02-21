@@ -23,7 +23,7 @@
 #' Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.
 #'
 #' @return
-#' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
+#' A table in the cdm reference.
 #' @export
 #'
 #' @examples
@@ -118,6 +118,21 @@ getCohortSequence <- function(cdm,
   time_1 <- combinationWindow[1]
   time_2 <- combinationWindow[2]
 
+  index_name <- CDMConnector::settings(cdm[[indexTable]]) %>%
+    dplyr::select(.data$cohort_definition_id, .data$cohort_name) %>%
+    dplyr::rename("index_id" = "cohort_definition_id",
+                  "index_name" = "cohort_name")
+
+  #prefix <- omopgenerics::tmpPrefix() - prefix
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "index_name", table = index_name)
+
+  marker_name <- CDMConnector::settings(cdm[[markerTable]]) %>%
+    dplyr::select(.data$cohort_definition_id, .data$cohort_name) %>%
+    dplyr::rename("marker_id" = "cohort_definition_id",
+                  "marker_name" = "cohort_name")
+
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "marker_name", table = marker_name)
+
   joinedData <- indexPreprocessed %>%
     dplyr::rename(
       "index_id" = "cohort_definition_id", "index_date" = "cohort_start_date",
@@ -159,9 +174,16 @@ getCohortSequence <- function(cdm,
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) %>%
-    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")
+    # dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
+    #               washout_window = .env$washoutWindow,
+    #               index_marker_gap = .env$indexMarkerGap,
+    #               combination_window = .env$combinationWindow) %>%
+    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")  %>%
+    dplyr::compute(name = name,
+                   temporary = FALSE)
 
-
+  cdm <- CDMConnector::dropTable(cdm = cdm, name = "index_name")
+  cdm <- CDMConnector::dropTable(cdm = cdm, name = "marker_name")
   return(cdm)
 }
 ### extra functions
