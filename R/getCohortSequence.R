@@ -175,7 +175,8 @@ getCohortSequence <- function(cdm,
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) %>%
     dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date") %>%
-    dplyr::compute()
+    dplyr::compute(name = name,
+                   temporary = FALSE)
 
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "index_name")
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "marker_name")
