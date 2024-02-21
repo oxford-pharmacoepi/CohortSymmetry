@@ -1,7 +1,7 @@
 getComparedResult <- function(x) {
   x <- x |>
     dplyr::mutate(
-      result_type = "sequence_symmetry_result",
+      result_type = "sequence_symmetry",
       package_name = "CohortSymmetry",
       package_version = as.character(utils::packageVersion("CohortSymmetry")),
       group_name_reference = "index_cohort_name",

@@ -3,6 +3,7 @@
 export("%>%")
 export(getCohortSequence)
 export(getSequenceRatios)
+export(tidySequenceSymmetry)
 importFrom(magrittr,"%>%")
 importFrom(rlang,":=")
 importFrom(rlang,.data)

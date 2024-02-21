@@ -12,7 +12,7 @@ test_that("getSequenceRatios", {
       outcomeTable = "joined_cohorts")
   )
 
-  expect_true("sequence_symmetry_result" %in% class(res))
+  expect_true("sequence_symmetry" %in% class(res))
   expect_true("compared_result" %in% class(res))
   expect_error(
     CohortSymmetry::getSequenceRatios(

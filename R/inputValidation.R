@@ -76,6 +76,17 @@ checkInputGetSequenceRatios <- function(cdm,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
+checkTidySequenceSymmetry <- function(result, minCellCount) {
+  # Check inputs
+  errorMessage <- checkmate::makeAssertCollection()
+  ## result
+  checkComparedResult(result, errorMessage)
+  ## minCellCount
+  checkMinCellCount(minCellCount, errorMessage)
+  # Report errors
+  checkmate::reportAssertions(collection = errorMessage)
+}
+
 ####################################################################
 # Check cdm object and index/marker tables
 checkCdm <- function(cdm, tables = NULL) {
@@ -209,4 +220,25 @@ checkConfidenceIntervalLevel <- function(confidenceIntervalLevel, errorMessage) 
     confidenceIntervalLevel, len = 1,
     lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage
   )
+}
+
+checkTidySequenceSymmetry <- function(result, errorMessage) {
+  classes <- c("sequence_symmetry", "compared_result","omop_result")
+  class_id <- classes %in% class(result)
+  if (!all(class_id)) {
+    errorMessage$push(paste0("result has not the classes: ",
+                             paste0(classes[!class_id], collapse = ", ")))
+  }
+  columns <- omopgenerics::resultColumns("compared_result")
+  columns_id <- columns %in% colnames(result)
+  if (!all(columns_id)) {
+    errorMessage$push(paste0("result must have all compared_result object columns. ",
+                             "Currently these are missing: ",
+                             paste0(columns[!columns_id], collapse = ", ")))
+  }
+}
+
+checkMinCellCount <- function(minCellCount, errorMessage) {
+  checkmate::assertIntegerish(minCellCount, len = 1, null.ok = TRUE,
+                              lower = 0, any.missing = FALSE)
 }
