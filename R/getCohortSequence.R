@@ -149,6 +149,8 @@ getCohortSequence <- function(cdm,
       by = "subject_id"
     )
 
+  comb_1 <- as.character(combinationWindow[1])
+  comb_2 <- as.character(combinationWindow[2])
   # Post-join processing
   cdm[[name]] <- joinedData %>%
     dplyr::mutate(
@@ -178,8 +180,8 @@ getCohortSequence <- function(cdm,
                   washout_window = .env$washoutWindow,
                   index_marker_gap = .env$indexMarkerGap,
                   combination_window = .env$combinationWindow) %>%
-
-    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap")  %>%
+    dplyr::mutate(combination_window = paste0("(",.env$comb_1, ",", .env$comb_2, ")")) %>%
+    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap", "combination_window")  %>%
     dplyr::compute(name = name,
                    temporary = FALSE)
 
