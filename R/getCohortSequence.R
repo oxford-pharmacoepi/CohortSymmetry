@@ -81,39 +81,47 @@ getCohortSequence <- function(cdm,
     )
   }
 
-  if (is.null(indexId)) {
-    if (is.null(markerId)) {
-      indexCohort <- cdm[[indexTable]]
-      markerCohort <- cdm[[markerTable]]
-    } else {
-      indexCohort <- cdm[[indexTable]]
-      markerCohort <- cdm[[markerTable]] %>% dplyr::filter(.data$cohort_definition_id %in% markerId)
+  preprocessCohort <- function(cdm, cohortName, cohortId, dateRange) {
+    cohort <- cdm[[cohortName]]
+    if (!is.null(cohortId)) {
+      cohort <- cohort |>
+        dplyr::filter(.data$cohort_definition_id %in% .env$cohortId)
     }
-  } else {
-    if (is.null(markerId)) {
-      indexCohort <- cdm[[indexTable]] %>% dplyr::filter(.data$cohort_definition_id %in% indexId)
-      markerCohort <- cdm[[markerTable]]
-    } else {
-      indexCohort <- cdm[[indexTable]] %>% dplyr::filter(.data$cohort_definition_id %in% indexId)
-      markerCohort <- cdm[[markerTable]] %>% dplyr::filter(.data$cohort_definition_id %in% markerId)
-    }
-  }
-
-  preprocessCohort <- function(cohort, dateRange) {
-    cohort %>%
+    id <- "tmp_id_12345"
+    nm <- paste0("tmp_001_",  omopgenerics::uniqueTableName())
+    cohort <- cohort |>
       dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
-      dbplyr::window_order(.data$cohort_start_date) %>%
-      dplyr::mutate(gap_to_prior = .data$cohort_start_date - dplyr::lag(.data$cohort_start_date)) %>%
-      dplyr::filter(.data$cohort_start_date <= !!dateRange[[2]] & .data$cohort_start_date >= !!dateRange[[1]]) %>%
-      dplyr::filter(dplyr::row_number() == 1) %>%
+      dplyr::arrange(.data$cohort_start_date) %>%
+      dplyr::mutate(!!id := dplyr::row_number()) |>
+      dplyr::compute(name = nm, temporary = FALSE)
+    cohort <- cohort |>
+      dplyr::left_join(
+        cohort |>
+          dplyr::select(dplyr::all_of(
+            c("previous_exposure" = "cohort_start_date", id)
+          )) |>
+          dplyr::mutate(!!id := .data[[id]] + 1),
+        by = id
+      ) %>%
+      dplyr::mutate(gap_to_prior = as.numeric(!!CDMConnector::datediff(
+        "previous_exposure", "cohort_start_date"
+      ))) %>%
+      dplyr::filter(
+        .data$cohort_start_date <= !!dateRange[[2]] &
+          .data$cohort_start_date >= !!dateRange[[1]]
+      ) %>%
+      dplyr::filter(.data[[id]] == min(.data[[id]], na.rm = TRUE)) %>%
       dplyr::ungroup() %>%
-      PatientProfiles::addPriorObservation(indexDate = "cohort_start_date", priorObservationName = "prior_observation") %>%
-      dplyr::compute()
+      dplyr::select(!dplyr::all_of(c(id, "previous_exposure"))) |>
+      dplyr::compute(name = nm, temporary = FALSE) |>
+      PatientProfiles::addPriorObservation()
+    cdm <- omopgenerics::dropTable(cdm = cdm, name = nm)
+    return(cohort)
   }
 
   # Preprocess both cohorts
-  indexPreprocessed <- preprocessCohort(indexCohort, dateRange)
-  markerPreprocessed <- preprocessCohort(markerCohort, dateRange)
+  indexPreprocessed <- preprocessCohort(cdm, indexTable, indexId, dateRange)
+  markerPreprocessed <- preprocessCohort(cdm, markerTable, markerId, dateRange)
 
   time_1 <- combinationWindow[1]
   time_2 <- combinationWindow[2]

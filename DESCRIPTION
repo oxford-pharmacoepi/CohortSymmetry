@@ -8,7 +8,7 @@ Description: Calculating crude sequence ratio (csr), adjusted sequence ratio (as
 License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests:
     testthat (>= 3.1.5),
     DBI (>= 1.0.0),
@@ -31,7 +31,6 @@ Imports:
     rlang,
     stringr,
     tibble,
-    dbplyr,
     omopgenerics
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
