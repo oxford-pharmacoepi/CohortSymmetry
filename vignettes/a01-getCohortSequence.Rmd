@@ -19,10 +19,30 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introduction
+In this vignette we will introduce the functionalities of `getCohortSequence()` function. First of all, we will use `mockPatientProfiles()` from PatientProfiles package to create a mock database. This **cdm** reference already contains two mock cohorts that we will use for the following examples. 
+
 ```{r setup}
 library(CohortSymmetry)
 library(dplyr)
+library(PatientProfiles)
+
+cdm <- mockPatientProfiles()
+cdm
 ```
 
-# Introduction
+
+```{r}
+library(PatientProfiles)
+cdm <- mockPatientProfiles()
+cdm <- CohortSymmetry::getCohortSequence(
+  cdm = cdm,
+  indexTable = "cohort1",
+  markerTable = "cohort2"
+)
+
+
+
+````
+
 
