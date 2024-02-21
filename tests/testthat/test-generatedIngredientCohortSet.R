@@ -16,8 +16,8 @@ test_that("test same results for ingredient cohorts", {
   )
 
   # Collect data from DuckDB tables into R data frames
-  cohort_1_df <- cdm$test_cohort_1 %>% dplyr::collect() %>% arrange(subject_id, cohort_start_date)
-  cohort_2_df <- cdm$test_cohort_2 %>% dplyr::collect() %>% arrange(subject_id, cohort_start_date)
+  cohort_1_df <- cdm$test_cohort_1 %>% dplyr::collect() %>% dplyr::arrange(subject_id, cohort_start_date)
+  cohort_2_df <- cdm$test_cohort_2 %>% dplyr::collect() %>% dplyr::arrange(subject_id, cohort_start_date)
 
   expect_equal(cohort_1_df, cohort_2_df)
 
