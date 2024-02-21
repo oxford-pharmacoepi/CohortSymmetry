@@ -13,7 +13,7 @@ Suggests:
     DrugUtilisation (>= 0.5.0),
     testthat (>= 3.1.5),
     DBI (>= 1.0.0),
-    CodelistGenerator,
+    CodelistGenerator (>= 2.2.2),
     duckdb,
     cli,
     checkmate,
@@ -31,5 +31,6 @@ Imports:
     rlang,
     stringr,
     tibble,
-    dbplyr
+    dbplyr,
+    omopgenerics
 Config/testthat/edition: 3
