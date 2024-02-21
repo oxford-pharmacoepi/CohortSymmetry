@@ -178,7 +178,7 @@ getCohortSequence <- function(cdm,
                   washout_window = .env$washoutWindow,
                   index_marker_gap = .env$indexMarkerGap,
                   combination_window = .env$combinationWindow) %>%
-    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")  %>%
+    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap", "combination_window")  %>%
     dplyr::compute(name = name,
                    temporary = FALSE)
 
