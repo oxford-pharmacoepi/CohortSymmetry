@@ -47,7 +47,7 @@ getCohortSequence <- function(cdm,
                               markerId = NULL,
                               daysPriorObservation = 0,
                               washoutWindow = 0,
-                              indexMarkerGap = NULL,
+                              indexMarkerGap = 365,
                               combinationWindow = c(0,365)) {
   # checks
   checkInputGetCohortSequence(
@@ -67,10 +67,6 @@ getCohortSequence <- function(cdm,
 
   if(!is.finite(combinationWindow[2])){
     combinationWindow[2] <- 99999999999
-  }
-
-  if(is.null(indexMarkerGap)){
-    indexMarkerGap <- combinationWindow[2]
   }
 
   # modify dateRange if necessary
