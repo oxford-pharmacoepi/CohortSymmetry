@@ -44,6 +44,7 @@ getSequenceRatios <- function(cdm,
                               restriction = restriction)
 
   temp <- list()
+  temp2<-list()
   results <- list()
   for (i in (cdm[[outcomeTable]] %>% dplyr::distinct(.data$index_id) %>% dplyr::pull())){
     for (j in (cdm[[outcomeTable]] %>% dplyr::filter(.data$index_id == i) %>% dplyr::distinct(.data$marker_id) %>% dplyr::pull())){
@@ -65,13 +66,19 @@ getSequenceRatios <- function(cdm,
         dplyr::summarise(marker_first = sum(.data$orderBA), index_first = sum(!.data$orderBA), .groups = "drop") %>%
         dplyr::ungroup()
 
+      temp2[[paste0("index_",i, "_marker_", j)]] <-
+        temp[[paste0("index_",i, "_marker_", j)]] %>%
+        dplyr::group_by(.data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window) %>%
+        dplyr::summarise(marker_first = sum(.data$marker_first), index_first = sum(.data$index_first), .groups = "drop") %>%
+        dplyr::ungroup()
+
       csr<-crudeSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]])
       nsr<-nullSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], restriction = restriction)
       asr<-adjustedSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], restriction = restriction)
       counts <- getConfidenceInterval(temp[[paste0("index_",i, "_marker_", j)]], nsr, confidenceIntervalLevel = confidenceIntervalLevel) %>%
         dplyr::select(-"index_first_by_nsr", -"marker_first_by_nsr", -"index_first", -"marker_first")
 
-      results[[paste0("index_",i, "_marker_", j)]] <- cbind(temp[[paste0("index_",i, "_marker_", j)]],
+      results[[paste0("index_",i, "_marker_", j)]] <- cbind(temp2[[paste0("index_",i, "_marker_", j)]],
                                                             cbind(tibble::tibble(csr = csr,asr = asr),
                                                                   counts)) %>%
         dplyr::mutate(marker_first_percentage = round(.data$marker_first/(.data$marker_first + .data$index_first)*100, digits = 1),
