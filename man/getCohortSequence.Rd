@@ -49,7 +49,7 @@ episode (could be either marker or index).}
 Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.}
 }
 \value{
-A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
+A table in the cdm reference.
 }
 \description{
 Join two tables in the CDM (one for index and the other for marker cohorts)

@@ -23,7 +23,7 @@
 #' Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.
 #'
 #' @return
-#' A table in the cdm reference with subject_id, index_id, marker_id, index_date, marker_date, first_date and cdm_name.
+#' A table in the cdm reference.
 #' @export
 #'
 #' @examples
@@ -174,7 +174,11 @@ getCohortSequence <- function(cdm,
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) %>%
-    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date") %>%
+    dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
+                  washout_window = .env$washoutWindow,
+                  index_marker_gap = .env$indexMarkerGap,
+                  combination_window = .env$combinationWindow) %>%
+    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap", "combination_window")  %>%
     dplyr::compute(name = name,
                    temporary = FALSE)
 

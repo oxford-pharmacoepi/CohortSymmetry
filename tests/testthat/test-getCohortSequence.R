@@ -39,8 +39,7 @@ test_that("mock db: check output table name", {
                                            markerTable = "cohort2")
   expect_null(cdm$joined_cohorts)
   expect_true(all(
-    c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
-      "first_date") %in%
+    c("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap", "combination_window") %in%
       colnames(cdm$output)
   ))
 }
@@ -52,8 +51,7 @@ test_that("mock db: check output format", {
                      indexTable ="cohort1",
                      markerTable = "cohort2")
   expect_true(all(
-    c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
-      "first_date") %in%
+    c("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap", "combination_window") %in%
       colnames(cdm$joined_cohorts)
   ))
 }
