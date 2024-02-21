@@ -126,6 +126,13 @@ getCohortSequence <- function(cdm,
   #prefix <- omopgenerics::tmpPrefix() - prefix
   cdm <- omopgenerics::insertTable(cdm = cdm, name = "index_name", table = index_name)
 
+  marker_name <- CDMConnector::settings(cdm[[markerTable]]) %>%
+    dplyr::select(.data$cohort_definition_id, .data$cohort_name) %>%
+    dplyr::rename("marker_id" = "cohort_definition_id",
+                  "marker_name" = "cohort_name")
+
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "marker_name", table = marker_name)
+
   joinedData <- indexPreprocessed %>%
     dplyr::rename(
       "index_id" = "cohort_definition_id", "index_date" = "cohort_start_date",
@@ -170,6 +177,7 @@ getCohortSequence <- function(cdm,
     dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date")
 
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "index_name")
+  cdm <- CDMConnector::dropTable(cdm = cdm, name = "marker_name")
   return(cdm)
 }
 ### extra functions
