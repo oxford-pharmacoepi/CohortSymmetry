@@ -32,6 +32,9 @@ Imports:
     stringr,
     tibble,
     dbplyr,
-    omopgenerics
+    omopgenerics,
+    utils,
+    visOmopResults,
+    tidyr
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/

@@ -92,7 +92,8 @@ getSequenceRatios <- function(cdm,
   }
 
   output <- Reduce(dplyr::union_all, results) %>%
-    PatientProfiles::addCdmName(cdm)
+    PatientProfiles::addCdmName(cdm) %>%
+    getComparedResult()
 
   return(output)
 }

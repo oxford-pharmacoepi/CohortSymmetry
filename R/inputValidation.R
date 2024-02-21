@@ -9,7 +9,7 @@ checkInputGetCohortSequence <- function(cdm,
                                         washoutWindow,
                                         indexMarkerGap,
                                         combinationWindow
-                                        ){
+                                        ) {
 
   # Check cdm objects, writing schema and index/marker tables
   checkCdm(cdm, tables = c(indexTable, markerTable))
@@ -39,16 +39,16 @@ checkInputGetCohortSequence <- function(cdm,
   checkColumns(cdm, markerTable, errorMessage)
 
   ## Check daysPriorObservation
-  checkdaysPriorObservation(daysPriorObservation, errorMessage)
+  checkDaysPriorObservation(daysPriorObservation, errorMessage)
 
   ## Check combinationWindow
-  checkcombinationWindow(combinationWindow, errorMessage)
+  checkCombinationWindow(combinationWindow, errorMessage)
 
   ## Check indexMarkerGap
-  checkindexMarkerGap(indexMarkerGap, combinationWindow, errorMessage)
+  checkIndexMarkerGap(indexMarkerGap, combinationWindow, errorMessage)
 
   ## Check washoutWindow
-  checkwashoutWindow(washoutWindow, errorMessage)
+  checkWashoutWindow(washoutWindow, errorMessage)
 
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
@@ -57,32 +57,25 @@ checkInputGetCohortSequence <- function(cdm,
 checkInputGetSequenceRatios <- function(cdm,
                                         outcomeTable,
                                         confidenceIntervalLevel,
-                                        restriction){
+                                        restriction) {
+
   # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables=c(outcomeTable))
+  checkCdm(cdm, tables = outcomeTable)
   assertWriteSchema(cdm)
 
+  # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
-  # check relevant formats of the arguments
-  checkmate::assertCharacter(outcomeTable, len = 1, any.missing = FALSE, add = errorMessage)
 
-  # Check confidenceIntervalLevel
-  checkmate::assertNumeric(
-    confidenceIntervalLevel, len = 1,
-    lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage
-  )
+  ## Check confidenceIntervalLevel
+  checkConfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
 
-  # Check restriction
-  checkrestriction(restriction, errorMessage)
+  ## Check restriction
+  checkRestriction(restriction, errorMessage)
 
-  restrictionCheck <- all(restriction >= 0)
-  if (!isTRUE(restrictionCheck)) {
-    errorMessage$push(
-      "restriction cannot be negative."
-    )
-  }
-  checkmate::reportAssertions(errorMessage)
+  # Report errors
+  checkmate::reportAssertions(collection = errorMessage)
 }
+
 ####################################################################
 # Check cdm object and index/marker tables
 checkCdm <- function(cdm, tables = NULL) {
@@ -137,7 +130,7 @@ checkColumns <- function(cdm, CohortTable, errorMessage) {
 }
 
 # Check indexMarkerGap (Inf or numeric >=1)
-checkindexMarkerGap <- function(indexMarkerGap, combinationWindow, errorMessage) {
+checkIndexMarkerGap <- function(indexMarkerGap, combinationWindow, errorMessage) {
   if (!is.null(indexMarkerGap)) {
     if (indexMarkerGap != Inf) {
       checkmate::assertIntegerish(
@@ -148,13 +141,11 @@ checkindexMarkerGap <- function(indexMarkerGap, combinationWindow, errorMessage)
     if (indexMarkerGap > combinationWindow[2]) {
       errorMessage$push("indexMarkerGap cannot be bigger than the second element of combinationWindow.")
     }
-  } else {
-    errorMessage$push("indexMarkerGap cannot be NULL.")
   }
 }
 
 # Check washoutWindow (Inf or numeric)
-checkwashoutWindow <- function(washoutWindow, errorMessage) {
+checkWashoutWindow <- function(washoutWindow, errorMessage) {
   if (washoutWindow != Inf) {
     checkmate::assertIntegerish(
       washoutWindow,
@@ -164,7 +155,7 @@ checkwashoutWindow <- function(washoutWindow, errorMessage) {
 }
 
 # Check restriction (Inf or numeric)
-checkrestriction <- function(restriction, errorMessage){
+checkRestriction <- function(restriction, errorMessage){
   if (restriction != Inf) {
     checkmate::assertIntegerish(
       restriction,
@@ -174,7 +165,7 @@ checkrestriction <- function(restriction, errorMessage){
 }
 
 # Check daysPriorObservation (has to be numeric)
-checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
+checkDaysPriorObservation <- function(daysPriorObservation, errorMessage){
   if (daysPriorObservation != Inf) {
     checkmate::assertIntegerish(
       daysPriorObservation,
@@ -187,7 +178,7 @@ checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
 }
 
 # Check combinationWindow (a numeric of length 2)
-checkcombinationWindow <- function(combinationWindow, errorMessage){
+checkCombinationWindow <- function(combinationWindow, errorMessage){
   checkmate::assert_numeric(combinationWindow, len = 2, any.missing = FALSE, add = errorMessage)
   if (combinationWindow[1] == Inf) {
    errorMessage$push("the first argument of combinationWindow cannot be infinite.")
@@ -213,3 +204,9 @@ checkDateRange <- function(dateRange, errorMessage) {
   }
 }
 
+checkConfidenceIntervalLevel <- function(confidenceIntervalLevel, errorMessage) {
+  checkmate::assertNumeric(
+    confidenceIntervalLevel, len = 1,
+    lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage
+  )
+}

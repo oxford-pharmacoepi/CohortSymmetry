@@ -47,7 +47,7 @@ getCohortSequence <- function(cdm,
                               markerId = NULL,
                               daysPriorObservation = 0,
                               washoutWindow = 0,
-                              indexMarkerGap = 365,
+                              indexMarkerGap = NULL,
                               combinationWindow = c(0,365)) {
   # checks
   checkInputGetCohortSequence(
@@ -67,6 +67,10 @@ getCohortSequence <- function(cdm,
 
   if(!is.finite(combinationWindow[2])){
     combinationWindow[2] <- 99999999999
+  }
+
+  if (is.null(indexMarkerGap)) {
+    indexMarkerGap <- combinationWindow[2]
   }
 
   # modify dateRange if necessary
@@ -115,7 +119,7 @@ getCohortSequence <- function(cdm,
   time_2 <- combinationWindow[2]
 
   index_name <- CDMConnector::settings(cdm[[indexTable]]) %>%
-    dplyr::select(.data$cohort_definition_id, .data$cohort_name) %>%
+    dplyr::select("cohort_definition_id", "cohort_name") %>%
     dplyr::rename("index_id" = "cohort_definition_id",
                   "index_name" = "cohort_name")
 
@@ -123,7 +127,7 @@ getCohortSequence <- function(cdm,
   cdm <- omopgenerics::insertTable(cdm = cdm, name = "index_name", table = index_name)
 
   marker_name <- CDMConnector::settings(cdm[[markerTable]]) %>%
-    dplyr::select(.data$cohort_definition_id, .data$cohort_name) %>%
+    dplyr::select("cohort_definition_id", "cohort_name") %>%
     dplyr::rename("marker_id" = "cohort_definition_id",
                   "marker_name" = "cohort_name")
 
