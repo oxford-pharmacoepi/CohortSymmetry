@@ -1,15 +1,11 @@
 ---
-title: "How to create the cohort sequence"
+title: "Merge the index and the marker tables"
 author: Xihang Chen, Tyman Stanford, Berta Raventós, Nicole Pratt, Ed Burn, Marti Catala, Danielle Newby, Nuria Mercade-Besora, Mike Du, Yuchen Guo, Kim Lopez, Marta Alcalde-Herraiz
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{How to create the cohort sequence}
+  %\VignetteIndexEntry{Merge the index and the marker tables}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-editor_options: 
-  chunk_output_type: console
-  markdown: 
-    wrap: 72
 ---
 
 ```{r, include = FALSE}
@@ -20,29 +16,63 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-In this vignette we will introduce the functionalities of `getCohortSequence()` function. First of all, we will use `mockPatientProfiles()` from PatientProfiles package to create a mock database. This **cdm** reference already contains two mock cohorts that we will use for the following examples. 
+
+In this vignette we will introduce the functionalities of `getCohortSequence()` function. First of all, we will use `mockPatientProfiles()` from PatientProfiles package to create a mock database. This **cdm** reference already contains two mock cohorts that we will use for the following examples.
 
 ```{r setup}
 library(CohortSymmetry)
-library(dplyr)
 library(PatientProfiles)
+library(dplyr)
+library(CDMConnector)
 
 cdm <- mockPatientProfiles()
 cdm
 ```
 
+We rename both cohorts as `index = cohort1` and `marker = cohort2`.
 
 ```{r}
-library(PatientProfiles)
-cdm <- mockPatientProfiles()
-cdm <- CohortSymmetry::getCohortSequence(
-  cdm = cdm,
-  indexTable = "cohort1",
-  markerTable = "cohort2"
-)
+cdm[["index"]] <- cdm[["cohort1"]]  |> filter(cohort_definition_id == 1) |> compute(name = "index", temporary = FALSE)
+cdm[["marker"]] <- cdm[["cohort2"]] |> filter(cohort_definition_id == 1) |>compute(name = "marker", temporary = FALSE)
+dropTable(cdm, c("cohort1","cohort2"))
+```
+
+# Use getCohortSequence() to merge the index and the marker cohorts
+
+Let us merge the index and the marker cohorts using the `getCohortSequence()` function. See an example bellow:
+
+```{r}
+cdm <- cdm |>
+  getCohortSequence(
+    indexTable  = "index",
+    markerTable = "marker",
+    name = "joined_cohorts"
+  )
+
+cdm
+```
+
+Notice that we have created a new table in the cdm object named **joined_cohorts**:
+
+```{r}
+cdm[["joined_cohorts"]]
+```
+
+The columns of this table correspond to:
+
+-   `index_id`: cohort_definition_id of the index cohort.
+-   `marker_id`: cohort_definition_id of the marker cohort.
+-   `subject_id`: individual identification.
+-   `ìndex_date`: observation_start_period of the index cohort.
+-   `marker_date`: observation_start_period of the marker cohort.
+-   `first_date`: earliest date between `ìndex_date` and `marker_date`.
+-   `second_date`: latest date between `ìndex_date` and `marker_date`.
+-   `days_prior_observation`: days of prior observation setted previously when using getCohortSequence(). See later how to modify this parameter.
+-   `index_marker_gap`: blabla.
+-   `combination_window`: blabla.
+-   `index_name`: blabla.
+-   `marker_name`: blabla.
 
 
-
-````
 
 
