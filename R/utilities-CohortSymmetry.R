@@ -33,7 +33,7 @@ getComparedResult <- function(x) {
         grepl("marker", .data$variable_name) ~ "marker"
       ),
       estimate_name = dplyr::case_when(
-        .data$variable_name %in% c("csr", "asr") ~ "sr",
+        .data$variable_name %in% c("csr", "asr") ~ "point_estimate",
         grepl("lower", .data$variable_name) ~ "lower_CI",
         grepl("upper", .data$variable_name) ~ "upper_CI",
         grepl("count", .data$variable_name) ~ "count",

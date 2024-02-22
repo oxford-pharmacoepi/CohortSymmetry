@@ -192,7 +192,7 @@ checkDaysPriorObservation <- function(daysPriorObservation, errorMessage){
 checkCombinationWindow <- function(combinationWindow, errorMessage){
   checkmate::assert_numeric(combinationWindow, len = 2, any.missing = FALSE, add = errorMessage)
   if (combinationWindow[1] == Inf) {
-   errorMessage$push("the first argument of combinationWindow cannot be infinite.")
+   errorMessage$push("The first argument of combinationWindow cannot be infinite.")
   }
   if (combinationWindow[2] != Inf){
     checkmate::assertIntegerish(
@@ -203,6 +203,9 @@ checkCombinationWindow <- function(combinationWindow, errorMessage){
       combinationWindow[2],
       lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage
     )
+  }
+  if (combinationWindow[1] >= combinationWindow[2]) {
+    errorMessage$push("The first argument of combinationWindow must be smaller than the second.")
   }
 }
 

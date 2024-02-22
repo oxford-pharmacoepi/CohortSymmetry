@@ -6,11 +6,15 @@ test_that("getSequenceRatios", {
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 
-  expect_no_error(
-    res <- CohortSymmetry::getSequenceRatios(
-      cdm = cdm,
-      outcomeTable = "joined_cohorts")
-  )
+  expect_warning(expect_warning(expect_warning(expect_warning(
+    expect_warning(expect_warning(expect_warning(expect_warning(
+      expect_warning(expect_warning(expect_warning(expect_warning(
+        expect_no_error(
+          res <- CohortSymmetry::getSequenceRatios(
+            cdm = cdm,
+            outcomeTable = "joined_cohorts")
+        )))))))))))))
+
 
   expect_true("sequence_symmetry" %in% class(res))
   expect_true("compared_result" %in% class(res))

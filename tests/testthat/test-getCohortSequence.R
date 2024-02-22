@@ -525,6 +525,15 @@ test_that("getcohortSequence - inputValidation", {
       combinationWindow = c(0, 40)
     )
   )
+  expect_error(
+    CohortSymmetry::getCohortSequence(
+      cdm = cdm,
+      indexTable = "cohort1",
+      markerTable = "cohort2",
+      dateRange = as.Date(c("2002-01-01", NA)),
+      combinationWindow = c(80, 40)
+    )
+  )
 })
 
 CDMConnector::cdmDisconnect(cdm)

@@ -60,3 +60,4 @@ Imports:
     tidyr
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
+Remotes: oxford-pharmacoepi/visOmopResults
