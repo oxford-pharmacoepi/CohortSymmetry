@@ -16,7 +16,22 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Xihang Chen \email{xihang.chen@ndorms.ox.ac.uk} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Xihang Chen \email{xihang.chen@ndorms.ox.ac.uk} (\href{https://orcid.org/0009-0001-8112-8959}{ORCID})
+
+Authors:
+\itemize{
+  \item Tyman Stanford \email{tyman.stanford@unisa.edu.au} (\href{https://orcid.org/0000-0002-8570-5493}{ORCID})
+  \item Berta Raventós \email{braventos@idiapjgol.info} (\href{https://orcid.org/0000-0002-4668-2970}{ORCID})
+  \item Nicole Pratt \email{Nicole.Pratt@unisa.edu.au} (\href{https://orcid.org/0000-0001-8730-8910}{ORCID})
+  \item Ed Burn \email{ed.burn@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-9286-1128}{ORCID})
+  \item Marti Català \email{marti.catalasabate@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0003-3308-9905}{ORCID})
+  \item Danielle Newby \email{danielle.newby@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-3001-1478}{ORCID})
+  \item Núria Mercadé-Besora \email{nuria.mercadebesora@ndorms.ox.ac.uk} (\href{https://orcid.org/0009-0006-7948-3747}{ORCID})
+  \item Mike Du \email{mike.du@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-9517-8834}{ORCID})
+  \item Yuchen Guo \email{yuchen.guo@ndorms.ox.ac.uk} (\href{https://orcid.org/0000-0002-0847-4855}{ORCID})
+  \item Kim Lopez \email{kim.lopez@spc.ox.ac.uk} (\href{https://orcid.org/0000-0002-8462-8668}{ORCID})
+  \item Marta Alcalde-Herraiz \email{marta.alcaldeherraiz@ndorms.ox.ac.uk} (\href{https://orcid.org/0009-0002-4405-1814}{ORCID})
+}
 
 }
 \keyword{internal}

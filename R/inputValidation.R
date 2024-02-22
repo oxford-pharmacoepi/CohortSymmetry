@@ -9,10 +9,10 @@ checkInputGetCohortSequence <- function(cdm,
                                         washoutWindow,
                                         indexMarkerGap,
                                         combinationWindow
-                                        ){
+                                        ) {
 
   # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables=c(indexTable, markerTable))
+  checkCdm(cdm, tables = c(indexTable, markerTable))
   assertWriteSchema(cdm)
 
   # Check the format of name
@@ -21,99 +21,72 @@ checkInputGetCohortSequence <- function(cdm,
                      "i" = "for example 'my_cohort' is allowed but 'MyCohort' is not"))
   }
 
-  # Check markerId and indexId
-  check_marker_id <- is.numeric(markerId)
-  if(!is.null(markerId)){
-    if(!isTRUE(check_marker_id)){
-      cli::cli_abort("markerId must be of type 'numeric'")
-    }
-  }
-
-  check_index_id <- is.numeric(indexId)
-  if(!is.null(indexId)){
-    if(!isTRUE(check_index_id)){
-      cli::cli_abort("indexId must be of type 'numeric'")
-    }
-  }
-
-  # Checks that Index and Marker ids exist in Index and Marker tables
-  checkCohortIds(cdm,indexTable,indexId)
-  checkCohortIds(cdm,markerTable,markerId)
-
-  # Checks columns in Index and Marker tables
-  checkColumns(cdm,indexTable)
-  checkColumns(cdm,markerTable)
-
+  # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
-  # check relevant formats of the arguments
+
+  ## check name format
   checkmate::assertCharacter(name, len = 1, any.missing = FALSE, add = errorMessage)
-  checkmate::expect_date(dateRange, len = 2)
-  checkmate::assertCharacter(indexTable, len = 1, any.missing = FALSE, add = errorMessage)
-  checkmate::assertCharacter(markerTable, len = 1, any.missing = FALSE, add = errorMessage)
 
-  # Check daysPriorObservation
-  checkdaysPriorObservation(daysPriorObservation, errorMessage)
-  daysCheck <- all(daysPriorObservation >= 0)
-  if (!isTRUE(daysCheck)) {
-    errorMessage$push(
-      "- daysPriorObservation cannot be negative"
-    )
-  }
+  ## Check date
+  checkDateRange(dateRange, errorMessage)
 
-  # Check combinationWindow
-  checkcombinationWindow(combinationWindow, errorMessage)
+  ## Checks that Index and Marker ids exist in Index and Marker tables
+  checkCohortIds(cdm, indexTable, indexId, errorMessage)
+  checkCohortIds(cdm, markerTable, markerId, errorMessage)
 
-  # Check indexMarkerGap
-  checkindexMarkerGap(indexMarkerGap, errorMessage)
-  indexMarkerGapCheck <- all(indexMarkerGap >= 0)
-  if (!isTRUE(indexMarkerGapCheck)) {
-    errorMessage$push(
-      "- indexMarkerGap cannot be negative"
-    )
-  }
+  ## Checks columns in Index and Marker tables
+  checkColumns(cdm, indexTable, errorMessage)
+  checkColumns(cdm, markerTable, errorMessage)
 
-  # Check washoutWindow
-  checkwashoutWindow (washoutWindow , errorMessage)
-  washoutWindowCheck <- all(washoutWindow  >= 0)
-  if (!isTRUE(washoutWindowCheck)) {
-    errorMessage$push(
-      "- washoutWindow cannot be negative"
-    )
-  }
-  return(checkmate::reportAssertions(collection = errorMessage))
+  ## Check daysPriorObservation
+  checkDaysPriorObservation(daysPriorObservation, errorMessage)
+
+  ## Check combinationWindow
+  checkCombinationWindow(combinationWindow, errorMessage)
+
+  ## Check indexMarkerGap
+  checkIndexMarkerGap(indexMarkerGap, combinationWindow, errorMessage)
+
+  ## Check washoutWindow
+  checkWashoutWindow(washoutWindow, errorMessage)
+
+  # Report errors
+  checkmate::reportAssertions(collection = errorMessage)
 }
 
 checkInputGetSequenceRatios <- function(cdm,
                                         outcomeTable,
                                         confidenceIntervalLevel,
-                                        restriction){
+                                        restriction) {
+
   # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables=c(outcomeTable))
+  checkCdm(cdm, tables = outcomeTable)
   assertWriteSchema(cdm)
 
+  # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
-  # check relevant formats of the arguments
-  checkmate::assertCharacter(outcomeTable, len = 1, any.missing = FALSE, add = errorMessage)
 
-  # Check confidenceIntervalLevel
-  checkconfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
-  daysCheck <- all(confidenceIntervalLevel >= 0)
-  if (!isTRUE(daysCheck)) {
-    errorMessage$push(
-      " - confidenceIntervalLevel cannot be negative"
-    )
-  }
+  ## Check confidenceIntervalLevel
+  checkConfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
 
-  # Check restriction
-  checkrestriction(restriction, errorMessage)
-  restrictionCheck <- all(restriction >= 0)
-  if (!isTRUE(restrictionCheck)) {
-    errorMessage$push(
-      "- restriction cannot be negative"
-    )
-  }
+  ## Check restriction
+  checkRestriction(restriction, errorMessage)
 
+  # Report errors
+  checkmate::reportAssertions(collection = errorMessage)
 }
+
+checkTidySequenceSymmetry <- function(result, minCellCount) {
+  # Check inputs
+  errorMessage <- checkmate::makeAssertCollection()
+  ## result
+  checkComparedResult(result, errorMessage)
+  ## minCellCount
+  checkMinCellCount(minCellCount, errorMessage)
+  # Report errors
+  checkmate::reportAssertions(collection = errorMessage)
+}
+
 ####################################################################
 # Check cdm object and index/marker tables
 checkCdm <- function(cdm, tables = NULL) {
@@ -143,41 +116,47 @@ assertWriteSchema <- function(cdm, call = rlang::env_parent()) {
 }
 
 # Checks Index and Marker ids cohorts
-checkCohortIds <- function(cdm,CohortTable, CohortId) {
+checkCohortIds <- function(cdm, CohortTable, CohortId, errorMessage) {
+  checkmate::assertNumeric(CohortId, lower = 1, any.missing = FALSE,
+                           null.ok = TRUE, add = errorMessage)
   if (!is.null(CohortId)) {
     ids <- cdm[[CohortTable]] %>%
       dplyr::select("cohort_definition_id") %>%
-      dplyr::distinct()%>%
+      dplyr::distinct() %>%
       dplyr::pull()
     if(!isTRUE(all(CohortId %in% ids))){
-      cli::cli_abort(paste0("Some of the cohort ids given do not exist in ", CohortTable))
+      errorMessage$push(paste0("Some of the cohort ids given do not exist in ", CohortTable))
     }
   }
 }
 
 # Checks columns of Index and Marker tables
-checkColumns <- function(cdm, CohortTable) {
+checkColumns <- function(cdm, CohortTable, errorMessage) {
   col <- colnames(cdm[[CohortTable]])
   exp_col <- c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date")
   if(!isTRUE(all(exp_col %in% col))){
-    cli::cli_abort(paste0("Some of the expected columns in ", CohortTable, " are missing (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)"))
+    errorMessage$push(paste0("Some of the expected columns in ", CohortTable,
+                             " are missing (cohort_definition_id, subject_id, cohort_start_date, cohort_end_date)."))
   }
 }
 
 # Check indexMarkerGap (Inf or numeric >=1)
-checkindexMarkerGap <- function(indexMarkerGap, errorMessage){
-  if (!is.null(indexMarkerGap)){
-    if (indexMarkerGap != Inf ) {
+checkIndexMarkerGap <- function(indexMarkerGap, combinationWindow, errorMessage) {
+  if (!is.null(indexMarkerGap)) {
+    if (indexMarkerGap != Inf) {
       checkmate::assertIntegerish(
         indexMarkerGap,
         lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
       )
     }
+    if (indexMarkerGap > combinationWindow[2]) {
+      errorMessage$push("indexMarkerGap cannot be bigger than the second element of combinationWindow.")
+    }
   }
-  }
+}
 
 # Check washoutWindow (Inf or numeric)
-checkwashoutWindow <- function(washoutWindow, errorMessage){
+checkWashoutWindow <- function(washoutWindow, errorMessage) {
   if (washoutWindow != Inf) {
     checkmate::assertIntegerish(
       washoutWindow,
@@ -187,7 +166,7 @@ checkwashoutWindow <- function(washoutWindow, errorMessage){
 }
 
 # Check restriction (Inf or numeric)
-checkrestriction <- function(restriction, errorMessage){
+checkRestriction <- function(restriction, errorMessage){
   if (restriction != Inf) {
     checkmate::assertIntegerish(
       restriction,
@@ -197,7 +176,7 @@ checkrestriction <- function(restriction, errorMessage){
 }
 
 # Check daysPriorObservation (has to be numeric)
-checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
+checkDaysPriorObservation <- function(daysPriorObservation, errorMessage){
   if (daysPriorObservation != Inf) {
     checkmate::assertIntegerish(
       daysPriorObservation,
@@ -205,15 +184,15 @@ checkdaysPriorObservation <- function(daysPriorObservation, errorMessage){
     )
   }
   if(!(is.finite(daysPriorObservation))){
-    cli::cli_abort("daysPriorObservation has to be finite")
+    errorMessage$push("daysPriorObservation has to be finite.")
   }
 }
 
 # Check combinationWindow (a numeric of length 2)
-checkcombinationWindow <- function(combinationWindow, errorMessage){
+checkCombinationWindow <- function(combinationWindow, errorMessage){
   checkmate::assert_numeric(combinationWindow, len = 2, any.missing = FALSE, add = errorMessage)
   if (combinationWindow[1] == Inf) {
-    cli::cli_abort("the first argument of combinationWindow cannot be infinite.")
+   errorMessage$push("The first argument of combinationWindow cannot be infinite.")
   }
   if (combinationWindow[2] != Inf){
     checkmate::assertIntegerish(
@@ -225,12 +204,44 @@ checkcombinationWindow <- function(combinationWindow, errorMessage){
       lower = 1, any.missing = FALSE, max.len = 4, add = errorMessage
     )
   }
+  if (combinationWindow[1] >= combinationWindow[2]) {
+    errorMessage$push("The first argument of combinationWindow must be smaller than the second.")
+  }
 }
 
-# Check confidenceInterval (has to be numeric)
-checkconfidenceIntervalLevel <- function(checkconfidenceIntervalLevel, errorMessage){
-    checkmate::assertNumeric(
-      checkconfidenceIntervalLevel,
-      lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage
-    )
+checkDateRange <- function(dateRange, errorMessage) {
+  checkmate::assertDate(dateRange, len = 2, add = errorMessage)
+  if (all(!is.na(dateRange))) {
+    if (dateRange[1] >= dateRange[2]) {
+      errorMessage$push("First element in dateRange must be smaller than the second.")
+    }
+  }
+}
+
+checkConfidenceIntervalLevel <- function(confidenceIntervalLevel, errorMessage) {
+  checkmate::assertNumeric(
+    confidenceIntervalLevel, len = 1,
+    lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage
+  )
+}
+
+checkTidySequenceSymmetry <- function(result, errorMessage) {
+  classes <- c("sequence_symmetry", "compared_result","omop_result")
+  class_id <- classes %in% class(result)
+  if (!all(class_id)) {
+    errorMessage$push(paste0("result has not the classes: ",
+                             paste0(classes[!class_id], collapse = ", ")))
+  }
+  columns <- omopgenerics::resultColumns("compared_result")
+  columns_id <- columns %in% colnames(result)
+  if (!all(columns_id)) {
+    errorMessage$push(paste0("result must have all compared_result object columns. ",
+                             "Currently these are missing: ",
+                             paste0(columns[!columns_id], collapse = ", ")))
+  }
+}
+
+checkMinCellCount <- function(minCellCount, errorMessage) {
+  checkmate::assertIntegerish(minCellCount, len = 1, null.ok = TRUE,
+                              lower = 0, any.missing = FALSE)
 }

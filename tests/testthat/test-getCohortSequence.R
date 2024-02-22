@@ -112,6 +112,7 @@ test_that("mock db: change combinationWindow ", {
                      indexId=1,
                      markerTable = "cohort2",
                      markerId=2,
+                     indexMarkerGap = 30,
                      combinationWindow = c(0,30))
 
   loc <- cdm$joined_cohorts %>% dplyr::collect()
@@ -467,4 +468,73 @@ test_that("mock db: example of multiple entries per person - exclusion based on 
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 })
 
+test_that("getcohortSequence - inputValidation", {
+  cdm <- PatientProfiles::mockPatientProfiles()
+  expect_error(
+    CohortSymmetry::getCohortSequence(
+      list(),
+      indexTable = "cohort1",
+      markerTable = "cohort2",
+      dateRange = as.Date(c("2002-01-01", NA)),
+      washoutWindow = 365,
+      combinationWindow = c(0,Inf)
+    ),
+    "cdm must be a CDMConnector CDM reference object"
+  )
+  expect_error(
+    CohortSymmetry::getCohortSequence(
+      cdm = cdm,
+      indexTable = "cohort1",
+      indexId = 2,
+      markerTable = "cohort2",
+      dateRange = as.Date(c("2002-01-01", NA)),
+      washoutWindow = 365,
+      combinationWindow = c(0,Inf)
+    ),
+    "Some of the cohort ids given do not exist in cohort1"
+  )
+  expect_error(
+    CohortSymmetry::getCohortSequence(
+      cdm = cdm,
+      indexTable = "cohort1",
+      markerTable = "cohort2",
+      dateRange = c(as.Date("2002-01-01"),1),
+      washoutWindow = 365,
+      combinationWindow = c(0, Inf)
+    ),
+    "First element in dateRange must be smaller than the second."
+  )
+  expect_error(
+    CohortSymmetry::getCohortSequence(
+      cdm = cdm,
+      indexTable = "cohort1",
+      markerTable = "cohort2",
+      dateRange = as.Date(c("2002-01-01", NA)),
+      washoutWindow = -1,
+      daysPriorObservation = Inf,
+      combinationWindow = c(0, Inf)
+    )
+  )
+  expect_error(
+    CohortSymmetry::getCohortSequence(
+      cdm = cdm,
+      indexTable = "cohort1",
+      markerTable = "cohort2",
+      dateRange = as.Date(c("2002-01-01", NA)),
+      indexMarkerGap = 41,
+      combinationWindow = c(0, 40)
+    )
+  )
+  expect_error(
+    CohortSymmetry::getCohortSequence(
+      cdm = cdm,
+      indexTable = "cohort1",
+      markerTable = "cohort2",
+      dateRange = as.Date(c("2002-01-01", NA)),
+      combinationWindow = c(80, 40)
+    )
+  )
+})
+
 CDMConnector::cdmDisconnect(cdm)
+
