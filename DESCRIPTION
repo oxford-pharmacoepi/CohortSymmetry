@@ -1,5 +1,5 @@
 Package: CohortSymmetry
-Title: Sequence Symmetry Analysis using OMOP CDM (Common Data Model)
+Title: Sequence Symmetry Analysis using the OMOP Common Data Model
 Version: 0.0.0.9000
 Authors@R: 
     person("Xihang", "Chen", , "xihang.chen@ndorms.ox.ac.uk", role = c("aut", "cre"),

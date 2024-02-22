@@ -56,7 +56,7 @@ cdm <- cdm_from_con(
  
 This will be entirely user's choice on how to generate such cohorts. Minimally, this package requires two tables in the cdm reference to be cohort tables; in other words, the columns of these tables should contain cohort_definition_id, subject_id, cohort_start_date and cohort_end_date.
  
-If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. As an example, amiodarone and levothyroxine are used. Famously, this is a known positive benchmark in [Pratt et al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4690514/)
+If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. As an example, amiodarone and levothyroxine are used. This is a known positive benchmark reported in the literature.<sup>1</sup>
  
 ```{r Example - Step 0: Using DrugUtilisation, eval=TRUE, warning=FALSE}
 library(DrugUtilisation)
@@ -107,3 +107,7 @@ cdm$joined_cohorts %>%
 cdm$joined_cohorts
  
 ```
+
+
+## References
+1. Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry analysis: assessing risk, temporality, and consistency for adverse drug reactions across datasets in five countries. Pharmacoepidemiol Drug Saf. 2015;24(8):858-864.

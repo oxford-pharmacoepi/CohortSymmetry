@@ -35,11 +35,8 @@ As an example, we will be utilising the Eunomia data set.
 ``` r
 library(CDMConnector)
 library(dplyr)
-#> Warning: package 'dplyr' was built under R version 4.1.3
 library(DBI)
-#> Warning: package 'DBI' was built under R version 4.1.3
 library(duckdb)
-#> Warning: package 'duckdb' was built under R version 4.1.3
  
 db <- DBI::dbConnect(duckdb::duckdb(), 
                      dbdir = CDMConnector::eunomia_dir())
@@ -59,9 +56,8 @@ contain cohort_definition_id, subject_id, cohort_start_date and
 cohort_end_date.
 
 If one wants to generate two drugs cohorts in cdm, DrugUtilisation is
-recommended. As an example, amiodarone and levothyroxine are used.
-Famously, this is a known positive control in [Pratt et
-al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4690514/)
+recommended. As an example, amiodarone and levothyroxine are used. This
+is a known positive benchmark reported in the literature.<sup>1</sup>
 
 ``` r
 library(DrugUtilisation)
@@ -76,22 +72,18 @@ cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     name = "cohort_index",
     conceptSet = index_drug
   )
-#> Warning: cohort_name must be snake case, the following cohorts will be renamed:
-#> * Ingredient: Amiodarone (1309944) -> ingredient_amiodarone_1309944
  
 cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     cdm = cdm,
     name = "cohort_marker",
     conceptSet = marker_drug
   )
-#> Warning: cohort_name must be snake case, the following cohorts will be renamed:
-#> * Ingredient: levothyroxine (1501700) -> ingredient_levothyroxine_1501700
  
 cdm$cohort_index %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 4
-#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\Rtmp0eRJF5\file1a1046e02ed2.duckdb]
+#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\RtmpiUNOTG\file46984e71f0e.duckdb]
 #> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
 #> $ subject_id           <int> 651, 712, 752, 918, 1410, 2518, 2602, 2955, 2985,~
 #> $ cohort_start_date    <date> 1999-01-28, 2011-04-14, 1979-02-04, 2016-05-20, ~
@@ -101,7 +93,7 @@ cdm$cohort_marker %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 4
-#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\Rtmp0eRJF5\file1a1046e02ed2.duckdb]
+#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\RtmpiUNOTG\file46984e71f0e.duckdb]
 #> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
 #> $ subject_id           <int> 1079, 515, 3866, 19, 2487, 2752, 4375, 4532, 3224~
 #> $ cohort_start_date    <date> 2016-03-05, 2009-03-05, 2017-09-24, 2004-01-17, ~
@@ -131,26 +123,32 @@ cdm <- CohortSymmetry::getCohortSequence(cdm,
                    indexTable ="cohort_index",
                    markerTable = "cohort_marker",
                    timeGap = Inf)
+#> Loading required namespace: testthat
  
 cdm$joined_cohorts %>%
   dplyr::glimpse()
 #> Rows: ??
-#> Columns: 8
-#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\Rtmp0eRJF5\file1a1046e02ed2.duckdb]
-#> $ subject_id  <int> 2006
+#> Columns: 7
+#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\RtmpiUNOTG\file46984e71f0e.duckdb]
 #> $ index_id    <int> 1
 #> $ marker_id   <int> 1
+#> $ subject_id  <int> 2006
 #> $ index_date  <date> 2014-01-17
 #> $ marker_date <date> 2017-12-31
 #> $ first_date  <date> 2014-01-17
-#> $ time_gap    <chr> "Infinity"
-#> $ cdm_name    <chr> "Synthea synthetic health database"
+#> $ second_date <date> 2017-12-31
 
 cdm$joined_cohorts
-#> # Source:   SQL [1 x 8]
-#> # Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\Rtmp0eRJF5\file1a1046e02ed2.duckdb]
-#>   subject_id index_id marker_id index_date marker_date first_date time_gap
-#>        <int>    <int>     <int> <date>     <date>      <date>     <chr>   
-#> 1       2006        1         1 2014-01-17 2017-12-31  2014-01-17 Infinity
-#> # i 1 more variable: cdm_name <chr>
+#> # Source:   table<joined_cohorts> [1 x 7]
+#> # Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\RtmpiUNOTG\file46984e71f0e.duckdb]
+#>   index_id marker_id subject_id index_date marker_date first_date second_date
+#>      <int>     <int>      <int> <date>     <date>      <date>     <date>     
+#> 1        1         1       2006 2014-01-17 2017-12-31  2014-01-17 2017-12-31
 ```
+
+## References
+
+1.  Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry
+    analysis: assessing risk, temporality, and consistency for adverse
+    drug reactions across datasets in five countries. Pharmacoepidemiol
+    Drug Saf. 2015;24(8):858-864.
