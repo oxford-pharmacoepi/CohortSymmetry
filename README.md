@@ -83,21 +83,21 @@ cdm$cohort_index %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 4
-#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\RtmpiUNOTG\file46984e71f0e.duckdb]
-#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
-#> $ subject_id           <int> 651, 712, 752, 918, 1410, 2518, 2602, 2955, 2985,~
-#> $ cohort_start_date    <date> 1999-01-28, 2011-04-14, 1979-02-04, 2016-05-20, ~
-#> $ cohort_end_date      <date> 1999-01-28, 2011-04-14, 1979-02-04, 2016-05-20, ~
- 
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpa4YI7a\file4bb86b696a79.duckdb]
+#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+#> $ subject_id           <int> 1101, 1169, 1605, 1632, 1635, 4668, 123, 1015, 10…
+#> $ cohort_start_date    <date> 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-13, …
+#> $ cohort_end_date      <date> 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-14, …
+
 cdm$cohort_marker %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 4
-#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\RtmpiUNOTG\file46984e71f0e.duckdb]
-#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
-#> $ subject_id           <int> 1079, 515, 3866, 19, 2487, 2752, 4375, 4532, 3224~
-#> $ cohort_start_date    <date> 2016-03-05, 2009-03-05, 2017-09-24, 2004-01-17, ~
-#> $ cohort_end_date      <date> 2016-03-05, 2009-03-05, 2017-09-24, 2004-01-17, ~
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpa4YI7a\file4bb86b696a79.duckdb]
+#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+#> $ subject_id           <int> 2909, 1079, 4532, 1537, 3224, 4960, 19, 2829, 430…
+#> $ cohort_start_date    <date> 1999-02-12, 2016-03-05, 1964-04-03, 2010-05-31, …
+#> $ cohort_end_date      <date> 1999-02-12, 2016-03-05, 1964-04-03, 2010-05-31, …
 ```
 
 ### Step 1: getCohortSequence
@@ -122,14 +122,15 @@ library(CohortSymmetry)
 cdm <- CohortSymmetry::getCohortSequence(cdm,
                    indexTable ="cohort_index",
                    markerTable = "cohort_marker",
-                   timeGap = Inf)
+                   combinationWindow = c(0,Inf))
 #> Loading required namespace: testthat
  
 cdm$joined_cohorts %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 7
-#> Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\RtmpiUNOTG\file46984e71f0e.duckdb]
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpa4YI7a\file4bb86b696a79.duckdb]
+#> Ordered by: index_date
 #> $ index_id    <int> 1
 #> $ marker_id   <int> 1
 #> $ subject_id  <int> 2006
@@ -139,8 +140,9 @@ cdm$joined_cohorts %>%
 #> $ second_date <date> 2017-12-31
 
 cdm$joined_cohorts
-#> # Source:   table<joined_cohorts> [1 x 7]
-#> # Database: DuckDB 0.7.1 [braventos@Windows 10 x64:R 4.1.2/C:\Users\BRAVEN~1\AppData\Local\Temp\RtmpiUNOTG\file46984e71f0e.duckdb]
+#> # Source:     SQL [1 x 7]
+#> # Database:   DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpa4YI7a\file4bb86b696a79.duckdb]
+#> # Ordered by: index_date
 #>   index_id marker_id subject_id index_date marker_date first_date second_date
 #>      <int>     <int>      <int> <date>     <date>      <date>     <date>     
 #> 1        1         1       2006 2014-01-17 2017-12-31  2014-01-17 2017-12-31

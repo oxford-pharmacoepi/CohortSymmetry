@@ -21,14 +21,13 @@
 #'               "cohort_start_date" = seq(as.Date("2020-05-23"), as.Date("2020-05-27"), by = "day"),
 #'               "cohort_end_date" = seq(as.Date("2020-05-24"), as.Date("2020-05-28"), by = "day"))
 #'
-#'  cdm <- mockPatientProfiles(cohort1 = cohort1,
+#' cdm <- mockPatientProfiles(cohort1 = cohort1,
 #'                             patient_size = 10)
-#'  cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+#' cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
 #'                                           indexTable = "cohort1",
 #'                                           markerTable = "cohort2")
 #'  pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
 #'                                                    outcomeTable = "joined_cohorts")
-#'
 #'  pssa_result
 #'  CDMConnector::cdmDisconnect(cdm)
 #' }
@@ -45,43 +44,55 @@ getSequenceRatios <- function(cdm,
                               restriction = restriction)
 
   temp <- list()
+  temp2<-list()
   results <- list()
   for (i in (cdm[[outcomeTable]] %>% dplyr::distinct(.data$index_id) %>% dplyr::pull())){
     for (j in (cdm[[outcomeTable]] %>% dplyr::filter(.data$index_id == i) %>% dplyr::distinct(.data$marker_id) %>% dplyr::pull())){
-      temp[[paste0("(",i,",",j,")")]] <-
+      temp[[paste0("index_",i, "_marker_", j)]] <-
         cdm[[outcomeTable]] %>%
         dplyr::filter(.data$index_id == i & .data$marker_id == j) %>%
         dplyr::collect()
 
-      date_start <- min(temp[[paste0("(",i,",",j,")")]]$index_date, temp[[paste0("(",i,",",j,")")]]$marker_date)
+      date_start <- min(temp[[paste0("index_",i, "_marker_", j)]]$index_date, temp[[paste0("index_",i, "_marker_", j)]]$marker_date)
 
-      temp[[paste0("(",i,",",j,")")]] <-
-        temp[[paste0("(",i,",",j,")")]] %>%
+      temp[[paste0("index_",i, "_marker_", j)]] <-
+        temp[[paste0("index_",i, "_marker_", j)]] %>%
         dplyr::mutate(
           orderBA = .data$index_date >= .data$marker_date,
           days_first = as.integer((lubridate::interval(date_start, .data$first_date)) / lubridate::days(1)), # gap between the first drug of a person and the first drug of the whole population
           days_second = as.integer((lubridate::interval(.data$first_date, .data$second_date)) / lubridate::days(1))) %>%  # gap between two drugs of a person
         dplyr::arrange(.data$days_first) %>%
-        dplyr::group_by(.data$days_first) %>%
+        dplyr::group_by(.data$days_first, .data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window) %>%
         dplyr::summarise(marker_first = sum(.data$orderBA), index_first = sum(!.data$orderBA), .groups = "drop") %>%
-        dplyr::mutate(index_id = i, marker_id = j) %>%
         dplyr::ungroup()
 
-      csr<-crudeSequenceRatio(temp[[paste0("(",i,",",j,")")]])
-      nsr<-nullSequenceRatio(temp[[paste0("(",i,",",j,")")]], restriction = restriction)
-      asr<-adjustedSequenceRatio(temp[[paste0("(",i,",",j,")")]], restriction = restriction)
-      counts <- getConfidenceInterval(temp[[paste0("(",i,",",j,")")]], nsr, confidenceIntervalLevel = confidenceIntervalLevel)
+      temp2[[paste0("index_",i, "_marker_", j)]] <-
+        temp[[paste0("index_",i, "_marker_", j)]] %>%
+        dplyr::group_by(.data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window) %>%
+        dplyr::summarise(marker_first = sum(.data$marker_first), index_first = sum(.data$index_first), .groups = "drop") %>%
+        dplyr::ungroup()
 
-      results[[paste0("(",i,",",j,")")]] <- cbind(tibble::tibble(csr = csr,
-                                      asr = asr),
-                                      counts) %>%
-        dplyr::mutate(index_id = i, marker_id = j)
+      csr<-crudeSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]])
+      nsr<-nullSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], restriction = restriction)
+      asr<-adjustedSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], restriction = restriction)
+      counts <- getConfidenceInterval(temp[[paste0("index_",i, "_marker_", j)]], nsr, confidenceIntervalLevel = confidenceIntervalLevel) %>%
+        dplyr::select(-"index_first_by_nsr", -"marker_first_by_nsr", -"index_first", -"marker_first")
+
+      results[[paste0("index_",i, "_marker_", j)]] <- cbind(temp2[[paste0("index_",i, "_marker_", j)]],
+                                                            cbind(tibble::tibble(csr = csr,asr = asr),
+                                                                  counts)) %>%
+        dplyr::mutate(marker_first_percentage = round(.data$marker_first/(.data$marker_first + .data$index_first)*100, digits = 1),
+                      index_first_percentage = round(.data$index_first/(.data$marker_first + .data$index_first)*100, digits = 1)) %>%
+        dplyr::select("index_id", "index_name", "marker_id", "marker_name",
+                      "index_first", "marker_first", "index_first_percentage", "marker_first_percentage",
+                      "csr", "lowerCSR_CI", "upperCSR_CI",
+                      "asr", "lowerASR_CI", "upperASR_CI",
+                      "days_prior_observation", "washout_window", "index_marker_gap", "combination_window")
     }
   }
 
   output <- Reduce(dplyr::union_all, results) %>%
-    PatientProfiles::addCdmName(cdm) %>%
-    dplyr::select("index_id", "marker_id", "index_first", "marker_first", "csr", "asr", "lowerCSR_CI", "upperCSR_CI", "lowerASR_CI", "upperASR_CI", "cdm_name")
+    PatientProfiles::addCdmName(cdm)
 
   return(output)
 }
