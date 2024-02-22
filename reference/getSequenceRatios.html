@@ -105,22 +105,26 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NSR numerator is 0, which results in a NSR = 0, proceed with caution</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NSR denominator is 0, suggesting no Marker Drug -&gt; Index Drug or Index Drug -&gt; Marker Drug events</span>
 <span class="r-in"><span> <span class="va">pssa_result</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   index_id index_name marker_id marker_name index_first marker_first</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1   cohort_1         2    cohort_2           1            0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        1   cohort_1         3    cohort_3           0            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        1   cohort_1         1    cohort_1           0            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   index_first_percentage marker_first_percentage csr lowerCSR_CI upperCSR_CI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1                    100                       0 Inf  0.09349227    58.74824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                      0                     100   0  0.01702179    10.69607</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                      0                     100   0  0.01702179    10.69607</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   asr lowerASR_CI upperASR_CI days_prior_observation washout_window</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  NA          NA          NA                      0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  NA          NA          NA                      0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  NA          NA          NA                      0              0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   index_marker_gap combination_window cdm_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1              365            (0,365)  PP_MOCK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2              365            (0,365)  PP_MOCK</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3              365            (0,365)  PP_MOCK</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 30 × 21</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    cdm_name result_type       package_name  package_version group_name_reference</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> PP_MOCK  sequence_symmetry CohortSymmet… 0.0.0.9000      index_cohort_name   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 20 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 16 more variables: group_level_reference &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   strata_name_reference &lt;chr&gt;, strata_level_reference &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   group_name_comparator &lt;chr&gt;, group_level_comparator &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   strata_name_comparator &lt;chr&gt;, strata_level_comparator &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   variable_name &lt;chr&gt;, variable_level &lt;chr&gt;, estimate_name &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   estimate_type &lt;chr&gt;, estimate_value &lt;chr&gt;, …</span></span>
 <span class="r-in"><span> <span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
