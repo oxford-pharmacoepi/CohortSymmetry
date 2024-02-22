@@ -1,9 +1,9 @@
 ---
-title: "Merge the index and the marker tables"
-author: Xihang Chen, Tyman Stanford, Berta Raventós, Nicole Pratt, Ed Burn, Marti Catala, Danielle Newby, Nuria Mercade-Besora, Mike Du, Yuchen Guo, Kim Lopez, Marta Alcalde-Herraiz
+title: "Create a new table with the index and marker cohorts"
+author: Xihang Chen, Tyman Stanford, Berta Raventós, Nicole Pratt, Ed Burn, Martí Català, Danielle Newby, Núria Mercadé-Besora, Mike Du, Yuchen Guo, Kim Lopez, Marta Alcalde-Herraiz
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Merge the index and the marker tables}
+  %\VignetteIndexEntry{Create a new table with the index and marker cohorts}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,7 +17,9 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-In this vignette we will introduce the functionalities of `getCohortSequence()` function. First of all, we will use `mockDrugUtilisation()` from DrugUtilisation package to create a mock database. This cdm reference already contains two mock cohorts that we will use for the following examples.
+In this vignette we will introduce the functionalities of `getCohortSequence()` function. The goal of this function is to intersect the index and the marker cohorts before being used to calculate the Sequence Symmetry Ratios.
+
+First of all, we will use `mockDrugUtilisation()` from DrugUtilisation package to create a mock database. This cdm reference already contains two mock cohorts that we will use for the following examples.
 
 ```{r setup, message = FALSE, warning = FALSE}
 library(CohortSymmetry)
@@ -33,7 +35,7 @@ attr(cdm,"write_schema") <- "main"
 cdm
 ```
 
-We rename both cohorts as `index = cohort1` and `marker = cohort2`.
+We rename both cohorts as `index = cohort1` and `marker = cohort2`. Notice that the cohorts can correspond to either a drug exposure or a condition. 
 
 ```{r message = FALSE, warning = FALSE}
 cdm[["index"]] <- cdm[["cohort1"]]  |> 
@@ -47,7 +49,7 @@ dropTable(cdm, c("cohort1","cohort2"))
 
 # Merge the index and the marker cohorts
 
-Let us merge the index and the marker cohorts using the `getCohortSequence()` function. See an example bellow:
+Let us see an example on how we can merge the index and the marker cohorts using the `getCohortSequence()` function:
 
 ```{r message = FALSE, warning = FALSE}
 cdm <- cdm |>
@@ -75,7 +77,7 @@ The columns of this table correspond to:
 -   **first_date**: earliest date between `ìndex_date` and `marker_date`.
 -   **second_date**: latest date between `ìndex_date` and `marker_date`.
 
-Notice that, by default, `getCohortSequence()` will create the analysis for all the cohorts contained in the index and the marker tables. If we want to specify which cohorts are of interest, we can use the `indexId` and the `markerId` parameters.
+Notice that, by default, `getCohortSequence()` will include all the cohorts contained in the index and the marker tables. If we want to specify which cohorts are of interest, we can use the `indexId` and the `markerId` parameters.
 
 ```{r message = FALSE, warning = FALSE}
 cdm <- cdm |>
@@ -91,17 +93,30 @@ cdm$joined_cohorts
 
 ## Use dateRange to define the study period
 
-By default, `getCohortSequence()` will not restrict the study period. However, we can define a range by using the `dateRange` parameter.
+By default, `getCohortSequence()` will not restrict the observation study period. However, we can define a range by using the `dateRange` parameter.
 
 This parameter has to be a vector of two dates, where the first one is bigger than the second one. If no study period wants to be specified, you can just use the default option: `dateRange  = as.Date(c(NA, NA))`.
 
+```{r message = FALSE, warning = FALSE}
+cdm <- cdm |>
+  getCohortSequence(
+    indexTable  = "index",
+    markerTable = "marker",
+    dateRange   = as.Date(c("2000-01-01","2005-01-01"))
+  )
+
+cdm$joined_cohorts
+```
+
+## Use daysPriorObservation to define the minimum prior observation 
+Restrict the analysis to people with a minimum observation period before the cohort start date by using the `daysPriorObservation` parameter. Default is 0.
 ```{r}
 cdm <- cdm |>
   getCohortSequence(
     indexTable  = "index",
     markerTable = "marker",
     name = "joined_cohorts",
-    dateRange = as.Date(c("2010-01-01","2001-01-01"))
+    daysPriorObservation = 365
   )
 
 cdm$joined_cohorts
@@ -117,26 +132,25 @@ cdm <- cdm |>
     indexTable  = "index",
     markerTable = "marker",
     name = "joined_cohorts",
-    dateRange = as.Date(c("2001-01-01","2010-01-01")),
     washoutWindow = 365
   )
 
 cdm$joined_cohorts
 ```
 
-## Use indexMarkerGap and combinationWindow to include time restrictions
+## Use indexMarkerGap and combinationWindow to impose time restrictions
 
 Use `indexMarkerGap` to define the maximum number of days between the start of the second episode (either if is the index or the marker) and the end of the first episode. That means:
 
 <p style="text-align:center;">indexMarkerGap = second_episode(cohort_start_date) - first_episode(cohort_end_date)</p>
 
+See example bellow, where we have restricted the analysis to participants where the gap between the start date of the second episode and the end date of the first episode is equal or smaller than 10.
 ```{r}
 cdm <- cdm |>
   getCohortSequence(
     indexTable  = "index",
     markerTable = "marker",
     name = "joined_cohorts",
-    dateRange = as.Date(c("2001-01-01","2010-01-01")),
     indexMarkerGap = 10
   )
 
@@ -147,7 +161,9 @@ Use `combinationWindow` to define the maximum day difference between the two sta
 
 <p style="text-align:center;"> x = second_episode(cohort_start_date) - first_episode(cohort_start_date) </p>
 
-<p style="text-align:center;"> combinationWindow[1] $\leq$ x $\leq$ combinationWindow[2] </p>
+<p style="text-align:center;"> combinationWindow[1] $<$ x $\leq$ combinationWindow[2] </p>
+
+In other words, if we define `combinationWindow = c(0,365)`, it means that the gap between the start date of the second episode and the first episode should be larger than 0 and less or equal than 365.
 
 ```{r}
 cdm <- cdm |>
@@ -155,7 +171,7 @@ cdm <- cdm |>
     indexTable  = "index",
     markerTable = "marker",
     name = "joined_cohorts",
-    combinationWindow = c(0,1)
+    combinationWindow = c(0,180)
   )
 
 cdm$joined_cohorts
