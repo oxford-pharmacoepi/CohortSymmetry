@@ -4,9 +4,9 @@
 \name{CohortSymmetry-package}
 \alias{CohortSymmetry}
 \alias{CohortSymmetry-package}
-\title{CohortSymmetry: Sequence Symmetry Analysis using OMOP CDM (Common Data Model)}
+\title{CohortSymmetry: Sequence Symmetry Analysis using the Observational Medical Outcomes Partnership common data model}
 \description{
-Calculating crude sequence ratio (csr), adjusted sequence ratio (asr) and confidence intervals using data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Calculations can also be done in a particular disease strata and stratification cohorts.
+Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the Observational Medical Outcomes Partnership common data model.
 }
 \seealso{
 Useful links:
