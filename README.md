@@ -56,9 +56,8 @@ contain cohort_definition_id, subject_id, cohort_start_date and
 cohort_end_date.
 
 If one wants to generate two drugs cohorts in cdm, DrugUtilisation is
-recommended. As an example, amiodarone and levothyroxine are used.
-Famously, this is a known positive benchmark in [Pratt et
-al.](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4690514/)
+recommended. As an example, amiodarone and levothyroxine are used. This
+is a known positive benchmark reported in the literature.<sup>1</sup>
 
 ``` r
 library(DrugUtilisation)
@@ -89,7 +88,7 @@ cdm$cohort_index %>%
 #> $ subject_id           <int> 1101, 1169, 1605, 1632, 1635, 4668, 123, 1015, 10…
 #> $ cohort_start_date    <date> 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-13, …
 #> $ cohort_end_date      <date> 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-14, …
- 
+
 cdm$cohort_marker %>%
   dplyr::glimpse()
 #> Rows: ??
@@ -148,3 +147,10 @@ cdm$joined_cohorts
 #>      <int>     <int>      <int> <date>     <date>      <date>     <date>     
 #> 1        1         1       2006 2014-01-17 2017-12-31  2014-01-17 2017-12-31
 ```
+
+## References
+
+1.  Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry
+    analysis: assessing risk, temporality, and consistency for adverse
+    drug reactions across datasets in five countries. Pharmacoepidemiol
+    Drug Saf. 2015;24(8):858-864.

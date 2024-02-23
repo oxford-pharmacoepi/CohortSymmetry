@@ -38,7 +38,7 @@ expect_no_error(cdm <- CohortSymmetry::getCohortSequence(cdm,
 
 expect_true(nrow(cdm$joined_cohorts %>% dplyr::collect()) > 0)
 
-CDMConnector::drop_table(cdm, tidyselect::starts_with("csyim"))
+CDMConnector::dropTable(cdm, tidyselect::starts_with("csyim"))
 
 CDMConnector::cdm_disconnect(cdm)
 })
@@ -80,7 +80,7 @@ test_that("Redshift", {
 
   expect_true(nrow(cdm$joined_cohorts %>% dplyr::collect()) > 0)
 
-  CDMConnector::drop_table(cdm, tidyselect::starts_with("csyim"))
+  CDMConnector::dropTable(cdm, tidyselect::starts_with("csyim"))
 
   CDMConnector::cdm_disconnect(cdm)
 })

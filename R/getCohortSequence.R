@@ -70,7 +70,7 @@ getCohortSequence <- function(cdm,
 
 
   if(!is.finite(combinationWindow[2])){
-    combinationWindow[2] <- 99999999999
+    combinationWindow[2] <- as.integer(99999)
   }
 
   if (is.null(indexMarkerGap)) {
@@ -170,10 +170,10 @@ getCohortSequence <- function(cdm,
   cdm[[name]] <- joinedData %>%
     dplyr::mutate(
       gap = CDMConnector::datediff("index_date", "marker_date", interval = "day"),
-      cei = dplyr::if_else(.data$index_date < .data$marker_date,
-        .data$marker_date - .data$index_end_date, #
-        .data$index_date - .data$marker_end_date
-      ),
+      gap_rev = CDMConnector::datediff( "marker_date", "index_date", interval = "day")) %>%
+    dplyr::mutate(
+      cei = dplyr::if_else(.data$gap < 0,
+                           .data$gap_rev, .data$gap),
       first_date = dplyr::if_else(.data$index_date <= .data$marker_date,
         .data$index_date,
         .data$marker_date

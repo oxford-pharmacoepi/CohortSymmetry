@@ -1,5 +1,5 @@
 Package: CohortSymmetry
-Title: Sequence Symmetry Analysis using OMOP CDM (Common Data Model)
+Title: Sequence Symmetry Analysis using the Observational Medical Outcomes Partnership common data model
 Version: 0.0.0.9000
 Authors@R: c(
     person("Xihang", "Chen", , "xihang.chen@ndorms.ox.ac.uk", role = c("aut", "cre"),
@@ -28,7 +28,7 @@ Authors@R: c(
            comment = c(ORCID = "0009-0002-4405-1814"))
   )
 Maintainer: Xihang Chen <xihang.chen@ndorms.ox.ac.uk>
-Description: Calculating crude sequence ratio (csr), adjusted sequence ratio (asr) and confidence intervals using data mapped to the Observational Medical Outcomes Partnership (OMOP) common data model. Calculations can also be done in a particular disease strata and stratification cohorts.
+Description: Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the Observational Medical Outcomes Partnership common data model.
 License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -51,7 +51,6 @@ Imports:
     lubridate,
     magrittr,
     PatientProfiles,
-    plyr,
     rlang,
     stringr,
     tibble,
