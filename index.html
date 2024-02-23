@@ -55,7 +55,7 @@
 </h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>The goal of CohortSymmetry is to carry out the necessary calculations for Sequence Symmetry Analysis (SSA).</p>
+<p>The goal of CohortSymmetry is to carry out the necessary calculations for Sequence Symmetry Analysis (SSA). It is highly recommended that this method is tested beforehand against well-known positive benchmarks and negative benchmarks. Such benchmarks could be found using the paper in the Reference.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -72,7 +72,7 @@
 <h3 id="create-a-reference-to-data-in-the-omop-cdm-format">Create a reference to data in the OMOP CDM format<a class="anchor" aria-label="anchor" href="#create-a-reference-to-data-in-the-omop-cdm-format"></a>
 </h3>
 <p>The CohortSymmetry package is designed to work with data in the OMOP CDM (Common Data Model) format, so our first step is to create a reference to the data using the CDMConnector package.</p>
-<p>As an example, we will be utilising the Eunomia data set.</p>
+<p>As an example, we will be using Eunomia data set.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu.github.io/CDMConnector/" class="external-link">CDMConnector</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
@@ -90,7 +90,7 @@
 <div class="section level3">
 <h3 id="step-0-instantiate-two-cohorts-in-the-cdm-reference">Step 0: Instantiate two cohorts in the cdm reference<a class="anchor" aria-label="anchor" href="#step-0-instantiate-two-cohorts-in-the-cdm-reference"></a>
 </h3>
-<p>This will be entirely user’s choice on how to generate such cohorts. Minimally, this package requires two tables in the cdm reference to be cohort tables; in other words, the columns of these tables should contain cohort_definition_id, subject_id, cohort_start_date and cohort_end_date.</p>
+<p>This will be entirely user’s choice on how to generate such cohorts. Minimally, this package requires two cohort tables in the cdm reference, in other words, the columns of these tables should contain cohort_definition_id, subject_id, cohort_start_date and cohort_end_date.</p>
 <p>If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. As an example, amiodarone and levothyroxine are used. This is a known positive benchmark reported in the literature.<sup>1</sup></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/" class="external-link">DrugUtilisation</a></span><span class="op">)</span></span>
@@ -116,17 +116,17 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpa4YI7a\file4bb86b696a79.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCmACiv\file2c2c75a2e80.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           &lt;int&gt; 1101, 1169, 1605, 1632, 1635, 4668, 123, 1015, 10…</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-13, …</span></span>
 <span><span class="co">#&gt; $ cohort_end_date      &lt;date&gt; 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-14, …</span></span>
-<span></span>
+<span> </span>
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">cohort_marker</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpa4YI7a\file4bb86b696a79.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCmACiv\file2c2c75a2e80.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           &lt;int&gt; 2909, 1079, 4532, 1537, 3224, 4960, 19, 2829, 430…</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 1999-02-12, 2016-03-05, 1964-04-03, 2010-05-31, …</span></span>
@@ -136,38 +136,77 @@
 <h3 id="step-1-getcohortsequence">Step 1: getCohortSequence<a class="anchor" aria-label="anchor" href="#step-1-getcohortsequence"></a>
 </h3>
 <p>In order to initiate the calculations, the two cohorts tables need to be combined together. The first cohort is considered to be the index cohort while the second is the marker.</p>
-<p>This process will filter out the individuals who appeared on both tables according to a user-specified timeGap (default 365, it can also be changed to Inf if no such restriction is preferred).</p>
-<p>The user also has the freedom to specify more than 1 IDs from either table that can be considered for this process. More concretely, if an user specifies m IDs from the first cohort and n IDs from the second cohort, this process will output mn combinations. If IDs are not specified then all IDs will be considered.</p>
+<p>This process will filter out the individuals who appeared on both tables according to a user-specified combinationWindow. The default is c(0, 365), meaning the gap between two inititaions of the drugs should be more than 0 days but less than or equal to 365 days.</p>
+<p>There are further parameters that could be specified by the users, including DateRange, indexId, markerId, daysPriorObservation, washoutWindow and indexMarkerGap. Details on these parameters could be found on the vignette.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span>
 <span> </span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/getCohortSequence.html">getCohortSequence</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
 <span>                   indexTable <span class="op">=</span><span class="st">"cohort_index"</span>,</span>
 <span>                   markerTable <span class="op">=</span> <span class="st">"cohort_marker"</span>,</span>
-<span>                   combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required namespace: testthat</span></span>
+<span>                   name <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span>,</span>
+<span>                   combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span> </span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohorts</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">amiodarone_levothyroxine</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
-<span><span class="co">#&gt; Columns: 7</span></span>
-<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpa4YI7a\file4bb86b696a79.duckdb]</span></span>
-<span><span class="co">#&gt; Ordered by: index_date</span></span>
-<span><span class="co">#&gt; $ index_id    &lt;int&gt; 1</span></span>
-<span><span class="co">#&gt; $ marker_id   &lt;int&gt; 1</span></span>
-<span><span class="co">#&gt; $ subject_id  &lt;int&gt; 2006</span></span>
-<span><span class="co">#&gt; $ index_date  &lt;date&gt; 2014-01-17</span></span>
-<span><span class="co">#&gt; $ marker_date &lt;date&gt; 2017-12-31</span></span>
-<span><span class="co">#&gt; $ first_date  &lt;date&gt; 2014-01-17</span></span>
-<span><span class="co">#&gt; $ second_date &lt;date&gt; 2017-12-31</span></span>
+<span><span class="co">#&gt; Columns: 13</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCmACiv\file2c2c75a2e80.duckdb]</span></span>
+<span><span class="co">#&gt; $ index_id               &lt;int&gt; 1</span></span>
+<span><span class="co">#&gt; $ marker_id              &lt;int&gt; 1</span></span>
+<span><span class="co">#&gt; $ subject_id             &lt;int&gt; 2006</span></span>
+<span><span class="co">#&gt; $ index_date             &lt;date&gt; 2014-01-17</span></span>
+<span><span class="co">#&gt; $ marker_date            &lt;date&gt; 2017-12-31</span></span>
+<span><span class="co">#&gt; $ first_date             &lt;date&gt; 2014-01-17</span></span>
+<span><span class="co">#&gt; $ second_date            &lt;date&gt; 2017-12-31</span></span>
+<span><span class="co">#&gt; $ days_prior_observation &lt;dbl&gt; 0</span></span>
+<span><span class="co">#&gt; $ washout_window         &lt;dbl&gt; 0</span></span>
+<span><span class="co">#&gt; $ index_marker_gap       &lt;dbl&gt; 1e+11</span></span>
+<span><span class="co">#&gt; $ combination_window     &lt;chr&gt; "(0,99999999999)"</span></span>
+<span><span class="co">#&gt; $ index_name             &lt;chr&gt; "amiodarone"</span></span>
+<span><span class="co">#&gt; $ marker_name            &lt;chr&gt; "levothyroxine"</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohorts</span></span>
-<span><span class="co">#&gt; # Source:     SQL [1 x 7]</span></span>
-<span><span class="co">#&gt; # Database:   DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpa4YI7a\file4bb86b696a79.duckdb]</span></span>
-<span><span class="co">#&gt; # Ordered by: index_date</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">amiodarone_levothyroxine</span></span>
+<span><span class="co">#&gt; # Source:   table&lt;amiodarone_levothyroxine&gt; [1 x 13]</span></span>
+<span><span class="co">#&gt; # Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCmACiv\file2c2c75a2e80.duckdb]</span></span>
 <span><span class="co">#&gt;   index_id marker_id subject_id index_date marker_date first_date second_date</span></span>
 <span><span class="co">#&gt;      &lt;int&gt;     &lt;int&gt;      &lt;int&gt; &lt;date&gt;     &lt;date&gt;      &lt;date&gt;     &lt;date&gt;     </span></span>
-<span><span class="co">#&gt; 1        1         1       2006 2014-01-17 2017-12-31  2014-01-17 2017-12-31</span></span></code></pre></div>
+<span><span class="co">#&gt; 1        1         1       2006 2014-01-17 2017-12-31  2014-01-17 2017-12-31 </span></span>
+<span><span class="co">#&gt; # ℹ 6 more variables: days_prior_observation &lt;dbl&gt;, washout_window &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   index_marker_gap &lt;dbl&gt;, combination_window &lt;chr&gt;, index_name &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   marker_name &lt;chr&gt;</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="step-2-getsequenceratio">Step 2: getSequenceRatio<a class="anchor" aria-label="anchor" href="#step-2-getsequenceratio"></a>
+</h3>
+<p>To get the sequence ratios, we would need the output of the getCohortSequence() function. The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span>
+<span> </span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/getSequenceRatios.html">getSequenceRatios</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
+<span>                                         outcomeTable <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span><span class="op">)</span></span>
+<span> </span>
+<span><span class="va">res</span></span>
+<span><span class="co">#&gt; # A tibble: 10 × 21</span></span>
+<span><span class="co">#&gt;    cdm_name        result_type package_name package_version group_name_reference</span></span>
+<span><span class="co">#&gt;    &lt;chr&gt;           &lt;chr&gt;       &lt;chr&gt;        &lt;chr&gt;           &lt;chr&gt;               </span></span>
+<span><span class="co">#&gt;  1 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt;  2 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt;  3 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt;  4 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt;  5 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt;  6 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt;  7 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt;  8 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt;  9 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt; 10 Synthea synthe… sequence_s… CohortSymme… 0.0.0.9000      index_cohort_name   </span></span>
+<span><span class="co">#&gt; # ℹ 16 more variables: group_level_reference &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   strata_name_reference &lt;chr&gt;, strata_level_reference &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   group_name_comparator &lt;chr&gt;, group_level_comparator &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   strata_name_comparator &lt;chr&gt;, strata_level_comparator &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   variable_name &lt;chr&gt;, variable_level &lt;chr&gt;, estimate_name &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   estimate_type &lt;chr&gt;, estimate_value &lt;chr&gt;, additional_name_reference &lt;chr&gt;,</span></span>
+<span><span class="co">#&gt; #   additional_level_reference &lt;chr&gt;, additional_name_comparator &lt;chr&gt;, …</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
