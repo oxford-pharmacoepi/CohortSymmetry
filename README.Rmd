@@ -122,7 +122,7 @@ library(CohortSymmetry)
 res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
                                          outcomeTable = "amiodarone_levothyroxine")
  
-res
+res %>% glimpse()
 ```
 
 ## References
