@@ -51,7 +51,6 @@ Imports:
     lubridate,
     magrittr,
     PatientProfiles,
-    plyr,
     rlang,
     stringr,
     tibble,
