@@ -51,19 +51,26 @@ getSequenceRatios <- function(cdm,
       temp[[paste0("index_",i, "_marker_", j)]] <-
         cdm[[outcomeTable]] %>%
         dplyr::filter(.data$index_id == i & .data$marker_id == j) %>%
-        dplyr::collect()
-
-      date_start <- min(temp[[paste0("index_",i, "_marker_", j)]]$index_date, temp[[paste0("index_",i, "_marker_", j)]]$marker_date)
-
-      temp[[paste0("index_",i, "_marker_", j)]] <-
-        temp[[paste0("index_",i, "_marker_", j)]] %>%
+        dplyr::left_join(
+          cdm[[outcomeTable]] %>%
+            dplyr::filter(.data$index_id == i & .data$marker_id == j) %>%
+            dplyr::group_by(.data$index_id, .data$marker_id) %>%
+            dplyr::summarise(date_start = min(.data$first_date, na.rm = T),
+                             .groups = "drop") %>%
+            dplyr::ungroup(),
+          by  = c("index_id", "marker_id")
+        ) %>%
         dplyr::mutate(
           orderBA = .data$index_date >= .data$marker_date,
-          days_first = as.integer((lubridate::interval(date_start, .data$first_date)) / lubridate::days(1)), # gap between the first drug of a person and the first drug of the whole population
-          days_second = as.integer((lubridate::interval(.data$first_date, .data$second_date)) / lubridate::days(1))) %>%  # gap between two drugs of a person
-        dplyr::arrange(.data$days_first) %>%
+          days_first = as.numeric(!!CDMConnector::datediff(
+            "date_start", "first_date"
+          )), # gap between the first drug of a person and the first drug of the whole population
+          days_second = as.numeric(!!CDMConnector::datediff(
+            "first_date", "second_date"
+          ))) %>%
+        dplyr::collect() %>%
         dplyr::group_by(.data$days_first, .data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window) %>%
-        dplyr::summarise(marker_first = sum(.data$orderBA), index_first = sum(!.data$orderBA), .groups = "drop") %>%
+        dplyr::summarise(marker_first = sum(.data$orderBA, na.rm = T), index_first = sum((!.data$orderBA), na.rm = T), .groups = "drop") %>%
         dplyr::ungroup()
 
       temp2[[paste0("index_",i, "_marker_", j)]] <-

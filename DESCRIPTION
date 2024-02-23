@@ -48,7 +48,6 @@ Imports:
     CDMConnector (>= 1.3.0),
     dplyr,
     ggplot2,
-    lubridate,
     magrittr,
     PatientProfiles,
     rlang,
