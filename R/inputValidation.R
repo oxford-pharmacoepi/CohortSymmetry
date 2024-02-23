@@ -80,7 +80,8 @@ checkSequenceSymmetry <- function(result) {
   omopgenerics::newSummarisedResult(result)
 }
 
-checksFormatSequenceSymmetry <- function(type, splitGroup, .options) {
+checksFormatSequenceSymmetry <- function(type, crude, adjusted, studyPopulation,
+                                         indexName, markerName, cdmName, .options) {
   # Checks
   errorMessage <- checkmate::makeAssertCollection()
   ## Booleans

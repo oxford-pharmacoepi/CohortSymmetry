@@ -77,7 +77,7 @@ getCohortSequence <- function(cdm,
     indexMarkerGap <- combinationWindow[2]
     indexMarkerGap_export <- comb_export_2
   } else {
-    indexMarkerGap <- indexMarkerGap
+    indexMarkerGap_export <- indexMarkerGap
   }
 
 
