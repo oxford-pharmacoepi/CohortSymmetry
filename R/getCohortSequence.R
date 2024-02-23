@@ -66,7 +66,7 @@ getCohortSequence <- function(cdm,
   temp <- list()
 
   if(!is.finite(combinationWindow[2])){
-    combinationWindow[2] <- 99999999999
+    combinationWindow[2] <- as.integer(99999)
   }
 
   if (is.null(indexMarkerGap)) {
@@ -163,10 +163,10 @@ getCohortSequence <- function(cdm,
   cdm[[name]] <- joinedData %>%
     dplyr::mutate(
       gap = CDMConnector::datediff("index_date", "marker_date", interval = "day"),
-      cei = dplyr::if_else(.data$index_date < .data$marker_date,
-        .data$marker_date - .data$index_end_date, #
-        .data$index_date - .data$marker_end_date
-      ),
+      gap_rev = CDMConnector::datediff( "marker_date", "index_date", interval = "day")) %>%
+    dplyr::mutate(
+      cei = dplyr::if_else(.data$gap < 0,
+                           .data$gap_rev, .data$gap),
       first_date = dplyr::if_else(.data$index_date <= .data$marker_date,
         .data$index_date,
         .data$marker_date
@@ -184,10 +184,9 @@ getCohortSequence <- function(cdm,
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) %>%
-    dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
-                  washout_window = .env$washoutWindow,
-                  index_marker_gap = .env$indexMarkerGap,
-                  combination_window = .env$combinationWindow) %>%
+    dplyr::mutate(days_prior_observation = as.integer(.env$daysPriorObservation),
+                  washout_window = as.integer(.env$washoutWindow),
+                  index_marker_gap = as.integer(.env$indexMarkerGap)) %>%
     dplyr::mutate(combination_window = paste0("(",.env$comb_1, ",", .env$comb_2, ")")) %>%
     dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap", "combination_window")  %>%
     dplyr::left_join(cdm[["index_name"]], by = "index_id") %>%
