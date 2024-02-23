@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
  
-The goal of CohortSymmetry is to carry out the necessary calculations for Sequence Symmetry Analysis (SSA).
+The goal of CohortSymmetry is to carry out the necessary calculations for Sequence Symmetry Analysis (SSA). It is highly recommended that this method is tested beforehand against well-known positive benchmarks and negative benchmarks. Such benchmarks could be found using the paper in the Reference.
  
 ## Installation
  
@@ -36,7 +36,7 @@ This is a basic example which carries out the necessary calculations for Sequenc
 ### Create a reference to data in the OMOP CDM format 
 The CohortSymmetry package is designed to work with data in the OMOP CDM (Common Data Model) format, so our first step is to create a reference to the data using the CDMConnector package.
  
-As an example, we will be utilising the Eunomia data set.
+As an example, we will be using Eunomia data set.
 ```{r, message=FALSE, eval=TRUE, warning=FALSE}
 library(CDMConnector)
 library(dplyr)
@@ -54,7 +54,7 @@ cdm <- cdm_from_con(
  
 ### Step 0: Instantiate two cohorts in the cdm reference
  
-This will be entirely user's choice on how to generate such cohorts. Minimally, this package requires two tables in the cdm reference to be cohort tables; in other words, the columns of these tables should contain cohort_definition_id, subject_id, cohort_start_date and cohort_end_date.
+This will be entirely user's choice on how to generate such cohorts. Minimally, this package requires two cohort tables in the cdm reference, in other words, the columns of these tables should contain cohort_definition_id, subject_id, cohort_start_date and cohort_end_date.
  
 If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. As an example, amiodarone and levothyroxine are used. This is a known positive benchmark reported in the literature.<sup>1</sup>
  
@@ -89,9 +89,11 @@ cdm$cohort_marker %>%
  
 In order to initiate the calculations, the two cohorts tables need to be combined together. The first cohort is considered to be the index cohort while the second is the marker.
  
-This process will filter out the individuals who appeared on both tables according to a user-specified timeGap (default 365, it can also be changed to Inf if no such restriction is preferred).
+This process will filter out the individuals who appeared on both tables according to a user-specified combinationWindow. The default is c(0, 365), meaning the gap between two inititaions of the drugs should be more than 0 days but less than or equal to 365 days.
  
-The user also has the freedom to specify more than 1 IDs from either table that can be considered for this process. More concretely, if an user specifies m IDs from the first cohort and n IDs from the second cohort, this process will output mn combinations. If IDs are not specified then all IDs will be considered.
+There are further parameters that could be specified by the users, including DateRange,
+indexId, markerId, daysPriorObservation, washoutWindow and indexMarkerGap. Details on 
+these parameters could be found on the vignette.
  
 ```{r Step 1: getCohortSequence, eval=TRUE, warning=FALSE}
 library(CohortSymmetry)
@@ -99,15 +101,29 @@ library(CohortSymmetry)
 cdm <- CohortSymmetry::getCohortSequence(cdm,
                    indexTable ="cohort_index",
                    markerTable = "cohort_marker",
-                   combinationWindow = c(0,Inf))
+                   name = "amiodarone_levothyroxine",
+                   combinationWindow = c(0, Inf))
  
-cdm$joined_cohorts %>%
+cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
 
-cdm$joined_cohorts
+cdm$amiodarone_levothyroxine
  
 ```
 
+### Step 2: getSequenceRatio
+ 
+To get the sequence ratios, we would need the output of the getCohortSequence() function. 
+The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
+
+```{r Step 2: getSequenceRatio, eval=TRUE, warning=FALSE}
+library(CohortSymmetry)
+ 
+res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
+                                         outcomeTable = "amiodarone_levothyroxine")
+ 
+res
+```
 
 ## References
 1. Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry analysis: assessing risk, temporality, and consistency for adverse drug reactions across datasets in five countries. Pharmacoepidemiol Drug Saf. 2015;24(8):858-864.
