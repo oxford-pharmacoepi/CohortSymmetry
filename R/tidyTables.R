@@ -10,10 +10,6 @@
 #' object.
 #'
 #' @export
-#'
-#' @examples
-#' {
-#' }
 
 tidySequenceSymmetry <- function(result) {
   # checks
@@ -25,7 +21,7 @@ tidySequenceSymmetry <- function(result) {
                      "estimate_type")) |>
     tidyr::pivot_wider(
       names_from = c("variable_level", "variable_name", "estimate_name"),
-      values_from = estimate_value
+      values_from = "estimate_value"
     )
 
   return(result)

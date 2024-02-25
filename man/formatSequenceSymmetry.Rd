@@ -27,13 +27,26 @@ formatSequenceSymmetry(
 
 \item{estimateNameFormat}{.}
 
-\item{style}{.}
+\item{style}{Named list that specifies how to style the different parts of a
+gt table or flextable. See visOmopResults package for more information on
+how to define a style. Alternatively, use "default" to get visOmopResults
+style, or NULL for gt/flextable default styling.}
 
-\item{.options}{decimals}
+\item{crude}{whether to report crude results.}
 
-\item{header}{.}
+\item{adjusted}{whether to report adjusted results.}
 
-\item{splitGroup}{.}
+\item{studyPopulation}{whether to report the stdy population.}
+
+\item{indexName}{whether to report index names.}
+
+\item{markerName}{whether to report marker names}
+
+\item{cdmName}{whether to report database names.}
+
+\item{.options}{named list with additional formatting options.
+CohortSymmetry::formatSequenceSymmetryOptions() shows allowed arguments and
+their defaulted values.}
 }
 \value{
 A table with a formatted version of the sequence_symmetry object.

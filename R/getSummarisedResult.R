@@ -5,7 +5,7 @@ getSummarisedResult <- function(x) {
       package_name = "CohortSymmetry",
       package_version = as.character(utils::packageVersion("CohortSymmetry")),
       group_name = "index_cohort_name and marker_cohort_name",
-      group_level = paste0(index_name, " and ", marker_name),
+      group_level = paste0(.data$index_name, " and ", .data$marker_name),
       strata_name = "overall", # to update
       strata_level = "overall", # to update
     ) |>

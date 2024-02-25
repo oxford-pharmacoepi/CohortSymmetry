@@ -245,9 +245,7 @@ checkSingleBoolean <- function(splitGroup, errorMessage) {
 }
 
 checkOptions <- function(.options, errorMessage) {
-  allowedNames <- c("decimals", "decimalMark", "bigMark", "keepNotFormatted",
-                    "useFormatOrder", "includeHeaderName", "includeHeaderKey",
-                    "na","groupNameAsColumn", "colsToMergeRows")
+  allowedNames <- names(formatSequenceSymmetryOptions())
   optionsNames <- names(.options)
   checkmate::assertList(.options, null.ok = TRUE, any.missing = TRUE,
                         types = c("numeric", "logical", "character", "list"),

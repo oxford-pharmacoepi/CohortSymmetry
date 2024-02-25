@@ -8,17 +8,23 @@
 #' @param type Type of desired formatted table, possibilities: "gt",
 #' "flextable", "tibble".
 #' @param estimateNameFormat .
-#' @param header .
-#' @param style .
-#' @param splitGroup .
-#' @param .options # decimals
+#' @param style Named list that specifies how to style the different parts of a
+#'  gt table or flextable. See visOmopResults package for more information on
+#'  how to define a style. Alternatively, use "default" to get visOmopResults
+#'  style, or NULL for gt/flextable default styling.
+#' @param crude whether to report crude results.
+#' @param adjusted whether to report adjusted results.
+#' @param studyPopulation whether to report the stdy population.
+#' @param indexName whether to report index names.
+#' @param markerName whether to report marker names
+#' @param cdmName whether to report database names.
+#' @param .options named list with additional formatting options.
+#' CohortSymmetry::formatSequenceSymmetryOptions() shows allowed arguments and
+#' their default values.
 #'
-#' @return A table with a formatted version of the sequence_symmetry object.
+#' @return A formatted version of the sequence_symmetry object.
 #'
-#'
-#' @examples
-#' {
-#' }
+#' @export
 #'
 #'
 formatSequenceSymmetry <- function(result,
@@ -56,7 +62,7 @@ formatSequenceSymmetry <- function(result,
       dplyr::filter(.data$estimate_name == "count") |>
       tidyr::pivot_wider(names_from = "variable_level",
                          values_from = "estimate_value") |>
-      dplyr::mutate(estimate_value = as.character(index + marker),
+      dplyr::mutate(estimate_value = as.character(.data$index + .data$marker),
                     estimate_name = "Study population") |>
       visOmopResults::splitGroup() |>
       dplyr::select(!c("result_type", "package_name", "package_version",
@@ -72,6 +78,14 @@ formatSequenceSymmetry <- function(result,
                      paste0("ASR (", ci, "% CI)"))
   order_columns <- order_columns[c(cdmName, indexName, markerName,
                                    studyPopulation, TRUE, TRUE, TRUE, TRUE)]
+
+  # correct names
+  if (!is.null(.options$groupNameCol)) {
+    ind <- c("cdm_name", "index_cohort_name", "marker_cohort_name") %in% .options$groupNameCol
+    if (any(ind)) {
+      .options$groupNameCol <- c("Database name", "Index", "Marker")[ind]
+    }
+  }
 
   # format table
   format_result <- result |>
@@ -121,7 +135,7 @@ formatSequenceSymmetry <- function(result,
     {if (!markerName) {
       dplyr::select(., -"Marker")
     } else .} %>%
-    tidyr::pivot_wider(names_from = estimate_name, values_from = estimate_value) %>%
+    tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") %>%
     dplyr::select(dplyr::all_of(order_columns))
 
 
@@ -186,11 +200,30 @@ defaultOptions <- function(userOptions) {
     colsToMergeRows = "all_columns"
   )
 
-  for (opt in names(defaultOpts)) {
-    if (!opt %in% names(userOptions)) {
-      userOptions[[opt]] <- defaultOpts[[opt]]
-    }
+
+  for (opt in names(userOptions)) {
+    defaultOpts[[opt]] <- userOptions[[opt]]
   }
 
-  return(userOptions)
+    return(defaultOpts)
+}
+
+#' A formatted visualization of sequence_symmetry objects.
+#'
+#' @description
+#' It provides a list of allowed inputs for .option argument in
+#' formatSequenceSymmetry and their given default value.
+#'
+#'
+#' @return The default .options named list.
+#'
+#' @export
+#'
+#' @examples
+#' {
+#' }
+#'
+#'
+formatSequenceSymmetryOptions <- function() {
+  return(defaultOptions(NULL))
 }
