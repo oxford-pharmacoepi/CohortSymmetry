@@ -46,18 +46,12 @@ style, or NULL for gt/flextable default styling.}
 
 \item{.options}{named list with additional formatting options.
 CohortSymmetry::formatSequenceSymmetryOptions() shows allowed arguments and
-their defaulted values.}
+their default values.}
 }
 \value{
-A table with a formatted version of the sequence_symmetry object.
+A formatted version of the sequence_symmetry object.
 }
 \description{
 It provides a formatted table with the contents of the getSequenceRatios
 output.
-}
-\examples{
-{
-}
-
-
 }

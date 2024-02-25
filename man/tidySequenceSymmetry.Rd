@@ -17,7 +17,3 @@ object.
 It provides a tidy dataframe with the contents of the getSequenceRatios
 output.
 }
-\examples{
-{
-}
-}
