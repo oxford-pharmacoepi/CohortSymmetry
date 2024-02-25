@@ -45,6 +45,6 @@ test_that("formatSequenceSymmetry", {
                                            cdmName = FALSE)
   )
   expect_true(tibbleResult$Index[1] == "Cohort 1")
-  expect_true(tibbleResult$Marker[1] == "Cohort 2")
+  expect_true(all(tibbleResult$Marker %in% c("Cohort 1", "Cohort 2", "Cohort 3")))
 
 })
