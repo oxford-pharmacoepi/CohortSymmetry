@@ -32,6 +32,6 @@ test_that("getSequenceRatios", {
     CohortSymmetry::getSequenceRatios(
       cdm = cdm,
       outcomeTable = "joined_cohorts",
-      confidenceIntervalLevel = 1.1)
+      confidenceInterval = 101)
   )
 })

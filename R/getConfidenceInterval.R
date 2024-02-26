@@ -1,6 +1,7 @@
 # CI
-getConfidenceInterval <- function(table, nsr, confidenceIntervalLevel = 0.025){
+getConfidenceInterval <- function(table, nsr, confidenceInterval = 95){
 
+  confidenceIntervalLevel <- (100-confidenceInterval)/200
   counts <- tibble::tibble(
     index_first = table %>% dplyr::pull("index_first") %>% sum(),
     marker_first = table %>% dplyr::pull("marker_first") %>% sum()

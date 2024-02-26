@@ -7,7 +7,7 @@
 getSequenceRatios(
   cdm,
   outcomeTable,
-  confidenceIntervalLevel = 0.025,
+  confidenceInterval = 95,
   restriction = 548
 )
 }
@@ -16,7 +16,7 @@ getSequenceRatios(
 
 \item{outcomeTable}{A table in the CDM that the output of getCohortSequence resides.}
 
-\item{confidenceIntervalLevel}{Default is 0.025, which is the central 95\% confidence interval.}
+\item{confidenceInterval}{Default is 95, indicating the central 95\% confidence interval.}
 
 \item{restriction}{The moving window when calculating nSR, default is 548.}
 }

@@ -49,8 +49,8 @@ formatSequenceSymmetry <- function(result,
   .options = defaultOptions(.options)
 
   # get CI
-  ci <- (1-2*(result |> visOmopResults::splitAdditional() |>
-    dplyr::pull("confidence_interval_level") |> unique() |> as.numeric()))*100
+  ci <- result |> visOmopResults::splitAdditional() |>
+    dplyr::pull("confidence_interval") |> unique() |> as.numeric()
 
   # get study population
   if (studyPopulation) {
