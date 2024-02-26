@@ -14,7 +14,7 @@
 #'  style, or NULL for gt/flextable default styling.
 #' @param crude whether to report crude results.
 #' @param adjusted whether to report adjusted results.
-#' @param studyPopulation whether to report the stdy population.
+#' @param studyPopulation whether to report the study population.
 #' @param indexName whether to report index names.
 #' @param markerName whether to report marker names
 #' @param cdmName whether to report database names.

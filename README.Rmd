@@ -30,9 +30,6 @@ devtools::install_github("oxford-pharmacoepi/CohortSymmetry")
 ```
  
 ## Example
- 
-This is a basic example which carries out the necessary calculations for Sequence Symmetry Analysis:
- 
 ### Create a reference to data in the OMOP CDM format 
 The CohortSymmetry package is designed to work with data in the OMOP CDM (Common Data Model) format, so our first step is to create a reference to the data using the CDMConnector package.
  
@@ -54,7 +51,7 @@ cdm <- cdm_from_con(
  
 ### Step 0: Instantiate two cohorts in the cdm reference
  
-This will be entirely user's choice on how to generate such cohorts. Minimally, this package requires two cohort tables in the cdm reference, in other words, the columns of these tables should contain cohort_definition_id, subject_id, cohort_start_date and cohort_end_date.
+This will be entirely user's choice on how to generate such cohorts. Minimally, this package requires two cohort tables in the cdm reference, namely the index_cohort and the marker_cohort.
  
 If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. As an example, amiodarone and levothyroxine are used. This is a known positive benchmark reported in the literature.<sup>1</sup>
  
@@ -77,38 +74,24 @@ cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     name = "cohort_marker",
     conceptSet = marker_drug
   )
- 
-cdm$cohort_index %>%
-  dplyr::glimpse()
- 
-cdm$cohort_marker %>%
-  dplyr::glimpse()
 ```
  
 ### Step 1: getCohortSequence
  
-In order to initiate the calculations, the two cohorts tables need to be combined together. The first cohort is considered to be the index cohort while the second is the marker.
- 
-This process will filter out the individuals who appeared on both tables according to a user-specified combinationWindow. The default is c(0, 365), meaning the gap between two inititaions of the drugs should be more than 0 days but less than or equal to 365 days.
- 
-There are further parameters that could be specified by the users, including DateRange,
-indexId, markerId, daysPriorObservation, washoutWindow and indexMarkerGap. Details on 
+In order to initiate the calculations, the two cohorts tables need to be intersected using `getCohortSequence()` function. This process will filter out the individuals who appeared on both tables according to a user-specified parameters. This includes `timeGap`, `washoutWindow`, `indexMarkerGap` and `daysPriorObservation`. Details on 
 these parameters could be found on the vignette.
  
 ```{r Step 1: getCohortSequence, eval=TRUE, warning=FALSE}
 library(CohortSymmetry)
  
 cdm <- CohortSymmetry::getCohortSequence(cdm,
-                   indexTable ="cohort_index",
+                   indexTable = "cohort_index",
                    markerTable = "cohort_marker",
                    name = "amiodarone_levothyroxine",
                    combinationWindow = c(0, Inf))
  
 cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
-
-cdm$amiodarone_levothyroxine
- 
 ```
 
 ### Step 2: getSequenceRatio
@@ -117,8 +100,6 @@ To get the sequence ratios, we would need the output of the getCohortSequence() 
 The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
 
 ```{r Step 2: getSequenceRatio, eval=TRUE, warning=FALSE}
-library(CohortSymmetry)
- 
 res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
                                          outcomeTable = "amiodarone_levothyroxine")
  
