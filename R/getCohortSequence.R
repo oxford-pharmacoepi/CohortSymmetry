@@ -18,7 +18,7 @@
 #' @param washoutWindow A washout window to be applied on both the index cohort event and marker cohort.
 #' @param indexMarkerGap The maximum allowable gap between the end of the first episode
 #' and the start of the second episode in a sequence/combination.
-#' @param combinationWindow a constrain to be placed on the gap between two iniations.
+#' @param combinationWindow a constrain to be placed on the gap between two initiations.
 #' Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.
 #'
 #' @return
