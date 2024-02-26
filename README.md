@@ -24,9 +24,6 @@ devtools::install_github("oxford-pharmacoepi/CohortSymmetry")
 
 ## Example
 
-This is a basic example which carries out the necessary calculations for
-Sequence Symmetry Analysis:
-
 ### Create a reference to data in the OMOP CDM format
 
 The CohortSymmetry package is designed to work with data in the OMOP CDM
@@ -54,8 +51,7 @@ cdm <- cdm_from_con(
 
 This will be entirely user’s choice on how to generate such cohorts.
 Minimally, this package requires two cohort tables in the cdm reference,
-in other words, the columns of these tables should contain
-cohort_definition_id, subject_id, cohort_start_date and cohort_end_date.
+namely the index_cohort and the marker_cohort.
 
 If one wants to generate two drugs cohorts in cdm, DrugUtilisation is
 recommended. As an example, amiodarone and levothyroxine are used. This
@@ -80,49 +76,22 @@ cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
     name = "cohort_marker",
     conceptSet = marker_drug
   )
- 
-cdm$cohort_index %>%
-  dplyr::glimpse()
-#> Rows: ??
-#> Columns: 4
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpK2EeTq\file7da034ca26a9.duckdb]
-#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-#> $ subject_id           <int> 1101, 1169, 1605, 1632, 1635, 4668, 123, 1015, 10…
-#> $ cohort_start_date    <date> 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-13, …
-#> $ cohort_end_date      <date> 1982-08-22, 2012-02-20, 2019-05-12, 1988-11-14, …
- 
-cdm$cohort_marker %>%
-  dplyr::glimpse()
-#> Rows: ??
-#> Columns: 4
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpK2EeTq\file7da034ca26a9.duckdb]
-#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-#> $ subject_id           <int> 2909, 1079, 4532, 1537, 3224, 4960, 19, 2829, 430…
-#> $ cohort_start_date    <date> 1999-02-12, 2016-03-05, 1964-04-03, 2010-05-31, …
-#> $ cohort_end_date      <date> 1999-02-12, 2016-03-05, 1964-04-03, 2010-05-31, …
 ```
 
 ### Step 1: getCohortSequence
 
 In order to initiate the calculations, the two cohorts tables need to be
-combined together. The first cohort is considered to be the index cohort
-while the second is the marker.
-
-This process will filter out the individuals who appeared on both tables
-according to a user-specified combinationWindow. The default is c(0,
-365), meaning the gap between two inititaions of the drugs should be
-more than 0 days but less than or equal to 365 days.
-
-There are further parameters that could be specified by the users,
-including DateRange, indexId, markerId, daysPriorObservation,
-washoutWindow and indexMarkerGap. Details on these parameters could be
-found on the vignette.
+intersected using `getCohortSequence()` function. This process will
+filter out the individuals who appeared on both tables according to a
+user-specified parameters. This includes `timeGap`, `washoutWindow`,
+`indexMarkerGap` and `daysPriorObservation`. Details on these parameters
+could be found on the vignette.
 
 ``` r
 library(CohortSymmetry)
  
 cdm <- CohortSymmetry::getCohortSequence(cdm,
-                   indexTable ="cohort_index",
+                   indexTable = "cohort_index",
                    markerTable = "cohort_marker",
                    name = "amiodarone_levothyroxine",
                    combinationWindow = c(0, Inf))
@@ -131,7 +100,7 @@ cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 13
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpK2EeTq\file7da034ca26a9.duckdb]
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmp2Peon4\file1a5425e522bc.duckdb]
 #> $ index_id               <int> 1
 #> $ marker_id              <int> 1
 #> $ subject_id             <int> 2006
@@ -145,16 +114,6 @@ cdm$amiodarone_levothyroxine %>%
 #> $ combination_window     <chr> "(0,99999999999)"
 #> $ index_name             <chr> "amiodarone"
 #> $ marker_name            <chr> "levothyroxine"
-
-cdm$amiodarone_levothyroxine
-#> # Source:   table<amiodarone_levothyroxine> [1 x 13]
-#> # Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpK2EeTq\file7da034ca26a9.duckdb]
-#>   index_id marker_id subject_id index_date marker_date first_date second_date
-#>      <int>     <int>      <int> <date>     <date>      <date>     <date>     
-#> 1        1         1       2006 2014-01-17 2017-12-31  2014-01-17 2017-12-31 
-#> # ℹ 6 more variables: days_prior_observation <dbl>, washout_window <dbl>,
-#> #   index_marker_gap <dbl>, combination_window <chr>, index_name <chr>,
-#> #   marker_name <chr>
 ```
 
 ### Step 2: getSequenceRatio
@@ -165,8 +124,6 @@ cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence
 intervals.
 
 ``` r
-library(CohortSymmetry)
- 
 res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
                                          outcomeTable = "amiodarone_levothyroxine")
  
