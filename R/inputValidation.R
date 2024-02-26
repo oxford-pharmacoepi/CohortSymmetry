@@ -76,13 +76,22 @@ checkInputGetSequenceRatios <- function(cdm,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkTidySequenceSymmetry <- function(result, minCellCount) {
-  # Check inputs
+checkSequenceSymmetry <- function(result) {
+  omopgenerics::newSummarisedResult(result)
+}
+
+checksFormatSequenceSymmetry <- function(type, crude, adjusted, studyPopulation,
+                                         indexName, markerName, cdmName, .options) {
+  # Checks
   errorMessage <- checkmate::makeAssertCollection()
-  ## result
-  checkComparedResult(result, errorMessage)
-  ## minCellCount
-  checkMinCellCount(minCellCount, errorMessage)
+  ## Booleans
+  for (boolean in c(crude, adjusted, studyPopulation, indexName, markerName, cdmName)) {
+    checkSingleBoolean(boolean, errorMessage)
+  }
+  ## Type
+  checkType(type, errorMessage)
+  ## .options
+  checkOptions(.options, errorMessage)
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
 }
@@ -225,23 +234,28 @@ checkConfidenceIntervalLevel <- function(confidenceIntervalLevel, errorMessage) 
   )
 }
 
-checkTidySequenceSymmetry <- function(result, errorMessage) {
-  classes <- c("sequence_symmetry", "compared_result","omop_result")
-  class_id <- classes %in% class(result)
-  if (!all(class_id)) {
-    errorMessage$push(paste0("result has not the classes: ",
-                             paste0(classes[!class_id], collapse = ", ")))
-  }
-  columns <- omopgenerics::resultColumns("compared_result")
-  columns_id <- columns %in% colnames(result)
-  if (!all(columns_id)) {
-    errorMessage$push(paste0("result must have all compared_result object columns. ",
-                             "Currently these are missing: ",
-                             paste0(columns[!columns_id], collapse = ", ")))
+checkType <- function(type, errorMessage) {
+  checkmate::assertCharacter(type, min.chars = 2, max.chars = 6, len = 1,
+                             add = errorMessage)
+}
+
+checkSingleBoolean <- function(splitGroup, errorMessage) {
+  checkmate::assertLogical(splitGroup, any.missing = FALSE, len = 1,
+                           add = errorMessage)
+}
+
+checkOptions <- function(.options, errorMessage) {
+  allowedNames <- names(formatSequenceSymmetryOptions())
+  optionsNames <- names(.options)
+  checkmate::assertList(.options, null.ok = TRUE, any.missing = TRUE,
+                        types = c("numeric", "logical", "character", "list"),
+                        add = errorMessage)
+  names_id <- optionsNames %in% allowedNames
+  if(!all(names_id)) {
+    errorMessage$push(
+      paste0("The following elements are not supported arguments for .options: ",
+             paste0(optionsNames[!names_id], collapse = ", "))
+    )
   }
 }
 
-checkMinCellCount <- function(minCellCount, errorMessage) {
-  checkmate::assertIntegerish(minCellCount, len = 1, null.ok = TRUE,
-                              lower = 0, any.missing = FALSE)
-}

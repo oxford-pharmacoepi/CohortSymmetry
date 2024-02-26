@@ -35,7 +35,7 @@
 getSequenceRatios <- function(cdm,
                               outcomeTable,
                               confidenceIntervalLevel = 0.025,
-                              restriction = 548){
+                              restriction = 548) {
 
   # checks
   checkInputGetSequenceRatios(cdm = cdm,
@@ -89,18 +89,21 @@ getSequenceRatios <- function(cdm,
                                                             cbind(tibble::tibble(csr = csr,asr = asr),
                                                                   counts)) %>%
         dplyr::mutate(marker_first_percentage = round(.data$marker_first/(.data$marker_first + .data$index_first)*100, digits = 1),
-                      index_first_percentage = round(.data$index_first/(.data$marker_first + .data$index_first)*100, digits = 1)) %>%
+                      index_first_percentage = round(.data$index_first/(.data$marker_first + .data$index_first)*100, digits = 1),
+                      confidence_interval_level = as.character(.env$confidenceIntervalLevel),
+                      restriction = as.character(restriction)) %>%
         dplyr::select("index_id", "index_name", "marker_id", "marker_name",
                       "index_first", "marker_first", "index_first_percentage", "marker_first_percentage",
                       "csr", "lowerCSR_CI", "upperCSR_CI",
                       "asr", "lowerASR_CI", "upperASR_CI",
-                      "days_prior_observation", "washout_window", "index_marker_gap", "combination_window")
+                      "days_prior_observation", "washout_window", "index_marker_gap", "combination_window",
+                      "confidence_interval_level", "restriction")
     }
   }
 
   output <- Reduce(dplyr::union_all, results) %>%
     PatientProfiles::addCdmName(cdm) %>%
-    getComparedResult()
+    getSummarisedResult()
 
   return(output)
 }

@@ -1,19 +1,15 @@
-getComparedResult <- function(x) {
+getSummarisedResult <- function(x) {
   x <- x |>
     dplyr::mutate(
       result_type = "sequence_symmetry",
       package_name = "CohortSymmetry",
       package_version = as.character(utils::packageVersion("CohortSymmetry")),
-      group_name_reference = "index_cohort_name",
-      group_name_comparator = "marker_cohort_name",
-      strata_name_reference = "overall", # to update
-      strata_level_reference = "overall", # to update
-      strata_name_comparator = "overall", # to update
-      strata_level_comparator = "overall" # to update
+      group_name = "index_cohort_name and marker_cohort_name",
+      group_level = paste0(.data$index_name, " and ", .data$marker_name),
+      strata_name = "overall", # to update
+      strata_level = "overall", # to update
     ) |>
     dplyr::rename(
-      "group_level_reference" = "index_name",
-      "group_level_comparator" = "marker_name",
       "index_first_count" = "index_first",
       "marker_first_count" = "marker_first"
     ) |>
@@ -51,15 +47,11 @@ getComparedResult <- function(x) {
     ) |>
     visOmopResults::uniteNameLevel(
       cols = c("days_prior_observation", "washout_window", "index_marker_gap",
-               "combination_window"),
-      name = "additional_name_reference",
-      level = "additional_level_reference"
+               "combination_window", "confidence_interval_level", "restriction"),
+      name = "additional_name",
+      level = "additional_level"
     ) |>
-    dplyr::mutate(
-      "additional_name_comparator" = "additional_name_reference",
-      "additional_level_comparator" = "additional_level_reference"
-    ) |>
-    dplyr::select(omopgenerics::resultColumns("compared_result")) |>
-    omopgenerics::newComparedResult()
+    dplyr::select(omopgenerics::resultColumns("summarised_result")) |>
+    omopgenerics::newSummarisedResult()
   return(x)
 }

@@ -7,3 +7,4 @@
 #' @importFrom rlang :=
 ## usethis namespace: end
 NULL
+utils::globalVariables(".") # so we can use `.` in dplyr pipelines.
