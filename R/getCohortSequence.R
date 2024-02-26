@@ -16,9 +16,8 @@
 #' @param daysPriorObservation The minimum amount of prior observation required on both the index
 #' and marker cohorts per person.
 #' @param washoutWindow A washout window to be applied on both the index cohort event and marker cohort.
-#' @param indexMarkerGap The time before the start of the second episode
-#' of the drug (could be either marker or index) and the time after the end of the first
-#' episode (could be either marker or index).
+#' @param indexMarkerGap The maximum allowable gap between the end of the first episode
+#' and the start of the second episode in a sequence/combination.
 #' @param combinationWindow a constrain to be placed on the gap between two iniations.
 #' Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.
 #'
