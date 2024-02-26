@@ -21,14 +21,14 @@ test_that("tidySequenceSymmetry", {
   expect_true(unique(tidy_result$combination_window) == "(0,Inf)")
   expect_true(unique(tidy_result$days_prior_observation) == "0")
   expect_true(unique(tidy_result$washout_window) == "0")
-  expect_true(unique(tidy_result$confidence_interval_level) == "0.025")
+  expect_true(unique(tidy_result$confidence_interval) == "95")
   expect_true(unique(tidy_result$index_marker_gap) == "Inf")
 
   expect_true(all(
     colnames(tidy_result) %in%
       c("cdm_name", "index_cohort_name", "marker_cohort_name",
         "days_prior_observation", "washout_window", "index_marker_gap",
-        "combination_window", "confidence_interval_level", "restriction",
+        "combination_window", "confidence_interval", "restriction",
         "index_first_pharmac_count", "index_first_pharmac_percentage",
         "marker_first_pharmac_count", "marker_first_pharmac_percentage",
         "crude_sequence_ratio_point_estimate",

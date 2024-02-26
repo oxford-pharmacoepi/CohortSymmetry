@@ -36,7 +36,7 @@ style, or NULL for gt/flextable default styling.}
 
 \item{adjusted}{whether to report adjusted results.}
 
-\item{studyPopulation}{whether to report the stdy population.}
+\item{studyPopulation}{whether to report the study population.}
 
 \item{indexName}{whether to report index names.}
 

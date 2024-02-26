@@ -56,7 +56,7 @@ checkInputGetCohortSequence <- function(cdm,
 
 checkInputGetSequenceRatios <- function(cdm,
                                         outcomeTable,
-                                        confidenceIntervalLevel,
+                                        confidenceInterval,
                                         restriction) {
 
   # Check cdm objects, writing schema and index/marker tables
@@ -66,8 +66,8 @@ checkInputGetSequenceRatios <- function(cdm,
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
-  ## Check confidenceIntervalLevel
-  checkConfidenceIntervalLevel(confidenceIntervalLevel, errorMessage)
+  ## Check confidenceInterval
+  checkConfidenceInterval(confidenceInterval, errorMessage)
 
   ## Check restriction
   checkRestriction(restriction, errorMessage)
@@ -227,10 +227,10 @@ checkDateRange <- function(dateRange, errorMessage) {
   }
 }
 
-checkConfidenceIntervalLevel <- function(confidenceIntervalLevel, errorMessage) {
+checkConfidenceInterval <- function(confidenceInterval, errorMessage) {
   checkmate::assertNumeric(
-    confidenceIntervalLevel, len = 1,
-    lower = 0, upper = 0.5, any.missing = FALSE, add = errorMessage
+    confidenceInterval, len = 1,
+    lower = 0, upper = 100, any.missing = FALSE, add = errorMessage
   )
 }
 
