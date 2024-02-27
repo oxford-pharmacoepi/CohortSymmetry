@@ -3,6 +3,7 @@ test_that("formatSequenceSymmetry", {
                                               drug_exposure_size = 100)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2",
                                            combinationWindow = c(0, Inf))

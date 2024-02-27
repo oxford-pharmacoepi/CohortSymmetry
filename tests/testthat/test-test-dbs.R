@@ -13,7 +13,8 @@ test_that("SQL Server", {
   write_schema<- strsplit(Sys.getenv("CDM5_SQL_SERVER_SCRATCH_SCHEMA"), "\\.")[[1]]
 
 cdm <- CDMConnector::cdm_from_con(db, cdm_schema = cdm_schema,
-                                  write_schema =  write_schema)
+                                  write_schema =  c(schema = write_schema,
+                                                    prefix = "ssa_p_"))
 
 index_drug <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm,
                                                         name = "celecoxib")
@@ -32,6 +33,7 @@ cdm <- CDMConnector::generate_concept_cohort_set(cdm = cdm,
                                                  overwrite = TRUE)
 
 expect_no_error(cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                                 name = "joined_cohorts",
                                                            indexTable ="csyim_index",
                                                            markerTable = "csyim_marker",
                                                            combinationWindow = c(0,Inf)))
@@ -74,6 +76,7 @@ test_that("Redshift", {
                                                    overwrite = TRUE)
 
   expect_no_error(cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                                   name = "joined_cohorts",
                                                            indexTable ="csyim_index",
                                                            markerTable = "csyim_marker",
                                                            combinationWindow = c(0,Inf)))

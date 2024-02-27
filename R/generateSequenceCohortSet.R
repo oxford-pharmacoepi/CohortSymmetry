@@ -7,7 +7,7 @@
 #' @param indexTable A table in the CDM that the index cohorts should come from.
 #' @param markerTable A table in the CDM that the marker cohorts should come from.
 #' @param name the name within the cdm that the output is called. Default is joined_cohorts.
-#' @param dateRange Two dates indicating study period and the sequences that the user wants
+#' @param cohortDateRange Two dates indicating study period and the sequences that the user wants
 #' to restrict to.
 #' @param indexId Cohort definition IDs in indexTable to be considered for the analysis.
 #' Change to NULL if all indices are wished to be included.
@@ -31,17 +31,17 @@
 #' cdm <- mockPatientProfiles()
 #' cdm <- CohortSymmetry::generateSequenceCohortSet(
 #'   cdm = cdm,
+#'   name = "joined_cohorts",
 #'   indexTable = "cohort1",
 #'   markerTable = "cohort2"
 #' )
-#' ## default name - joined_cohorts
 #'  cdm$joined_cohorts
 #' }
 generateSequenceCohortSet <- function(cdm,
                               indexTable,
                               markerTable,
-                              name = "joined_cohorts",
-                              dateRange = as.Date(c(NA, NA)),
+                              name,
+                              cohortDateRange = as.Date(c(NA, NA)),
                               indexId = NULL,
                               markerId = NULL,
                               daysPriorObservation = 0,
@@ -54,7 +54,7 @@ generateSequenceCohortSet <- function(cdm,
     indexTable = indexTable,
     markerTable = markerTable,
     name = name,
-    dateRange = dateRange,
+    cohortDateRange = cohortDateRange,
     indexId = indexId,
     markerId = markerId,
     daysPriorObservation = daysPriorObservation,
@@ -78,17 +78,17 @@ generateSequenceCohortSet <- function(cdm,
     indexMarkerGap_export <- indexMarkerGap
   }
 
-  # modify dateRange if necessary
-  if (any(is.na(dateRange))) {
-    dateRange <- getDateRange(
+  # modify cohortDateRange if necessary
+  if (any(is.na(cohortDateRange))) {
+    cohortDateRange <- getcohortDateRange(
       cdm = cdm,
-      dateRange = dateRange
+      cohortDateRange = cohortDateRange
     )
   }
 
   # Preprocess both cohorts
   indexPreprocessed <- preprocessCohort(cdm, indexTable,
-                                        indexId, dateRange) %>%
+                                        indexId, cohortDateRange) %>%
     dplyr::rename("index_id" = "cohort_definition_id",
                   "index_name" = "cohort_name",
       "index_date" = "cohort_start_date",
@@ -97,7 +97,7 @@ generateSequenceCohortSet <- function(cdm,
       "gap_to_prior_index" = "gap_to_prior"
     )
   markerPreprocessed <- preprocessCohort(cdm, markerTable,
-                                         markerId, dateRange) %>%
+                                         markerId, cohortDateRange) %>%
     dplyr::rename("marker_id" = "cohort_definition_id",
                   "marker_name" = "cohort_name",
                   "marker_date" = "cohort_start_date",
@@ -148,7 +148,7 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::select(.data$index_id, .data$marker_id) %>%
     dplyr::distinct() %>%
     dplyr::arrange(.data$index_id, .data$marker_id) %>%
-    dplyr::mutate(cohort_definition_id = dplyr::row_number()) %>%
+    dplyr::mutate(cohort_definition_id = as.integer(dplyr::row_number())) %>%
     dplyr::compute(name = "ids", temporary = FALSE)
 
   cdm[[name]] <- cdm[[name]] %>%
@@ -227,9 +227,9 @@ generateSequenceCohortSet <- function(cdm,
 ### extra functions
 # If the user doesn't specify date range
 # range to min and max of obs period
-getDateRange <- function(cdm, dateRange) {
-  if (is.na(dateRange[1])) {
-    dateRange[1] <- as.Date(cdm[["observation_period"]] %>%
+getcohortDateRange <- function(cdm, cohortDateRange) {
+  if (is.na(cohortDateRange[1])) {
+    cohortDateRange[1] <- as.Date(cdm[["observation_period"]] %>%
       dplyr::summarise(
         min(.data$observation_period_start_date,
           na.rm = TRUE
@@ -238,8 +238,8 @@ getDateRange <- function(cdm, dateRange) {
       dplyr::collect() %>%
       dplyr::pull())
   }
-  if (is.na(dateRange[2])) {
-    dateRange[2] <- as.Date(cdm[["observation_period"]] %>%
+  if (is.na(cohortDateRange[2])) {
+    cohortDateRange[2] <- as.Date(cdm[["observation_period"]] %>%
       dplyr::summarise(
         max(.data$observation_period_end_date,
           na.rm = TRUE
@@ -248,10 +248,10 @@ getDateRange <- function(cdm, dateRange) {
       dplyr::collect() %>%
       dplyr::pull())
   }
-  return(dateRange)
+  return(cohortDateRange)
 }
 
-preprocessCohort <- function(cdm, cohortName, cohortId, dateRange) {
+preprocessCohort <- function(cdm, cohortName, cohortId, cohortDateRange) {
   cohort <- cdm[[cohortName]]
   if (!is.null(cohortId)) {
     cohort <- cohort |>
@@ -277,8 +277,8 @@ preprocessCohort <- function(cdm, cohortName, cohortId, dateRange) {
       "previous_exposure", "cohort_start_date"
     ))) %>%
     dplyr::filter(
-      .data$cohort_start_date <= !!dateRange[[2]] &
-        .data$cohort_start_date >= !!dateRange[[1]]
+      .data$cohort_start_date <= !!cohortDateRange[[2]] &
+        .data$cohort_start_date >= !!cohortDateRange[[1]]
     ) %>%
     dplyr::filter(.data[[id]] == min(.data[[id]], na.rm = TRUE)) %>%
     dplyr::ungroup() %>%

@@ -49,6 +49,7 @@ test_that("mock db: check output table name", {
 # check colnames
 test_that("mock db: check output format", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      markerTable = "cohort2")
   expect_true(all(
@@ -62,6 +63,7 @@ test_that("mock db: check output format", {
 #check one ID against one ID
 test_that("mock db: one ID against one ID, example 1", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      indexId=1,
                      markerTable = "cohort2",
@@ -81,6 +83,7 @@ test_that("mock db: one ID against one ID, example 1", {
 test_that("mock db: one ID against one ID, example 2", {
   # Single id (indexId=markerId=2)
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      indexId=2,
                      markerTable = "cohort2",
@@ -99,6 +102,7 @@ test_that("mock db: one ID against one ID, example 2", {
 test_that("mock db: one ID against one ID, example 3", {
   # Single id (indexId=1, markerId=2)
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      indexId=1,
                      markerTable = "cohort2",
@@ -115,6 +119,7 @@ test_that("mock db: one ID against one ID, example 3", {
 test_that("mock db: change combinationWindow ", {
   # change of defaulted combinationWindow
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      indexId=1,
                      markerTable = "cohort2",
@@ -132,6 +137,7 @@ test_that("mock db: change combinationWindow ", {
 
 test_that("mock db: change combinationWindow[1]", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            indexId=1,
                                            markerTable = "cohort2",
@@ -150,6 +156,7 @@ test_that("mock db: change combinationWindow[1]", {
 test_that("mock db: all IDs against all IDs", {
   # Multiple id
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable = "cohort1",
                      markerTable = "cohort2",
                      combinationWindow = c(0,90))
@@ -173,6 +180,7 @@ test_that("mock db: all IDs against all IDs", {
 test_that("mock db: one index (rsp. marker) ID against all marker (rsp. index) IDs", {
   # 1 Id vs all Ids
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      indexId = 1,
                      markerTable = "cohort2"
@@ -190,6 +198,7 @@ test_that("mock db: one index (rsp. marker) ID against all marker (rsp. index) I
   expect_false("cohort_3" %in% (loc %>% dplyr::pull(index_name)))
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      markerTable = "cohort2",
                      markerId = 1
@@ -211,6 +220,7 @@ test_that("mock db: one index (rsp. marker) ID against all marker (rsp. index) I
 test_that("mock db: a subset of IDs against a subset of IDs", {
   # subset Ids vs subset Ids
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      indexId = c(1,2),
                      markerTable = "cohort2",
@@ -234,6 +244,7 @@ test_that("mock db: a subset of IDs against a subset of IDs", {
 test_that("mock db: example of timeGap being infinite", {
   # timeGap finiteness
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      indexId = 1,
                      markerTable = "cohort2",
@@ -245,6 +256,7 @@ test_that("mock db: example of timeGap being infinite", {
   expect_true(loc %>% dplyr::tally() %>% dplyr::pull(n) == 3) # default time, 3 entries
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                      indexTable ="cohort1",
                      indexId = 1,
                      markerTable = "cohort2",
@@ -258,7 +270,7 @@ test_that("mock db: example of timeGap being infinite", {
 })
 
 CDMConnector::cdmDisconnect(cdm)
-################## Involving dateRange and priorObservation ###################
+################## Involving cohortDateRange and priorObservation ###################
 # priorObservation
 indexCohort <- dplyr::tibble(
   cohort_definition_id = c(1, 1, 1, 1),
@@ -291,6 +303,7 @@ cdm <-
 
 test_that("mock db: example of timeGap being infinite with 0 daysPriorObservation", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 0,
@@ -302,6 +315,7 @@ test_that("mock db: example of timeGap being infinite with 0 daysPriorObservatio
 
 test_that("mock db: example of fixed timeGap being with 0 daysPriorObservation", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 0,
@@ -312,6 +326,7 @@ test_that("mock db: example of fixed timeGap being with 0 daysPriorObservation",
 
 test_that("mock db: example of infinite timeGap being with non-zero daysPriorObservation", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 30,
@@ -322,6 +337,7 @@ test_that("mock db: example of infinite timeGap being with non-zero daysPriorObs
 
 test_that("mock db: example of fixed timeGap being with non-zero daysPriorObservation", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 30,
@@ -330,12 +346,13 @@ test_that("mock db: example of fixed timeGap being with non-zero daysPriorObserv
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
 })
 
-#dateRange
+#cohortDateRange
 test_that("mock db: example of given study period start date", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           dateRange = as.Date(c("2020-01-01", NA)),
+                                           cohortDateRange = as.Date(c("2020-01-01", NA)),
                                            daysPriorObservation = 0,
                                            combinationWindow = c(0,Inf)
   )
@@ -345,9 +362,10 @@ test_that("mock db: example of given study period start date", {
 
 test_that("mock db: example of given study period start date with daysPriorObservation and timeGap", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           dateRange = as.Date(c("2020-01-01", NA)),
+                                           cohortDateRange = as.Date(c("2020-01-01", NA)),
                                            daysPriorObservation = 365
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
@@ -356,9 +374,10 @@ test_that("mock db: example of given study period start date with daysPriorObser
 
 test_that("mock db: example of given study period start date wih daysPriorObservation", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           dateRange = as.Date(c("2000-01-01", "2022-01-01")),
+                                           cohortDateRange = as.Date(c("2000-01-01", "2022-01-01")),
                                            daysPriorObservation = 30,
                                            combinationWindow = c(0,Inf)
   )
@@ -368,9 +387,10 @@ test_that("mock db: example of given study period start date wih daysPriorObserv
 
 test_that("mock db: example of given study period start date wih daysPriorObservation", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           dateRange = as.Date(c("2000-01-01", "2023-01-01")),
+                                           cohortDateRange = as.Date(c("2000-01-01", "2023-01-01")),
                                            daysPriorObservation = 365,
                                            combinationWindow = c(0,Inf)
   )
@@ -419,6 +439,7 @@ cdm <-
 
 test_that("mock db: example of multiple entries per person", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            combinationWindow = c(0,Inf)
@@ -438,6 +459,7 @@ test_that("mock db: example of multiple entries per person", {
 
 test_that("mock db: example of multiple entries per person - exclusion based on timeGap", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2"
   )
@@ -446,6 +468,7 @@ test_that("mock db: example of multiple entries per person - exclusion based on 
 
 test_that("mock db: example of multiple entries per person - exclusion based on prior observation", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 365,
@@ -454,9 +477,10 @@ test_that("mock db: example of multiple entries per person - exclusion based on 
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 })
 
-test_that("mock db: example of multiple entries per person - picking sequence in relation to dateRange", {
+test_that("mock db: example of multiple entries per person - picking sequence in relation to cohortDateRange", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-                                           dateRange = as.Date(c("2000-01-01", NA)),
+                                                   name = "joined_cohorts",
+                                           cohortDateRange = as.Date(c("2000-01-01", NA)),
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 365,
@@ -466,9 +490,10 @@ test_that("mock db: example of multiple entries per person - picking sequence in
   expect_true(cdm$joined_cohorts %>% dplyr::pull(cohort_start_date) >= as.Date("2000-01-01"))
 })
 
-test_that("mock db: example of multiple entries per person - picking sequence in relation to dateRange with fixed timeGap", {
+test_that("mock db: example of multiple entries per person - picking sequence in relation to cohortDateRange with fixed timeGap", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-                                           dateRange = as.Date(c("2000-01-01", NA)),
+                                                   name = "joined_cohorts",
+                                           cohortDateRange = as.Date(c("2000-01-01", NA)),
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            daysPriorObservation = 365
@@ -478,6 +503,7 @@ test_that("mock db: example of multiple entries per person - picking sequence in
 
 test_that("mock db: example of multiple entries per person - index washout (shouldn't affect the first event)", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            washoutWindow = 365,
@@ -491,9 +517,10 @@ test_that("mock db: example of multiple entries per person - index washout (shou
 
 test_that("mock db: example of multiple entries per person - exclusion based on marker washout", {
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
-                                           dateRange = as.Date(c("2002-01-01", NA)),
+                                           cohortDateRange = as.Date(c("2002-01-01", NA)),
                                            washoutWindow = 365,
                                            combinationWindow = c(0,Inf)
   )
@@ -505,9 +532,10 @@ test_that("generateSequenceCohortSet - inputValidation", {
   expect_error(
     CohortSymmetry::generateSequenceCohortSet(
       list(),
+      name = "joined_cohorts",
       indexTable = "cohort1",
       markerTable = "cohort2",
-      dateRange = as.Date(c("2002-01-01", NA)),
+      cohortDateRange = as.Date(c("2002-01-01", NA)),
       washoutWindow = 365,
       combinationWindow = c(0,Inf)
     ),
@@ -516,10 +544,11 @@ test_that("generateSequenceCohortSet - inputValidation", {
   expect_error(
     CohortSymmetry::generateSequenceCohortSet(
       cdm = cdm,
+      name = "joined_cohorts",
       indexTable = "cohort1",
       indexId = 2,
       markerTable = "cohort2",
-      dateRange = as.Date(c("2002-01-01", NA)),
+      cohortDateRange = as.Date(c("2002-01-01", NA)),
       washoutWindow = 365,
       combinationWindow = c(0,Inf)
     ),
@@ -528,20 +557,22 @@ test_that("generateSequenceCohortSet - inputValidation", {
   expect_error(
     CohortSymmetry::generateSequenceCohortSet(
       cdm = cdm,
+      name = "joined_cohorts",
       indexTable = "cohort1",
       markerTable = "cohort2",
-      dateRange = c(as.Date("2002-01-01"),1),
+      cohortDateRange = c(as.Date("2002-01-01"),1),
       washoutWindow = 365,
       combinationWindow = c(0, Inf)
     ),
-    "First element in dateRange must be smaller than the second."
+    "First element in cohortDateRange must be smaller than the second."
   )
   expect_error(
     CohortSymmetry::generateSequenceCohortSet(
       cdm = cdm,
+      name = "joined_cohorts",
       indexTable = "cohort1",
       markerTable = "cohort2",
-      dateRange = as.Date(c("2002-01-01", NA)),
+      cohortDateRange = as.Date(c("2002-01-01", NA)),
       washoutWindow = -1,
       daysPriorObservation = Inf,
       combinationWindow = c(0, Inf)
@@ -550,9 +581,10 @@ test_that("generateSequenceCohortSet - inputValidation", {
   expect_error(
     CohortSymmetry::generateSequenceCohortSet(
       cdm = cdm,
+      name = "joined_cohorts",
       indexTable = "cohort1",
       markerTable = "cohort2",
-      dateRange = as.Date(c("2002-01-01", NA)),
+      cohortDateRange = as.Date(c("2002-01-01", NA)),
       indexMarkerGap = 41,
       combinationWindow = c(0, 40)
     )
@@ -560,9 +592,10 @@ test_that("generateSequenceCohortSet - inputValidation", {
   expect_error(
     CohortSymmetry::generateSequenceCohortSet(
       cdm = cdm,
+      name = "joined_cohorts",
       indexTable = "cohort1",
       markerTable = "cohort2",
-      dateRange = as.Date(c("2002-01-01", NA)),
+      cohortDateRange = as.Date(c("2002-01-01", NA)),
       combinationWindow = c(80, 40)
     )
   )

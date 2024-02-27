@@ -3,6 +3,7 @@ test_that("tidySequenceSymmetry", {
                                               drug_exposure_size = 100)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2",
                                            combinationWindow = c(0, Inf))
@@ -38,6 +39,7 @@ test_that("tidySequenceSymmetry", {
   ))
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2",
                                            indexMarkerGap = 40,

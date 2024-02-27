@@ -8,8 +8,8 @@ generateSequenceCohortSet(
   cdm,
   indexTable,
   markerTable,
-  name = "joined_cohorts",
-  dateRange = as.Date(c(NA, NA)),
+  name,
+  cohortDateRange = as.Date(c(NA, NA)),
   indexId = NULL,
   markerId = NULL,
   daysPriorObservation = 0,
@@ -27,7 +27,7 @@ generateSequenceCohortSet(
 
 \item{name}{the name within the cdm that the output is called. Default is joined_cohorts.}
 
-\item{dateRange}{Two dates indicating study period and the sequences that the user wants
+\item{cohortDateRange}{Two dates indicating study period and the sequences that the user wants
 to restrict to.}
 
 \item{indexId}{Cohort definition IDs in indexTable to be considered for the analysis.
@@ -61,10 +61,10 @@ library(PatientProfiles)
 cdm <- mockPatientProfiles()
 cdm <- CohortSymmetry::generateSequenceCohortSet(
   cdm = cdm,
+  name = "joined_cohorts",
   indexTable = "cohort1",
   markerTable = "cohort2"
 )
-## default name - joined_cohorts
  cdm$joined_cohorts
 }
 }

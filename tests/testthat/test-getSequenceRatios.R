@@ -3,6 +3,7 @@ test_that("getSequenceRatios", {
                                               drug_exposure_size = 100)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 
@@ -83,6 +84,7 @@ test_that("getSequenceRatios - testing ratios and CIs", {
                                               drug_exposure_size = 100)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 
@@ -143,6 +145,7 @@ test_that("getSequenceRatios - testing ratios and CIs", {
                                               drug_exposure_size = 100)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 

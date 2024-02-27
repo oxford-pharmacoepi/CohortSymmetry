@@ -24,6 +24,7 @@
 #' cdm <- mockPatientProfiles(cohort1 = cohort1,
 #'                             patient_size = 10)
 #' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+#'                                           name = "joined_cohorts",
 #'                                           indexTable = "cohort1",
 #'                                           markerTable = "cohort2")
 #' pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,

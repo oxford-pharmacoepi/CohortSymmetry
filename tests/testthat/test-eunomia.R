@@ -31,6 +31,7 @@ test_that("eunomia - generateSequenceCohortSet", {
   )
 
   expect_no_error(cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            combinationWindow = c(0,Inf)))
