@@ -39,8 +39,8 @@ test_that("mock db: check output table name", {
                                            markerTable = "cohort2")
   expect_null(cdm$joined_cohorts)
   expect_true(all(
-    c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
-      "first_date") %in%
+    c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "marker_date",
+      "index_date") %in%
       colnames(cdm$output)
   ))
 }
@@ -51,13 +51,9 @@ test_that("mock db: check output format", {
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                      indexTable ="cohort1",
                      markerTable = "cohort2")
-
-  expect_true(all(omopgenerics::cohortColumns("cohort") %in%
-        colnames(cdm$joined_cohorts)))
-
   expect_true(all(
-    c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
-      "first_date") %in%
+    c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "marker_date",
+      "index_date") %in%
       colnames(cdm$joined_cohorts)
   ))
 }
@@ -71,12 +67,14 @@ test_that("mock db: one ID against one ID, example 1", {
                      markerTable = "cohort2",
                      markerId=1)
   expect_true((cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n)) == 2)
-  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
 
   # check first Date
-  expect_true(all(loc$first_date == pmin(loc$index_date, loc$marker_date)))
-  expect_true(all(loc$first_date < loc$second_date))
+  expect_true(all(loc$cohort_start_date == pmin(loc$index_date, loc$marker_date)))
+  expect_true(all(loc$cohort_start_date < loc$cohort_end_date))
 }
 )
 
@@ -87,10 +85,13 @@ test_that("mock db: one ID against one ID, example 2", {
                      indexId=2,
                      markerTable = "cohort2",
                      markerId=2)
-  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
+
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
-  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==2 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n)) == 1)
-  expect_false((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n)) > 0)
+  expect_true((loc %>% dplyr::filter(index_name=="cohort_2" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n)) == 1)
+  expect_false((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n)) > 0)
   # we should have one row for subject id 2
 }
 )
@@ -103,9 +104,11 @@ test_that("mock db: one ID against one ID, example 3", {
                      markerTable = "cohort2",
                      markerId=2)
 
-  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
-  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n))== 3)
+  expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n))== 3)
 }
 )
 
@@ -119,13 +122,15 @@ test_that("mock db: change combinationWindow ", {
                      indexMarkerGap = 30,
                      combinationWindow = c(0,30))
 
-  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 30))
-  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr:: tally() %>% dplyr:: pull(n)) == 1)
+  expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 1)
 }
 )
 
-test_that("mock db: change blackOutPeriod", {
+test_that("mock db: change combinationWindow[1]", {
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                                            indexTable ="cohort1",
                                            indexId=1,
@@ -133,10 +138,12 @@ test_that("mock db: change blackOutPeriod", {
                                            markerId=2,
                                            combinationWindow = c(7,365))
 
-  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
-  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr:: tally() %>% dplyr:: pull(n)) == 2)
-  expect_true(all(loc$second_date-loc$first_date>7 & loc$second_date-loc$first_date<365))
+  expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 2)
+  expect_true(all(loc$cohort_end_date-loc$cohort_start_date>7 & loc$cohort_end_date-loc$cohort_start_date<365))
 }
 )
 
@@ -149,15 +156,17 @@ test_that("mock db: all IDs against all IDs", {
 
 
   # check number of rows (timeGap=90d)
-  loc <- cdm$joined_cohorts %>% dplyr::collect()
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 90))
-  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n)) == 1 &
-                (cdm$joined_cohorts %>% dplyr::filter(index_id==2 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n)) == 1)
+  expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n)) == 1 &
+                (loc %>% dplyr::filter(index_name=="cohort_2" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n)) == 1)
   # check the total number of combinations, should be 5
-  expect_true(cdm$joined_cohorts %>% dplyr::select(index_id, marker_id) %>% dplyr::distinct() %>% dplyr::tally() %>% dplyr::pull(n) == 4)
+  expect_true(loc %>% dplyr::select(index_name, marker_name) %>% dplyr::distinct() %>% dplyr::tally() %>% dplyr::pull(n) == 4)
 
   # same start date exclusion
-  expect_false(1 %in% (cdm$joined_cohorts %>% dplyr::filter(index_id==3, marker_id==2) %>% dplyr::pull(subject_id)))
+  expect_false(1 %in% (loc %>% dplyr::filter(index_name=="cohort_3", marker_name=="cohort_2") %>% dplyr::pull(subject_id)))
 }
 )
 
@@ -169,12 +178,16 @@ test_that("mock db: one index (rsp. marker) ID against all marker (rsp. index) I
                      markerTable = "cohort2"
   )
 
-  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==1) %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
-                (cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n) == 3) &
-                (cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==3) %>% dplyr::tally() %>% dplyr::pull(n) == 3))
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
 
-  expect_false(2 %in% (cdm$joined_cohorts %>% dplyr::pull(index_id)))
-  expect_false(3 %in% (cdm$joined_cohorts %>% dplyr::pull(index_id)))
+  expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_1") %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
+                (loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n) == 3) &
+                (loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_3") %>% dplyr::tally() %>% dplyr::pull(n) == 3))
+
+  expect_false("cohort_2" %in% (loc %>% dplyr::pull(index_name)))
+  expect_false("cohort_3" %in% (loc %>% dplyr::pull(index_name)))
 
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                      indexTable ="cohort1",
@@ -182,11 +195,15 @@ test_that("mock db: one index (rsp. marker) ID against all marker (rsp. index) I
                      markerId = 1
   )
 
-  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==1) %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
-                (cdm$joined_cohorts %>% dplyr::filter(index_id==3 & marker_id==1) %>% dplyr::tally() %>% dplyr::pull(n) == 1))
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
 
-  expect_false(2 %in% (cdm$joined_cohorts %>% dplyr::pull(marker_id)))
-  expect_false(3 %in% (cdm$joined_cohorts %>% dplyr::pull(marker_id)))
+  expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_1") %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
+                (loc %>% dplyr::filter(index_name=="cohort_3" & marker_name=="cohort_1") %>% dplyr::tally() %>% dplyr::pull(n) == 1))
+
+  expect_false("cohort_2" %in% (loc %>% dplyr::pull(marker_name)))
+  expect_false("cohort_3" %in% (loc %>% dplyr::pull(marker_name)))
 
 }
 )
@@ -200,13 +217,17 @@ test_that("mock db: a subset of IDs against a subset of IDs", {
                      markerId = c(2,3)
   )
 
-  expect_true((cdm$joined_cohorts %>% dplyr::filter(index_id==2 & marker_id==3) %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
-                (cdm$joined_cohorts %>% dplyr::filter(index_id==2 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n) == 1) &
-                (cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==2) %>% dplyr::tally() %>% dplyr::pull(n) == 3) &
-                (cdm$joined_cohorts %>% dplyr::filter(index_id==1 & marker_id==3) %>% dplyr::tally() %>% dplyr::pull(n) == 3))
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
 
-  expect_false(3 %in% (cdm$joined_cohorts %>% dplyr::pull(index_id)))
-  expect_false(1 %in% (cdm$joined_cohorts %>% dplyr::pull(marker_id)))
+  expect_true((loc %>% dplyr::filter(index_name=="cohort_2" & marker_name=="cohort_3") %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
+                (loc %>% dplyr::filter(index_name=="cohort_2" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n) == 1) &
+                (loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n) == 3) &
+                (loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_3") %>% dplyr::tally() %>% dplyr::pull(n) == 3))
+
+  expect_false("cohort_3" %in% (loc %>% dplyr::pull(index_name)))
+  expect_false("cohort_1" %in% (loc %>% dplyr::pull(marker_name)))
 }
 )
 
@@ -218,7 +239,10 @@ test_that("mock db: example of timeGap being infinite", {
                      markerTable = "cohort2",
                      markerId = 3
   )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3) # default time, 3 entries
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
+  expect_true(loc %>% dplyr::tally() %>% dplyr::pull(n) == 3) # default time, 3 entries
 
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                      indexTable ="cohort1",
@@ -227,7 +251,10 @@ test_that("mock db: example of timeGap being infinite", {
                      markerId = 3,
                      combinationWindow = c(0,Inf)
   )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 4) #inf gives more values
+  loc <- cdm$joined_cohorts %>%
+    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::collect()
+  expect_true(loc %>% dplyr::tally() %>% dplyr::pull(n) == 4) #inf gives more values
 })
 
 CDMConnector::cdmDisconnect(cdm)
@@ -269,6 +296,7 @@ test_that("mock db: example of timeGap being infinite with 0 daysPriorObservatio
                                            daysPriorObservation = 0,
                                            combinationWindow = c(0,Inf)
   )
+
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
 })
 
@@ -315,7 +343,7 @@ test_that("mock db: example of given study period start date", {
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1,2,4)))
 })
 
-test_that("mock db: example of given study period start date wih daysPriorObservation and timeGap", {
+test_that("mock db: example of given study period start date with daysPriorObservation and timeGap", {
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
@@ -435,7 +463,7 @@ test_that("mock db: example of multiple entries per person - picking sequence in
                                            combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-  expect_true(cdm$joined_cohorts %>% dplyr::pull(first_date) >= as.Date("2000-01-01"))
+  expect_true(cdm$joined_cohorts %>% dplyr::pull(cohort_start_date) >= as.Date("2000-01-01"))
 })
 
 test_that("mock db: example of multiple entries per person - picking sequence in relation to dateRange with fixed timeGap", {

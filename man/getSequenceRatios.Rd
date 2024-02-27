@@ -6,7 +6,7 @@
 \usage{
 getSequenceRatios(
   cdm,
-  outcomeTable,
+  sequenceCohortSet,
   confidenceInterval = 95,
   restriction = 548
 )
@@ -14,7 +14,7 @@ getSequenceRatios(
 \arguments{
 \item{cdm}{A CDM reference.}
 
-\item{outcomeTable}{A table in the CDM that the output of getCohortSequence resides.}
+\item{sequenceCohortSet}{A table in the CDM that the output of getCohortSequence resides.}
 
 \item{confidenceInterval}{Default is 95, indicating the central 95\% confidence interval.}
 
@@ -40,8 +40,8 @@ cdm <- mockPatientProfiles(cohort1 = cohort1,
 cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
                                           indexTable = "cohort1",
                                           markerTable = "cohort2")
- pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
-                                                   outcomeTable = "joined_cohorts")
+pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
+                                                  sequenceCohortSet = "joined_cohorts")
  pssa_result
  CDMConnector::cdmDisconnect(cdm)
 }
