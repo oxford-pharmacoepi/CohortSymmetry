@@ -127,21 +127,14 @@
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">amiodarone_levothyroxine</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
-<span><span class="co">#&gt; Columns: 13</span></span>
-<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmp2Peon4\file1a5425e522bc.duckdb]</span></span>
-<span><span class="co">#&gt; $ index_id               &lt;int&gt; 1</span></span>
-<span><span class="co">#&gt; $ marker_id              &lt;int&gt; 1</span></span>
-<span><span class="co">#&gt; $ subject_id             &lt;int&gt; 2006</span></span>
-<span><span class="co">#&gt; $ index_date             &lt;date&gt; 2014-01-17</span></span>
-<span><span class="co">#&gt; $ marker_date            &lt;date&gt; 2017-12-31</span></span>
-<span><span class="co">#&gt; $ first_date             &lt;date&gt; 2014-01-17</span></span>
-<span><span class="co">#&gt; $ second_date            &lt;date&gt; 2017-12-31</span></span>
-<span><span class="co">#&gt; $ days_prior_observation &lt;dbl&gt; 0</span></span>
-<span><span class="co">#&gt; $ washout_window         &lt;dbl&gt; 0</span></span>
-<span><span class="co">#&gt; $ index_marker_gap       &lt;dbl&gt; 1e+11</span></span>
-<span><span class="co">#&gt; $ combination_window     &lt;chr&gt; "(0,99999999999)"</span></span>
-<span><span class="co">#&gt; $ index_name             &lt;chr&gt; "amiodarone"</span></span>
-<span><span class="co">#&gt; $ marker_name            &lt;chr&gt; "levothyroxine"</span></span></code></pre></div>
+<span><span class="co">#&gt; Columns: 6</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpqM1x20\file3140448b221d.duckdb]</span></span>
+<span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1</span></span>
+<span><span class="co">#&gt; $ subject_id           &lt;int&gt; 2006</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 2014-01-17</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      &lt;date&gt; 2017-12-31</span></span>
+<span><span class="co">#&gt; $ index_date           &lt;date&gt; 2014-01-17</span></span>
+<span><span class="co">#&gt; $ marker_date          &lt;date&gt; 2017-12-31</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-2-getsequenceratio">Step 2: getSequenceRatio<a class="anchor" aria-label="anchor" href="#step-2-getsequenceratio"></a>
@@ -149,32 +142,26 @@
 <p>To get the sequence ratios, we would need the output of the getCohortSequence() function. The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/getSequenceRatios.html">getSequenceRatios</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>                                         outcomeTable <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span><span class="op">)</span></span>
+<span>                                         sequenceCohortSet <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span><span class="op">)</span></span>
 <span> </span>
 <span><span class="va">res</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
-<span><span class="co">#&gt; Columns: 21</span></span>
-<span><span class="co">#&gt; $ cdm_name                    &lt;chr&gt; "Synthea synthetic health database", "Synt…</span></span>
-<span><span class="co">#&gt; $ result_type                 &lt;chr&gt; "sequence_symmetry", "sequence_symmetry", …</span></span>
-<span><span class="co">#&gt; $ package_name                &lt;chr&gt; "CohortSymmetry", "CohortSymmetry", "Cohor…</span></span>
-<span><span class="co">#&gt; $ package_version             &lt;chr&gt; "0.0.0.9000", "0.0.0.9000", "0.0.0.9000", …</span></span>
-<span><span class="co">#&gt; $ group_name_reference        &lt;chr&gt; "index_cohort_name", "index_cohort_name", …</span></span>
-<span><span class="co">#&gt; $ group_level_reference       &lt;chr&gt; "amiodarone", "amiodarone", "amiodarone", …</span></span>
-<span><span class="co">#&gt; $ strata_name_reference       &lt;chr&gt; "overall", "overall", "overall", "overall"…</span></span>
-<span><span class="co">#&gt; $ strata_level_reference      &lt;chr&gt; "overall", "overall", "overall", "overall"…</span></span>
-<span><span class="co">#&gt; $ group_name_comparator       &lt;chr&gt; "marker_cohort_name", "marker_cohort_name"…</span></span>
-<span><span class="co">#&gt; $ group_level_comparator      &lt;chr&gt; "levothyroxine", "levothyroxine", "levothy…</span></span>
-<span><span class="co">#&gt; $ strata_name_comparator      &lt;chr&gt; "overall", "overall", "overall", "overall"…</span></span>
-<span><span class="co">#&gt; $ strata_level_comparator     &lt;chr&gt; "overall", "overall", "overall", "overall"…</span></span>
-<span><span class="co">#&gt; $ variable_name               &lt;chr&gt; "first_pharmac", "first_pharmac", "first_p…</span></span>
-<span><span class="co">#&gt; $ variable_level              &lt;chr&gt; "index", "index", "marker", "marker", "cru…</span></span>
-<span><span class="co">#&gt; $ estimate_name               &lt;chr&gt; "count", "percentage", "count", "percentag…</span></span>
-<span><span class="co">#&gt; $ estimate_type               &lt;chr&gt; "integer", "numeric", "integer", "numeric"…</span></span>
-<span><span class="co">#&gt; $ estimate_value              &lt;chr&gt; "1", "100", "0", "0", "Inf", NA, "0.093492…</span></span>
-<span><span class="co">#&gt; $ additional_name_reference   &lt;chr&gt; "days_prior_observation and washout_window…</span></span>
-<span><span class="co">#&gt; $ additional_level_reference  &lt;chr&gt; "0 and 0 and 99999999999 and (0,9999999999…</span></span>
-<span><span class="co">#&gt; $ additional_name_comparator  &lt;chr&gt; "additional_name_reference", "additional_n…</span></span>
-<span><span class="co">#&gt; $ additional_level_comparator &lt;chr&gt; "additional_level_reference", "additional_…</span></span></code></pre></div>
+<span><span class="co">#&gt; Columns: 15</span></span>
+<span><span class="co">#&gt; $ cdm_name         &lt;chr&gt; "Synthea synthetic health database", "Synthea synthet…</span></span>
+<span><span class="co">#&gt; $ result_type      &lt;chr&gt; "sequence_symmetry", "sequence_symmetry", "sequence_s…</span></span>
+<span><span class="co">#&gt; $ package_name     &lt;chr&gt; "CohortSymmetry", "CohortSymmetry", "CohortSymmetry",…</span></span>
+<span><span class="co">#&gt; $ package_version  &lt;chr&gt; "0.0.0.9000", "0.0.0.9000", "0.0.0.9000", "0.0.0.9000…</span></span>
+<span><span class="co">#&gt; $ group_name       &lt;chr&gt; "index_cohort_name and marker_cohort_name", "index_co…</span></span>
+<span><span class="co">#&gt; $ group_level      &lt;chr&gt; "amiodarone and levothyroxine", "amiodarone and levot…</span></span>
+<span><span class="co">#&gt; $ strata_name      &lt;chr&gt; "overall", "overall", "overall", "overall", "overall"…</span></span>
+<span><span class="co">#&gt; $ strata_level     &lt;chr&gt; "overall", "overall", "overall", "overall", "overall"…</span></span>
+<span><span class="co">#&gt; $ variable_name    &lt;chr&gt; "first_pharmac", "first_pharmac", "first_pharmac", "f…</span></span>
+<span><span class="co">#&gt; $ variable_level   &lt;chr&gt; "index", "index", "marker", "marker", "crude", "adjus…</span></span>
+<span><span class="co">#&gt; $ estimate_name    &lt;chr&gt; "count", "percentage", "count", "percentage", "point_…</span></span>
+<span><span class="co">#&gt; $ estimate_type    &lt;chr&gt; "integer", "numeric", "integer", "numeric", "numeric"…</span></span>
+<span><span class="co">#&gt; $ estimate_value   &lt;chr&gt; "1", "100", "0", "0", "Inf", NA, "0.0934922743508363"…</span></span>
+<span><span class="co">#&gt; $ additional_name  &lt;chr&gt; "days_prior_observation and washout_window and index_…</span></span>
+<span><span class="co">#&gt; $ additional_level &lt;chr&gt; "0 and 0 and Inf and (0,Inf) and 95 and 548", "0 and …</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
