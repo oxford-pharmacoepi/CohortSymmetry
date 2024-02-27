@@ -101,7 +101,7 @@ The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequ
 
 ```{r Step 2: getSequenceRatio, eval=TRUE, warning=FALSE}
 res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
-                                         outcomeTable = "amiodarone_levothyroxine")
+                                         sequenceCohortSet = "amiodarone_levothyroxine")
  
 res %>% glimpse()
 ```

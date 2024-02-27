@@ -4,7 +4,7 @@
 #' Using getCohortSequence to obtain sequence ratios for the desired outcomes.
 #'
 #' @param cdm A CDM reference.
-#' @param outcomeTable A table in the CDM that the output of getCohortSequence resides.
+#' @param sequenceCohortSet A table in the CDM that the output of getCohortSequence resides.
 #' @param confidenceInterval Default is 95, indicating the central 95% confidence interval.
 #' @param restriction The moving window when calculating nSR, default is 548.
 #'
@@ -26,36 +26,41 @@
 #' cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
 #'                                           indexTable = "cohort1",
 #'                                           markerTable = "cohort2")
-#'  pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
-#'                                                    outcomeTable = "joined_cohorts")
+#' pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
+#'                                                   sequenceCohortSet = "joined_cohorts")
 #'  pssa_result
 #'  CDMConnector::cdmDisconnect(cdm)
 #' }
 #'
 getSequenceRatios <- function(cdm,
-                              outcomeTable,
+                              sequenceCohortSet,
                               confidenceInterval = 95,
                               restriction = 548) {
 
   # checks
   checkInputGetSequenceRatios(cdm = cdm,
-                              outcomeTable = outcomeTable,
+                              sequenceCohortSet = sequenceCohortSet,
                               confidenceInterval = confidenceInterval,
                               restriction = restriction)
 
   temp <- list()
   temp2<-list()
   results <- list()
-  for (i in (cdm[[outcomeTable]] %>% dplyr::distinct(.data$index_id) %>% dplyr::pull())){
-    for (j in (cdm[[outcomeTable]] %>% dplyr::filter(.data$index_id == i) %>% dplyr::distinct(.data$marker_id) %>% dplyr::pull())){
+  cdm[["intermediate"]] <- cdm[[sequenceCohortSet]] %>%
+    dplyr::left_join(CDMConnector::settings(cdm[[sequenceCohortSet]]), copy = T, by = "cohort_definition_id") %>%
+    dplyr::compute(name = "intermediate",
+                   temporary = FALSE)
+
+  for (i in (cdm[["intermediate"]] %>% dplyr::distinct(.data$index_id) %>% dplyr::pull())){
+    for (j in (cdm[["intermediate"]] %>% dplyr::filter(.data$index_id == i) %>% dplyr::distinct(.data$marker_id) %>% dplyr::pull())){
       temp[[paste0("index_",i, "_marker_", j)]] <-
-        cdm[[outcomeTable]] %>%
+        cdm[["intermediate"]] %>%
         dplyr::filter(.data$index_id == i & .data$marker_id == j) %>%
         dplyr::left_join(
-          cdm[[outcomeTable]] %>%
+          cdm[["intermediate"]] %>%
             dplyr::filter(.data$index_id == i & .data$marker_id == j) %>%
             dplyr::group_by(.data$index_id, .data$marker_id) %>%
-            dplyr::summarise(date_start = min(.data$first_date, na.rm = T),
+            dplyr::summarise(date_start = min(.data$cohort_start_date, na.rm = T),
                              .groups = "drop") %>%
             dplyr::ungroup(),
           by  = c("index_id", "marker_id")
@@ -63,10 +68,10 @@ getSequenceRatios <- function(cdm,
         dplyr::mutate(
           orderBA = .data$index_date >= .data$marker_date,
           days_first = as.numeric(!!CDMConnector::datediff(
-            "date_start", "first_date"
+            "date_start", "cohort_start_date"
           )), # gap between the first drug of a person and the first drug of the whole population
           days_second = as.numeric(!!CDMConnector::datediff(
-            "first_date", "second_date"
+            "cohort_start_date", "cohort_end_date"
           ))) %>%
         dplyr::collect() %>%
         dplyr::group_by(.data$days_first, .data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window) %>%
@@ -105,5 +110,7 @@ getSequenceRatios <- function(cdm,
     PatientProfiles::addCdmName(cdm) %>%
     getSummarisedResult()
 
+  cdm <- CDMConnector::dropTable(cdm = cdm,
+                                 name = "intermediate")
   return(output)
 }

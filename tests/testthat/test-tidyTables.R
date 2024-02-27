@@ -13,7 +13,7 @@ test_that("tidySequenceSymmetry", {
         expect_no_error(
           res <- CohortSymmetry::getSequenceRatios(
             cdm = cdm,
-            outcomeTable = "joined_cohorts")
+            sequenceCohortSet = "joined_cohorts")
         )))))))))))))
 
   expect_no_error(tidy_result <- tidySequenceSymmetry(res))
@@ -47,7 +47,7 @@ test_that("tidySequenceSymmetry", {
     expect_warning(expect_warning(expect_warning(expect_warning(
           res <- CohortSymmetry::getSequenceRatios(
             cdm = cdm,
-            outcomeTable = "joined_cohorts")
+            sequenceCohortSet = "joined_cohorts")
         ))))))))
 
   expect_no_error(tidy_result <- tidySequenceSymmetry(res))

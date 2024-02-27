@@ -10,7 +10,7 @@ test_that("formatSequenceSymmetry", {
 
   res <- CohortSymmetry::getSequenceRatios(
     cdm = cdm,
-    outcomeTable = "joined_cohorts")
+    sequenceCohortSet = "joined_cohorts")
 
   gtResult <- formatSequenceSymmetry(res)
   expect_true("gt_tbl" %in% (gtResult %>% class()))
@@ -46,5 +46,5 @@ test_that("formatSequenceSymmetry", {
   )
   expect_true(tibbleResult$Index[1] == "Cohort 1")
   expect_true(all(tibbleResult$Marker %in% c("Cohort 1", "Cohort 2", "Cohort 3")))
-
+  CDMConnector::cdmDisconnect(cdm)
 })

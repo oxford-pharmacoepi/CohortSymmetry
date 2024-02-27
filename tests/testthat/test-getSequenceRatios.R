@@ -12,7 +12,7 @@ test_that("getSequenceRatios", {
         expect_no_error(
           res <- CohortSymmetry::getSequenceRatios(
             cdm = cdm,
-            outcomeTable = "joined_cohorts")
+            sequenceCohortSet = "joined_cohorts")
         )))))))))))))
 
 
@@ -21,31 +21,31 @@ test_that("getSequenceRatios", {
   expect_error(
     CohortSymmetry::getSequenceRatios(
       cdm = cdm,
-      outcomeTable = NULL)
+      sequenceCohortSet = NULL)
   )
   expect_error(
     CohortSymmetry::getSequenceRatios(
       cdm = cdm,
-      outcomeTable = character(0))
+      sequenceCohortSet = character(0))
   )
   expect_error(
     CohortSymmetry::getSequenceRatios(
       cdm = cdm,
-      outcomeTable = "joined_cohorts",
+      sequenceCohortSet = "joined_cohorts",
       confidenceInterval = 101)
   )
 
   expect_error(
     CohortSymmetry::getSequenceRatios(
       cdm = cdm,
-      outcomeTable = "joined_cohorts",
+      sequenceCohortSet = "joined_cohorts",
       confidenceInterval = -101)
   )
 
     expect_error(
       CohortSymmetry::getSequenceRatios(
       cdm = cdm,
-      outcomeTable = "cohort",
+      sequenceCohortSet = "cohort",
       confidenceInterval = 101)
   )
 })
@@ -86,9 +86,12 @@ test_that("getSequenceRatios - testing ratios and CIs", {
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 
-  res <- CohortSymmetry::getSequenceRatios(
-            cdm = cdm,
-            outcomeTable = "joined_cohorts")
+  suppressWarnings(
+    res <- CohortSymmetry::getSequenceRatios(
+      cdm = cdm,
+      sequenceCohortSet = "joined_cohorts")
+  )
+
   res <- CohortSymmetry::tidySequenceSymmetry(res)
 
   expect_true(all(res$days_prior_observation==0))
@@ -103,6 +106,7 @@ test_that("getSequenceRatios - testing ratios and CIs", {
     dplyr::mutate(crude_ci_check = .data$crude_sequence_ratio_lower_CI <= .data$crude_sequence_ratio_upper_CI)
 
   expect_true(all(as.integer(int$crude_ci_check== T)))
+  CDMConnector::cdmDisconnect(cdm)
   })
 
 
@@ -144,7 +148,7 @@ test_that("getSequenceRatios - testing ratios and CIs", {
 
   res <- CohortSymmetry::getSequenceRatios(
     cdm = cdm,
-    outcomeTable = "joined_cohorts")
+    sequenceCohortSet = "joined_cohorts")
   res <- CohortSymmetry::tidySequenceSymmetry(res)
 
   expect_true(all(res$days_prior_observation==0))
@@ -163,5 +167,6 @@ test_that("getSequenceRatios - testing ratios and CIs", {
 
   expect_true(all(as.integer(int$crude_ci_check== T)))
   expect_true(all(as.integer(int$adjusted_ci_check== T)))
+  CDMConnector::cdmDisconnect(cdm)
 })
 

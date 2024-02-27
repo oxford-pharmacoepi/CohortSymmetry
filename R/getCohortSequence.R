@@ -67,7 +67,6 @@ getCohortSequence <- function(cdm,
   comb_export_1 <- as.character(combinationWindow[1])
   comb_export_2 <- as.character(combinationWindow[2])
 
-
   if(!is.finite(combinationWindow[2])){
     combinationWindow[2] <- as.integer(99999)
   }
@@ -164,7 +163,6 @@ getCohortSequence <- function(cdm,
       by = "subject_id"
     )
 
-
   # Post-join processing
   cdm[[name]] <- joinedData %>%
     dplyr::mutate(
@@ -182,6 +180,65 @@ getCohortSequence <- function(cdm,
         .data$marker_date
       )
     ) %>%
+    dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
+                    washout_window = .env$washoutWindow,
+                    index_marker_gap = .env$indexMarkerGap_export,
+                    combination_window = paste0("(",.env$comb_export_1, ",", .env$comb_export_2, ")")) %>%
+    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap", "combination_window", "cei", "prior_observation_marker", "prior_observation_index", "gap_to_prior_index", "gap_to_prior_marker", "gap")  %>%
+    dplyr::left_join(cdm[["index_name"]], by = "index_id") %>%
+    dplyr::left_join(cdm[["marker_name"]], by = "marker_id") %>%
+    dplyr::compute(name = name,
+                   temporary = FALSE)
+
+  ids <- cdm[[name]] %>%
+    dplyr::select(.data$index_id, .data$marker_id) %>%
+    dplyr::distinct() %>%
+    dplyr::collect() %>%
+    dplyr::arrange(.data$index_id, .data$marker_id) %>%
+    dplyr::mutate(cohort_definition_id = dplyr::row_number())
+
+  cdm <- omopgenerics::insertTable(cdm = cdm, name = "ids", table = ids)
+
+  cdm[[name]] <- cdm[[name]] %>%
+    dplyr::left_join(cdm[["ids"]], by = c("index_id", "marker_id")) %>%
+    dplyr::mutate(cohort_start_date = .data$first_date,
+                  cohort_end_date = .data$second_date,
+                  index_first = dplyr::if_else(.data$index_date < .data$marker_date,
+                                               "TRUE", "FALSE"),
+                  cohort_name = paste0("index_", .data$index_name,
+                                       "_marker_", .data$marker_name)) %>%
+    dplyr::select("cohort_definition_id", "index_id", "marker_id",
+                  "cohort_name", "index_name", "marker_name",
+                  "subject_id",
+                  "cohort_start_date",
+                  "cohort_end_date",
+                  "index_date",
+                  "marker_date",
+                  "cei", "prior_observation_marker", "prior_observation_index", "gap_to_prior_index", "gap_to_prior_marker", "gap")  %>%
+    dplyr::compute(name = name,
+                   temporary = FALSE)
+
+  cohortSetRef <- cdm[[name]]  %>%
+    dplyr::group_by(.data$cohort_definition_id, .data$cohort_name, .data$index_id,
+                    .data$index_name, .data$marker_id, .data$marker_name) %>%
+    dplyr::tally() %>%
+    dplyr::select(!"n") %>%
+    dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
+                  washout_window = .env$washoutWindow,
+                  index_marker_gap = .env$indexMarkerGap_export,
+                  combination_window = paste0("(",.env$comb_export_1, ",", .env$comb_export_2, ")"))
+
+  cdm[[name]] <- cdm[[name]] %>%
+    dplyr::select(!c("cohort_name", "index_name", "marker_name"))
+
+
+  cdm[[name]] <- cdm[[name]] %>%
+    omopgenerics::newCohortTable(cohortSetRef = cohortSetRef,
+                                 cohortAttritionRef = NULL)
+
+
+    # #exclusion criteria - where attrition starts
+  cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(
       abs(.data$gap) > .env$time_1 & abs(.data$gap) <= .env$time_2,
       .data$cei <= .env$indexMarkerGap,
@@ -190,16 +247,13 @@ getCohortSequence <- function(cdm,
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) %>%
-    dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
-                  washout_window = .env$washoutWindow,
-                  index_marker_gap = .env$indexMarkerGap_export,
-                  combination_window = paste0("(",.env$comb_export_1, ",", .env$comb_export_2, ")")) %>%
-    dplyr::select("index_id", "marker_id", "subject_id", "index_date", "marker_date", "first_date", "second_date", "days_prior_observation", "washout_window", "index_marker_gap", "combination_window")  %>%
-    dplyr::left_join(cdm[["index_name"]], by = "index_id") %>%
-    dplyr::left_join(cdm[["marker_name"]], by = "marker_id") %>%
+    dplyr::select("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "index_date", "marker_date")  %>%
     dplyr::compute(name = name,
                    temporary = FALSE)
 
+
+  # in cohort format
+  cdm <- CDMConnector::dropTable(cdm = cdm, name = "ids")
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "index_name")
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "marker_name")
   return(cdm)

@@ -55,12 +55,12 @@ checkInputGetCohortSequence <- function(cdm,
 }
 
 checkInputGetSequenceRatios <- function(cdm,
-                                        outcomeTable,
+                                        sequenceCohortSet,
                                         confidenceInterval,
                                         restriction) {
 
   # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables = outcomeTable)
+  checkCdm(cdm, tables = sequenceCohortSet)
   assertWriteSchema(cdm)
 
   # Check the rest of inputs
