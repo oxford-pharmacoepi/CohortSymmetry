@@ -101,6 +101,7 @@ cdm$amiodarone_levothyroxine %>%
 #> Rows: ??
 #> Columns: 6
 #> Database: DuckDB v0.9.2 [eburn@Windows 10 x64:R 4.2.1/C:\Users\eburn\AppData\Local\Temp\RtmpUjUxdr\file36ec1b47952.duckdb]
+
 #> $ cohort_definition_id <int> 1
 #> $ subject_id           <int> 2006
 #> $ cohort_start_date    <date> 2014-01-17
