@@ -76,15 +76,15 @@ cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
   )
 ```
  
-### Step 1: getCohortSequence
+### Step 1: generateSequenceCohortSet
  
-In order to initiate the calculations, the two cohorts tables need to be intersected using `getCohortSequence()` function. This process will filter out the individuals who appeared on both tables according to a user-specified parameters. This includes `timeGap`, `washoutWindow`, `indexMarkerGap` and `daysPriorObservation`. Details on 
+In order to initiate the calculations, the two cohorts tables need to be intersected using `generateSequenceCohortSet()` function. This process will filter out the individuals who appeared on both tables according to a user-specified parameters. This includes `timeGap`, `washoutWindow`, `indexMarkerGap` and `daysPriorObservation`. Details on 
 these parameters could be found on the vignette.
  
-```{r Step 1: getCohortSequence, eval=TRUE, warning=FALSE}
+```{r Step 1: generateSequenceCohortSet, eval=TRUE, warning=FALSE}
 library(CohortSymmetry)
  
-cdm <- CohortSymmetry::getCohortSequence(cdm,
+cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
                    indexTable = "cohort_index",
                    markerTable = "cohort_marker",
                    name = "amiodarone_levothyroxine",
@@ -96,7 +96,7 @@ cdm$amiodarone_levothyroxine %>%
 
 ### Step 2: getSequenceRatio
  
-To get the sequence ratios, we would need the output of the getCohortSequence() function. 
+To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function. 
 The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
 
 ```{r Step 2: getSequenceRatio, eval=TRUE, warning=FALSE}

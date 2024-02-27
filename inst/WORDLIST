@@ -14,7 +14,7 @@ asr
 cdm
 csr
 et
-getCohortSequence
+generateSequenceCohortSet
 indexTable
 iniations
 levothyroxine

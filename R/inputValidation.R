@@ -1,4 +1,4 @@
-checkInputGetCohortSequence <- function(cdm,
+checkInputgenerateSequenceCohortSet <- function(cdm,
                                         indexTable,
                                         markerTable,
                                         name,

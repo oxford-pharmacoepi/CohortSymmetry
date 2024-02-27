@@ -2,7 +2,7 @@ test_that("tidySequenceSymmetry", {
   cdm <- PatientProfiles::mockPatientProfiles(patient_size = 100,
                                               drug_exposure_size = 100)
 
-  cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                            indexTable = "cohort1",
                                            markerTable = "cohort2",
                                            combinationWindow = c(0, Inf))
@@ -37,7 +37,7 @@ test_that("tidySequenceSymmetry", {
         "adjusted_sequence_ratio_lower_CI", "adjusted_sequence_ratio_upper_CI")
   ))
 
-  cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                            indexTable = "cohort1",
                                            markerTable = "cohort2",
                                            indexMarkerGap = 40,

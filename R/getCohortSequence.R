@@ -29,7 +29,7 @@
 #' \donttest{
 #' library(PatientProfiles)
 #' cdm <- mockPatientProfiles()
-#' cdm <- CohortSymmetry::getCohortSequence(
+#' cdm <- CohortSymmetry::generateSequenceCohortSet(
 #'   cdm = cdm,
 #'   indexTable = "cohort1",
 #'   markerTable = "cohort2"
@@ -37,7 +37,7 @@
 #' ## default name - joined_cohorts
 #'  cdm$joined_cohorts
 #' }
-getCohortSequence <- function(cdm,
+generateSequenceCohortSet <- function(cdm,
                               indexTable,
                               markerTable,
                               name = "joined_cohorts",
@@ -49,7 +49,7 @@ getCohortSequence <- function(cdm,
                               indexMarkerGap = NULL,
                               combinationWindow = c(0,365)) {
   # checks
-  checkInputGetCohortSequence(
+  checkInputgenerateSequenceCohortSet(
     cdm = cdm,
     indexTable = indexTable,
     markerTable = markerTable,
