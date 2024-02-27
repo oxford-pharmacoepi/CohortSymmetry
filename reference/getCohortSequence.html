@@ -106,13 +106,12 @@ and marker cohorts per person.</p></dd>
 
 
 <dt>indexMarkerGap</dt>
-<dd><p>The time before the start of the second episode
-of the drug (could be either marker or index) and the time after the end of the first
-episode (could be either marker or index).</p></dd>
+<dd><p>The maximum allowable gap between the end of the first episode
+and the start of the second episode in a sequence/combination.</p></dd>
 
 
 <dt>combinationWindow</dt>
-<dd><p>a constrain to be placed on the gap between two iniations.
+<dd><p>a constrain to be placed on the gap between two initiations.
 Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.</p></dd>
 
 </dl></div>
@@ -135,15 +134,13 @@ Default c(0,365), meaning the gap should be larger than 0 but less than or equal
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## default name - joined_cohorts</span></span></span>
 <span class="r-in"><span> <span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohorts</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;joined_cohorts&gt; [2 x 13]</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Source:   table&lt;joined_cohorts&gt; [2 x 6]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Database: DuckDB v0.9.2 [unknown@Linux 6.2.0-1019-azure:R 4.3.2/:memory:]</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   index_id marker_id subject_id index_date marker_date first_date second_date</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>        1         1          1 2020-01-01 2019-12-30  2019-12-30 2020-01-01 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>        1         2          1 2020-01-01 2020-05-25  2020-01-01 2020-05-25 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 6 more variables: days_prior_observation &lt;dbl&gt;, washout_window &lt;dbl&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   index_marker_gap &lt;chr&gt;, combination_window &lt;chr&gt;, index_name &lt;chr&gt;,</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   marker_name &lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>                    1          1 2019-12-30        2020-01-01      2020-01-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span>                    2          1 2020-01-01        2020-05-25      2020-01-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1 more variable: marker_date &lt;date&gt;</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
