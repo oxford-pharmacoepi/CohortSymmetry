@@ -13,7 +13,6 @@ checkInputGetCohortSequence <- function(cdm,
 
   # Check cdm objects, writing schema and index/marker tables
   checkCdm(cdm, tables = c(indexTable, markerTable))
-  assertWriteSchema(cdm)
 
   # Check the format of name
   if(stringr::str_detect(name, "^[a-z0-9_]+$", negate = TRUE)){
@@ -61,7 +60,6 @@ checkInputGetSequenceRatios <- function(cdm,
 
   # Check cdm objects, writing schema and index/marker tables
   checkCdm(cdm, tables = sequenceCohortSet)
-  assertWriteSchema(cdm)
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
@@ -114,15 +112,15 @@ checkCdm <- function(cdm, tables = NULL) {
   invisible(NULL)
 }
 
-# Check writing schema
-assertWriteSchema <- function(cdm, call = rlang::env_parent()) {
-  if (!("write_schema" %in% names(attributes(cdm)))) {
-    cli::cli_abort(
-      message = "write_schema must be provided in the cdm object to use this function",
-      call = call
-    )
-  }
-}
+# # Check writing schema
+# assertWriteSchema <- function(cdm, call = rlang::env_parent()) {
+#   if (!("write_schema" %in% names(attributes(cdm)))) {
+#     cli::cli_abort(
+#       message = "write_schema must be provided in the cdm object to use this function",
+#       call = call
+#     )
+#   }
+# }
 
 # Checks Index and Marker ids cohorts
 checkCohortIds <- function(cdm, CohortTable, CohortId, errorMessage) {
