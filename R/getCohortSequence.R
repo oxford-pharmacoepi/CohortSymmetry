@@ -200,6 +200,44 @@ getCohortSequence <- function(cdm,
     dplyr::compute(name = name,
                    temporary = FALSE)
 
+
+  # in cohort format
+  cdm[[name]] <- cdm[[name]] %>%
+    dplyr::mutate(cohort_definition_id = as.integer(index_id + (marker_id*1000)),
+                  cohort_start_date = .data$first_date,
+                  cohort_end_date = .data$second_date,
+                  index_first = dplyr::if_else(.data$index_date < .data$marker_date,
+                                               "TRUE", "FALSE"),
+                  cohort_name = paste0("index_", .data$index_name,
+                                       "_marker_", .data$marker_name)) %>%
+    dplyr::select("cohort_definition_id",
+                  "cohort_name", "index_name", "marker_name",
+                  "subject_id",
+                  "cohort_start_date",
+                  "cohort_end_date",
+                  "index_date",
+                  "marker_date")  %>%
+    dplyr::compute(name = name,
+                   temporary = FALSE)
+
+  cohortSetRef <- cdm[[name]]  %>%
+    dplyr::group_by(cohort_definition_id, cohort_name,
+                    index_name, marker_name) %>%
+    dplyr::tally() %>%
+    dplyr::select(!"n") %>%
+    dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
+                  washout_window = .env$washoutWindow,
+                  index_marker_gap = .env$indexMarkerGap_export,
+                  combination_window = paste0("(",.env$comb_export_1, ",", .env$comb_export_2, ")"))
+
+  cdm[[name]] <- cdm[[name]] %>%
+    dplyr::select(!c("cohort_name", "index_name", "marker_name"))
+
+
+  cdm[[name]] <- cdm[[name]] %>%
+    omopgenerics::newCohortTable(cohortSetRef = cohortSetRef,
+                               cohortAttritionRef = NULL)
+
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "index_name")
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "marker_name")
   return(cdm)

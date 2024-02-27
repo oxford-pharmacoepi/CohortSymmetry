@@ -51,6 +51,10 @@ test_that("mock db: check output format", {
   cdm <- CohortSymmetry::getCohortSequence(cdm,
                      indexTable ="cohort1",
                      markerTable = "cohort2")
+
+  expect_true(all(omopgenerics::cohortColumns("cohort") %in%
+        colnames(cdm$joined_cohorts)))
+
   expect_true(all(
     c("subject_id", "index_id", "marker_id", "index_date", "marker_date",
       "first_date") %in%
