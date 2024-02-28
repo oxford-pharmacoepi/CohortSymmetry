@@ -257,3 +257,4 @@ checkOptions <- function(.options, errorMessage) {
   }
 }
 
+
