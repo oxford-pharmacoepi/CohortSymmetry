@@ -112,13 +112,13 @@
 <span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="step-1-getcohortsequence">Step 1: getCohortSequence<a class="anchor" aria-label="anchor" href="#step-1-getcohortsequence"></a>
+<h3 id="step-1-generatesequencecohortset">Step 1: generateSequenceCohortSet<a class="anchor" aria-label="anchor" href="#step-1-generatesequencecohortset"></a>
 </h3>
-<p>In order to initiate the calculations, the two cohorts tables need to be intersected using <code><a href="reference/getCohortSequence.html">getCohortSequence()</a></code> function. This process will filter out the individuals who appeared on both tables according to a user-specified parameters. This includes <code>timeGap</code>, <code>washoutWindow</code>, <code>indexMarkerGap</code> and <code>daysPriorObservation</code>. Details on these parameters could be found on the vignette.</p>
+<p>In order to initiate the calculations, the two cohorts tables need to be intersected using <code><a href="reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code> function. This process will filter out the individuals who appeared on both tables according to a user-specified parameters. This includes <code>timeGap</code>, <code>washoutWindow</code>, <code>indexMarkerGap</code> and <code>daysPriorObservation</code>. Details on these parameters could be found on the vignette.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span>
 <span> </span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/getCohortSequence.html">getCohortSequence</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
 <span>                   indexTable <span class="op">=</span> <span class="st">"cohort_index"</span>,</span>
 <span>                   markerTable <span class="op">=</span> <span class="st">"cohort_marker"</span>,</span>
 <span>                   name <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span>,</span>
@@ -128,7 +128,8 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpqM1x20\file3140448b221d.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.9.2 [eburn@Windows 10 x64:R 4.2.1/C:\Users\eburn\AppData\Local\Temp\RtmpUjUxdr\file36ec1b47952.duckdb]</span></span>
+<span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1</span></span>
 <span><span class="co">#&gt; $ subject_id           &lt;int&gt; 2006</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 2014-01-17</span></span>
@@ -139,7 +140,7 @@
 <div class="section level3">
 <h3 id="step-2-getsequenceratio">Step 2: getSequenceRatio<a class="anchor" aria-label="anchor" href="#step-2-getsequenceratio"></a>
 </h3>
-<p>To get the sequence ratios, we would need the output of the getCohortSequence() function. The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
+<p>To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function. The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/getSequenceRatios.html">getSequenceRatios</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>                                         sequenceCohortSet <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span><span class="op">)</span></span>

@@ -22,7 +22,7 @@
     <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/formatSequenceSymmetryOptions.html</loc>
   </url>
   <url>
-    <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/getCohortSequence.html</loc>
+    <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/generateSequenceCohortSet.html</loc>
   </url>
   <url>
     <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/getSequenceRatios.html</loc>
