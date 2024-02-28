@@ -1,21 +1,21 @@
 test_that("tidySequenceSymmetry", {
-  cdm <- PatientProfiles::mockPatientProfiles(patient_size = 100,
-                                              drug_exposure_size = 100)
+  cdm <- CohortSymmetry::mockCohortSymmetry()
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                                    name = "joined_cohorts",
-                                           indexTable = "cohort1",
-                                           markerTable = "cohort2",
-                                           combinationWindow = c(0, Inf))
+                                                   indexTable = "cohort_1",
+                                                   indexId = c(1,2),
+                                                   markerTable = "cohort_2",
+                                                   markerId = c(1,2),
+                                                   combinationWindow = c(0, Inf))
 
   expect_warning(expect_warning(expect_warning(expect_warning(
     expect_warning(expect_warning(expect_warning(expect_warning(
-      expect_warning(expect_warning(expect_warning(expect_warning(
-        expect_no_error(
-          res <- CohortSymmetry::getSequenceRatios(
-            cdm = cdm,
-            sequenceCohortSet = "joined_cohorts")
-        )))))))))))))
+      expect_no_error(
+        res <- CohortSymmetry::getSequenceRatios(
+          cdm = cdm,
+          sequenceCohortSet = "joined_cohorts")
+      )))))))))
 
   expect_no_error(tidy_result <- tidySequenceSymmetry(res))
 
@@ -40,19 +40,24 @@ test_that("tidySequenceSymmetry", {
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                                    name = "joined_cohorts",
-                                           indexTable = "cohort1",
-                                           markerTable = "cohort2",
-                                           indexMarkerGap = 40,
-                                           combinationWindow = c(0, Inf))
+                                                   indexTable = "cohort_1",
+                                                   indexId = c(2,3),
+                                                   markerTable = "cohort_2",
+                                                   markerId = c(1,2),
+                                                   indexMarkerGap = 40,
+                                                   combinationWindow = c(0, Inf))
 
   expect_warning(expect_warning(expect_warning(expect_warning(
     expect_warning(expect_warning(expect_warning(expect_warning(
-          res <- CohortSymmetry::getSequenceRatios(
-            cdm = cdm,
-            sequenceCohortSet = "joined_cohorts")
-        ))))))))
+      expect_no_error(
+        res <- CohortSymmetry::getSequenceRatios(
+          cdm = cdm,
+          sequenceCohortSet = "joined_cohorts")
+      )))))))))
 
   expect_no_error(tidy_result <- tidySequenceSymmetry(res))
   expect_true(unique(tidy_result$combination_window) == "(0,Inf)")
   expect_true(unique(tidy_result$index_marker_gap) == "40")
+
+  CDMConnector::cdmDisconnect(cdm)
 })
