@@ -5,16 +5,18 @@
 \title{Creates mock cdm object for testing}
 \usage{
 mockCohortSymmetry(
-  indexCohort = indexCohort,
-  markerCohort = markerCohort,
+  indexCohort = NULL,
+  markerCohort = NULL,
   con = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
   schema = "main"
 )
 }
 \arguments{
-\item{indexCohort}{the tibble of your index cohort}
+\item{indexCohort}{the tibble of your index cohort.
+Default is NULL, which means the default indexCohort is being used.}
 
-\item{markerCohort}{the tibble of your marker cohort}
+\item{markerCohort}{the tibble of your marker cohort.
+Default is NULL, which means the default indexCohort is being used.}
 
 \item{con}{connection detail}
 
@@ -26,6 +28,7 @@ mock cdm object contains your index and marker cohort
 \description{
 Creates a mock cdm with two default synthetic cohorts,
 one is the index cohort and the other one is the marker cohort.
+However the users could specify them should they wish.
 }
 \examples{
 \donttest{
