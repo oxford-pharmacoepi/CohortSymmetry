@@ -1,10 +1,10 @@
 #' Sequence ratio calculations
 #'
 #' @description
-#' Using getCohortSequence to obtain sequence ratios for the desired outcomes.
+#' Using generateSequenceCohortSet to obtain sequence ratios for the desired outcomes.
 #'
 #' @param cdm A CDM reference.
-#' @param sequenceCohortSet A table in the CDM that the output of getCohortSequence resides.
+#' @param sequenceCohortSet A table in the CDM that the output of generateSequenceCohortSet resides.
 #' @param confidenceInterval Default is 95, indicating the central 95% confidence interval.
 #' @param restriction The moving window when calculating nSR, default is 548.
 #'
@@ -23,7 +23,8 @@
 #'
 #' cdm <- mockPatientProfiles(cohort1 = cohort1,
 #'                             patient_size = 10)
-#' cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+#' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+#'                                           name = "joined_cohorts",
 #'                                           indexTable = "cohort1",
 #'                                           markerTable = "cohort2")
 #' pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,

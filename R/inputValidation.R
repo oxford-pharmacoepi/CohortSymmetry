@@ -1,8 +1,8 @@
-checkInputGetCohortSequence <- function(cdm,
+checkInputgenerateSequenceCohortSet <- function(cdm,
                                         indexTable,
                                         markerTable,
                                         name,
-                                        dateRange,
+                                        cohortDateRange,
                                         indexId,
                                         markerId,
                                         daysPriorObservation,
@@ -27,7 +27,7 @@ checkInputGetCohortSequence <- function(cdm,
   checkmate::assertCharacter(name, len = 1, any.missing = FALSE, add = errorMessage)
 
   ## Check date
-  checkDateRange(dateRange, errorMessage)
+  checkcohortDateRange(cohortDateRange, errorMessage)
 
   ## Checks that Index and Marker ids exist in Index and Marker tables
   checkCohortIds(cdm, indexTable, indexId, errorMessage)
@@ -216,11 +216,11 @@ checkCombinationWindow <- function(combinationWindow, errorMessage){
   }
 }
 
-checkDateRange <- function(dateRange, errorMessage) {
-  checkmate::assertDate(dateRange, len = 2, add = errorMessage)
-  if (all(!is.na(dateRange))) {
-    if (dateRange[1] >= dateRange[2]) {
-      errorMessage$push("First element in dateRange must be smaller than the second.")
+checkcohortDateRange <- function(cohortDateRange, errorMessage) {
+  checkmate::assertDate(cohortDateRange, len = 2, add = errorMessage)
+  if (all(!is.na(cohortDateRange))) {
+    if (cohortDateRange[1] >= cohortDateRange[2]) {
+      errorMessage$push("First element in cohortDateRange must be smaller than the second.")
     }
   }
 }

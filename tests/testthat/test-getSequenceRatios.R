@@ -2,7 +2,8 @@ test_that("getSequenceRatios", {
   cdm <- PatientProfiles::mockPatientProfiles(patient_size = 100,
                                               drug_exposure_size = 100)
 
-  cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 
@@ -82,7 +83,8 @@ test_that("getSequenceRatios - testing ratios and CIs", {
                                               cohort2 = markerCohort,
                                               drug_exposure_size = 100)
 
-  cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 
@@ -142,7 +144,8 @@ test_that("getSequenceRatios - testing ratios and CIs", {
                                               cohort2 = markerCohort,
                                               drug_exposure_size = 100)
 
-  cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 

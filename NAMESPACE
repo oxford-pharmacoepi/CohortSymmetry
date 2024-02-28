@@ -3,7 +3,7 @@
 export("%>%")
 export(formatSequenceSymmetry)
 export(formatSequenceSymmetryOptions)
-export(getCohortSequence)
+export(generateSequenceCohortSet)
 export(getSequenceRatios)
 export(tidySequenceSymmetry)
 importFrom(magrittr,"%>%")

@@ -78,19 +78,19 @@ cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
   )
 ```
 
-### Step 1: getCohortSequence
+### Step 1: generateSequenceCohortSet
 
 In order to initiate the calculations, the two cohorts tables need to be
-intersected using `getCohortSequence()` function. This process will
-filter out the individuals who appeared on both tables according to a
-user-specified parameters. This includes `timeGap`, `washoutWindow`,
+intersected using `generateSequenceCohortSet()` function. This process
+will filter out the individuals who appeared on both tables according to
+a user-specified parameters. This includes `timeGap`, `washoutWindow`,
 `indexMarkerGap` and `daysPriorObservation`. Details on these parameters
 could be found on the vignette.
 
 ``` r
 library(CohortSymmetry)
  
-cdm <- CohortSymmetry::getCohortSequence(cdm,
+cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
                    indexTable = "cohort_index",
                    markerTable = "cohort_marker",
                    name = "amiodarone_levothyroxine",
@@ -100,7 +100,8 @@ cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpqM1x20\file3140448b221d.duckdb]
+#> Database: DuckDB v0.9.2 [eburn@Windows 10 x64:R 4.2.1/C:\Users\eburn\AppData\Local\Temp\RtmpUjUxdr\file36ec1b47952.duckdb]
+
 #> $ cohort_definition_id <int> 1
 #> $ subject_id           <int> 2006
 #> $ cohort_start_date    <date> 2014-01-17
@@ -112,9 +113,9 @@ cdm$amiodarone_levothyroxine %>%
 ### Step 2: getSequenceRatio
 
 To get the sequence ratios, we would need the output of the
-getCohortSequence() function. The output of this process contains
-cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence
-intervals.
+generateSequenceCohortSet() function. The output of this process
+contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and
+confidence intervals.
 
 ``` r
 res <- CohortSymmetry::getSequenceRatios(cdm = cdm,

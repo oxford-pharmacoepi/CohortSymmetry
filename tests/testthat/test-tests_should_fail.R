@@ -42,7 +42,8 @@ cdm <-
   )
 
 test_that("mock db: unsuccessful examples - Inf prior observation", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable ="cohort1",
                                                  markerTable = "cohort2",
                                                  daysPriorObservation = Inf
@@ -50,7 +51,8 @@ test_that("mock db: unsuccessful examples - Inf prior observation", {
 })
 
 test_that("mock db: unsuccessful examples - indexTable not strings", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = cohort1,
                                                  markerTable = "cohort2",
                                                  daysPriorObservation = 0
@@ -58,7 +60,8 @@ test_that("mock db: unsuccessful examples - indexTable not strings", {
 })
 
 test_that("mock db: unsuccessful examples - markerTable not strings", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = cohort2,
                                                  daysPriorObservation = 0
@@ -66,12 +69,14 @@ test_that("mock db: unsuccessful examples - markerTable not strings", {
 })
 
 test_that("mock db: unsuccessful examples - daysPriorObservation is not numeric", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "cohort2",
                                                  daysPriorObservation = "seven"
   ))
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "cohort2",
                                                  daysPriorObservation = 2.5
@@ -79,12 +84,14 @@ test_that("mock db: unsuccessful examples - daysPriorObservation is not numeric"
 })
 
 test_that("mock db: unsuccessful examples - Ids outside of range", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "cohort2",
                                                  indexId = 2
   ))
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "cohort2",
                                                  markerId = 2
@@ -92,7 +99,8 @@ test_that("mock db: unsuccessful examples - Ids outside of range", {
 })
 
 test_that("mock db: unsuccessful examples - tables not in the CDM", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "cohort3",
                                                  indexId = 2
@@ -100,31 +108,36 @@ test_that("mock db: unsuccessful examples - tables not in the CDM", {
 })
 
 test_that("mock db: unsuccessful examples - tables not in the right format", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "drug_exposure"
   ))
 })
 
 test_that("mock db: unsuccessful examples - tables not in the right format", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "drug_exposure"
   ))
 })
 
 test_that("mock db: unsuccessful examples - negative parameters", {
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "drug_exposure",
                                                  daysPriorObservation = -100
   ))
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "drug_exposure",
                                                  washoutWindow = -100
   ))
-  expect_error(CohortSymmetry::getCohortSequence(cdm,
+  expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                         name = "joined_cohorts",
                                                  indexTable = "cohort1",
                                                  markerTable = "drug_exposure",
                                                  combinationWindow = c(-200,-100)

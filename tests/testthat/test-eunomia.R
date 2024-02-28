@@ -1,4 +1,4 @@
-test_that("eunomia - getCohortSequence", {
+test_that("eunomia - generateSequenceCohortSet", {
 
   if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") {
     Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
@@ -30,7 +30,8 @@ test_that("eunomia - getCohortSequence", {
     conceptSet = marker_drug
   )
 
-  expect_no_error(cdm <- CohortSymmetry::getCohortSequence(cdm,
+  expect_no_error(cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                                   name = "joined_cohorts",
                                            indexTable ="cohort1",
                                            markerTable = "cohort2",
                                            combinationWindow = c(0,Inf)))

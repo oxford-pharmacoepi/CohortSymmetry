@@ -35,7 +35,7 @@ for (group in (groups)){
     dplyr::filter(age_group == group)
   cdm$cohort2_temp2 <- cdm$cohort2_temp %>%
     dplyr::filter(age_group == group)
-  cdm <- getCohortSequence(cdm = cdm,
+  cdm <- generateSequenceCohortSet(cdm = cdm,
                                         indexTable = "cohort1_temp2",
                                         markerTable = "cohort2_temp2")
   results[[group]] <- getSequenceRatios(cdm, "joined_cohorts") %>%
@@ -70,7 +70,7 @@ cdm$cohort2_temp <-
 results <- list()
 
 if("Both" %in% sex){
-  cdm <- getCohortSequence(cdm = cdm,
+  cdm <- generateSequenceCohortSet(cdm = cdm,
                            indexTable = "cohort1",
                            markerTable = "cohort2")
 results[["Both"]] <- getSequenceRatios(cdm = cdm,
@@ -83,7 +83,7 @@ if("Male" %in% sex){
     dplyr::filter(sex == "Male")
   cdm$cohort2_temp2 <- cdm$cohort2_temp %>%
     dplyr::filter(sex == "Male")
-  cdm <- getCohortSequence(cdm = cdm,
+  cdm <- generateSequenceCohortSet(cdm = cdm,
                            indexTable = "cohort1_temp2",
                            markerTable = "cohort2_temp2")
   results[["Male"]] <- getSequenceRatios(cdm, "joined_cohorts") %>%
@@ -95,7 +95,7 @@ if("Male" %in% sex){
     dplyr::filter(sex == "Male")
   cdm$cohort2_temp2 <- cdm$cohort2_temp %>%
     dplyr::filter(sex == "Male")
-  cdm <- getCohortSequence(cdm = cdm,
+  cdm <- generateSequenceCohortSet(cdm = cdm,
                            indexTable = "cohort1_temp2",
                            markerTable = "cohort2_temp2")
   results[["Male"]] <- getSequenceRatios(cdm, "joined_cohorts") %>%
@@ -107,7 +107,7 @@ if("Female" %in% sex){
     dplyr::filter(sex == "Female")
   cdm$cohort2_temp2 <- cdm$cohort2_temp %>%
     dplyr::filter(sex == "Female")
-  cdm <- getCohortSequence(cdm = cdm,
+  cdm <- generateSequenceCohortSet(cdm = cdm,
                            indexTable = "cohort1_temp2",
                            markerTable = "cohort2_temp2")
   results[["Female"]] <- getSequenceRatios(cdm, "joined_cohorts") %>%

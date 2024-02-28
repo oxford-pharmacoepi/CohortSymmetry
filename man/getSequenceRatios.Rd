@@ -14,7 +14,7 @@ getSequenceRatios(
 \arguments{
 \item{cdm}{A CDM reference.}
 
-\item{sequenceCohortSet}{A table in the CDM that the output of getCohortSequence resides.}
+\item{sequenceCohortSet}{A table in the CDM that the output of generateSequenceCohortSet resides.}
 
 \item{confidenceInterval}{Default is 95, indicating the central 95\% confidence interval.}
 
@@ -24,7 +24,7 @@ getSequenceRatios(
 A local table with all the analyses.
 }
 \description{
-Using getCohortSequence to obtain sequence ratios for the desired outcomes.
+Using generateSequenceCohortSet to obtain sequence ratios for the desired outcomes.
 }
 \examples{
 \donttest{
@@ -37,7 +37,8 @@ dplyr::tibble("cohort_definition_id" = c(1,1,1,1,1),
 
 cdm <- mockPatientProfiles(cohort1 = cohort1,
                             patient_size = 10)
-cdm <- CohortSymmetry::getCohortSequence(cdm = cdm,
+cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                          name = "joined_cohorts",
                                           indexTable = "cohort1",
                                           markerTable = "cohort2")
 pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
