@@ -78,15 +78,13 @@ test_that("getSequenceRatios - testing ratios and CIs", {
     cohort_end_date = cohort_start_date
   )
 
-  cdm <- PatientProfiles::mockPatientProfiles(patient_size = 100,
-                                              cohort1 = indexCohort,
-                                              cohort2 = markerCohort,
-                                              drug_exposure_size = 100)
+  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+                                            markerCohort = markerCohort)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                                    name = "joined_cohorts",
-                                           indexTable = "cohort1",
-                                           markerTable = "cohort2")
+                                           indexTable = "cohort_1",
+                                           markerTable = "cohort_2")
 
   suppressWarnings(
     res <- CohortSymmetry::getSequenceRatios(
@@ -139,15 +137,13 @@ test_that("getSequenceRatios - testing ratios and CIs", {
     cohort_end_date = cohort_start_date
   )
 
-  cdm <- PatientProfiles::mockPatientProfiles(patient_size = 100,
-                                              cohort1 = indexCohort,
-                                              cohort2 = markerCohort,
-                                              drug_exposure_size = 100)
+  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+                                            markerCohort = markerCohort)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                                    name = "joined_cohorts",
-                                           indexTable = "cohort1",
-                                           markerTable = "cohort2")
+                                           indexTable = "cohort_1",
+                                           markerTable = "cohort_2")
 
   res <- CohortSymmetry::getSequenceRatios(
     cdm = cdm,
