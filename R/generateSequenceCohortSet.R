@@ -28,14 +28,15 @@
 #' @examples
 #' \donttest{
 #' library(PatientProfiles)
-#' cdm <- mockPatientProfiles()
+#' cdm <- CohortSymmetry::mockCohortSymmetry()
 #' cdm <- CohortSymmetry::generateSequenceCohortSet(
 #'   cdm = cdm,
 #'   name = "joined_cohorts",
-#'   indexTable = "cohort1",
-#'   markerTable = "cohort2"
+#'   indexTable = "cohort_1",
+#'   markerTable = "cohort_2"
 #' )
 #'  cdm$joined_cohorts
+#'  CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 generateSequenceCohortSet <- function(cdm,
                               indexTable,

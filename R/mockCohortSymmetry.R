@@ -18,6 +18,8 @@
 #' \donttest{
 #' library(CohortSymmetry)
 #' cdm <- mockCohortSymmetry()
+#' cdm
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 mockCohortSymmetry <- function(indexCohort = NULL,
                                markerCohort = NULL,
