@@ -26,19 +26,6 @@
 #'
 #' @export
 #'
-#' @examples
-#' \donttest{
-#' library(CohortSymmetry)
-#' cdm <- CohortSymmetry::mockCohortSymmetry()
-#' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-#'                                                  indexTable = "cohort_1",
-#'                                                  markerTable = "cohort_2",
-#'                                                  name = "joined_cohort")
-#' res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
-#'                                          sequenceCohortSet = "joined_cohort")
-#' gtResult <- formatSequenceSymmetry(res)
-#' CDMConnector::cdmDisconnect(cdm = cdm)
-#' }
 formatSequenceSymmetry <- function(result,
                                    type = "gt",
                                    estimateNameFormat =
