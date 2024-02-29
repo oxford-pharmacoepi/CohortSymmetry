@@ -346,7 +346,7 @@ test_that("mock db: parameters involving priorObservation and cohortDateRange", 
                                                    daysPriorObservation = 365,
                                                    combinationWindow = c(0,Inf)
   )
- # expect_equal(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n), 3)
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1, 2, 4)))
   CDMConnector::cdmDisconnect(cdm)
 })
