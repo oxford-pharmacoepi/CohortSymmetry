@@ -29,7 +29,7 @@
 #' @examples
 #' \donttest{
 #' library(CohortSymmetry)
-#' cdm <- mockCohortSymmetry()
+#' cdm <- CohortSymmetry::mockCohortSymmetry()
 #' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
 #'                                                  indexTable = "cohort_1",
 #'                                                  markerTable = "cohort_2",

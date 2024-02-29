@@ -34,14 +34,7 @@ However the users could specify them should they wish.
 \donttest{
 library(CohortSymmetry)
 cdm <- mockCohortSymmetry()
-cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-                                                 name = "joined_cohorts",
-                                                 indexTable = "cohort_1",
-                                                 markerTable = "cohort_2",
-                                                 combinationWindow = c(0, Inf))
-res <- CohortSymmetry::getSequenceRatios(
-cdm = cdm,
-sequenceCohortSet = "joined_cohorts")
-gtResult <- formatSequenceSymmetry(res)
+cdm
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }
