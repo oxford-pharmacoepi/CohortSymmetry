@@ -94,16 +94,29 @@ cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
 ```
 
-### Step 2: getSequenceRatio
+### Step 2: summariseSequenceRatio
  
 To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function. 
 The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
 
-```{r Step 2: getSequenceRatio, eval=TRUE, warning=FALSE}
-res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
+```{r Step 2: summariseSequenceRatio, eval=TRUE, warning=FALSE}
+res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
                                          sequenceCohortSet = "amiodarone_levothyroxine")
  
 res %>% glimpse()
+```
+
+### Step 3: visualise the results
+ 
+The user could then visualise their results using a wide array of provided tools.
+
+```{r Step 3: visualise the results, eval=TRUE, warning=FALSE}
+
+gtResult <- formatSequenceSymmetry(res)
+
+gtResult
+
+CDMConnector::cdmDisconnect(cdm = cdm)
 ```
 
 ## References

@@ -27,19 +27,19 @@
 #'                                           name = "joined_cohorts",
 #'                                           indexTable = "cohort1",
 #'                                           markerTable = "cohort2")
-#' pssa_result <- CohortSymmetry::getSequenceRatios (cdm = cdm,
+#' pssa_result <- CohortSymmetry::summariseSequenceRatio (cdm = cdm,
 #'                                                   sequenceCohortSet = "joined_cohorts")
 #'  pssa_result
 #'  CDMConnector::cdmDisconnect(cdm)
 #' }
 #'
-getSequenceRatios <- function(cdm,
+summariseSequenceRatio <- function(cdm,
                               sequenceCohortSet,
                               confidenceInterval = 95,
                               restriction = 548) {
 
   # checks
-  checkInputGetSequenceRatios(cdm = cdm,
+  checkInputSummariseSequenceRatio(cdm = cdm,
                               sequenceCohortSet = sequenceCohortSet,
                               confidenceInterval = confidenceInterval,
                               restriction = restriction)

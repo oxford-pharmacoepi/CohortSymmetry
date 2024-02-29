@@ -1,7 +1,7 @@
 #' A formatted visualization of sequence_symmetry objects.
 #'
 #' @description
-#' It provides a formatted table with the contents of the getSequenceRatios
+#' It provides a formatted table with the contents of the summariseSequenceRatio
 #' output.
 #'
 #' @param result A sequence_symmetry object.
@@ -34,7 +34,7 @@
 #'                                                  indexTable = "cohort_1",
 #'                                                  markerTable = "cohort_2",
 #'                                                  name = "joined_cohort")
-#' res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
+#' res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
 #'                                          sequenceCohortSet = "joined_cohort")
 #' gtResult <- formatSequenceSymmetry(res)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
