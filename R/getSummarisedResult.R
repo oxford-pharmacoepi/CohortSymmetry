@@ -1,7 +1,7 @@
 getSummarisedResult <- function(x) {
   x <- x |>
     dplyr::mutate(
-      result_type = "sequence_symmetry",
+      result_type = "sequence_ratios",
       package_name = "CohortSymmetry",
       package_version = as.character(utils::packageVersion("CohortSymmetry")),
       group_name = "index_cohort_name and marker_cohort_name",

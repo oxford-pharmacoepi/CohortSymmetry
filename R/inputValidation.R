@@ -243,7 +243,7 @@ checkSingleBoolean <- function(splitGroup, errorMessage) {
 }
 
 checkOptions <- function(.options, errorMessage) {
-  allowedNames <- names(formatSequenceSymmetryOptions())
+  allowedNames <- names(tableSequenceRatiosOptions())
   optionsNames <- names(.options)
   checkmate::assertList(.options, null.ok = TRUE, any.missing = TRUE,
                         types = c("numeric", "logical", "character", "list"),

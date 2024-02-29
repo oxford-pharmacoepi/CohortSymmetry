@@ -19,7 +19,7 @@
 #' @param markerName whether to report marker names
 #' @param cdmName whether to report database names.
 #' @param .options named list with additional formatting options.
-#' CohortSymmetry::formatSequenceSymmetryOptions() shows allowed arguments and
+#' CohortSymmetry::tableSequenceRatiosOptions() shows allowed arguments and
 #' their default values.
 #'
 #' @return A formatted version of the sequence_symmetry object.
@@ -27,7 +27,7 @@
 #' @export
 #'
 #'
-formatSequenceSymmetry <- function(result,
+tableSequenceRatios <- function(result,
                                    type = "gt",
                                    estimateNameFormat =
                                      c("N (%)" = "<count> (<percentage> %)",
@@ -212,7 +212,7 @@ defaultOptions <- function(userOptions) {
 #'
 #' @description
 #' It provides a list of allowed inputs for .option argument in
-#' formatSequenceSymmetry and their given default value.
+#' tableSequenceRatios and their given default value.
 #'
 #'
 #' @return The default .options named list.
@@ -224,6 +224,6 @@ defaultOptions <- function(userOptions) {
 #' }
 #'
 #'
-formatSequenceSymmetryOptions <- function() {
+tableSequenceRatiosOptions <- function() {
   return(defaultOptions(NULL))
 }
