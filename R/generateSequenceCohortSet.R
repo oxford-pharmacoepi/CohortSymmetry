@@ -203,10 +203,11 @@ generateSequenceCohortSet <- function(cdm,
 
   # 3) days prior observation
   cdm[[name]] <- cdm[[name]] %>%
-    dplyr::filter(
-      .data$prior_observation_marker >= .env$daysPriorObservation &
-      .data$prior_observation_index >= .env$daysPriorObservation
-    )
+    dplyr::mutate(min_obs = dplyr::if_else(.data$prior_observation_index <= .data$prior_observation_marker,
+                                           .data$prior_observation_index,
+                                           .data$prior_observation_marker)) %>%
+    dplyr::filter(.data$min_obs >= .env$daysPriorObservation) %>%
+    dplyr::select(-"min_obs")
   omopgenerics::recordCohortAttrition(cdm[[name]], reason="Prior history requirement fulfilled")
 
   # 4) washoutWindow
