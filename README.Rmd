@@ -111,13 +111,18 @@ res %>% glimpse()
 The user could then visualise their results using a wide array of provided tools.
 
 ```{r Step 3: visualise the results, eval=TRUE, warning=FALSE}
+tidy_results <- CohortSymmetry::tidySequenceSymmetry(result = res)
 
-gtResult <- formatSequenceSymmetry(res)
-
-gtResult
+tidy_results
 
 CDMConnector::cdmDisconnect(cdm = cdm)
+
 ```
 
+```{r Disconnect from the cdm database connection, eval=TRUE, warning=FALSE}
+
+CDMConnector::cdmDisconnect(cdm = cdm)
+
+```
 ## References
 1. Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry analysis: assessing risk, temporality, and consistency for adverse drug reactions across datasets in five countries. Pharmacoepidemiol Drug Saf. 2015;24(8):858-864.
