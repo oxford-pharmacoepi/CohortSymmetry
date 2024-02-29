@@ -353,121 +353,119 @@ test_that("mock db: parameters involving priorObservation and cohortDateRange", 
 
 ################################# Involving washouts ################################
 # washoutWindow
-# test_that("mock db: tests involving washout", {
-#   indexCohort <- dplyr::tibble(
-#     cohort_definition_id = c(1, 1, 1, 1),
-#     subject_id = c(1, 1, 1, 1),
-#     cohort_start_date = as.Date(
-#       c(
-#         "2020-04-07", "2020-08-27", "2014-01-01", "2020-01-01"
-#       )
-#     ),
-#     cohort_end_date = as.Date(
-#       c(
-#         "2020-04-08", "2020-08-27", "2014-01-01", "2020-01-02"
-#       )
-#     )
-#   )
-#
-#   markerCohort <- dplyr::tibble(
-#     cohort_definition_id = c(1, 1, 1, 1),
-#     subject_id = c(1, 1, 1, 1),
-#     cohort_start_date = as.Date(
-#       c(
-#         "2021-04-25", "2010-08-26","2022-01-02", "2016-03-01"
-#       )
-#     ),
-#     cohort_end_date = as.Date(
-#       c(
-#         "2021-04-25","2010-08-27","2022-05-25", "2016-03-14"
-#       )
-#     )
-#   )
-#
-#   cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
-#                                             markerCohort = markerCohort)
-#
-#   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-#                                                    name = "joined_cohorts",
-#                                            indexTable ="cohort_1",
-#                                            markerTable = "cohort_2",
-#                                            combinationWindow = c(0,Inf)
-#   )
-#   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-#
-#   earliest_index_date <- cdm$cohort1 %>%
-#     dplyr::arrange(cohort_start_date) %>%
-#     dplyr::filter(dplyr::row_number()==1) %>%
-#     dplyr::pull(cohort_start_date)
-#
-#   earliest_marker_date <- cdm$cohort2 %>%
-#     dplyr::arrange(cohort_start_date) %>%
-#     dplyr::filter(dplyr::row_number()==1) %>%
-#     dplyr::pull(cohort_start_date)
-#
-#   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(index_date) == earliest_index_date,
-#                   cdm$joined_cohorts %>% dplyr::pull(marker_date) == earliest_marker_date))
-#
-#   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-#                                                    name = "joined_cohorts",
-#                                            indexTable ="cohort_1",
-#                                            markerTable = "cohort_2"
-#   )
-#   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
-#
-#   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-#                                                    name = "joined_cohorts",
-#                                            indexTable ="cohort_1",
-#                                            markerTable = "cohort_2",
-#                                            daysPriorObservation = 365,
-#                                            combinationWindow = c(0, Inf)
-#   )
-#   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-# })
-#
-# test_that("mock db: example of multiple entries per person - picking sequence in relation to cohortDateRange", {
-#   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-#                                                    name = "joined_cohorts",
-#                                            cohortDateRange = as.Date(c("2000-01-01", NA)),
-#                                            indexTable ="cohort_1",
-#                                            markerTable = "cohort_2",
-#                                            daysPriorObservation = 365,
-#                                            combinationWindow = c(0,Inf)
-#   )
-#   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-#   expect_true(cdm$joined_cohorts %>% dplyr::pull(cohort_start_date) >= as.Date("2000-01-01"))
-#
-#   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-#                                                    name = "joined_cohorts",
-#                                            cohortDateRange = as.Date(c("2000-01-01", NA)),
-#                                            indexTable ="cohort_1",
-#                                            markerTable = "cohort_2",
-#                                            daysPriorObservation = 365
-#   )
-#   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
-#
-#   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-#                                                    name = "joined_cohorts",
-#                                            indexTable ="cohort_1",
-#                                            markerTable = "cohort_2",
-#                                            washoutWindow = 365,
-#                                            combinationWindow = c(0,Inf)
-#   )
-#   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-#   index_date <- cdm$joined_cohorts %>% dplyr::pull(index_date)
-#   test_index <- cdm$cohort1 %>% dplyr::filter(cohort_start_date<=as.Date(index_date)) %>% dplyr::collect() %>% dplyr::filter(cohort_start_date+365 >= as.Date(index_date)) %>% dplyr::collect()
-#   expect_true(test_index %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-#
-#   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-#                                                    name = "joined_cohorts",
-#                                            indexTable ="cohort_1",
-#                                            markerTable = "cohort_2",
-#                                            cohortDateRange = as.Date(c("2002-01-01", NA)),
-#                                            washoutWindow = 365,
-#                                            combinationWindow = c(0,Inf)
-#   )
-#   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-# })
+test_that("mock db: tests involving washout", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1),
+    subject_id = c(1, 1, 1, 1),
+    cohort_start_date = as.Date(
+      c(
+        "2020-04-07", "2020-08-27", "2014-01-01", "2020-01-01"
+      )
+    ),
+    cohort_end_date = as.Date(
+      c(
+        "2020-04-08", "2020-08-27", "2014-01-01", "2020-01-02"
+      )
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1),
+    subject_id = c(1, 1, 1, 1),
+    cohort_start_date = as.Date(
+      c(
+        "2021-04-25", "2010-08-26","2022-01-02", "2016-03-01"
+      )
+    ),
+    cohort_end_date = as.Date(
+      c(
+        "2021-04-25","2010-08-27","2022-05-25", "2016-03-14"
+      )
+    )
+  )
+
+  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+                                            markerCohort = markerCohort)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
+                                           indexTable ="cohort_1",
+                                           markerTable = "cohort_2",
+                                           combinationWindow = c(0,Inf)
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+
+  earliest_index_date <- cdm$cohort_1 %>%
+    dplyr::arrange(cohort_start_date) %>%
+    dplyr::filter(dplyr::row_number()==1) %>%
+    dplyr::pull(cohort_start_date)
+
+  earliest_marker_date <- cdm$cohort_2 %>%
+    dplyr::arrange(cohort_start_date) %>%
+    dplyr::filter(dplyr::row_number()==1) %>%
+    dplyr::pull(cohort_start_date)
+
+  expect_true(all(cdm$joined_cohorts %>% dplyr::pull(index_date) == earliest_index_date,
+                  cdm$joined_cohorts %>% dplyr::pull(marker_date) == earliest_marker_date))
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
+                                           indexTable ="cohort_1",
+                                           markerTable = "cohort_2"
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
+                                           indexTable ="cohort_1",
+                                           markerTable = "cohort_2",
+                                           daysPriorObservation = 365,
+                                           combinationWindow = c(0, Inf)
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
+                                           cohortDateRange = as.Date(c("2000-01-01", NA)),
+                                           indexTable ="cohort_1",
+                                           markerTable = "cohort_2",
+                                           daysPriorObservation = 365,
+                                           combinationWindow = c(0,Inf)
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  expect_true(cdm$joined_cohorts %>% dplyr::pull(cohort_start_date) >= as.Date("2000-01-01"))
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
+                                           cohortDateRange = as.Date(c("2000-01-01", NA)),
+                                           indexTable ="cohort_1",
+                                           markerTable = "cohort_2",
+                                           daysPriorObservation = 365
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
+                                           indexTable ="cohort_1",
+                                           markerTable = "cohort_2",
+                                           washoutWindow = 365,
+                                           combinationWindow = c(0,Inf)
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+  index_date <- cdm$joined_cohorts %>% dplyr::pull(index_date)
+  test_index <- cdm$cohort_1 %>% dplyr::filter(cohort_start_date<=as.Date(index_date)) %>% dplyr::collect() %>% dplyr::filter(cohort_start_date+365 >= as.Date(index_date)) %>% dplyr::collect()
+  expect_true(test_index %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
+                                                   name = "joined_cohorts",
+                                           indexTable ="cohort_1",
+                                           markerTable = "cohort_2",
+                                           cohortDateRange = as.Date(c("2002-01-01", NA)),
+                                           washoutWindow = 365,
+                                           combinationWindow = c(0,Inf)
+  )
+  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
+})
 
 test_that("generateSequenceCohortSet - inputValidation", {
   cdm <- CohortSymmetry::mockCohortSymmetry()
