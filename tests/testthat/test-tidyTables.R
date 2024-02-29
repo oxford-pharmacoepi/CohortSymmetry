@@ -12,7 +12,7 @@ test_that("tidySequenceSymmetry", {
   expect_warning(expect_warning(expect_warning(expect_warning(
     expect_warning(expect_warning(expect_warning(expect_warning(
       expect_no_error(
-        res <- CohortSymmetry::getSequenceRatios(
+        res <- CohortSymmetry::summariseSequenceRatio(
           cdm = cdm,
           sequenceCohortSet = "joined_cohorts")
       )))))))))
@@ -50,7 +50,7 @@ test_that("tidySequenceSymmetry", {
   expect_warning(expect_warning(expect_warning(expect_warning(
     expect_warning(expect_warning(expect_warning(expect_warning(
       expect_no_error(
-        res <- CohortSymmetry::getSequenceRatios(
+        res <- CohortSymmetry::summariseSequenceRatio(
           cdm = cdm,
           sequenceCohortSet = "joined_cohorts")
       )))))))))
