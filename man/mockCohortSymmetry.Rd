@@ -34,7 +34,5 @@ However the users could specify them should they wish.
 \donttest{
 library(CohortSymmetry)
 cdm <- mockCohortSymmetry()
-cdm
-CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

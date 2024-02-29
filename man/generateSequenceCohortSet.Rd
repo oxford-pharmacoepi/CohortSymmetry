@@ -58,14 +58,13 @@ Index and marker cohorts should be instantiated in advance by the user.
 \examples{
 \donttest{
 library(PatientProfiles)
-cdm <- CohortSymmetry::mockCohortSymmetry()
+cdm <- mockPatientProfiles()
 cdm <- CohortSymmetry::generateSequenceCohortSet(
   cdm = cdm,
   name = "joined_cohorts",
-  indexTable = "cohort_1",
-  markerTable = "cohort_2"
+  indexTable = "cohort1",
+  markerTable = "cohort2"
 )
  cdm$joined_cohorts
- CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

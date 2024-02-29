@@ -3,7 +3,7 @@ test_that("formatSequenceSymmetry", {
                                               drug_exposure_size = 100)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohort",
+                                                   name = "joined_cohorts",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2",
                                            combinationWindow = c(0, Inf))
@@ -11,7 +11,7 @@ test_that("formatSequenceSymmetry", {
 
   res <- CohortSymmetry::getSequenceRatios(
     cdm = cdm,
-    sequenceCohortSet = "joined_cohort")
+    sequenceCohortSet = "joined_cohorts")
 
   gtResult <- formatSequenceSymmetry(res)
   expect_true("gt_tbl" %in% (gtResult %>% class()))

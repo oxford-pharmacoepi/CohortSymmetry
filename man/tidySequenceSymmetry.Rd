@@ -17,22 +17,3 @@ object.
 It provides a tidy dataframe with the contents of the getSequenceRatios
 output.
 }
-\examples{
-\donttest{
-library(CohortSymmetry)
-cdm <- mockCohortSymmetry()
-cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-                                                 name = "joined_cohorts",
-                                                 indexTable = "cohort_1",
-                                                 markerTable = "cohort_2",
-                                                 combinationWindow = c(0, Inf))
-res <- CohortSymmetry::getSequenceRatios(
-cdm = cdm,
-sequenceCohortSet = "joined_cohorts")
-
-tidy_result <- CohortSymmetry::tidySequenceSymmetry(res)
-
-tidy_result
-CDMConnector::cdmDisconnect(cdm = cdm)
-}
-}
