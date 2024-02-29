@@ -160,8 +160,6 @@ tidy_results
 #> #   crude_sequence_ratio_point_estimate <chr>,
 #> #   adjusted_sequence_ratio_point_estimate <chr>,
 #> #   crude_sequence_ratio_lower_CI <chr>, crude_sequence_ratio_upper_CI <chr>, …
-
-CDMConnector::cdmDisconnect(cdm = cdm)
 ```
 
 ``` r
