@@ -1,4 +1,4 @@
-test_that("getSequenceRatios", {
+test_that("summariseSequenceRatio", {
   cdm <- PatientProfiles::mockPatientProfiles(patient_size = 100,
                                               drug_exposure_size = 100)
 
@@ -11,7 +11,7 @@ test_that("getSequenceRatios", {
     expect_warning(expect_warning(expect_warning(expect_warning(
       expect_warning(expect_warning(expect_warning(expect_warning(
         expect_no_error(
-          res <- CohortSymmetry::getSequenceRatios(
+          res <- CohortSymmetry::summariseSequenceRatio(
             cdm = cdm,
             sequenceCohortSet = "joined_cohorts")
         )))))))))))))
@@ -20,38 +20,38 @@ test_that("getSequenceRatios", {
   expect_true("sequence_symmetry" %in% class(res))
   expect_true("summarised_result" %in% class(res))
   expect_error(
-    CohortSymmetry::getSequenceRatios(
+    CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
       sequenceCohortSet = NULL)
   )
   expect_error(
-    CohortSymmetry::getSequenceRatios(
+    CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
       sequenceCohortSet = character(0))
   )
   expect_error(
-    CohortSymmetry::getSequenceRatios(
+    CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
       sequenceCohortSet = "joined_cohorts",
       confidenceInterval = 101)
   )
 
   expect_error(
-    CohortSymmetry::getSequenceRatios(
+    CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
       sequenceCohortSet = "joined_cohorts",
       confidenceInterval = -101)
   )
 
     expect_error(
-      CohortSymmetry::getSequenceRatios(
+      CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
       sequenceCohortSet = "cohort",
       confidenceInterval = 101)
   )
 })
 
-test_that("getSequenceRatios - testing ratios and CIs", {
+test_that("summariseSequenceRatio - testing ratios and CIs", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -87,7 +87,7 @@ test_that("getSequenceRatios - testing ratios and CIs", {
                                            markerTable = "cohort_2")
 
   suppressWarnings(
-    res <- CohortSymmetry::getSequenceRatios(
+    res <- CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
       sequenceCohortSet = "joined_cohorts")
   )
@@ -110,7 +110,7 @@ test_that("getSequenceRatios - testing ratios and CIs", {
   })
 
 
-test_that("getSequenceRatios - testing ratios and CIs", {
+test_that("summariseSequenceRatio - testing ratios and CIs", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
     subject_id = c(1, 4, 2, 3, 5, 7, 8, 9, 6, 10),
@@ -145,7 +145,7 @@ test_that("getSequenceRatios - testing ratios and CIs", {
                                            indexTable = "cohort_1",
                                            markerTable = "cohort_2")
 
-  res <- CohortSymmetry::getSequenceRatios(
+  res <- CohortSymmetry::summariseSequenceRatio(
     cdm = cdm,
     sequenceCohortSet = "joined_cohorts")
   res <- CohortSymmetry::tidySequenceSymmetry(res)

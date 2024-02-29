@@ -9,7 +9,7 @@ test_that("formatSequenceSymmetry", {
                                            combinationWindow = c(0, Inf))
 
 
-  res <- CohortSymmetry::getSequenceRatios(
+  res <- CohortSymmetry::summariseSequenceRatio(
     cdm = cdm,
     sequenceCohortSet = "joined_cohort")
 

@@ -23,8 +23,7 @@ flextable
 formatSequenceSymmetry
 formatSequenceSymmetryOptions
 generateSequenceCohortSet
-getSequenceRatio
-getSequenceRatios
+indexCohort
 indexTable
 levothyroxine
 magrittr
@@ -33,3 +32,4 @@ nSR
 temporality
 tibble
 visOmopResults
+visualise

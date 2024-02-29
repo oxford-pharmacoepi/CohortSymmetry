@@ -1,7 +1,7 @@
 #' A tidy visualization of sequence_symmetry objects.
 #'
 #' @description
-#' It provides a tidy dataframe with the contents of the getSequenceRatios
+#' It provides a tidy dataframe with the contents of the summariseSequenceRatio
 #' output.
 #'
 #' @param result A sequence_symmetry object.
@@ -19,7 +19,7 @@
 #'                                                  indexTable = "cohort_1",
 #'                                                  markerTable = "cohort_2",
 #'                                                  combinationWindow = c(0, Inf))
-#' res <- CohortSymmetry::getSequenceRatios(
+#' res <- CohortSymmetry::summariseSequenceRatio(
 #' cdm = cdm,
 #' sequenceCohortSet = "joined_cohorts")
 #'

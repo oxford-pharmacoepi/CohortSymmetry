@@ -14,7 +14,7 @@ A tibble with a tidy version of the sequence_symmetry
 object.
 }
 \description{
-It provides a tidy dataframe with the contents of the getSequenceRatios
+It provides a tidy dataframe with the contents of the summariseSequenceRatio
 output.
 }
 \examples{
@@ -26,7 +26,7 @@ cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                                  indexTable = "cohort_1",
                                                  markerTable = "cohort_2",
                                                  combinationWindow = c(0, Inf))
-res <- CohortSymmetry::getSequenceRatios(
+res <- CohortSymmetry::summariseSequenceRatio(
 cdm = cdm,
 sequenceCohortSet = "joined_cohorts")
 
