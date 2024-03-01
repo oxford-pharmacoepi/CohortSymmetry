@@ -2,7 +2,7 @@
 % Please edit documentation in R/displayTables.R
 \name{tableSequenceRatiosOptions}
 \alias{tableSequenceRatiosOptions}
-\title{A formatted visualization of sequence_symmetry objects.}
+\title{A formatted visualization of sequence_ratios objects.}
 \usage{
 tableSequenceRatiosOptions()
 }

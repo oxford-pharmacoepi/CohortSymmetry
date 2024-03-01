@@ -52,7 +52,7 @@ getSummarisedResult <- function(x) {
 
   x_res <- x |>
     dplyr::distinct(dplyr::across(dplyr::all_of(c(settings, "cdm_name")))) |>
-    dplyr::mutate(result_id = dplyr::row_number())
+    dplyr::mutate(result_id = as.character(dplyr::row_number()))
 
   x_sum <- x_sum |>
     dplyr::left_join(x_res) |>
@@ -83,9 +83,9 @@ getSummarisedResult <- function(x) {
           .data$estimate_name == "confidence_interval" ~ "numeric",
           .default = "integer"
         )) |>
-        dplyr::select(c("result_id", omopgenerics::resultColumns("summarised_result")))
-    )
-  # add class !!
+        dplyr::select(omopgenerics::resultColumns("summarised_result"))
+    ) |>
+    omopgenerics::newSummarisedResult()
 
   return(x_sum)
 }

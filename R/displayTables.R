@@ -41,18 +41,18 @@
 #'
 #'
 tableSequenceRatios <- function(result,
-                                   type = "gt",
-                                   estimateNameFormat =
-                                     c("N (%)" = "<count> (<percentage> %)",
-                                       "SR (CI)" = "<point_estimate> (<lower_CI> - <upper_CI>)"),
-                                   style = "default",
-                                   crude = TRUE,
-                                   adjusted = TRUE,
-                                   studyPopulation = TRUE,
-                                   indexName = TRUE,
-                                   markerName = TRUE,
-                                   cdmName = TRUE,
-                                   .options = NULL) {
+                                type = "gt",
+                                estimateNameFormat =
+                                  c("N (%)" = "<count> (<percentage> %)",
+                                    "SR (CI)" = "<point_estimate> (<lower_CI> - <upper_CI>)"),
+                                style = "default",
+                                crude = TRUE,
+                                adjusted = TRUE,
+                                studyPopulation = TRUE,
+                                indexName = TRUE,
+                                markerName = TRUE,
+                                cdmName = TRUE,
+                                .options = NULL) {
   # checks
   checkSequenceSymmetry(result)
   checksFormatSequenceSymmetry(type, crude, adjusted, studyPopulation, indexName,
@@ -62,15 +62,24 @@ tableSequenceRatios <- function(result,
   .options = defaultOptions(.options)
 
   # get CI
-  ci <- result |> visOmopResults::splitAdditional() |>
-    dplyr::pull("confidence_interval") |> unique() |> as.numeric()
+  ci <- result |>
+    omopgenerics::settings() |>
+    dplyr::pull("confidence_interval") |>
+    unique()
+
+  result <- result |>
+    dplyr::filter(.data$variable_level != "settings")
+
+  if (length(ci) > 1) {
+    cli::cli_abort("Provide results generated using the same confidence interval.")
+  }
 
   # get study population
   if (studyPopulation) {
     total_participants <- result |>
       dplyr::mutate(
         estimate_value = as.numeric(.data$estimate_value)
-        ) |>
+      ) |>
       dplyr::filter(.data$variable_name == "first_pharmac") |>
       dplyr::filter(.data$estimate_name == "count") |>
       tidyr::pivot_wider(names_from = "variable_level",
@@ -218,10 +227,10 @@ defaultOptions <- function(userOptions) {
     defaultOpts[[opt]] <- userOptions[[opt]]
   }
 
-    return(defaultOpts)
+  return(defaultOpts)
 }
 
-#' A formatted visualization of sequence_symmetry objects.
+#' A formatted visualization of sequence_ratios objects.
 #'
 #' @description
 #' It provides a list of allowed inputs for .option argument in

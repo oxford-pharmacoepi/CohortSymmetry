@@ -111,9 +111,9 @@ res %>% glimpse()
 The user could then visualise their results using a wide array of provided tools.
 
 ```{r Step 3: visualise the results, eval=TRUE, warning=FALSE}
-tidy_results <- CohortSymmetry::tidySequenceSymmetry(result = res)
+nice_results <- CohortSymmetry::tableSequenceRatios(result = res)
 
-tidy_results
+nice_results
 
 CDMConnector::cdmDisconnect(cdm = cdm)
 

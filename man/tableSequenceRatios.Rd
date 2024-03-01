@@ -65,7 +65,9 @@ cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                                  name = "joined_cohort")
 res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
                                          sequenceCohortSet = "joined_cohort")
-gtResult <- formatSequenceSymmetry(res)
+gtResult <- tableSequenceRatios(res)
 CDMConnector::cdmDisconnect(cdm = cdm)
 }
+
+
 }
