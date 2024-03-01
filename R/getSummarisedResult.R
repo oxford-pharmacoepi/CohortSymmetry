@@ -50,8 +50,14 @@ getSummarisedResult <- function(x) {
                "combination_window", "confidence_interval", "restriction"),
       name = "additional_name",
       level = "additional_level"
-    ) |>
-    dplyr::select(omopgenerics::resultColumns("summarised_result")) |>
-    omopgenerics::newSummarisedResult()
-  return(x)
+    )
+
+x <- x |>
+  dplyr::group_by(.data$index_id, .data$marker_id) |>
+  dplyr::mutate(result_id = as.character(dplyr::cur_group_id())) |>
+  dplyr::ungroup() |>
+  dplyr::select(omopgenerics::resultColumns("summarised_result"))|>
+  omopgenerics::newSummarisedResult()
+
+return(x)
 }
