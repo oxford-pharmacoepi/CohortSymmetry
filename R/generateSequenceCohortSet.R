@@ -6,7 +6,7 @@
 #' @param cdm A CDM reference.
 #' @param indexTable A table in the CDM that the index cohorts should come from.
 #' @param markerTable A table in the CDM that the marker cohorts should come from.
-#' @param name the name within the cdm that the output is called. Default is joined_cohorts.
+#' @param name The name within the cdm that the output is called. Default is joined_cohorts.
 #' @param cohortDateRange Two dates indicating study period and the sequences that the user wants
 #' to restrict to.
 #' @param indexId Cohort definition IDs in indexTable to be considered for the analysis.
@@ -18,11 +18,11 @@
 #' @param washoutWindow A washout window to be applied on both the index cohort event and marker cohort.
 #' @param indexMarkerGap The maximum allowable gap between the end of the first episode
 #' and the start of the second episode in a sequence/combination.
-#' @param combinationWindow a constrain to be placed on the gap between two initiations.
+#' @param combinationWindow A constrain to be placed on the gap between two initiations.
 #' Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.
 #'
 #' @return
-#' A table in the cdm reference.
+#' A table within the cdm reference.
 #' @export
 #'
 #' @examples
