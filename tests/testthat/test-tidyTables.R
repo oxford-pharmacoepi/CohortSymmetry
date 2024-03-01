@@ -27,7 +27,8 @@ test_that("tidySequenceSymmetry", {
 
   expect_true(all(
     colnames(tidy_result) %in%
-      c("cdm_name", "index_cohort_name", "marker_cohort_name",
+      c("result_id",
+        "cdm_name", "index_cohort_name", "marker_cohort_name",
         "days_prior_observation", "washout_window", "index_marker_gap",
         "combination_window", "confidence_interval", "restriction",
         "index_first_pharmac_count", "index_first_pharmac_percentage",
