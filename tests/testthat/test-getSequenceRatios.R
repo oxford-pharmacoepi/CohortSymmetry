@@ -17,7 +17,7 @@ test_that("getSequenceRatios", {
         )))))))))))))
 
 
-  expect_true("sequence_symmetry" %in% class(res))
+  expect_true("sequence_ratios" %in% class(res))
   expect_true("summarised_result" %in% class(res))
   expect_error(
     CohortSymmetry::getSequenceRatios(
