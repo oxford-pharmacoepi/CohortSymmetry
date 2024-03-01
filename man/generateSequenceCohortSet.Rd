@@ -57,7 +57,6 @@ Index and marker cohorts should be instantiated in advance by the user.
 }
 \examples{
 \donttest{
-library(PatientProfiles)
 cdm <- CohortSymmetry::mockCohortSymmetry()
 cdm <- CohortSymmetry::generateSequenceCohortSet(
   cdm = cdm,
