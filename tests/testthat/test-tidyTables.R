@@ -9,13 +9,12 @@ test_that("tidySequenceSymmetry", {
                                                    markerId = c(1,2),
                                                    combinationWindow = c(0, Inf))
 
-  expect_warning(expect_warning(expect_warning(expect_warning(
-    expect_warning(expect_warning(expect_warning(expect_warning(
+expect_warning(
       expect_no_error(
         res <- CohortSymmetry::summariseSequenceRatio(
           cdm = cdm,
           sequenceCohortSet = "joined_cohorts")
-      )))))))))
+      ))
 
   expect_no_error(tidy_result <- tidySequenceSymmetry(res))
 
@@ -48,13 +47,12 @@ test_that("tidySequenceSymmetry", {
                                                    indexMarkerGap = 40,
                                                    combinationWindow = c(0, Inf))
 
-  expect_warning(expect_warning(expect_warning(expect_warning(
-    expect_warning(expect_warning(expect_warning(expect_warning(
+expect_warning(
       expect_no_error(
         res <- CohortSymmetry::summariseSequenceRatio(
           cdm = cdm,
           sequenceCohortSet = "joined_cohorts")
-      )))))))))
+      ))
 
   expect_no_error(tidy_result <- tidySequenceSymmetry(res))
   expect_true(unique(tidy_result$combination_window) == "(0,Inf)")
