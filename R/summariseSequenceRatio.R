@@ -107,7 +107,27 @@ summariseSequenceRatio <- function(cdm,
     }
   }
 
-  output <- Reduce(dplyr::union_all, results) %>%
+  output <- Reduce(dplyr::union_all, results)
+
+  ifp_100 <- output %>%
+    dplyr::filter(.data$index_first_percentage == 100) %>%
+    dplyr::tally() %>%
+    dplyr::pull("n")
+  mfp_100 <- output %>%
+    dplyr::filter(.data$marker_first_percentage == 100) %>%
+    dplyr::tally() %>%
+    dplyr::pull("n")
+  if(ifp_100 > 0 | mfp_100 > 0){
+    cli::cli_warn("For at least some combinations, index is always before marker or marker always before index")
+    if(ifp_100 > 0){
+    cli::cli_inform("-- {ifp_100} combination{?s} of {nrow(output)} had index always before marker")
+    }
+    if(mfp_100 > 0){
+      cli::cli_inform("-- {ifp_100} combination{?s}  of {nrow(output)} had marker always before index")
+    }
+    }
+
+  output <- output %>%
     PatientProfiles::addCdmName(cdm) %>%
     getSummarisedResult()
 
