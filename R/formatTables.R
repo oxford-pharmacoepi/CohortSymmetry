@@ -7,18 +7,19 @@
 #' @param result A sequence_symmetry object.
 #' @param type Type of desired formatted table, possibilities: "gt",
 #' "flextable", "tibble".
-#' @param estimateNameFormat .
+#' @param estimateNameFormat The columns that the user wishes to see for the
+#' formatted table, by default it would display both the counts and sequence ratios.
 #' @param style Named list that specifies how to style the different parts of a
 #'  gt table or flextable. See visOmopResults package for more information on
 #'  how to define a style. Alternatively, use "default" to get visOmopResults
 #'  style, or NULL for gt/flextable default styling.
-#' @param crude whether to report crude results.
-#' @param adjusted whether to report adjusted results.
-#' @param studyPopulation whether to report the study population.
-#' @param indexName whether to report index names.
-#' @param markerName whether to report marker names
-#' @param cdmName whether to report database names.
-#' @param .options named list with additional formatting options.
+#' @param crude Whether to report crude results.
+#' @param adjusted Whether to report adjusted results.
+#' @param studyPopulation Whether to report the study population.
+#' @param indexName Whether to report index names.
+#' @param markerName Whether to report marker names
+#' @param cdmName Whether to report database names.
+#' @param .options Named list with additional formatting options.
 #' CohortSymmetry::formatSequenceSymmetryOptions() shows allowed arguments and
 #' their default values.
 #'
