@@ -100,8 +100,7 @@ cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB v0.9.2 [eburn@Windows 10 x64:R 4.2.1/C:\Users\eburn\AppData\Local\Temp\RtmpUjUxdr\file36ec1b47952.duckdb]
-
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpqSl4Aj\file526424747b3e.duckdb]
 #> $ cohort_definition_id <int> 1
 #> $ subject_id           <int> 2006
 #> $ cohort_start_date    <date> 2014-01-17
@@ -110,7 +109,7 @@ cdm$amiodarone_levothyroxine %>%
 #> $ marker_date          <date> 2017-12-31
 ```
 
-### Step 2: getSequenceRatio
+### Step 2: summariseSequenceRatio
 
 To get the sequence ratios, we would need the output of the
 generateSequenceCohortSet() function. The output of this process
@@ -118,7 +117,7 @@ contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and
 confidence intervals.
 
 ``` r
-res <- CohortSymmetry::getSequenceRatios(cdm = cdm,
+res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
                                          sequenceCohortSet = "amiodarone_levothyroxine")
  
 res %>% glimpse()
@@ -139,6 +138,33 @@ res %>% glimpse()
 #> $ estimate_value   <chr> "1", "100", "0", "0", "Inf", NA, "0.0934922743508363"…
 #> $ additional_name  <chr> "days_prior_observation and washout_window and index_…
 #> $ additional_level <chr> "0 and 0 and Inf and (0,Inf) and 95 and 548", "0 and …
+```
+
+### Step 3: visualise the results
+
+The user could then visualise their results using a wide array of
+provided tools.
+
+``` r
+tidy_results <- CohortSymmetry::tidySequenceSymmetry(result = res)
+
+tidy_results
+#> # A tibble: 1 × 19
+#>   cdm_name           index_cohort_name marker_cohort_name days_prior_observation
+#>   <chr>              <chr>             <chr>              <chr>                 
+#> 1 Synthea synthetic… amiodarone        levothyroxine      0                     
+#> # ℹ 15 more variables: washout_window <chr>, index_marker_gap <chr>,
+#> #   combination_window <chr>, confidence_interval <chr>, restriction <chr>,
+#> #   index_first_pharmac_count <chr>, index_first_pharmac_percentage <chr>,
+#> #   marker_first_pharmac_count <chr>, marker_first_pharmac_percentage <chr>,
+#> #   crude_sequence_ratio_point_estimate <chr>,
+#> #   adjusted_sequence_ratio_point_estimate <chr>,
+#> #   crude_sequence_ratio_lower_CI <chr>, crude_sequence_ratio_upper_CI <chr>, …
+```
+
+``` r
+
+CDMConnector::cdmDisconnect(cdm = cdm)
 ```
 
 ## References

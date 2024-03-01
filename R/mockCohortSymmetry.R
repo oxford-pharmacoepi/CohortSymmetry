@@ -7,7 +7,7 @@
 #' @param indexCohort the tibble of your index cohort.
 #' Default is NULL, which means the default indexCohort is being used.
 #' @param markerCohort the tibble of your marker cohort.
-#' Default is NULL, which means the default indexCohort is being used.
+#' Default is NULL, which means the default markerCohort is being used.
 #' @param con connection detail
 #' @param schema name of your write schema
 #'
@@ -18,6 +18,8 @@
 #' \donttest{
 #' library(CohortSymmetry)
 #' cdm <- mockCohortSymmetry()
+#' cdm
+#' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 mockCohortSymmetry <- function(indexCohort = NULL,
                                markerCohort = NULL,

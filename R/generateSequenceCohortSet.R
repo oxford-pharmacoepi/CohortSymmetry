@@ -28,14 +28,15 @@
 #' @examples
 #' \donttest{
 #' library(PatientProfiles)
-#' cdm <- mockPatientProfiles()
+#' cdm <- CohortSymmetry::mockCohortSymmetry()
 #' cdm <- CohortSymmetry::generateSequenceCohortSet(
 #'   cdm = cdm,
 #'   name = "joined_cohorts",
-#'   indexTable = "cohort1",
-#'   markerTable = "cohort2"
+#'   indexTable = "cohort_1",
+#'   markerTable = "cohort_2"
 #' )
 #'  cdm$joined_cohorts
+#'  CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 generateSequenceCohortSet <- function(cdm,
                               indexTable,
@@ -193,21 +194,28 @@ generateSequenceCohortSet <- function(cdm,
   cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(abs(.data$gap) > .env$time_1 &
                   abs(.data$gap) <= .env$time_2)
+  omopgenerics::recordCohortAttrition(cdm[[name]], reason="Events available during the study period")
+
   # 2) indexMarkerGap
   cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(.data$cei <= .env$indexMarkerGap)
+  omopgenerics::recordCohortAttrition(cdm[[name]], reason="Events within the prespecified time gap")
+
   # 3) days prior observation
   cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(
       .data$prior_observation_marker >= .env$daysPriorObservation &
       .data$prior_observation_index >= .env$daysPriorObservation
     )
+  omopgenerics::recordCohortAttrition(cdm[[name]], reason="Prior history requirement fulfilled")
+
   # 4) washoutWindow
   cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     )
+  omopgenerics::recordCohortAttrition(cdm[[name]], reason="Washout window fulfilled")
 
   # final output table
   cdm[[name]] <- cdm[[name]] %>%

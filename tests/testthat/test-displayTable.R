@@ -3,15 +3,15 @@ test_that("tableSequenceRatios", {
                                               drug_exposure_size = 100)
 
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohorts",
+                                                   name = "joined_cohort",
                                            indexTable = "cohort1",
                                            markerTable = "cohort2",
                                            combinationWindow = c(0, Inf))
 
 
-  res <- CohortSymmetry::getSequenceRatios(
+  res <- CohortSymmetry::summariseSequenceRatio(
     cdm = cdm,
-    sequenceCohortSet = "joined_cohorts")
+    sequenceCohortSet = "joined_cohort")
 
   gtResult <- tableSequenceRatios(res)
   expect_true("gt_tbl" %in% (gtResult %>% class()))

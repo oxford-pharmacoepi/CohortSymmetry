@@ -16,7 +16,7 @@ mockCohortSymmetry(
 Default is NULL, which means the default indexCohort is being used.}
 
 \item{markerCohort}{the tibble of your marker cohort.
-Default is NULL, which means the default indexCohort is being used.}
+Default is NULL, which means the default markerCohort is being used.}
 
 \item{con}{connection detail}
 
@@ -34,5 +34,7 @@ However the users could specify them should they wish.
 \donttest{
 library(CohortSymmetry)
 cdm <- mockCohortSymmetry()
+cdm
+CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

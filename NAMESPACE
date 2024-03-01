@@ -2,7 +2,8 @@
 
 export("%>%")
 export(generateSequenceCohortSet)
-export(getSequenceRatios)
+export(mockCohortSymmetry)
+export(summariseSequenceRatio)
 export(tableSequenceRatios)
 export(tableSequenceRatiosOptions)
 importFrom(magrittr,"%>%")
