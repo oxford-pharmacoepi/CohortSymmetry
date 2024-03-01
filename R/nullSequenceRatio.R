@@ -38,11 +38,10 @@ nullSequenceRatio <- function(table, restriction = 548) {
 
   }
 
-  if (numer < 1)
-    warning("NSR numerator is 0, which results in a NSR = 0, proceed with caution")
+  # if (numer < 1)
+  #   warning("NSR numerator is 0, which results in a NSR = 0, proceed with caution")
 
   if (denom < 1){
-    warning("NSR denominator is 0, suggesting no Marker Drug -> Index Drug or Index Drug -> Marker Drug events")
     nullSequenceRatio <- NA
   } else {
     a <- numer / denom
