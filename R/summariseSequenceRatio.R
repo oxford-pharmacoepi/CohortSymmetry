@@ -110,11 +110,11 @@ summariseSequenceRatio <- function(cdm,
   output <- Reduce(dplyr::union_all, results)
 
   ifp_100 <- output %>%
-    dplyr::filter(index_first_percentage == 100) %>%
+    dplyr::filter(.data$index_first_percentage == 100) %>%
     dplyr::tally() %>%
     dplyr::pull("n")
   mfp_100 <- output %>%
-    dplyr::filter(marker_first_percentage == 100) %>%
+    dplyr::filter(.data$marker_first_percentage == 100) %>%
     dplyr::tally() %>%
     dplyr::pull("n")
   if(ifp_100 > 0 | mfp_100 > 0){
