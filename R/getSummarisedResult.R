@@ -56,7 +56,7 @@ getSummarisedResult <- function(x) {
 
   x_sum <- x_sum |>
     dplyr::left_join(x_res) |>
-    dplyr::select(dplyr::all_of(c("result_id", omopgenerics::resultColumns("summarised_result")))) |>
+    dplyr::select(dplyr::all_of(omopgenerics::resultColumns("summarised_result"))) |>
     dplyr::union_all(
       x_res |>
         dplyr::mutate(
@@ -73,9 +73,7 @@ getSummarisedResult <- function(x) {
           variable_level = NA_character_,
           dplyr::across(dplyr::all_of(settings), ~ as.character(.x))
         ) |>
-        tidyr::pivot_longer(cols = c("days_prior_observation", "washout_window",
-                                     "index_marker_gap", "combination_window",
-                                     "confidence_interval", "restriction"),
+        tidyr::pivot_longer(cols = settings,
                             names_to = "estimate_name",
                             values_to = "estimate_value") |>
         dplyr::mutate(estimate_type = dplyr::case_when(

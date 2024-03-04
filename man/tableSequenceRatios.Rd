@@ -33,17 +33,18 @@ gt table or flextable. See visOmopResults package for more information on
 how to define a style. Alternatively, use "default" to get visOmopResults
 style, or NULL for gt/flextable default styling.}
 
-\item{crude}{Whether to report crude results.}
+\item{crude}{whether to report crude results.}
 
-\item{adjusted}{Whether to report adjusted results.}
+\item{adjusted}{whether to report adjusted results.}
 
-\item{studyPopulation}{Whether to report the study population.}
+\item{studyPopulation}{whether to report the study population.}
 
-\item{indexName}{Whether to report index names.}
+\item{indexName}{whether to report index names.}
 
-\item{markerName}{Whether to report marker names}
+\item{markerName}{whether to report marker names}
 
-\item{cdmName}{Whether to report database names.}
+\item{cdmName}{whether to report database names.}
+
 \item{.options}{named list with additional formatting options.
 CohortSymmetry::tableSequenceRatiosOptions() shows allowed arguments and
 their default values.}
