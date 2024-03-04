@@ -128,7 +128,7 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpqSl4Aj\file526424747b3e.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpQPf3Ae\file42d4408138ff.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1</span></span>
 <span><span class="co">#&gt; $ subject_id           &lt;int&gt; 2006</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 2014-01-17</span></span>
@@ -143,6 +143,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>                                         sequenceCohortSet <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; -- 1 combination of 1 had index always before marker</span></span>
 <span> </span>
 <span><span class="va">res</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
@@ -181,7 +182,13 @@
 <span><span class="co">#&gt; #   marker_first_pharmac_count &lt;chr&gt;, marker_first_pharmac_percentage &lt;chr&gt;,</span></span>
 <span><span class="co">#&gt; #   crude_sequence_ratio_point_estimate &lt;chr&gt;,</span></span>
 <span><span class="co">#&gt; #   adjusted_sequence_ratio_point_estimate &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   crude_sequence_ratio_lower_CI &lt;chr&gt;, crude_sequence_ratio_upper_CI &lt;chr&gt;, …</span></span></code></pre></div>
+<span><span class="co">#&gt; #   crude_sequence_ratio_lower_CI &lt;chr&gt;, crude_sequence_ratio_upper_CI &lt;chr&gt;, …</span></span>
+<span></span>
+<span><span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="disconnect-from-the-cdm-database-connection">Disconnect from the cdm database connection<a class="anchor" aria-label="anchor" href="#disconnect-from-the-cdm-database-connection"></a>
+</h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
