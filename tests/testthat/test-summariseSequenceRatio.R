@@ -7,12 +7,14 @@ test_that("summariseSequenceRatio", {
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 
-expect_warning(
-        expect_no_error(
-          res <- CohortSymmetry::summariseSequenceRatio(
-            cdm = cdm,
-            sequenceCohortSet = "joined_cohorts")
-        ))
+  expect_warning(
+    expect_no_error(
+      res <- CohortSymmetry::summariseSequenceRatio(
+        cdm = cdm,
+        sequenceCohortSet = "joined_cohorts")
+    )
+  )
+
 
   expect_true("summarised_result" %in% class(res))
   expect_error(
@@ -164,8 +166,8 @@ test_that("summariseSequenceRatio - testing ratios and CIs", {
   expect_true(all(res$index_marker_gap==365))
   expect_true(all(res$confidence_interval==95))
   expect_true(all(res$restriction==548))
-  expect_true(res$index_cohort_name =="cohort_1")
-  expect_true(res$marker_cohort_name == "cohort_3")
+  expect_true((res$index_cohort_name=="cohort_1"))
+  expect_true((res$marker_cohort_name=="cohort_3"))
   expect_true(all(as.integer(res$index_first_pharmac_percentage)<=100 & 0 <= as.integer(res$index_first_pharmac_percentage)))
 
   int <- res %>%

@@ -13,20 +13,19 @@
 #'  gt table or flextable. See visOmopResults package for more information on
 #'  how to define a style. Alternatively, use "default" to get visOmopResults
 #'  style, or NULL for gt/flextable default styling.
-#' @param crude Whether to report crude results.
-#' @param adjusted Whether to report adjusted results.
-#' @param studyPopulation Whether to report the study population.
-#' @param indexName Whether to report index names.
-#' @param markerName Whether to report marker names
-#' @param cdmName Whether to report database names.
-#' @param .options Named list with additional formatting options.
-#' CohortSymmetry::formatSequenceSymmetryOptions() shows allowed arguments and
+#' @param crude whether to report crude results.
+#' @param adjusted whether to report adjusted results.
+#' @param studyPopulation whether to report the study population.
+#' @param indexName whether to report index names.
+#' @param markerName whether to report marker names
+#' @param cdmName whether to report database names.
+#' @param .options named list with additional formatting options.
+#' CohortSymmetry::tableSequenceRatiosOptions() shows allowed arguments and
 #' their default values.
 #'
 #' @return A formatted version of the sequence_symmetry object.
 #'
 #' @export
-#'
 #' @examples
 #' \donttest{
 #' library(CohortSymmetry)
@@ -37,22 +36,24 @@
 #'                                                  name = "joined_cohort")
 #' res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
 #'                                          sequenceCohortSet = "joined_cohort")
-#' gtResult <- formatSequenceSymmetry(res)
+#' gtResult <- tableSequenceRatios(res)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
-formatSequenceSymmetry <- function(result,
-                                   type = "gt",
-                                   estimateNameFormat =
-                                     c("N (%)" = "<count> (<percentage> %)",
-                                       "SR (CI)" = "<point_estimate> (<lower_CI> - <upper_CI>)"),
-                                   style = "default",
-                                   crude = TRUE,
-                                   adjusted = TRUE,
-                                   studyPopulation = TRUE,
-                                   indexName = TRUE,
-                                   markerName = TRUE,
-                                   cdmName = TRUE,
-                                   .options = NULL) {
+#'
+#'
+tableSequenceRatios <- function(result,
+                                type = "gt",
+                                estimateNameFormat =
+                                  c("N (%)" = "<count> (<percentage> %)",
+                                    "SR (CI)" = "<point_estimate> (<lower_CI> - <upper_CI>)"),
+                                style = "default",
+                                crude = TRUE,
+                                adjusted = TRUE,
+                                studyPopulation = TRUE,
+                                indexName = TRUE,
+                                markerName = TRUE,
+                                cdmName = TRUE,
+                                .options = NULL) {
   # checks
   checkSequenceSymmetry(result)
   checksFormatSequenceSymmetry(type, crude, adjusted, studyPopulation, indexName,
@@ -62,15 +63,24 @@ formatSequenceSymmetry <- function(result,
   .options = defaultOptions(.options)
 
   # get CI
-  ci <- result |> visOmopResults::splitAdditional() |>
-    dplyr::pull("confidence_interval") |> unique() |> as.numeric()
+  ci <- result |>
+    omopgenerics::settings() |>
+    dplyr::pull("confidence_interval") |>
+    unique()
+
+  result <- result |>
+    dplyr::filter(.data$variable_level != "settings")
+
+  if (length(ci) > 1) {
+    cli::cli_abort("Provide results generated using the same confidence interval.")
+  }
 
   # get study population
   if (studyPopulation) {
     total_participants <- result |>
       dplyr::mutate(
         estimate_value = as.numeric(.data$estimate_value)
-        ) |>
+      ) |>
       dplyr::filter(.data$variable_name == "first_pharmac") |>
       dplyr::filter(.data$estimate_name == "count") |>
       tidyr::pivot_wider(names_from = "variable_level",
@@ -218,14 +228,14 @@ defaultOptions <- function(userOptions) {
     defaultOpts[[opt]] <- userOptions[[opt]]
   }
 
-    return(defaultOpts)
+  return(defaultOpts)
 }
 
-#' A formatted visualization of sequence_symmetry objects.
+#' A formatted visualization of sequence_ratios objects.
 #'
 #' @description
 #' It provides a list of allowed inputs for .option argument in
-#' formatSequenceSymmetry and their given default value.
+#' tableSequenceRatios and their given default value.
 #'
 #'
 #' @return The default .options named list.
@@ -237,6 +247,6 @@ defaultOptions <- function(userOptions) {
 #' }
 #'
 #'
-formatSequenceSymmetryOptions <- function() {
+tableSequenceRatiosOptions <- function() {
   return(defaultOptions(NULL))
 }

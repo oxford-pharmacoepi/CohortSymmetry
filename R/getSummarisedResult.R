@@ -1,7 +1,9 @@
 getSummarisedResult <- function(x) {
-  x <- x |>
+  settings <- c("days_prior_observation", "washout_window", "index_marker_gap",
+                "combination_window", "confidence_interval", "restriction")
+  x_sum <- x |>
     dplyr::mutate(
-      result_type = "sequence_symmetry",
+      result_type = "sequence_ratios",
       package_name = "CohortSymmetry",
       package_version = as.character(utils::packageVersion("CohortSymmetry")),
       group_name = "index_cohort_name and marker_cohort_name",
@@ -43,21 +45,45 @@ getSummarisedResult <- function(x) {
                                     "lowerASR_CI", "upperASR_CI"),
         "sequence_ratio", "first_pharmac"
       ),
-      estimate_value = as.character(.data$estimate_value)
-    ) |>
-    visOmopResults::uniteNameLevel(
-      cols = c("days_prior_observation", "washout_window", "index_marker_gap",
-               "combination_window", "confidence_interval", "restriction"),
-      name = "additional_name",
-      level = "additional_level"
+      estimate_value = as.character(.data$estimate_value),
+      additional_name = "overall",
+      additional_level = "overall"
     )
 
-x <- x |>
-  dplyr::group_by(.data$index_id, .data$marker_id) |>
-  dplyr::mutate(result_id = as.character(dplyr::cur_group_id())) |>
-  dplyr::ungroup() |>
-  dplyr::select(omopgenerics::resultColumns("summarised_result"))|>
-  omopgenerics::newSummarisedResult()
+  x_res <- x |>
+    dplyr::distinct(dplyr::across(dplyr::all_of(c(settings, "cdm_name")))) |>
+    dplyr::mutate(result_id = as.character(dplyr::row_number()))
 
-return(x)
+  x_sum <- x_sum |>
+    dplyr::left_join(x_res) |>
+    dplyr::select(dplyr::all_of(omopgenerics::resultColumns("summarised_result"))) |>
+    dplyr::union_all(
+      x_res |>
+        dplyr::mutate(
+          result_type = "sequence_ratios",
+          package_name = "CohortSymmetry",
+          package_version = as.character(utils::packageVersion("CohortSymmetry")),
+          group_name = "overall",
+          group_level = "overall",
+          strata_name = "overall",
+          strata_level = "overall",
+          additional_name = "overall",
+          additional_level = "overall",
+          variable_name = "settings",
+          variable_level = NA_character_,
+          dplyr::across(dplyr::all_of(settings), ~ as.character(.x))
+        ) |>
+        tidyr::pivot_longer(cols = settings,
+                            names_to = "estimate_name",
+                            values_to = "estimate_value") |>
+        dplyr::mutate(estimate_type = dplyr::case_when(
+          .data$estimate_name == "combination_window" ~ "character",
+          .data$estimate_name == "confidence_interval" ~ "numeric",
+          .default = "integer"
+        )) |>
+        dplyr::select(omopgenerics::resultColumns("summarised_result"))
+    ) |>
+    omopgenerics::newSummarisedResult()
+
+  return(x_sum)
 }
