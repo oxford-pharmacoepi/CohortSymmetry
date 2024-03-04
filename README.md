@@ -100,7 +100,7 @@ cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpqSl4Aj\file526424747b3e.duckdb]
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpQPf3Ae\file42d4408138ff.duckdb]
 #> $ cohort_definition_id <int> 1
 #> $ subject_id           <int> 2006
 #> $ cohort_start_date    <date> 2014-01-17
@@ -119,6 +119,7 @@ confidence intervals.
 ``` r
 res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
                                          sequenceCohortSet = "amiodarone_levothyroxine")
+#> -- 1 combination of 1 had index always before marker
  
 res %>% glimpse()
 #> Rows: 10
@@ -160,7 +161,11 @@ tidy_results
 #> #   crude_sequence_ratio_point_estimate <chr>,
 #> #   adjusted_sequence_ratio_point_estimate <chr>,
 #> #   crude_sequence_ratio_lower_CI <chr>, crude_sequence_ratio_upper_CI <chr>, …
+
+CDMConnector::cdmDisconnect(cdm = cdm)
 ```
+
+### Disconnect from the cdm database connection
 
 ``` r
 

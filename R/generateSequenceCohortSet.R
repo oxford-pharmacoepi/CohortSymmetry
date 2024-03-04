@@ -117,11 +117,13 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::mutate(
       gap = CDMConnector::datediff("index_date", "marker_date",
                                    interval = "day"),
-      gap_rev = CDMConnector::datediff( "marker_date", "index_date",
-                                        interval = "day")) %>%
+      gap_index_marker = CDMConnector::datediff("index_end_date", "marker_date",
+                                        interval = "day"),
+      gap_marker_index = CDMConnector::datediff("marker_end_date", "index_date",
+                                                interval = "day")) %>%
     dplyr::mutate(
-      cei = dplyr::if_else(.data$gap < 0,
-                           .data$gap_rev, .data$gap),
+      cei = dplyr::if_else(.data$index_date < .data$marker_date,
+                           .data$gap_index_marker, .data$gap_marker_index),
       first_date = dplyr::if_else(.data$index_date <= .data$marker_date,
         .data$index_date,
         .data$marker_date
@@ -196,22 +198,22 @@ generateSequenceCohortSet <- function(cdm,
   cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(abs(.data$gap) > .env$time_1 &
                   abs(.data$gap) <= .env$time_2) |>
-  dplyr::compute(name = name, temporary = FALSE)
-  omopgenerics::recordCohortAttrition(cdm[[name]], reason="Events available during the study period")
+  dplyr::compute(name = name, temporary = FALSE) |>
+  omopgenerics::recordCohortAttrition(reason="Events available during the study period")
 
   # 2) indexMarkerGap
   cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(.data$cei <= .env$indexMarkerGap) |>
-  dplyr::compute(name = name, temporary = FALSE)
-  omopgenerics::recordCohortAttrition(cdm[[name]], reason="Events within the prespecified time gap")
+  dplyr::compute(name = name, temporary = FALSE) |>
+  omopgenerics::recordCohortAttrition(reason="Events within the prespecified time gap")
 
   # 3) days prior observation
   cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(
       .data$prior_observation >= .env$daysPriorObservation
     ) |>
-    dplyr::compute(name = name, temporary = FALSE)
-  omopgenerics::recordCohortAttrition(cdm[[name]], reason="Prior history requirement fulfilled")
+    dplyr::compute(name = name, temporary = FALSE) |>
+  omopgenerics::recordCohortAttrition(reason="Prior history requirement fulfilled")
 
   # 4) washoutWindow
   cdm[[name]] <- cdm[[name]] %>%
@@ -219,8 +221,8 @@ generateSequenceCohortSet <- function(cdm,
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) |>
-    dplyr::compute(name = name, temporary = FALSE)
-  omopgenerics::recordCohortAttrition(cdm[[name]], reason="Washout window fulfilled")
+    dplyr::compute(name = name, temporary = FALSE) |>
+  omopgenerics::recordCohortAttrition(reason="Washout window fulfilled")
 
   # final output table
   cdm[[name]] <- cdm[[name]] %>%

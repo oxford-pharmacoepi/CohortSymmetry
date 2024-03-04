@@ -119,6 +119,7 @@ CDMConnector::cdmDisconnect(cdm = cdm)
 
 ```
 
+### Disconnect from the cdm database connection
 ```{r Disconnect from the cdm database connection, eval=TRUE, warning=FALSE}
 
 CDMConnector::cdmDisconnect(cdm = cdm)
