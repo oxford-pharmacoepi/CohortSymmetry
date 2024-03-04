@@ -16,12 +16,6 @@
     <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/CohortSymmetry-package.html</loc>
   </url>
   <url>
-    <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/formatSequenceSymmetry.html</loc>
-  </url>
-  <url>
-    <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/formatSequenceSymmetryOptions.html</loc>
-  </url>
-  <url>
     <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/generateSequenceCohortSet.html</loc>
   </url>
   <url>
@@ -37,6 +31,9 @@
     <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/summariseSequenceRatio.html</loc>
   </url>
   <url>
-    <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/tidySequenceSymmetry.html</loc>
+    <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/tableSequenceRatios.html</loc>
+  </url>
+  <url>
+    <loc>https://oxford-pharmacoepi.github.io/CohortSymmetry/reference/tableSequenceRatiosOptions.html</loc>
   </url>
 </urlset>
