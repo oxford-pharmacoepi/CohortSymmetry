@@ -7,7 +7,8 @@
 #' @param result A sequence_symmetry object.
 #' @param type Type of desired formatted table, possibilities: "gt",
 #' "flextable", "tibble".
-#' @param estimateNameFormat .
+#' @param estimateNameFormat The columns that the user wishes to see for the
+#' formatted table, by default it would display both the counts and sequence ratios.
 #' @param style Named list that specifies how to style the different parts of a
 #'  gt table or flextable. See visOmopResults package for more information on
 #'  how to define a style. Alternatively, use "default" to get visOmopResults

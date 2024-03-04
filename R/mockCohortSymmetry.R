@@ -4,14 +4,14 @@
 #' one is the index cohort and the other one is the marker cohort.
 #' However the users could specify them should they wish.
 #'
-#' @param indexCohort the tibble of your index cohort.
+#' @param indexCohort The tibble of your index cohort.
 #' Default is NULL, which means the default indexCohort is being used.
-#' @param markerCohort the tibble of your marker cohort.
+#' @param markerCohort The tibble of your marker cohort.
 #' Default is NULL, which means the default markerCohort is being used.
-#' @param con connection detail
-#' @param schema name of your write schema
+#' @param con Connection detail.
+#' @param schema Name of your write schema.
 #'
-#' @return mock cdm object contains your index and marker cohort
+#' @return A mock cdm object contains your index and marker cohort
 #' @export
 #'
 #' @examples

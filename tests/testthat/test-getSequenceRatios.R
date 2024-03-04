@@ -7,17 +7,13 @@ test_that("summariseSequenceRatio", {
                                            indexTable = "cohort1",
                                            markerTable = "cohort2")
 
-  expect_warning(expect_warning(expect_warning(expect_warning(
-    expect_warning(expect_warning(expect_warning(expect_warning(
-      expect_warning(expect_warning(expect_warning(expect_warning(
+expect_warning(
         expect_no_error(
           res <- CohortSymmetry::summariseSequenceRatio(
             cdm = cdm,
             sequenceCohortSet = "joined_cohorts")
-        )))))))))))))
+        ))
 
-
-  # expect_true("sequence_ratios" %in% class(res))
   expect_true("summarised_result" %in% class(res))
   expect_error(
     CohortSymmetry::summariseSequenceRatio(

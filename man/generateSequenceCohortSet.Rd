@@ -25,7 +25,7 @@ generateSequenceCohortSet(
 
 \item{markerTable}{A table in the CDM that the marker cohorts should come from.}
 
-\item{name}{the name within the cdm that the output is called. Default is joined_cohorts.}
+\item{name}{The name within the cdm that the output is called. Default is joined_cohorts.}
 
 \item{cohortDateRange}{Two dates indicating study period and the sequences that the user wants
 to restrict to.}
@@ -44,11 +44,11 @@ and marker cohorts per person.}
 \item{indexMarkerGap}{The maximum allowable gap between the end of the first episode
 and the start of the second episode in a sequence/combination.}
 
-\item{combinationWindow}{a constrain to be placed on the gap between two initiations.
+\item{combinationWindow}{A constrain to be placed on the gap between two initiations.
 Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.}
 }
 \value{
-A table in the cdm reference.
+A table within the cdm reference.
 }
 \description{
 Join two tables in the CDM (one for index and the other for marker cohorts)
@@ -57,7 +57,6 @@ Index and marker cohorts should be instantiated in advance by the user.
 }
 \examples{
 \donttest{
-library(PatientProfiles)
 cdm <- CohortSymmetry::mockCohortSymmetry()
 cdm <- CohortSymmetry::generateSequenceCohortSet(
   cdm = cdm,

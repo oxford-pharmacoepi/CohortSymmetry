@@ -12,18 +12,18 @@ mockCohortSymmetry(
 )
 }
 \arguments{
-\item{indexCohort}{the tibble of your index cohort.
+\item{indexCohort}{The tibble of your index cohort.
 Default is NULL, which means the default indexCohort is being used.}
 
-\item{markerCohort}{the tibble of your marker cohort.
+\item{markerCohort}{The tibble of your marker cohort.
 Default is NULL, which means the default markerCohort is being used.}
 
-\item{con}{connection detail}
+\item{con}{Connection detail.}
 
-\item{schema}{name of your write schema}
+\item{schema}{Name of your write schema.}
 }
 \value{
-mock cdm object contains your index and marker cohort
+A mock cdm object contains your index and marker cohort
 }
 \description{
 Creates a mock cdm with two default synthetic cohorts,
