@@ -29,7 +29,7 @@ expect_warning(
       c("result_id",
         "cdm_name", "index_cohort_name", "marker_cohort_name",
         "days_prior_observation", "washout_window", "index_marker_gap",
-        "combination_window", "confidence_interval", "restriction",
+        "combination_window", "confidence_interval", "moving_average_restriction",
         "index_first_pharmac_count", "index_first_pharmac_percentage",
         "marker_first_pharmac_count", "marker_first_pharmac_percentage",
         "crude_sequence_ratio_point_estimate",

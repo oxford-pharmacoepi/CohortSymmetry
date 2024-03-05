@@ -47,7 +47,7 @@ getSummarisedResult <- function(x) {
     ) |>
     visOmopResults::uniteNameLevel(
       cols = c("days_prior_observation", "washout_window", "index_marker_gap",
-               "combination_window", "confidence_interval", "restriction"),
+               "combination_window", "confidence_interval", "moving_average_restriction"),
       name = "additional_name",
       level = "additional_level"
     )
