@@ -101,7 +101,7 @@ test_that("summariseSequenceRatio - testing ratios and CIs", {
   expect_true(all(res$combination_window == "(0,365)"))
   expect_true(all(res$index_marker_gap==365))
   expect_true(all(res$confidence_interval==95))
-  expect_true(all(res$restriction==548))
+  expect_true(all(res$moving_average_restriction==548))
   expect_true(all(as.integer(res$index_first_pharmac_percentage)<=100 & 0 <= as.integer(res$index_first_pharmac_percentage)))
 
   int <- res %>%
@@ -163,7 +163,7 @@ test_that("summariseSequenceRatio - testing ratios and CIs", {
   expect_true(all(res$combination_window == "(0,365)"))
   expect_true(all(res$index_marker_gap==365))
   expect_true(all(res$confidence_interval==95))
-  expect_true(all(res$restriction==548))
+  expect_true(all(res$moving_average_restriction==548))
   expect_true(res$index_cohort_name =="cohort_1")
   expect_true(res$marker_cohort_name == "cohort_3")
   expect_true(all(as.integer(res$index_first_pharmac_percentage)<=100 & 0 <= as.integer(res$index_first_pharmac_percentage)))

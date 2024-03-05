@@ -56,7 +56,7 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
 checkInputSummariseSequenceRatio <- function(cdm,
                                         sequenceCohortSet,
                                         confidenceInterval,
-                                        restriction) {
+                                        movingAverageRestriction) {
 
   # Check cdm objects, writing schema and index/marker tables
   checkCdm(cdm, tables = sequenceCohortSet)
@@ -67,8 +67,8 @@ checkInputSummariseSequenceRatio <- function(cdm,
   ## Check confidenceInterval
   checkConfidenceInterval(confidenceInterval, errorMessage)
 
-  ## Check restriction
-  checkRestriction(restriction, errorMessage)
+  ## Check movingAverageRestriction
+  checkmovingAverageRestriction(movingAverageRestriction, errorMessage)
 
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
@@ -172,11 +172,11 @@ checkWashoutWindow <- function(washoutWindow, errorMessage) {
   }
 }
 
-# Check restriction (Inf or numeric)
-checkRestriction <- function(restriction, errorMessage){
-  if (restriction != Inf) {
+# Check movingAverageRestriction (Inf or numeric)
+checkmovingAverageRestriction <- function(movingAverageRestriction, errorMessage){
+  if (movingAverageRestriction != Inf) {
     checkmate::assertIntegerish(
-      restriction,
+      movingAverageRestriction,
       lower = 0, any.missing = FALSE, max.len = 10, add = errorMessage
     )
   }

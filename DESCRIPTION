@@ -53,10 +53,10 @@ Imports:
     rlang,
     stringr,
     tibble,
-    omopgenerics,
     visOmopResults,
     tidyr,
-    omock (>= 0.1.0)
+    omock (>= 0.1.0),
+    omopgenerics
 Remotes: 
    oxford-pharmacoepi/omock,
    darwin-eu-dev/omopgenerics

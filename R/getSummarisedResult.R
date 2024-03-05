@@ -1,6 +1,6 @@
 getSummarisedResult <- function(x) {
   settings <- c("days_prior_observation", "washout_window", "index_marker_gap",
-                "combination_window", "confidence_interval", "restriction")
+                "combination_window", "confidence_interval", "moving_average_restriction")
   x_sum <- x |>
     dplyr::mutate(
       result_type = "sequence_ratios",
