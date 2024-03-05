@@ -100,7 +100,7 @@ cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmp0MfAeN\file3a0c2a6c61fb.duckdb]
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpIBWZLk\filece454661f90.duckdb]
 #> $ cohort_definition_id <int> 1
 #> $ subject_id           <int> 2006
 #> $ cohort_start_date    <date> 2014-01-17
@@ -118,7 +118,7 @@ confidence intervals.
 
 ``` r
 res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                         sequenceCohortSet = "amiodarone_levothyroxine")
+                                         sequenceTable = "amiodarone_levothyroxine")
 #> -- 1 combination of 1 had index always before marker
 #> Joining with `by = join_by(days_prior_observation, washout_window, index_marker_gap, combination_window, confidence_interval, moving_average_restriction, cdm_name)`
 #> ! The following column type were changed:
@@ -157,20 +157,20 @@ nice_results <- CohortSymmetry::tableSequenceRatios(result = res)
 nice_results
 ```
 
-<div id="tpcmoakrfj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#tpcmoakrfj table {
+<div id="xpgpqqtpoy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#xpgpqqtpoy table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-&#10;#tpcmoakrfj thead, #tpcmoakrfj tbody, #tpcmoakrfj tfoot, #tpcmoakrfj tr, #tpcmoakrfj td, #tpcmoakrfj th {
+&#10;#xpgpqqtpoy thead, #xpgpqqtpoy tbody, #xpgpqqtpoy tfoot, #xpgpqqtpoy tr, #xpgpqqtpoy td, #xpgpqqtpoy th {
   border-style: none;
 }
-&#10;#tpcmoakrfj p {
+&#10;#xpgpqqtpoy p {
   margin: 0;
   padding: 0;
 }
-&#10;#tpcmoakrfj .gt_table {
+&#10;#xpgpqqtpoy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -195,11 +195,11 @@ nice_results
   border-left-width: 2px;
   border-left-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_caption {
+&#10;#xpgpqqtpoy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
-&#10;#tpcmoakrfj .gt_title {
+&#10;#xpgpqqtpoy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -210,7 +210,7 @@ nice_results
   border-bottom-color: #FFFFFF;
   border-bottom-width: 0;
 }
-&#10;#tpcmoakrfj .gt_subtitle {
+&#10;#xpgpqqtpoy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -221,7 +221,7 @@ nice_results
   border-top-color: #FFFFFF;
   border-top-width: 0;
 }
-&#10;#tpcmoakrfj .gt_heading {
+&#10;#xpgpqqtpoy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -232,12 +232,12 @@ nice_results
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_bottom_border {
+&#10;#xpgpqqtpoy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_col_headings {
+&#10;#xpgpqqtpoy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -251,7 +251,7 @@ nice_results
   border-right-width: 1px;
   border-right-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_col_heading {
+&#10;#xpgpqqtpoy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -270,7 +270,7 @@ nice_results
   padding-right: 5px;
   overflow-x: hidden;
 }
-&#10;#tpcmoakrfj .gt_column_spanner_outer {
+&#10;#xpgpqqtpoy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -281,13 +281,13 @@ nice_results
   padding-left: 4px;
   padding-right: 4px;
 }
-&#10;#tpcmoakrfj .gt_column_spanner_outer:first-child {
+&#10;#xpgpqqtpoy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
-&#10;#tpcmoakrfj .gt_column_spanner_outer:last-child {
+&#10;#xpgpqqtpoy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
-&#10;#tpcmoakrfj .gt_column_spanner {
+&#10;#xpgpqqtpoy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -298,10 +298,10 @@ nice_results
   display: inline-block;
   width: 100%;
 }
-&#10;#tpcmoakrfj .gt_spanner_row {
+&#10;#xpgpqqtpoy .gt_spanner_row {
   border-bottom-style: hidden;
 }
-&#10;#tpcmoakrfj .gt_group_heading {
+&#10;#xpgpqqtpoy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -326,7 +326,7 @@ nice_results
   vertical-align: middle;
   text-align: left;
 }
-&#10;#tpcmoakrfj .gt_empty_group_heading {
+&#10;#xpgpqqtpoy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -340,13 +340,13 @@ nice_results
   border-bottom-color: #D3D3D3;
   vertical-align: middle;
 }
-&#10;#tpcmoakrfj .gt_from_md > :first-child {
+&#10;#xpgpqqtpoy .gt_from_md > :first-child {
   margin-top: 0;
 }
-&#10;#tpcmoakrfj .gt_from_md > :last-child {
+&#10;#xpgpqqtpoy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
-&#10;#tpcmoakrfj .gt_row {
+&#10;#xpgpqqtpoy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -364,7 +364,7 @@ nice_results
   vertical-align: middle;
   overflow-x: hidden;
 }
-&#10;#tpcmoakrfj .gt_stub {
+&#10;#xpgpqqtpoy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -376,7 +376,7 @@ nice_results
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tpcmoakrfj .gt_stub_row_group {
+&#10;#xpgpqqtpoy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -389,13 +389,13 @@ nice_results
   padding-right: 5px;
   vertical-align: top;
 }
-&#10;#tpcmoakrfj .gt_row_group_first td {
+&#10;#xpgpqqtpoy .gt_row_group_first td {
   border-top-width: 2px;
 }
-&#10;#tpcmoakrfj .gt_row_group_first th {
+&#10;#xpgpqqtpoy .gt_row_group_first th {
   border-top-width: 2px;
 }
-&#10;#tpcmoakrfj .gt_summary_row {
+&#10;#xpgpqqtpoy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -404,14 +404,14 @@ nice_results
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tpcmoakrfj .gt_first_summary_row {
+&#10;#xpgpqqtpoy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_first_summary_row.thick {
+&#10;#xpgpqqtpoy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
-&#10;#tpcmoakrfj .gt_last_summary_row {
+&#10;#xpgpqqtpoy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -420,7 +420,7 @@ nice_results
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_grand_summary_row {
+&#10;#xpgpqqtpoy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -429,7 +429,7 @@ nice_results
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tpcmoakrfj .gt_first_grand_summary_row {
+&#10;#xpgpqqtpoy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -438,7 +438,7 @@ nice_results
   border-top-width: 6px;
   border-top-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_last_grand_summary_row_top {
+&#10;#xpgpqqtpoy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -447,10 +447,10 @@ nice_results
   border-bottom-width: 6px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_striped {
+&#10;#xpgpqqtpoy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
-&#10;#tpcmoakrfj .gt_table_body {
+&#10;#xpgpqqtpoy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -458,7 +458,7 @@ nice_results
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_footnotes {
+&#10;#xpgpqqtpoy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -471,7 +471,7 @@ nice_results
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_footnote {
+&#10;#xpgpqqtpoy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -479,7 +479,7 @@ nice_results
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tpcmoakrfj .gt_sourcenotes {
+&#10;#xpgpqqtpoy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -492,57 +492,57 @@ nice_results
   border-right-width: 2px;
   border-right-color: #D3D3D3;
 }
-&#10;#tpcmoakrfj .gt_sourcenote {
+&#10;#xpgpqqtpoy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
   padding-left: 5px;
   padding-right: 5px;
 }
-&#10;#tpcmoakrfj .gt_left {
+&#10;#xpgpqqtpoy .gt_left {
   text-align: left;
 }
-&#10;#tpcmoakrfj .gt_center {
+&#10;#xpgpqqtpoy .gt_center {
   text-align: center;
 }
-&#10;#tpcmoakrfj .gt_right {
+&#10;#xpgpqqtpoy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-&#10;#tpcmoakrfj .gt_font_normal {
+&#10;#xpgpqqtpoy .gt_font_normal {
   font-weight: normal;
 }
-&#10;#tpcmoakrfj .gt_font_bold {
+&#10;#xpgpqqtpoy .gt_font_bold {
   font-weight: bold;
 }
-&#10;#tpcmoakrfj .gt_font_italic {
+&#10;#xpgpqqtpoy .gt_font_italic {
   font-style: italic;
 }
-&#10;#tpcmoakrfj .gt_super {
+&#10;#xpgpqqtpoy .gt_super {
   font-size: 65%;
 }
-&#10;#tpcmoakrfj .gt_footnote_marks {
+&#10;#xpgpqqtpoy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
-&#10;#tpcmoakrfj .gt_asterisk {
+&#10;#xpgpqqtpoy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
-&#10;#tpcmoakrfj .gt_indent_1 {
+&#10;#xpgpqqtpoy .gt_indent_1 {
   text-indent: 5px;
 }
-&#10;#tpcmoakrfj .gt_indent_2 {
+&#10;#xpgpqqtpoy .gt_indent_2 {
   text-indent: 10px;
 }
-&#10;#tpcmoakrfj .gt_indent_3 {
+&#10;#xpgpqqtpoy .gt_indent_3 {
   text-indent: 15px;
 }
-&#10;#tpcmoakrfj .gt_indent_4 {
+&#10;#xpgpqqtpoy .gt_indent_4 {
   text-indent: 20px;
 }
-&#10;#tpcmoakrfj .gt_indent_5 {
+&#10;#xpgpqqtpoy .gt_indent_5 {
   text-indent: 25px;
 }
 </style>

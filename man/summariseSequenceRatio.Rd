@@ -6,7 +6,7 @@
 \usage{
 summariseSequenceRatio(
   cdm,
-  sequenceCohortSet,
+  sequenceTable,
   confidenceInterval = 95,
   movingAverageRestriction = 548
 )
@@ -14,7 +14,7 @@ summariseSequenceRatio(
 \arguments{
 \item{cdm}{A CDM reference.}
 
-\item{sequenceCohortSet}{A table in the CDM that the output of generateSequenceCohortSet resides.}
+\item{sequenceTable}{A table in the CDM that the output of generateSequenceCohortSet resides.}
 
 \item{confidenceInterval}{Default is 95, indicating the central 95\% confidence interval.}
 
@@ -42,7 +42,7 @@ cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                           indexTable = "cohort1",
                                           markerTable = "cohort2")
 pssa_result <- CohortSymmetry::summariseSequenceRatio (cdm = cdm,
-                                                  sequenceCohortSet = "joined_cohorts")
+                                                  sequenceTable = "joined_cohorts")
  pssa_result
  CDMConnector::cdmDisconnect(cdm)
 }

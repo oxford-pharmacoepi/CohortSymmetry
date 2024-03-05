@@ -35,7 +35,7 @@
 #'                                                  markerTable = "cohort_2",
 #'                                                  name = "joined_cohort")
 #' res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-#'                                          sequenceCohortSet = "joined_cohort")
+#'                                          sequenceTable = "joined_cohort")
 #' gtResult <- tableSequenceRatios(res)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }

@@ -4,7 +4,7 @@
 #' Using generateSequenceCohortSet to obtain sequence ratios for the desired outcomes.
 #'
 #' @param cdm A CDM reference.
-#' @param sequenceCohortSet A table in the CDM that the output of generateSequenceCohortSet resides.
+#' @param sequenceTable A table in the CDM that the output of generateSequenceCohortSet resides.
 #' @param confidenceInterval Default is 95, indicating the central 95% confidence interval.
 #' @param movingAverageRestriction The moving window when calculating nSR, default is 548.
 #'
@@ -28,27 +28,27 @@
 #'                                           indexTable = "cohort1",
 #'                                           markerTable = "cohort2")
 #' pssa_result <- CohortSymmetry::summariseSequenceRatio (cdm = cdm,
-#'                                                   sequenceCohortSet = "joined_cohorts")
+#'                                                   sequenceTable = "joined_cohorts")
 #'  pssa_result
 #'  CDMConnector::cdmDisconnect(cdm)
 #' }
 #'
 summariseSequenceRatio <- function(cdm,
-                              sequenceCohortSet,
+                              sequenceTable,
                               confidenceInterval = 95,
                               movingAverageRestriction = 548) {
 
   # checks
   checkInputSummariseSequenceRatio(cdm = cdm,
-                              sequenceCohortSet = sequenceCohortSet,
+                              sequenceTable = sequenceTable,
                               confidenceInterval = confidenceInterval,
                               movingAverageRestriction = movingAverageRestriction)
 
   temp <- list()
   temp2<-list()
   results <- list()
-  cdm[["intermediate"]] <- cdm[[sequenceCohortSet]] %>%
-    dplyr::left_join(CDMConnector::settings(cdm[[sequenceCohortSet]]), copy = T, by = "cohort_definition_id") %>%
+  cdm[["intermediate"]] <- cdm[[sequenceTable]] %>%
+    dplyr::left_join(CDMConnector::settings(cdm[[sequenceTable]]), copy = T, by = "cohort_definition_id") %>%
     dplyr::compute(name = "intermediate",
                    temporary = FALSE)
 
