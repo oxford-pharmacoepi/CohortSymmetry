@@ -6,7 +6,7 @@
 #' @param cdm A CDM reference.
 #' @param sequenceCohortSet A table in the CDM that the output of generateSequenceCohortSet resides.
 #' @param confidenceInterval Default is 95, indicating the central 95% confidence interval.
-#' @param restriction The moving window when calculating nSR, default is 548.
+#' @param movingAverageRestriction The moving window when calculating nSR, default is 548.
 #'
 #' @return
 #' A local table with all the analyses.
@@ -36,13 +36,13 @@
 summariseSequenceRatio <- function(cdm,
                               sequenceCohortSet,
                               confidenceInterval = 95,
-                              restriction = 548) {
+                              movingAverageRestriction = 548) {
 
   # checks
   checkInputSummariseSequenceRatio(cdm = cdm,
                               sequenceCohortSet = sequenceCohortSet,
                               confidenceInterval = confidenceInterval,
-                              restriction = restriction)
+                              movingAverageRestriction = movingAverageRestriction)
 
   temp <- list()
   temp2<-list()
@@ -86,8 +86,8 @@ summariseSequenceRatio <- function(cdm,
         dplyr::ungroup()
 
       csr<-crudeSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]])
-      nsr<-nullSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], restriction = restriction)
-      asr<-adjustedSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], restriction = restriction)
+      nsr<-nullSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], movingAverageRestriction = movingAverageRestriction)
+      asr<-adjustedSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], movingAverageRestriction = movingAverageRestriction)
       counts <- getConfidenceInterval(temp[[paste0("index_",i, "_marker_", j)]], nsr, confidenceInterval = confidenceInterval) %>%
         dplyr::select(-"index_first_by_nsr", -"marker_first_by_nsr", -"index_first", -"marker_first")
 
@@ -97,13 +97,13 @@ summariseSequenceRatio <- function(cdm,
         dplyr::mutate(marker_first_percentage = round(.data$marker_first/(.data$marker_first + .data$index_first)*100, digits = 1),
                       index_first_percentage = round(.data$index_first/(.data$marker_first + .data$index_first)*100, digits = 1),
                       confidence_interval = as.character(.env$confidenceInterval),
-                      restriction = as.character(restriction)) %>%
+                      moving_average_restriction = as.character(movingAverageRestriction)) %>%
         dplyr::select("index_id", "index_name", "marker_id", "marker_name",
                       "index_first", "marker_first", "index_first_percentage", "marker_first_percentage",
                       "csr", "lowerCSR_CI", "upperCSR_CI",
                       "asr", "lowerASR_CI", "upperASR_CI",
                       "days_prior_observation", "washout_window", "index_marker_gap", "combination_window",
-                      "confidence_interval", "restriction")
+                      "confidence_interval", "moving_average_restriction")
     }
   }
 

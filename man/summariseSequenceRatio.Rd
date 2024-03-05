@@ -8,7 +8,7 @@ summariseSequenceRatio(
   cdm,
   sequenceCohortSet,
   confidenceInterval = 95,
-  restriction = 548
+  movingAverageRestriction = 548
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ summariseSequenceRatio(
 
 \item{confidenceInterval}{Default is 95, indicating the central 95\% confidence interval.}
 
-\item{restriction}{The moving window when calculating nSR, default is 548.}
+\item{movingAverageRestriction}{The moving window when calculating nSR, default is 548.}
 }
 \value{
 A local table with all the analyses.
