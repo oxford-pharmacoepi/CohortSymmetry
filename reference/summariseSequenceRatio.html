@@ -46,7 +46,7 @@
 <span>  <span class="va">cdm</span>,</span>
 <span>  <span class="va">sequenceCohortSet</span>,</span>
 <span>  confidenceInterval <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>  restriction <span class="op">=</span> <span class="fl">548</span></span>
+<span>  movingAverageRestriction <span class="op">=</span> <span class="fl">548</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -64,7 +64,7 @@
 <dd><p>Default is 95, indicating the central 95% confidence interval.</p></dd>
 
 
-<dt>restriction</dt>
+<dt>movingAverageRestriction</dt>
 <dd><p>The moving window when calculating nSR, default is 548.</p></dd>
 
 </dl></div>
@@ -98,8 +98,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -- 1 combination of 3 had index always before marker</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -- 1 combination of 3 had marker always before index</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(days_prior_observation, washout_window,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> index_marker_gap, combination_window, confidence_interval, restriction,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> cdm_name)`</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> index_marker_gap, combination_window, confidence_interval,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> moving_average_restriction, cdm_name)`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The following column type were changed:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> result_id: from character to integer</span>
 <span class="r-in"><span> <span class="va">pssa_result</span></span></span>
