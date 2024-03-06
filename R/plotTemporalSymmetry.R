@@ -62,7 +62,7 @@ plotTemporalSymmetry <- function(cdm,
                                                NA, .data$individuals)) %>%
     dplyr::compute()
 
-  if(is.na(plot_data %>% dplyr::pull("individuals") %>% unique())) {
+  if(all(is.na(plot_data %>% dplyr::pull("individuals")))) {
     cli::abort("There is nothing to plot. With that censorRange no counts are available.")
   }
 
