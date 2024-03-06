@@ -44,7 +44,8 @@
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summariseSequenceRatio</span><span class="op">(</span></span>
 <span>  <span class="va">cdm</span>,</span>
-<span>  <span class="va">sequenceCohortSet</span>,</span>
+<span>  <span class="va">sequenceTable</span>,</span>
+<span>  sequenceId <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  confidenceInterval <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>  movingAverageRestriction <span class="op">=</span> <span class="fl">548</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -56,8 +57,12 @@
 <dd><p>A CDM reference.</p></dd>
 
 
-<dt>sequenceCohortSet</dt>
+<dt>sequenceTable</dt>
 <dd><p>A table in the CDM that the output of generateSequenceCohortSet resides.</p></dd>
+
+
+<dt>sequenceId</dt>
+<dd><p>The Ids in the sequenceTable that are wished to be included in the analyses.</p></dd>
 
 
 <dt>confidenceInterval</dt>
@@ -78,45 +83,38 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu-dev.github.io/PatientProfiles/" class="external-link">PatientProfiles</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cohort1</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="st">"cohort_definition_id"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span>,<span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              <span class="st">"subject_id"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              <span class="st">"cohort_start_date"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-05-23"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-05-27"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              <span class="st">"cohort_end_date"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-05-24"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2020-05-28"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"day"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu-dev.github.io/PatientProfiles/reference/mockPatientProfiles.html" class="external-link">mockPatientProfiles</a></span><span class="op">(</span>cohort1 <span class="op">=</span> <span class="va">cohort1</span>,</span></span>
-<span class="r-in"><span>                            patient_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="mockCohortSymmetry.html">mockCohortSymmetry</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
-<span class="r-in"><span>                                          name <span class="op">=</span> <span class="st">"joined_cohorts"</span>,</span></span>
-<span class="r-in"><span>                                          indexTable <span class="op">=</span> <span class="st">"cohort1"</span>,</span></span>
-<span class="r-in"><span>                                          markerTable <span class="op">=</span> <span class="st">"cohort2"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                                 name <span class="op">=</span> <span class="st">"joined_cohorts"</span>,</span></span>
+<span class="r-in"><span>                                                 indexTable <span class="op">=</span> <span class="st">"cohort_1"</span>,</span></span>
+<span class="r-in"><span>                                                 markerTable <span class="op">=</span> <span class="st">"cohort_2"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pssa_result</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu">summariseSequenceRatio</span> <span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
-<span class="r-in"><span>                                                  sequenceCohortSet <span class="op">=</span> <span class="st">"joined_cohorts"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                                       sequenceTable <span class="op">=</span> <span class="st">"joined_cohorts"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>For at least some combinations, index is always before marker or marker always</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> before index</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> -- 1 combination of 3 had index always before marker</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> -- 1 combination of 3 had marker always before index</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> -- 5 combinations of 8 had index always before marker</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> -- 5 combinations of 8 had marker always before index</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Joining with `by = join_by(days_prior_observation, washout_window,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> index_marker_gap, combination_window, confidence_interval,</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> moving_average_restriction, cdm_name)`</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> The following column type were changed:</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> result_id: from character to integer</span>
 <span class="r-in"><span> <span class="va">pssa_result</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 36 × 16</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    result_id cdm_name result_type     package_name   package_version group_name </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>         1 PP_MOCK  sequence_ratios CohortSymmetry 0.0.0.9000      index_coho…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 26 more rows</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 86 × 16</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    result_id cdm_name      result_type   package_name package_version group_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span>         1 mock database sequence_rat… CohortSymme… 0.0.0.9000      index_coh…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 76 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 10 more variables: group_level &lt;chr&gt;, strata_name &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   strata_level &lt;chr&gt;, variable_name &lt;chr&gt;, variable_level &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   estimate_name &lt;chr&gt;, estimate_type &lt;chr&gt;, estimate_value &lt;chr&gt;,</span></span>
