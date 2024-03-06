@@ -94,6 +94,31 @@ checksFormatSequenceSymmetry <- function(type, crude, adjusted, studyPopulation,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
+checkInputPlotTemporalSymmetry <- function(cdm,
+                                           joinedTable,
+                                           censorRange,
+                                           xlim,
+                                           colours) {
+  # Check index/marker table
+  checkCdm(cdm, tables = joinedTable)
+
+  # Check the rest of inputs
+  errorMessage <- checkmate::makeAssertCollection()
+
+  ## Check censorRange
+  checkCensorRange(censorRange, errorMessage)
+
+  ## Check censorRange
+  checkXLim(xlim, errorMessage)
+
+  ## Check censorRange
+  checkColours(colours, errorMessage)
+
+  # Report errors
+  checkmate::reportAssertions(collection = errorMessage)
+
+}
+
 ####################################################################
 # Check cdm object and index/marker tables
 checkCdm <- function(cdm, tables = NULL) {
@@ -255,5 +280,27 @@ checkOptions <- function(.options, errorMessage) {
              paste0(optionsNames[!names_id], collapse = ", "))
     )
   }
+}
+
+checkCensorRange <- function(censorRange, errorMessage) {
+  checkmate::assert_integerish(censorRange,
+                               null.ok = TRUE,
+                               lower = 0)
+}
+
+checkXLim <- function(xlim, errorMessage) {
+  checkmate::assert_integerish(xlim,
+                               len = 2)
+}
+
+checkColours <- function(colours, errorMessage) {
+  checkmate::assert_character(colours,
+                              len = 2)
+  for(i in 1:length(colours)) {
+    if(!(colours[i] %in% grDevices::colors())) {
+      cli::cli_abort(message = paste0("colour '",colours[i],"' is not available. Please select one of the list of colours in base R, type colors()"))
+    }
+  }
+
 }
 
