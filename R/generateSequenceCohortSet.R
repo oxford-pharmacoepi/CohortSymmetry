@@ -110,7 +110,26 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::inner_join(
       markerPreprocessed,
       by = "subject_id"
-    )
+    ) %>%
+    dplyr::mutate(
+      first_date = dplyr::if_else(.data$index_date <= .data$marker_date,
+                                                    .data$index_date,
+                                                    .data$marker_date
+    ),
+    second_date = dplyr::if_else(.data$index_date >= .data$marker_date,
+                                 .data$index_date,
+                                 .data$marker_date)
+    ) %>%
+    dplyr::inner_join(
+      cdm[["observation_period"]], by = c("subject_id" = "person_id")
+    ) %>%
+    dplyr::filter(.data$first_date >= .data$observation_period_start_date,
+                  .data$second_date <= .data$observation_period_end_date) %>%
+    dplyr::select("index_id", "subject_id", "index_date",
+                  "index_end_date", "gap_to_prior_index",
+                  "index_name", "marker_id", "marker_date",
+                  "marker_end_date", "gap_to_prior_marker",
+                  "marker_name", "first_date", "second_date")
 
   # Post-join processing
   cdm[[name]] <- joinedData %>%
@@ -123,15 +142,7 @@ generateSequenceCohortSet <- function(cdm,
                                                 interval = "day")) %>%
     dplyr::mutate(
       cei = dplyr::if_else(.data$index_date < .data$marker_date,
-                           .data$gap_index_marker, .data$gap_marker_index),
-      first_date = dplyr::if_else(.data$index_date <= .data$marker_date,
-        .data$index_date,
-        .data$marker_date
-      ),
-      second_date = dplyr::if_else(.data$index_date >= .data$marker_date,
-        .data$index_date,
-        .data$marker_date
-      )
+                           .data$gap_index_marker, .data$gap_marker_index)
     ) %>%
     dplyr::select("index_id", "index_name",
                   "marker_id", "marker_name",
@@ -305,4 +316,3 @@ preprocessCohort <- function(cdm, cohortName, cohortId, cohortDateRange) {
   cdm <- omopgenerics::dropTable(cdm = cdm, name = nm)
   return(cohort)
 }
-
