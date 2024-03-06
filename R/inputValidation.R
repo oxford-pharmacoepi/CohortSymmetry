@@ -102,7 +102,8 @@ checkInputPlotTemporalSymmetry <- function(cdm,
                                            labs,
                                            censorRange,
                                            xlim,
-                                           colours) {
+                                           colours,
+                                           scales) {
   # Check index/marker table
   checkCdm(cdm, tables = joinedTable)
 
@@ -123,6 +124,9 @@ checkInputPlotTemporalSymmetry <- function(cdm,
 
   ## Check colours
   checkColours(colours, errorMessage)
+
+  ## Check scales
+  checkScales(scales, errorMessage)
 
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
@@ -346,4 +350,11 @@ checkPlotTitleLabs <- function(plotTitle, labs, errorMessage) {
                               add = errorMessage)
 }
 
-
+checkScales <- function(scales, errorMessage) {
+  checkmate::assert_character(scales,
+                              len = 1,
+                              add = errorMessage)
+  if(!(scales %in% c("free", "fixed"))) {
+    cli::cli_abort("The parameter 'scales' can only be set to 'free' or 'fixed'.")
+  }
+}

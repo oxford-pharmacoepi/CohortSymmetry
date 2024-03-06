@@ -14,7 +14,8 @@ plotTemporalSymmetry(
   timescale = "month",
   censorRange = NULL,
   xlim = c(-12, 12),
-  colours = c("blue", "red")
+  colours = c("blue", "red"),
+  scales = "free"
 )
 }
 \arguments{
@@ -38,6 +39,10 @@ of generateSequenceCohortSet.}
 \item{xlim}{Limits for the x axis of the plot.}
 
 \item{colours}{Colours for both parts of the plot, pre- and post- time 0.}
+
+\item{scales}{Whether to set free y scales for the facet wrap when there are
+multiple plots (i.e. each plot has its own scaled y axis) or set them equal
+for all. Only accepts "free" for the former and "fixed" for the latter.}
 }
 \value{
 A plot for the temporal symmetry of cohorts.

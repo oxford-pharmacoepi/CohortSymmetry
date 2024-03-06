@@ -30,6 +30,7 @@ test_that("plot working", {
   plotTS7 <- plotTemporalSymmetry(cdm, "joined_cohort", labs = c("lab1", "lab2"))
   plotTS8 <- plotTemporalSymmetry(cdm, "joined_cohort", index_ids = c(1))
   plotTS9 <- plotTemporalSymmetry(cdm, "joined_cohort", marker_ids = c(1,2))
+  plotTS10 <- plotTemporalSymmetry(cdm, "joined_cohort", scales = "fixed")
 
   expect_true("ggplot" %in% (plotTS %>% class()))
   expect_true("ggplot" %in% (plotTS2 %>% class()))
@@ -40,6 +41,7 @@ test_that("plot working", {
   expect_true("ggplot" %in% (plotTS7 %>% class()))
   expect_true("ggplot" %in% (plotTS8 %>% class()))
   expect_true("ggplot" %in% (plotTS9 %>% class()))
+  expect_true("ggplot" %in% (plotTS10 %>% class()))
 
   CDMConnector::cdmDisconnect(cdm)
 })
@@ -86,6 +88,8 @@ test_that("expected errors", {
   expect_error(plotTemporalSymmetry(cdm, "joined_cohort", marker_ids = c("1", "2")))
   expect_error(plotTemporalSymmetry(cdm, "joined_cohort", timescale = 44))
   expect_error(plotTemporalSymmetry(cdm, "joined_cohort", timescale = "days"))
+  expect_error(plotTemporalSymmetry(cdm, "joined_cohort", scales = "days"))
+  expect_error(plotTemporalSymmetry(cdm, "joined_cohort", scales = c("free", "fixed")))
 
   CDMConnector::cdmDisconnect(cdm)
 })

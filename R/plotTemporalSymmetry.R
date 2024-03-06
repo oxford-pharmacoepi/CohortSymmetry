@@ -14,6 +14,9 @@
 #' @param censorRange Counts to be censored, can be NULL.
 #' @param xlim Limits for the x axis of the plot.
 #' @param colours Colours for both parts of the plot, pre- and post- time 0.
+#' @param scales Whether to set free y scales for the facet wrap when there are
+#' multiple plots (i.e. each plot has its own scaled y axis) or set them equal
+#' for all. Only accepts "free" for the former and "fixed" for the latter.
 #'
 #' @return A plot for the temporal symmetry of cohorts.
 #'
@@ -39,7 +42,8 @@ plotTemporalSymmetry <- function(cdm,
                                  timescale = "month",
                                  censorRange = NULL,
                                  xlim = c(-12, 12),
-                                 colours = c("blue", "red")) {
+                                 colours = c("blue", "red"),
+                                 scales = "free") {
   # checks
   checkInputPlotTemporalSymmetry(cdm = cdm,
                                  joinedTable = joinedTable,
@@ -49,7 +53,8 @@ plotTemporalSymmetry <- function(cdm,
                                  labs = labs,
                                  censorRange = censorRange,
                                  xlim = xlim,
-                                 colours = colours)
+                                 colours = colours,
+                                 scales = scales)
 
   index_names <- attr(cdm[[joinedTable]], "cohort_set") %>%
     dplyr::select("cohort_definition_id", "index_name", "index_id", "marker_id")
@@ -111,7 +116,7 @@ plotTemporalSymmetry <- function(cdm,
     ggplot2::labs(title = plotTitle, x = labs[1], y = labs[2]) +
     ggplot2::theme(legend.position = "none",
                    plot.title = ggplot2::element_text(hjust = 0.5)) +
-    ggplot2::facet_wrap(~ index_name + marker_name, scales = "free") +
+    ggplot2::facet_wrap(~ index_name + marker_name, scales = scales) +
     ggplot2::geom_vline(xintercept = 0, linetype = "dashed") +
     ggplot2::scale_fill_manual(values = colours) +
     ggplot2::scale_colour_manual(values = colours)
