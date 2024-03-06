@@ -4,7 +4,8 @@
 #' Using generateSequenceCohortSet to obtain sequence ratios for the desired outcomes.
 #'
 #' @param cdm A CDM reference.
-#' @param sequenceCohortSet A table in the CDM that the output of generateSequenceCohortSet resides.
+#' @param sequenceTable A table in the CDM that the output of generateSequenceCohortSet resides.
+#' @param sequenceId The Ids in the sequenceTable that are wished to be included in the analyses.
 #' @param confidenceInterval Default is 95, indicating the central 95% confidence interval.
 #' @param movingAverageRestriction The moving window when calculating nSR, default is 548.
 #'
@@ -14,41 +15,44 @@
 #'
 #' @examples
 #' \donttest{
-#' library(PatientProfiles)
-#' cohort1 <-
-#' dplyr::tibble("cohort_definition_id" = c(1,1,1,1,1),
-#'               "subject_id" = c(1,2,1,2,1),
-#'               "cohort_start_date" = seq(as.Date("2020-05-23"), as.Date("2020-05-27"), by = "day"),
-#'               "cohort_end_date" = seq(as.Date("2020-05-24"), as.Date("2020-05-28"), by = "day"))
-#'
-#' cdm <- mockPatientProfiles(cohort1 = cohort1,
-#'                             patient_size = 10)
+#' library(CohortSymmetry)
+#' cdm <- CohortSymmetry::mockCohortSymmetry()
 #' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-#'                                           name = "joined_cohorts",
-#'                                           indexTable = "cohort1",
-#'                                           markerTable = "cohort2")
+#'                                                  name = "joined_cohorts",
+#'                                                  indexTable = "cohort_1",
+#'                                                  markerTable = "cohort_2")
 #' pssa_result <- CohortSymmetry::summariseSequenceRatio (cdm = cdm,
-#'                                                   sequenceCohortSet = "joined_cohorts")
+#'                                                        sequenceTable = "joined_cohorts")
 #'  pssa_result
 #'  CDMConnector::cdmDisconnect(cdm)
 #' }
 #'
 summariseSequenceRatio <- function(cdm,
-                              sequenceCohortSet,
+                              sequenceTable,
+                              sequenceId = NULL,
                               confidenceInterval = 95,
                               movingAverageRestriction = 548) {
 
   # checks
   checkInputSummariseSequenceRatio(cdm = cdm,
-                              sequenceCohortSet = sequenceCohortSet,
+                              sequenceTable = sequenceTable,
+                              sequenceId = sequenceId,
                               confidenceInterval = confidenceInterval,
                               movingAverageRestriction = movingAverageRestriction)
+
+  if (is.null(sequenceId)){
+    sequenceId <- cdm[[sequenceTable]] %>%
+      dplyr::select("cohort_definition_id") %>%
+      dplyr::distinct() %>%
+      dplyr::pull("cohort_definition_id")
+  }
 
   temp <- list()
   temp2<-list()
   results <- list()
-  cdm[["intermediate"]] <- cdm[[sequenceCohortSet]] %>%
-    dplyr::left_join(CDMConnector::settings(cdm[[sequenceCohortSet]]), copy = T, by = "cohort_definition_id") %>%
+  cdm[["intermediate"]] <- cdm[[sequenceTable]] %>%
+    dplyr::filter(.data$cohort_definition_id %in% sequenceId) %>%
+    dplyr::left_join(CDMConnector::settings(cdm[[sequenceTable]]), copy = T, by = "cohort_definition_id") %>%
     dplyr::compute(name = "intermediate",
                    temporary = FALSE)
 

@@ -11,7 +11,7 @@ test_that("tableSequenceRatios", {
 
   res <- CohortSymmetry::summariseSequenceRatio(
     cdm = cdm,
-    sequenceCohortSet = "joined_cohort")
+    sequenceTable = "joined_cohort")
 
   gtResult <- tableSequenceRatios(res)
   expect_true("gt_tbl" %in% (gtResult %>% class()))

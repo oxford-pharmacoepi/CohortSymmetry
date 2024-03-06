@@ -11,7 +11,7 @@ test_that("summariseSequenceRatio", {
     expect_no_error(
       res <- CohortSymmetry::summariseSequenceRatio(
         cdm = cdm,
-        sequenceCohortSet = "joined_cohorts")
+        sequenceTable = "joined_cohorts")
     )
   )
 
@@ -20,31 +20,31 @@ test_that("summariseSequenceRatio", {
   expect_error(
     CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
-      sequenceCohortSet = NULL)
+      sequenceTable = NULL)
   )
   expect_error(
     CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
-      sequenceCohortSet = character(0))
+      sequenceTable = character(0))
   )
   expect_error(
     CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
-      sequenceCohortSet = "joined_cohorts",
+      sequenceTable = "joined_cohorts",
       confidenceInterval = 101)
   )
 
   expect_error(
     CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
-      sequenceCohortSet = "joined_cohorts",
+      sequenceTable = "joined_cohorts",
       confidenceInterval = -101)
   )
 
     expect_error(
       CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
-      sequenceCohortSet = "cohort",
+      sequenceTable = "cohort",
       confidenceInterval = 101)
   )
 })
@@ -87,7 +87,7 @@ test_that("summariseSequenceRatio - testing ratios and CIs", {
   suppressWarnings(
     res <- CohortSymmetry::summariseSequenceRatio(
       cdm = cdm,
-      sequenceCohortSet = "joined_cohorts")
+      sequenceTable = "joined_cohorts")
   )
 
   res <- res |>
@@ -151,7 +151,7 @@ test_that("summariseSequenceRatio - testing ratios and CIs", {
 
   res <- CohortSymmetry::summariseSequenceRatio(
     cdm = cdm,
-    sequenceCohortSet = "joined_cohorts")
+    sequenceTable = "joined_cohorts")
   res <- res |>
     visOmopResults::splitAll() |>
     dplyr::filter(variable_name != "settings") |>
