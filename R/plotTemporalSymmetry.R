@@ -63,7 +63,7 @@ plotTemporalSymmetry <- function(cdm,
     dplyr::compute()
 
   if(all(is.na(plot_data %>% dplyr::pull("individuals")))) {
-    cli::abort("There is nothing to plot. With that censorRange no counts are available.")
+    cli::cli_abort("There is nothing to plot. With that censorRange no counts are available.")
   }
 
   plot_data <- plot_data %>%
