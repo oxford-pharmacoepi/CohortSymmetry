@@ -7,7 +7,12 @@
 plotTemporalSymmetry(
   cdm,
   joinedTable,
-  censorRange = c(1:4),
+  index_ids = NULL,
+  marker_ids = NULL,
+  plotTitle = NULL,
+  labs = c("Time (months)", "Individuals (N)"),
+  timescale = "month",
+  censorRange = NULL,
   xlim = c(-12, 12),
   colours = c("blue", "red")
 )
@@ -17,6 +22,16 @@ plotTemporalSymmetry(
 
 \item{joinedTable}{The name of a table in the cdm of the form of the output
 of generateSequenceCohortSet.}
+
+\item{index_ids}{What index ids to plot, if NULL all will be plotted.}
+
+\item{marker_ids}{What marker ids to plot, if NULL all will be plotted.}
+
+\item{plotTitle}{Title of the plot, if NULL no title will be plotted.}
+
+\item{labs}{Axis labels for the plot.}
+
+\item{timescale}{Timescale for the x axis of the plot (month, day, year).}
 
 \item{censorRange}{Counts to be censored, can be NULL.}
 

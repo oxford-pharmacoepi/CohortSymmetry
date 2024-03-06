@@ -96,6 +96,10 @@ checksFormatSequenceSymmetry <- function(type, crude, adjusted, studyPopulation,
 
 checkInputPlotTemporalSymmetry <- function(cdm,
                                            joinedTable,
+                                           index_ids,
+                                           marker_ids,
+                                           plotTitle,
+                                           labs,
                                            censorRange,
                                            xlim,
                                            colours) {
@@ -105,13 +109,19 @@ checkInputPlotTemporalSymmetry <- function(cdm,
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
+  ## Check ids
+  checkPlotIds(cdm, joinedTable, index_ids, marker_ids, errorMessage)
+
+  ## Check plot title and labs
+  checkPlotTitleLabs(plotTitle, labs, errorMessage)
+
   ## Check censorRange
   checkCensorRange(censorRange, errorMessage)
 
-  ## Check censorRange
+  ## Check xlim
   checkXLim(xlim, errorMessage)
 
-  ## Check censorRange
+  ## Check colours
   checkColours(colours, errorMessage)
 
   # Report errors
@@ -285,22 +295,55 @@ checkOptions <- function(.options, errorMessage) {
 checkCensorRange <- function(censorRange, errorMessage) {
   checkmate::assert_integerish(censorRange,
                                null.ok = TRUE,
-                               lower = 0)
+                               lower = 0,
+                               add = errorMessage)
 }
 
 checkXLim <- function(xlim, errorMessage) {
   checkmate::assert_integerish(xlim,
-                               len = 2)
+                               len = 2,
+                               add = errorMessage)
 }
 
 checkColours <- function(colours, errorMessage) {
   checkmate::assert_character(colours,
-                              len = 2)
+                              len = 2,
+                              add = errorMessage)
   for(i in 1:length(colours)) {
     if(!(colours[i] %in% grDevices::colors())) {
       cli::cli_abort(message = paste0("colour '",colours[i],"' is not available. Please select one of the list of colours in base R, type colors()"))
     }
   }
-
 }
+
+checkPlotIds<- function(cdm, joinedTable, index_ids, marker_ids, errorMessage) {
+  checkmate::assert_integerish(index_ids,
+                               null.ok = TRUE,
+                               lower = 0,
+                               add = errorMessage)
+  checkmate::assert_integerish(marker_ids,
+                               null.ok = TRUE,
+                               lower = 0,
+                               add = errorMessage)
+  cohort_set_table <- attr(cdm[[joinedTable]], "cohort_set") %>%
+    dplyr::collect()
+  if(!(all(index_ids %in% cohort_set_table$index_id))) {
+    cli::cli_abort("Some of the index_ids provided are not index ids in the cohort")
+  }
+  if(!(all(marker_ids %in% cohort_set_table$marker_id))) {
+    cli::cli_abort("Some of the marker_ids provided are not marker ids in the cohort")
+  }
+}
+
+checkPlotTitleLabs <- function(plotTitle, labs, errorMessage) {
+  checkmate::assert_character(plotTitle,
+                              len = 1,
+                              null.ok = TRUE,
+                              add = errorMessage)
+
+  checkmate::assert_character(labs,
+                              len = 2,
+                              add = errorMessage)
+}
+
 
