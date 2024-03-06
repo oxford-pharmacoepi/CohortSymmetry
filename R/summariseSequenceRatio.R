@@ -36,13 +36,22 @@ summariseSequenceRatio <- function(cdm,
   # checks
   checkInputSummariseSequenceRatio(cdm = cdm,
                               sequenceTable = sequenceTable,
+                              sequenceId = sequenceId,
                               confidenceInterval = confidenceInterval,
                               movingAverageRestriction = movingAverageRestriction)
+
+  if (is.null(sequenceId)){
+    sequenceId <- cdm[[sequenceTable]] %>%
+      dplyr::select("cohort_definition_id") %>%
+      dplyr::distinct() %>%
+      dplyr::pull("cohort_definition_id")
+  }
 
   temp <- list()
   temp2<-list()
   results <- list()
   cdm[["intermediate"]] <- cdm[[sequenceTable]] %>%
+    dplyr::filter(.data$cohort_definition_id %in% sequenceId) %>%
     dplyr::left_join(CDMConnector::settings(cdm[[sequenceTable]]), copy = T, by = "cohort_definition_id") %>%
     dplyr::compute(name = "intermediate",
                    temporary = FALSE)

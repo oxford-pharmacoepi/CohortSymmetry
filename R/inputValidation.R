@@ -55,6 +55,7 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
 
 checkInputSummariseSequenceRatio <- function(cdm,
                                         sequenceTable,
+                                        sequenceId,
                                         confidenceInterval,
                                         movingAverageRestriction) {
 
@@ -63,6 +64,9 @@ checkInputSummariseSequenceRatio <- function(cdm,
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
+
+  # Check sequenceId
+  checkCohortIds(cdm, sequenceTable, sequenceId, errorMessage)
 
   ## Check confidenceInterval
   checkConfidenceInterval(confidenceInterval, errorMessage)
