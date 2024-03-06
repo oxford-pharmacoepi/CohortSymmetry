@@ -1,3 +1,30 @@
+#' A plot for the temporal symmetry of cohorts.
+#'
+#' @description
+#' It provides a ggplot of the temporal symmetry of two or more cohorts.
+#'
+#' @param cdm A cdm object.
+#' @param joinedTable The name of a table in the cdm of the form of the output
+#' of generateSequenceCohortSet.
+#' @param censorRange Counts to be censored, can be NULL.
+#' @param xlim Limits for the x axis of the plot.
+#' @param colours Colours for both parts of the plot, pre- and post- time 0.
+#'
+#' @return A plot for the temporal symmetry of cohorts.
+#'
+#' @export
+#'
+#' @examples
+#' \donttest{
+#' library(CohortSymmetry)
+#' cdm <- CohortSymmetry::mockCohortSymmetry()
+#' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+#'                                                  indexTable = "cohort_1",
+#'                                                  markerTable = "cohort_2",
+#'                                                  name = "joined_cohort")
+#' plotTemporalSymmetry(cdm, "joined_cohort", censorRange = NULL)
+#' CDMConnector::cdmDisconnect(cdm = cdm)
+#' }
 plotTemporalSymmetry <- function(cdm,
                                  joinedTable,
                                  censorRange = c(1:4),
@@ -34,6 +61,10 @@ plotTemporalSymmetry <- function(cdm,
     dplyr::mutate(individuals = dplyr::if_else(.data$individuals %in% censorRange,
                                                NA, .data$individuals)) %>%
     dplyr::compute()
+
+  if(is.na(plot_data %>% dplyr::pull("individuals") %>% unique())) {
+    cli::abort("There is nothing to plot. With that censorRange no counts are available.")
+  }
 
   plot_data <- plot_data %>%
     dplyr::filter(.data$time != 0) %>%
