@@ -11,7 +11,6 @@
 #' @param plotTitle Title of the plot, if NULL no title will be plotted.
 #' @param labs Axis labels for the plot.
 #' @param timescale Timescale for the x axis of the plot (month, day, year).
-#' @param censorRange Counts to be censored, can be NULL.
 #' @param xlim Limits for the x axis of the plot.
 #' @param colours Colours for both parts of the plot, pre- and post- time 0.
 #' @param scales Whether to set free y scales for the facet wrap when there are
@@ -30,7 +29,7 @@
 #'                                                  indexTable = "cohort_1",
 #'                                                  markerTable = "cohort_2",
 #'                                                  name = "joined_cohort")
-#' plotTemporalSymmetry(cdm, "joined_cohort", censorRange = NULL)
+#' plotTemporalSymmetry(cdm, "joined_cohort")
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 plotTemporalSymmetry <- function(cdm,
@@ -40,7 +39,6 @@ plotTemporalSymmetry <- function(cdm,
                                  plotTitle = NULL,
                                  labs = c("Time (months)", "Individuals (N)"),
                                  timescale = "month",
-                                 censorRange = NULL,
                                  xlim = c(-12, 12),
                                  colours = c("blue", "red"),
                                  scales = "free") {
@@ -51,7 +49,6 @@ plotTemporalSymmetry <- function(cdm,
                                  marker_ids = marker_ids,
                                  plotTitle = plotTitle,
                                  labs = labs,
-                                 censorRange = censorRange,
                                  xlim = xlim,
                                  colours = colours,
                                  scales = scales)
@@ -77,8 +74,6 @@ plotTemporalSymmetry <- function(cdm,
       by = c("cohort_definition_id")
     ) %>%
     dplyr::select(-c("cohort_definition_id")) %>%
-    dplyr::mutate(individuals = dplyr::if_else(.data$individuals %in% censorRange,
-                                               NA, .data$individuals)) %>%
     dplyr::compute()
 
   if(!is.null(index_ids)) {
@@ -89,11 +84,6 @@ plotTemporalSymmetry <- function(cdm,
   if(!is.null(marker_ids)) {
     plot_data <- plot_data %>%
       dplyr::filter(.data$marker_id %in% .env$marker_ids)
-  }
-
-  if(all(is.na(plot_data %>% dplyr::pull("individuals")))) {
-    cli::cli_abort("There is nothing to plot. With that censorRange and the
-                   index and marker ids provided no counts are available.")
   }
 
   plot_data <- plot_data %>%

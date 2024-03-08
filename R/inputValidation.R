@@ -100,7 +100,6 @@ checkInputPlotTemporalSymmetry <- function(cdm,
                                            marker_ids,
                                            plotTitle,
                                            labs,
-                                           censorRange,
                                            xlim,
                                            colours,
                                            scales) {
@@ -116,9 +115,6 @@ checkInputPlotTemporalSymmetry <- function(cdm,
   ## Check plot title and labs
   checkPlotTitleLabs(plotTitle, labs, errorMessage)
 
-  ## Check censorRange
-  checkCensorRange(censorRange, errorMessage)
-
   ## Check xlim
   checkXLim(xlim, errorMessage)
 
@@ -130,7 +126,37 @@ checkInputPlotTemporalSymmetry <- function(cdm,
 
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
+}
 
+checkInputPlotSequenceRatio <- function(cdm,
+                                        joinedTable,
+                                        sequenceRatio,
+                                        onlyaSR,
+                                        index_ids,
+                                        marker_ids,
+                                        plotTitle,
+                                        labs,
+                                        colours) {
+  # Check index/marker table
+  checkCdm(cdm, tables = joinedTable)
+
+  # Check the rest of inputs
+  errorMessage <- checkmate::makeAssertCollection()
+
+  ## Check sequenceRatio
+  checkSequenceSymmetry(sequenceRatio)
+
+  ## Check ids
+  checkPlotIds(cdm, joinedTable, index_ids, marker_ids, errorMessage)
+
+  ## Check plot title and labs
+  checkPlotTitleLabs(plotTitle, labs, errorMessage)
+
+  ## Check colours and onlyaSR
+  checkColoursaSR(colours, onlyaSR, errorMessage)
+
+  # Report errors
+  checkmate::reportAssertions(collection = errorMessage)
 }
 
 ####################################################################
@@ -296,13 +322,6 @@ checkOptions <- function(.options, errorMessage) {
   }
 }
 
-checkCensorRange <- function(censorRange, errorMessage) {
-  checkmate::assert_integerish(censorRange,
-                               null.ok = TRUE,
-                               lower = 0,
-                               add = errorMessage)
-}
-
 checkXLim <- function(xlim, errorMessage) {
   checkmate::assert_integerish(xlim,
                                len = 2,
@@ -311,8 +330,29 @@ checkXLim <- function(xlim, errorMessage) {
 
 checkColours <- function(colours, errorMessage) {
   checkmate::assert_character(colours,
-                              len = 2,
-                              add = errorMessage)
+                                len = 2,
+                                add = errorMessage)
+
+  for(i in 1:length(colours)) {
+    if(!(colours[i] %in% grDevices::colors())) {
+      cli::cli_abort(message = paste0("colour '",colours[i],"' is not available. Please select one of the list of colours in base R, type colors()"))
+    }
+  }
+}
+
+checkColoursaSR <- function(colours, onlyaSR, errorMessage) {
+  checkmate::assert_logical(onlyaSR,
+                            add = errorMessage)
+  if(onlyaSR) {
+    checkmate::assert_character(colours,
+                                len = 1,
+                                add = errorMessage)
+  } else {
+    checkmate::assert_character(colours,
+                                len = 2,
+                                add = errorMessage)
+  }
+
   for(i in 1:length(colours)) {
     if(!(colours[i] %in% grDevices::colors())) {
       cli::cli_abort(message = paste0("colour '",colours[i],"' is not available. Please select one of the list of colours in base R, type colors()"))
