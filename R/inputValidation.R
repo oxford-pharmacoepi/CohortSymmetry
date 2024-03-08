@@ -54,21 +54,25 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
 }
 
 checkInputSummariseSequenceRatio <- function(cdm,
-                                        sequenceCohortSet,
+                                        sequenceTable,
+                                        sequenceId,
                                         confidenceInterval,
-                                        restriction) {
+                                        movingAverageRestriction) {
 
   # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables = sequenceCohortSet)
+  checkCdm(cdm, tables = sequenceTable)
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
+  # Check sequenceId
+  checkCohortIds(cdm, sequenceTable, sequenceId, errorMessage)
+
   ## Check confidenceInterval
   checkConfidenceInterval(confidenceInterval, errorMessage)
 
-  ## Check restriction
-  checkRestriction(restriction, errorMessage)
+  ## Check movingAverageRestriction
+  checkmovingAverageRestriction(movingAverageRestriction, errorMessage)
 
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
@@ -237,11 +241,11 @@ checkWashoutWindow <- function(washoutWindow, errorMessage) {
   }
 }
 
-# Check restriction (Inf or numeric)
-checkRestriction <- function(restriction, errorMessage){
-  if (restriction != Inf) {
+# Check movingAverageRestriction (Inf or numeric)
+checkmovingAverageRestriction <- function(movingAverageRestriction, errorMessage){
+  if (movingAverageRestriction != Inf) {
     checkmate::assertIntegerish(
-      restriction,
+      movingAverageRestriction,
       lower = 0, any.missing = FALSE, max.len = 10, add = errorMessage
     )
   }
@@ -308,7 +312,7 @@ checkSingleBoolean <- function(splitGroup, errorMessage) {
 }
 
 checkOptions <- function(.options, errorMessage) {
-  allowedNames <- names(formatSequenceSymmetryOptions())
+  allowedNames <- names(tableSequenceRatiosOptions())
   optionsNames <- names(.options)
   checkmate::assertList(.options, null.ok = TRUE, any.missing = TRUE,
                         types = c("numeric", "logical", "character", "list"),

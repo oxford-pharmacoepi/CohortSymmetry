@@ -1,5 +1,5 @@
 ### NSR (uses tableCleaning, days_first, marker_first and index_first)
-nullSequenceRatio <- function(table, restriction = 548) {
+nullSequenceRatio <- function(table, movingAverageRestriction = 548) {
 
   n_index_before_marker <- table %>% dplyr::pull("index_first") %>% sum()
   n_marker_before_index <- table %>% dplyr::pull("marker_first") %>% sum()
@@ -8,13 +8,13 @@ nullSequenceRatio <- function(table, restriction = 548) {
   denom <- 0
 
   # The case restriction is finite:
-  if (is.finite(restriction)) {
+  if (is.finite(movingAverageRestriction)) {
 
     table <-
       table %>%
       dplyr::mutate(
-        marker_cumsum_fwd = deltaCumulativeSum(.data$marker_first, .data$days_first, restriction, backwards = FALSE), # For each days_first, look back 548 (restriction) days and see how many marker_first are there
-        marker_cumsum_bwd = deltaCumulativeSum(.data$marker_first, .data$days_first, restriction, backwards = TRUE), # For each days_first, look forward 548 (restriction days) and see how many marker_first are there
+        marker_cumsum_fwd = deltaCumulativeSum(.data$marker_first, .data$days_first, movingAverageRestriction, backwards = FALSE), # For each days_first, look back 548 (restriction) days and see how many marker_first are there
+        marker_cumsum_bwd = deltaCumulativeSum(.data$marker_first, .data$days_first, movingAverageRestriction, backwards = TRUE), # For each days_first, look forward 548 (restriction days) and see how many marker_first are there
         numerator = .data$index_first * .data$marker_cumsum_fwd,
         denominator = .data$index_first * (.data$marker_cumsum_bwd + .data$marker_cumsum_fwd)
       )
@@ -23,7 +23,7 @@ nullSequenceRatio <- function(table, restriction = 548) {
     denom <- table %>% dplyr::pull("denominator") %>% sum()
 
   } else {
-    # The case restriction is infinite:
+    # The case movingAverageRestriction is infinite:
     # Hallas 1996 Appendix
     numer <-
       table %>%
