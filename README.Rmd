@@ -101,7 +101,7 @@ The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequ
 
 ```{r Step 2: summariseSequenceRatio, eval=TRUE, warning=FALSE}
 res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                         sequenceCohortSet = "amiodarone_levothyroxine")
+                                         sequenceTable = "amiodarone_levothyroxine")
  
 res %>% glimpse()
 ```
@@ -111,14 +111,15 @@ res %>% glimpse()
 The user could then visualise their results using a wide array of provided tools.
 
 ```{r Step 3: visualise the results, eval=TRUE, warning=FALSE}
-tidy_results <- CohortSymmetry::tidySequenceSymmetry(result = res)
+nice_results <- CohortSymmetry::tableSequenceRatios(result = res)
 
-tidy_results
+nice_results
 
 CDMConnector::cdmDisconnect(cdm = cdm)
 
 ```
 
+### Disconnect from the cdm database connection
 ```{r Disconnect from the cdm database connection, eval=TRUE, warning=FALSE}
 
 CDMConnector::cdmDisconnect(cdm = cdm)
