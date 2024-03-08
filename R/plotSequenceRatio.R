@@ -80,7 +80,7 @@ plotSequenceRatio <- function(cdm,
     visOmopResults::splitAdditional() %>%
     tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") %>%
     dplyr::mutate(group = paste0(.data$index_cohort_name, " > ", .data$marker_cohort_name)) %>%
-    dplyr::select(-c("index_cohort_name", "marker_cohort_name", "index_marker_gap")) %>%
+    dplyr::select(-c("index_cohort_name", "marker_cohort_name")) %>%
     dplyr::mutate(
       point_estimate = as.numeric(.data$point_estimate),
       lower_CI = as.numeric(.data$lower_CI),
