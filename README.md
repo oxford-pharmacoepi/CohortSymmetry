@@ -100,7 +100,7 @@ cdm$amiodarone_levothyroxine %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpe42Opp\file30bc207e6d08.duckdb]
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpGavWVO\file55246568bc.duckdb]
 #> $ cohort_definition_id <int> 1
 #> $ subject_id           <int> 2006
 #> $ cohort_start_date    <date> 2014-01-17
@@ -156,10 +156,11 @@ nice_results <- CohortSymmetry::tableSequenceRatios(result = res)
 nice_results
 ```
 
+![](./man/figures/README-unnamed-chunk-7-1.png)
+
 ### Disconnect from the cdm database connection
 
 ``` r
-
 CDMConnector::cdmDisconnect(cdm = cdm)
 ```
 
