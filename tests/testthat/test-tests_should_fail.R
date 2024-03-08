@@ -1,4 +1,4 @@
-test_that("mock db: unsuccessful examples - Inf prior observation", {
+test_that("unsuccessful examples - Inf prior observation", {
   cdm <- CohortSymmetry::mockCohortSymmetry()
 
   expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
@@ -10,7 +10,7 @@ test_that("mock db: unsuccessful examples - Inf prior observation", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("mock db: unsuccessful examples - indexTable not strings", {
+test_that("unsuccessful examples - indexTable not strings", {
   cdm <- CohortSymmetry::mockCohortSymmetry()
   expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
                                                          name = "joined_cohorts",
@@ -21,7 +21,7 @@ test_that("mock db: unsuccessful examples - indexTable not strings", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("mock db: unsuccessful examples - markerTable not strings", {
+test_that("unsuccessful examples - markerTable not strings", {
   cdm <- CohortSymmetry::mockCohortSymmetry()
   expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
                                                          name = "joined_cohorts",
@@ -32,7 +32,7 @@ test_that("mock db: unsuccessful examples - markerTable not strings", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("mock db: unsuccessful examples - daysPriorObservation is not numeric", {
+test_that("unsuccessful examples - daysPriorObservation is not numeric", {
   cdm <- CohortSymmetry::mockCohortSymmetry()
   expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
                                                          name = "joined_cohorts",
@@ -49,7 +49,7 @@ test_that("mock db: unsuccessful examples - daysPriorObservation is not numeric"
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("mock db: unsuccessful examples - Ids outside of range", {
+test_that("unsuccessful examples - Ids outside of range", {
   cdm <- CohortSymmetry::mockCohortSymmetry()
   expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
                                                          name = "joined_cohorts",
@@ -66,7 +66,7 @@ test_that("mock db: unsuccessful examples - Ids outside of range", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("mock db: unsuccessful examples - tables not in the CDM", {
+test_that("unsuccessful examples - tables not in the CDM", {
   cdm <- CohortSymmetry::mockCohortSymmetry()
   expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
                                                          name = "joined_cohorts",
@@ -97,7 +97,7 @@ test_that("mock db: unsuccessful examples - tables not in the right format", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("mock db: unsuccessful examples - negative parameters", {
+test_that("unsuccessful examples - negative parameters", {
   cdm <- CohortSymmetry::mockCohortSymmetry()
   expect_error(CohortSymmetry::generateSequenceCohortSet(cdm,
                                                          name = "joined_cohorts",

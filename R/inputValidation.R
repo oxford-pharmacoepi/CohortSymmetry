@@ -302,7 +302,7 @@ checkConfidenceInterval <- function(confidenceInterval, errorMessage) {
 }
 
 checkType <- function(type, errorMessage) {
-  checkmate::assertCharacter(type, min.chars = 2, max.chars = 6, len = 1,
+  checkmate::assertCharacter(type, min.chars = 2, max.chars = 10, len = 1,
                              add = errorMessage)
 }
 
