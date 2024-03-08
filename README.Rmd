@@ -115,12 +115,12 @@ nice_results <- CohortSymmetry::tableSequenceRatios(result = res)
 
 nice_results
 
-
 ```
+
+![](./man/figures/README-unnamed-chunk-7-1.png)
 
 ### Disconnect from the cdm database connection
 ```{r Disconnect from the cdm database connection, eval=TRUE, warning=FALSE}
-
 CDMConnector::cdmDisconnect(cdm = cdm)
 
 ```
