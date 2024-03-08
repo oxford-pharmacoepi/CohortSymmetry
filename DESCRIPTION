@@ -56,6 +56,7 @@ Imports:
     visOmopResults,
     tidyr,
     omock (>= 0.1.0),
+    stats,
     omopgenerics
 Remotes: 
    oxford-pharmacoepi/omock,

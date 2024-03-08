@@ -3,6 +3,8 @@
 export("%>%")
 export(generateSequenceCohortSet)
 export(mockCohortSymmetry)
+export(plotSequenceRatio)
+export(plotTemporalSymmetry)
 export(summariseSequenceRatio)
 export(tableSequenceRatios)
 export(tableSequenceRatiosOptions)
