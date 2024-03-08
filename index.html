@@ -128,7 +128,7 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpe42Opp\file30bc207e6d08.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpGavWVO\file55246568bc.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1</span></span>
 <span><span class="co">#&gt; $ subject_id           &lt;int&gt; 2006</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 2014-01-17</span></span>
@@ -176,13 +176,13 @@
 <code class="sourceCode R"><span><span class="va">nice_results</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">res</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">nice_results</span></span></code></pre></div>
+<p><img src="./reference/figures/README-unnamed-chunk-7-1.png"></p>
 </div>
 <div class="section level3">
 <h3 id="disconnect-from-the-cdm-database-connection">Disconnect from the cdm database connection<a class="anchor" aria-label="anchor" href="#disconnect-from-the-cdm-database-connection"></a>
 </h3>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
-<span><span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
