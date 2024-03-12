@@ -79,7 +79,7 @@ plotSequenceRatio <- function(cdm,
     dplyr::select(-c("cdm_name", "result_type", "package_name", "package_version", "strata_name", "strata_level", "variable_name")) %>%
     visOmopResults::splitAdditional() %>%
     tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") %>%
-    dplyr::mutate(group = paste0(.data$index_cohort_name, " > ", .data$marker_cohort_name)) %>%
+    dplyr::mutate(group = paste0(.data$index_cohort_name, " -> ", .data$marker_cohort_name)) %>%
     dplyr::select(-c("index_cohort_name", "marker_cohort_name")) %>%
     dplyr::mutate(
       point_estimate = as.numeric(.data$point_estimate),
@@ -87,7 +87,7 @@ plotSequenceRatio <- function(cdm,
       upper_CI = as.numeric(.data$upper_CI),
       variable_level = as.factor(.data$variable_level)
     ) %>%
-    dplyr::select(tidyselect::where( ~ dplyr::n_distinct(.) > 1)) %>%
+    dplyr::select(tidyselect::where( ~ dplyr::n_distinct(.) > 1)|.data$group) %>%
     dplyr::rename(
       !!labs[1] := "point_estimate",
       !!labs[2] := "group"
