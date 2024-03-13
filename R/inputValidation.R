@@ -100,8 +100,8 @@ checksFormatSequenceSymmetry <- function(type, crude, adjusted, studyPopulation,
 
 checkInputPlotTemporalSymmetry <- function(cdm,
                                            joinedTable,
-                                           index_ids,
-                                           marker_ids,
+                                           indexId,
+                                           markerId,
                                            plotTitle,
                                            labs,
                                            xlim,
@@ -114,7 +114,7 @@ checkInputPlotTemporalSymmetry <- function(cdm,
   errorMessage <- checkmate::makeAssertCollection()
 
   ## Check ids
-  checkPlotIds(cdm, joinedTable, index_ids, marker_ids, errorMessage)
+  checkPlotIds(cdm, joinedTable, indexId, markerId, errorMessage)
 
   ## Check plot title and labs
   checkPlotTitleLabs(plotTitle, labs, errorMessage)
@@ -136,8 +136,8 @@ checkInputPlotSequenceRatio <- function(cdm,
                                         joinedTable,
                                         sequenceRatio,
                                         onlyaSR,
-                                        index_ids,
-                                        marker_ids,
+                                        indexId,
+                                        markerId,
                                         plotTitle,
                                         labs,
                                         colours) {
@@ -151,7 +151,7 @@ checkInputPlotSequenceRatio <- function(cdm,
   checkSequenceSymmetry(sequenceRatio)
 
   ## Check ids
-  checkPlotIds(cdm, joinedTable, index_ids, marker_ids, errorMessage)
+  checkPlotIds(cdm, joinedTable, indexId, markerId, errorMessage)
 
   ## Check plot title and labs
   checkPlotTitleLabs(plotTitle, labs, errorMessage)
@@ -364,22 +364,22 @@ checkColoursaSR <- function(colours, onlyaSR, errorMessage) {
   }
 }
 
-checkPlotIds<- function(cdm, joinedTable, index_ids, marker_ids, errorMessage) {
-  checkmate::assert_integerish(index_ids,
+checkPlotIds<- function(cdm, joinedTable, indexId, markerId, errorMessage) {
+  checkmate::assert_integerish(indexId,
                                null.ok = TRUE,
                                lower = 0,
                                add = errorMessage)
-  checkmate::assert_integerish(marker_ids,
+  checkmate::assert_integerish(markerId,
                                null.ok = TRUE,
                                lower = 0,
                                add = errorMessage)
   cohort_set_table <- attr(cdm[[joinedTable]], "cohort_set") %>%
     dplyr::collect()
-  if(!(all(index_ids %in% cohort_set_table$index_id))) {
-    cli::cli_abort("Some of the index_ids provided are not index ids in the cohort")
+  if(!(all(indexId %in% cohort_set_table$index_id))) {
+    cli::cli_abort("Some of the indexId provided are not index ids in the cohort")
   }
-  if(!(all(marker_ids %in% cohort_set_table$marker_id))) {
-    cli::cli_abort("Some of the marker_ids provided are not marker ids in the cohort")
+  if(!(all(markerId %in% cohort_set_table$marker_id))) {
+    cli::cli_abort("Some of the markerId provided are not marker ids in the cohort")
   }
 }
 

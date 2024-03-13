@@ -9,8 +9,8 @@ plotSequenceRatio(
   joinedTable,
   sequenceRatio,
   onlyaSR = FALSE,
-  index_ids = NULL,
-  marker_ids = NULL,
+  indexId = NULL,
+  markerId = NULL,
   plotTitle = NULL,
   labs = c("SR", "Drug Pairs"),
   colours = c("red", "blue")
@@ -26,9 +26,9 @@ of generateSequenceCohortSet.}
 
 \item{onlyaSR}{If the only SR to be plotted is the adjusted SR.}
 
-\item{index_ids}{What index ids to plot, if NULL all will be plotted.}
+\item{indexId}{What index ids to plot, if NULL all will be plotted.}
 
-\item{marker_ids}{What marker ids to plot, if NULL all will be plotted.}
+\item{markerId}{What marker ids to plot, if NULL all will be plotted.}
 
 \item{plotTitle}{Title of the plot, if NULL no title will be plotted.}
 

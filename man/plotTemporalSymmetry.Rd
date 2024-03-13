@@ -7,8 +7,8 @@
 plotTemporalSymmetry(
   cdm,
   joinedTable,
-  index_ids = NULL,
-  marker_ids = NULL,
+  indexId = NULL,
+  markerId = NULL,
   plotTitle = NULL,
   labs = c("Time (months)", "Individuals (N)"),
   timescale = "month",
@@ -23,9 +23,9 @@ plotTemporalSymmetry(
 \item{joinedTable}{The name of a table in the cdm of the form of the output
 of generateSequenceCohortSet.}
 
-\item{index_ids}{What index ids to plot, if NULL all will be plotted.}
+\item{indexId}{What index ids to plot, if NULL all will be plotted.}
 
-\item{marker_ids}{What marker ids to plot, if NULL all will be plotted.}
+\item{markerId}{What marker ids to plot, if NULL all will be plotted.}
 
 \item{plotTitle}{Title of the plot, if NULL no title will be plotted.}
 
