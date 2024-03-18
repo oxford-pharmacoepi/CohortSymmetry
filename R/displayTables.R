@@ -184,7 +184,7 @@ tableSequenceRatios <- function(result,
     )
   }
 
-  if (type == "fx") {
+  if (type == "flextable") {
     return(
       visOmopResults::fxTable(
         format_result,
@@ -245,7 +245,6 @@ defaultOptions <- function(userOptions) {
 #' @examples
 #' {
 #' }
-#'
 #'
 tableSequenceRatiosOptions <- function() {
   return(defaultOptions(NULL))

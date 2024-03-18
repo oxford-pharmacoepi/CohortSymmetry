@@ -1,19 +1,16 @@
-test_that("tableSequenceRatios", {
-  cdm <- PatientProfiles::mockPatientProfiles(patient_size = 100,
-                                              drug_exposure_size = 100)
-
+test_that("tableSequenceRatios - gt output", {
+  cdm <- CohortSymmetry::mockCohortSymmetry()
   cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohort",
-                                           indexTable = "cohort1",
-                                           markerTable = "cohort2",
-                                           combinationWindow = c(0, Inf))
+                                                   indexTable = "cohort_1",
+                                                   indexId = 1,
+                                                   markerTable = "cohort_2",
+                                                   markerId = 3,
+                                                   name = "joined_cohort")
 
+  res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
+                                                sequenceTable = "joined_cohort")
 
-  res <- CohortSymmetry::summariseSequenceRatio(
-    cdm = cdm,
-    sequenceTable = "joined_cohort")
-
-  gtResult <- tableSequenceRatios(res)
+  gtResult <- CohortSymmetry::tableSequenceRatios(res)
   expect_true("gt_tbl" %in% (gtResult %>% class()))
   expect_true(all(colnames(gtResult$`_data`) %in%
                     c("Database name", "Index", "Marker", "Study population",
@@ -25,28 +22,53 @@ test_that("tableSequenceRatios", {
                     c("Database name", "Index", "Marker",
                       "Index first, N (%)", "Marker first, N (%)", "CSR (95% CI)",
                       "ASR (95% CI)")))
+  CDMConnector::cdmDisconnect(cdm)
+})
 
-  expect_no_error(
-    fxResult <- tableSequenceRatios(res,
-                                       type = "fx",
-                                       studyPopulation = FALSE,
-                                       indexName = FALSE,
-                                       .options = list(groupNameCol = "cdm_name"))
-  )
-  expect_true(all(colnames(fxResult$body$dataset) %in%
-                    c("Database name", "Marker","Index first, N (%)",
-                      "Marker first, N (%)", "CSR (95% CI)", "ASR (95% CI)")))
-  expect_equal(fxResult$body$dataset$`Database name`,
-               factor(c("PP_MOCK", NA, NA, NA)))
+test_that("tableSequenceRatios - tibble output", {
+  cdm <- CohortSymmetry::mockCohortSymmetry()
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   indexTable = "cohort_1",
+                                                   indexId = 1,
+                                                   markerTable = "cohort_2",
+                                                   markerId = 3,
+                                                   name = "joined_cohort")
 
-  expect_no_error(
-    tibbleResult <- tableSequenceRatios(res,
-                                           type = "tibble",
-                                           studyPopulation = FALSE,
-                                           cdmName = FALSE)
-  )
-  expect_true(tibbleResult$Index[1] == "Cohort 1")
-  expect_true(all(tibbleResult$Marker %in% c("Cohort 1", "Cohort 2", "Cohort 3")))
+  res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
+                                                sequenceTable = "joined_cohort")
 
+  tibble_res <- CohortSymmetry::tableSequenceRatios(res, type = "tibble")
+
+  expect_true("data.frame" %in% (tibble_res %>% class()))
+  expect_true(all(colnames(tibble_res) %in%
+                    c("Database name", "Index", "Marker", "Study population",
+                      "Index first, N (%)", "Marker first, N (%)", "CSR (95% CI)",
+                      "ASR (95% CI)")))
+  expect_no_error(tibble_res <- tableSequenceRatios(res, type = "tibble",
+                                                  studyPopulation = FALSE))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("tableSequenceRatios - flextable output", {
+  cdm <- CohortSymmetry::mockCohortSymmetry()
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   indexTable = "cohort_1",
+                                                   indexId = 1,
+                                                   markerTable = "cohort_2",
+                                                   markerId = 3,
+                                                   name = "joined_cohort")
+
+  res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
+                                                sequenceTable = "joined_cohort")
+
+  flextable_res <- CohortSymmetry::tableSequenceRatios(res, type = "flextable")
+
+  expect_true("flextable" %in% (flextable_res %>% class()))
+  expect_true(all(colnames(flextable_res) %in%
+                    c("Database name", "Index", "Marker", "Study population",
+                      "Index first, N (%)", "Marker first, N (%)", "CSR (95% CI)",
+                      "ASR (95% CI)")))
+  expect_no_error(flextable_res <- tableSequenceRatios(res, type = "flextable",
+                                                    studyPopulation = FALSE))
   CDMConnector::cdmDisconnect(cdm)
 })

@@ -43,7 +43,8 @@ Suggests:
     checkmate,
     odbc, 
     RPostgres,
-    tidyselect
+    tidyselect,
+    flextable
 Imports: 
     CDMConnector (>= 1.3.0),
     dplyr,
