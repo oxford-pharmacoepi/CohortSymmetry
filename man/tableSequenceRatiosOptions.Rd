@@ -17,5 +17,4 @@ tableSequenceRatios and their given default value.
 {
 }
 
-
 }

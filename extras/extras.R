@@ -213,8 +213,17 @@ cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                                  indexTable = "cohort_1",
                                                  indexId = 1,
                                                  markerTable = "cohort_2",
-                                                 markerId = 1,
+                                                 markerId = 3,
                                                  name = "joined_cohort")
-sr <- CohortSymmetry::summariseSequenceRatio(cdm, "joined_cohort")
-plotSequenceRatio(cdm, "joined_cohort", sr)
+
+res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
+                                              sequenceTable = "joined_cohort")
+
+gtResult <- CohortSymmetry::tableSequenceRatios(res)
+
+CohortSymmetry::plotSequenceRatio(cdm = cdm,
+                                  joinedTable = "joined_cohort",
+                                  sequenceRatio = res,
+                                  onlyaSR = T)
+
 CDMConnector::cdmDisconnect(cdm = cdm)
