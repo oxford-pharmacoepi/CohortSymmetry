@@ -291,10 +291,10 @@ preprocessCohort <- function(cdm, cohortName, cohortId, cohortDateRange) {
     dplyr::left_join(
       cohort |>
         dplyr::select(dplyr::all_of(
-          c("previous_exposure" = "cohort_start_date", id)
+          c("previous_exposure" = "cohort_start_date", id, "cohort_definition_id", "subject_id")
         )) |>
         dplyr::mutate(!!id := .data[[id]] + 1),
-      by = id
+      by = c(id, "cohort_definition_id", "subject_id")
     ) %>%
     dplyr::mutate(gap_to_prior = as.numeric(!!CDMConnector::datediff(
       "previous_exposure", "cohort_start_date"
