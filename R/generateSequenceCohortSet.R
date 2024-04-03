@@ -210,7 +210,7 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::filter(abs(.data$gap) > .env$time_1 &
                   abs(.data$gap) <= .env$time_2) |>
   dplyr::compute(name = name, temporary = FALSE) |>
-  omopgenerics::recordCohortAttrition(reason="Events available during the study period")
+  omopgenerics::recordCohortAttrition(reason="Events available within the prespecified combination window")
 
   # 2) indexMarkerGap
   cdm[[name]] <- cdm[[name]] %>%
