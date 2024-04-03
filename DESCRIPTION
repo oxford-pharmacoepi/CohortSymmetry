@@ -44,10 +44,12 @@ Suggests:
     odbc, 
     RPostgres,
     tidyselect,
-    flextable
+    flextable,
+    gt
 Imports: 
     CDMConnector (>= 1.3.0),
     dplyr,
+    dbplyr (>= 2.5.0),
     ggplot2,
     magrittr,
     PatientProfiles,
@@ -61,7 +63,7 @@ Imports:
     omopgenerics
 Remotes: 
    oxford-pharmacoepi/omock,
-   darwin-eu-dev/omopgenerics
+   darwin-eu-dev/omopgenerics,
+   darwin-eu-dev/PatientProfiles
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
-

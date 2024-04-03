@@ -134,12 +134,12 @@ generateSequenceCohortSet <- function(cdm,
   # Post-join processing
   cdm[[name]] <- joinedData %>%
     dplyr::mutate(
-      gap = CDMConnector::datediff("index_date", "marker_date",
-                                   interval = "day"),
-      gap_index_marker = CDMConnector::datediff("index_end_date", "marker_date",
-                                        interval = "day"),
-      gap_marker_index = CDMConnector::datediff("marker_end_date", "index_date",
-                                                interval = "day")) %>%
+      gap = as.numeric(!!CDMConnector::datediff("index_date", "marker_date",
+                                                interval = "day")),
+      gap_index_marker = as.numeric(!!CDMConnector::datediff("index_end_date", "marker_date",
+                                        interval = "day")),
+      gap_marker_index = as.numeric(!!CDMConnector::datediff("marker_end_date", "index_date",
+                                                             interval = "day"))) %>%
     dplyr::mutate(
       cei = dplyr::if_else(.data$index_date < .data$marker_date,
                            .data$gap_index_marker, .data$gap_marker_index)
@@ -294,10 +294,10 @@ preprocessCohort <- function(cdm, cohortName, cohortId, cohortDateRange) {
     dplyr::left_join(
       cohort |>
         dplyr::select(dplyr::all_of(
-          c("previous_exposure" = "cohort_start_date", id)
+          c("previous_exposure" = "cohort_start_date", id, "cohort_definition_id", "subject_id")
         )) |>
         dplyr::mutate(!!id := .data[[id]] + 1),
-      by = id
+      by = c(id, "cohort_definition_id", "subject_id")
     ) %>%
     dplyr::mutate(gap_to_prior = as.numeric(!!CDMConnector::datediff(
       "previous_exposure", "cohort_start_date"

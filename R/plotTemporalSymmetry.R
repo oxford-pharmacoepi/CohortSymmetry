@@ -59,8 +59,8 @@ plotTemporalSymmetry <- function(cdm,
     dplyr::select("cohort_definition_id", "marker_name")
 
   plot_data <- cdm[[joinedTable]] %>%
-    dplyr::mutate(time = CDMConnector::datediff(
-      "index_date", "marker_date", interval = timescale)) %>%
+    dplyr::mutate(time = as.numeric(!!CDMConnector::datediff(
+      "index_date", "marker_date", interval = timescale))) %>%
     dplyr::select("cohort_definition_id", "time") %>%
     dplyr::group_by(.data$cohort_definition_id, .data$time) %>%
     dplyr::summarise(individuals = as.integer(dplyr::n())) %>%
