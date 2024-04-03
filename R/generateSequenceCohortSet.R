@@ -134,12 +134,12 @@ generateSequenceCohortSet <- function(cdm,
   # Post-join processing
   cdm[[name]] <- joinedData %>%
     dplyr::mutate(
-      gap = CDMConnector::datediff("index_date", "marker_date",
-                                   interval = "day"),
-      gap_index_marker = CDMConnector::datediff("index_end_date", "marker_date",
-                                        interval = "day"),
-      gap_marker_index = CDMConnector::datediff("marker_end_date", "index_date",
-                                                interval = "day")) %>%
+      gap = as.numeric(!!CDMConnector::datediff("index_date", "marker_date",
+                                                interval = "day")),
+      gap_index_marker = as.numeric(!!CDMConnector::datediff("index_end_date", "marker_date",
+                                        interval = "day")),
+      gap_marker_index = as.numeric(!!CDMConnector::datediff("marker_end_date", "index_date",
+                                                             interval = "day"))) %>%
     dplyr::mutate(
       cei = dplyr::if_else(.data$index_date < .data$marker_date,
                            .data$gap_index_marker, .data$gap_marker_index)
