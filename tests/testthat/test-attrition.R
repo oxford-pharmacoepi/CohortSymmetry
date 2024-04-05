@@ -357,3 +357,188 @@ test_that("attrition: indexMarkerGap", {
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
+
+test_that("attrition: daysPriorObservation", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1),
+    subject_id = c(1, 3, 4, 2, 5, 1, 2, 3, 4, 5, 1),
+    cohort_start_date = as.Date(
+      c(
+        "2020-10-01", "2021-06-01", "2022-05-22", "2010-01-01", "2019-08-01", "2019-04-07", "2021-01-01", "2008-02-02", "2010-09-09", "2021-01-01", "2020-01-01"
+      )
+    ),
+    cohort_end_date = as.Date(
+      c(
+        "2020-10-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01", "2020-03-01"
+      )
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
+    subject_id = c(1, 3, 4, 2, 5, 1, 2, 3, 4, 5, 1),
+    cohort_start_date = as.Date(
+      c(
+        "2020-12-30", "2010-01-01","2021-05-25","2022-05-31", "2020-05-25", "2019-05-25", "2022-05-25", "2010-09-30", "2022-05-25", "2020-02-29", "2021-01-01"
+      )
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+                                            markerCohort = markerCohort)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
+                                                   indexTable = "cohort_1",
+                                                   indexId=2,
+                                                   markerTable = "cohort_2",
+                                                   markerId=3,
+                                                   daysPriorObservation = 1460,
+                                                   combinationWindow = c(0, Inf))
+
+  expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                dplyr::filter(reason =="Prior history requirement fulfilled") %>%
+                dplyr::pull(excluded_subjects)==1)
+
+  expect_true(all(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                dplyr::filter(!reason =="Prior history requirement fulfilled") %>%
+                dplyr::pull(excluded_subjects)==0))
+
+  expect_identical(cdm$joined_cohorts %>%
+                     dplyr::select(subject_id) %>%
+                     dplyr::collect() %>%
+                     dplyr::arrange(subject_id) %>%
+                     dplyr::pull(subject_id) %>%
+                     as.numeric(),
+                   c(1, 2, 3, 5)
+  )
+
+  CDMConnector::cdmDisconnect(cdm = cdm)
+})
+
+test_that("attrition: washoutWindow", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
+    subject_id = c(1, 1, 1, 2, 2, 1, 1, 1, 2, 2),
+    cohort_start_date = as.Date(
+      c(
+        "2020-10-01", "2021-06-01", "2022-05-22", "2010-01-01", "2019-08-01", "2019-04-07", "2021-01-01", "2008-02-02", "2010-09-09", "2021-01-01"
+      )
+    ),
+    cohort_end_date = as.Date(
+      c(
+        "2020-10-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
+      )
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
+    subject_id = c(1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 2),
+    cohort_start_date = as.Date(
+      c(
+        "2020-12-30", "2020-01-01","2021-05-25","2021-05-31", "2020-05-25", "2019-05-25", "2022-05-25", "2010-09-30", "2022-05-25", "2020-02-29", "2021-01-01"
+      )
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+                                            markerCohort = markerCohort)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
+                                                   indexTable = "cohort_1",
+                                                   markerTable = "cohort_2",
+                                                   combinationWindow = c(0, Inf))
+
+  expect_true(all(c(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                      dplyr::select(cohort_definition_id) %>%
+                      dplyr::distinct()%>%
+                      dplyr::pull()
+  ) %in%
+    c(1:4)
+  ))
+
+  expect_identical(nrow(cdm$joined_cohorts %>% dplyr::collect()) %>%
+                     as.numeric(),
+                   8)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
+                                                   indexTable = "cohort_1",
+                                                   indexId = 1,
+                                                   markerTable = "cohort_2",
+                                                   markerId = 3,
+                                                   combinationWindow = c(0, Inf))
+
+  expect_identical(cdm$joined_cohorts %>%
+                     dplyr::collect() %>%
+                     nrow() %>%
+                     as.numeric(),
+                   2)
+
+  expect_true(all(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                    dplyr::pull(excluded_subjects)==0))
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
+                                                   indexTable = "cohort_1",
+                                                   indexId = 1,
+                                                   markerTable = "cohort_2",
+                                                   markerId = 3,
+                                                   cohortDateRange = as.Date(c("2015-01-01", NA)),
+                                                   combinationWindow = c(0, Inf))
+
+  expect_identical(cdm$joined_cohorts %>%
+                     dplyr::collect() %>%
+                     nrow() %>%
+                     as.numeric(),
+                   2)
+
+  expect_true(all(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                    dplyr::pull(excluded_subjects)==0))
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
+                                                   indexTable = "cohort_1",
+                                                   indexId = 1,
+                                                   markerTable = "cohort_2",
+                                                   markerId = 3,
+                                                   cohortDateRange = as.Date(c("2022-01-01", NA)),
+                                                   combinationWindow = c(0, Inf))
+
+  expect_identical(cdm$joined_cohorts %>%
+                     dplyr::collect() %>%
+                     nrow() %>%
+                     as.numeric(),
+                   1)
+
+  expect_true(all(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                    dplyr::pull(excluded_subjects)==0))
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
+                                                   indexTable = "cohort_1",
+                                                   indexId = 1,
+                                                   markerTable = "cohort_2",
+                                                   markerId = 3,
+                                                   cohortDateRange = as.Date(c("2022-01-01", NA)),
+                                                   combinationWindow = c(0, Inf),
+                                                   washoutWindow = 365)
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason == "Initial qualifying events") %>%
+                     dplyr::pull(number_records) %>%
+                     as.numeric(),
+                   1)
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason == "Washout window fulfilled") %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   1)
+
+  CDMConnector::cdmDisconnect(cdm = cdm)
+})

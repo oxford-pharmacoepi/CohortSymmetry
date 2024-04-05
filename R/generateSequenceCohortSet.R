@@ -85,8 +85,8 @@ generateSequenceCohortSet <- function(cdm,
   }
 
   # Preprocess both cohorts
-  indexPreprocessed <- preprocessCohort(cdm, indexTable,
-                                        indexId, cohortDateRange) %>%
+  indexPreprocessed <- preprocessCohort(cdm = cdm, cohortName = indexTable,
+                                        cohortId = indexId, cohortDateRange = cohortDateRange) %>%
     dplyr::rename("index_id" = "cohort_definition_id",
                   "index_name" = "cohort_name",
       "index_date" = "cohort_start_date",
@@ -94,8 +94,8 @@ generateSequenceCohortSet <- function(cdm,
       #"prior_observation_index" = "prior_observation",
       "gap_to_prior_index" = "gap_to_prior"
     )
-  markerPreprocessed <- preprocessCohort(cdm, markerTable,
-                                         markerId, cohortDateRange) %>%
+  markerPreprocessed <- preprocessCohort(cdm = cdm, cohortName = markerTable,
+                                         cohortId = markerId, cohortDateRange = cohortDateRange) %>%
     dplyr::rename("marker_id" = "cohort_definition_id",
                   "marker_name" = "cohort_name",
                   "marker_date" = "cohort_start_date",
@@ -306,6 +306,7 @@ preprocessCohort <- function(cdm, cohortName, cohortId, cohortDateRange) {
       .data$cohort_start_date <= !!cohortDateRange[[2]] &
         .data$cohort_start_date >= !!cohortDateRange[[1]]
     ) %>%
+    dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
     dplyr::filter(.data[[id]] == min(.data[[id]], na.rm = TRUE)) %>%
     dplyr::ungroup() %>%
     dplyr::select(!dplyr::all_of(c(id, "previous_exposure"))) |>
