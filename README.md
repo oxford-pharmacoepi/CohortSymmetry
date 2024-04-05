@@ -8,9 +8,9 @@
 
 The goal of CohortSymmetry is to carry out the necessary calculations
 for Sequence Symmetry Analysis (SSA). It is highly recommended that this
-method is tested beforehand against well-known positive benchmarks and
-negative benchmarks. Such benchmarks could be found using the paper in
-the Reference.
+method is tested beforehand against well-known positive and negative
+controls. Such controls could be found using the paper in the Reference.
+<sup>1</sup>
 
 ## Installation
 
@@ -28,7 +28,7 @@ devtools::install_github("oxford-pharmacoepi/CohortSymmetry")
 
 The CohortSymmetry package is designed to work with data in the OMOP CDM
 (Common Data Model) format, so our first step is to create a reference
-to the data using the CDMConnector package.
+to the data using the `CDMConnector` package.
 
 As an example, we will be using Eunomia data set.
 
@@ -54,75 +54,71 @@ Minimally, this package requires two cohort tables in the cdm reference,
 namely the index_cohort and the marker_cohort.
 
 If one wants to generate two drugs cohorts in cdm, DrugUtilisation is
-recommended. As an example, amiodarone and levothyroxine are used. This
-is a known positive benchmark reported in the literature.<sup>1</sup>
+recommended. For merely illustration purposes, we will carry out PSSA on
+aspirin (index_cohort) against amoxicillin (marker_cohort)
 
 ``` r
-library(DrugUtilisation)
-library(CodelistGenerator)
 library(dplyr)
- 
-index_drug <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm, name = "amiodarone")
-marker_drug <- CodelistGenerator::getDrugIngredientCodes(cdm = cdm, name = "levothyroxine")
- 
-cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
-    cdm = cdm,
-    name = "cohort_index",
-    conceptSet = index_drug
-  )
- 
-cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
-    cdm = cdm,
-    name = "cohort_marker",
-    conceptSet = marker_drug
-  )
+library(DrugUtilisation)
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm, 
+  name = "aspirin",
+  ingredient = "aspirin")
+
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "amoxicillin",
+  ingredient = "amoxicillin")
 ```
 
 ### Step 1: generateSequenceCohortSet
 
 In order to initiate the calculations, the two cohorts tables need to be
-intersected using `generateSequenceCohortSet()` function. This process
-will filter out the individuals who appeared on both tables according to
-a user-specified parameters. This includes `timeGap`, `washoutWindow`,
-`indexMarkerGap` and `daysPriorObservation`. Details on these parameters
-could be found on the vignette.
+intersected using `CohortSymmetry::generateSequenceCohortSet()`. This
+process will output all the individuals who appeared on both tables
+according to a user-specified parameters. This includes `timeGap`,
+`washoutWindow`, `indexMarkerGap` and `daysPriorObservation`. Details on
+these parameters could be found on the vignette.
 
 ``` r
 library(CohortSymmetry)
  
-cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-                   indexTable = "cohort_index",
-                   markerTable = "cohort_marker",
-                   name = "amiodarone_levothyroxine",
-                   combinationWindow = c(0, Inf))
- 
-cdm$amiodarone_levothyroxine %>%
+cdm <- CohortSymmetry::generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "amoxicillin",
+  name = "aspirin_amoxicillin"
+)
+
+cdm$aspirin_amoxicillin %>% 
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpGavWVO\file55246568bc.duckdb]
-#> $ cohort_definition_id <int> 1
-#> $ subject_id           <int> 2006
-#> $ cohort_start_date    <date> 2014-01-17
-#> $ cohort_end_date      <date> 2017-12-31
-#> $ index_date           <date> 2014-01-17
-#> $ marker_date          <date> 2017-12-31
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmp2VgLAW\file5e685c7d25a3.duckdb]
+#> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+#> $ subject_id           <int> 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …
+#> $ cohort_start_date    <date> 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …
+#> $ cohort_end_date      <date> 1969-06-18, 1968-04-07, 1947-04-12, 1979-09-04, …
+#> $ index_date           <date> 1969-06-18, 1967-05-28, 1947-04-07, 1978-10-30, …
+#> $ marker_date          <date> 1968-07-29, 1968-04-07, 1947-04-12, 1979-09-04, …
 ```
 
 ### Step 2: summariseSequenceRatio
 
 To get the sequence ratios, we would need the output of the
-generateSequenceCohortSet() function. The output of this process
+generateSequenceCohortSet() function to be fed into
+`CohortSymmetry::summariseSequenceRatio()` The output of this process
 contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and
 confidence intervals.
 
 ``` r
 res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                         sequenceTable = "amiodarone_levothyroxine")
-#> -- 1 combination of 1 had index always before marker
-#> Joining with `by = join_by(days_prior_observation, washout_window, index_marker_gap, combination_window, confidence_interval, moving_average_restriction, cdm_name)`
-#> ! The following column type were changed:
-#> • result_id: from character to integer
+                                         sequenceTable = "aspirin_amoxicillin")
+#> Joining with `by = join_by(days_prior_observation, washout_window,
+#> index_marker_gap, combination_window, confidence_interval,
+#> moving_average_restriction, cdm_name)`
+#> ! The following column type were changed: • result_id: from character to
+#> integer
  
 res %>% glimpse()
 #> Rows: 16
@@ -133,14 +129,14 @@ res %>% glimpse()
 #> $ package_name     <chr> "CohortSymmetry", "CohortSymmetry", "CohortSymmetry",…
 #> $ package_version  <chr> "0.0.0.9000", "0.0.0.9000", "0.0.0.9000", "0.0.0.9000…
 #> $ group_name       <chr> "index_cohort_name and marker_cohort_name", "index_co…
-#> $ group_level      <chr> "amiodarone and levothyroxine", "amiodarone and levot…
+#> $ group_level      <chr> "aspirin and amoxicillin", "aspirin and amoxicillin",…
 #> $ strata_name      <chr> "overall", "overall", "overall", "overall", "overall"…
 #> $ strata_level     <chr> "overall", "overall", "overall", "overall", "overall"…
 #> $ variable_name    <chr> "first_pharmac", "first_pharmac", "first_pharmac", "f…
 #> $ variable_level   <chr> "index", "index", "marker", "marker", "crude", "adjus…
 #> $ estimate_name    <chr> "count", "percentage", "count", "percentage", "point_…
 #> $ estimate_type    <chr> "integer", "numeric", "integer", "numeric", "numeric"…
-#> $ estimate_value   <chr> "1", "100", "0", "0", "Inf", NA, "0.0934922743508363"…
+#> $ estimate_value   <chr> "56", "58.9", "39", "41.1", "1.43589743589744", "1.35…
 #> $ additional_name  <chr> "overall", "overall", "overall", "overall", "overall"…
 #> $ additional_level <chr> "overall", "overall", "overall", "overall", "overall"…
 ```
@@ -150,13 +146,38 @@ res %>% glimpse()
 The user could then visualise their results using a wide array of
 provided tools.
 
-``` r
-nice_results <- CohortSymmetry::tableSequenceRatios(result = res)
+For example, the following produces a gt table.
 
-nice_results
+``` r
+gt_results <- CohortSymmetry::tableSequenceRatios(result = res)
+
+gt_results
 ```
 
-![](./man/figures/README-unnamed-chunk-7-1.png)
+![](./man/figures/README-gt_table.png) Note that flextable is also an
+option, users may specify this by using the `type` argument.
+
+One could also visualise the plot, for example, the following is the
+plot of the adjusted sequence ratio.
+
+``` r
+CohortSymmetry::plotSequenceRatio(cdm = cdm,
+                                  joinedTable = "aspirin_amoxicillin",
+                                  onlyaSR = T,
+                                  sequenceRatio = res,
+                                  colours = "black")
+```
+
+![](./man/figures/plotSR.png)
+
+The user also has the freedom to plot temporal trend like so:
+
+``` r
+CohortSymmetry::plotTemporalSymmetry(cdm = cdm,
+                                     joinedTable = "aspirin_amoxicillin")
+```
+
+![](./man/figures/plot_temporal.png)
 
 ### Disconnect from the cdm database connection
 
