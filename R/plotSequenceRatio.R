@@ -8,8 +8,8 @@
 #' of generateSequenceCohortSet.
 #' @param sequenceRatio A table of the form of the output of summariseSequenceRatio.
 #' @param onlyaSR If the only SR to be plotted is the adjusted SR.
-#' @param index_ids What index ids to plot, if NULL all will be plotted.
-#' @param marker_ids What marker ids to plot, if NULL all will be plotted.
+#' @param indexId What index ids to plot, if NULL all will be plotted.
+#' @param markerId What marker ids to plot, if NULL all will be plotted.
 #' @param plotTitle Title of the plot, if NULL no title will be plotted.
 #' @param labs Axis labels for the plot.
 #' @param colours Colours for both parts of the plot, pre- and post- time 0.
@@ -34,8 +34,8 @@ plotSequenceRatio <- function(cdm,
                               joinedTable,
                               sequenceRatio,
                               onlyaSR = FALSE,
-                              index_ids = NULL,
-                              marker_ids = NULL,
+                              indexId = NULL,
+                              markerId = NULL,
                               plotTitle = NULL,
                               labs = c("SR", "Drug Pairs"),
                               colours = c("red", "blue")
@@ -45,13 +45,13 @@ plotSequenceRatio <- function(cdm,
                               joinedTable = joinedTable,
                               sequenceRatio = sequenceRatio,
                               onlyaSR = onlyaSR,
-                              index_ids = index_ids,
-                              marker_ids = marker_ids,
+                              indexId = indexId,
+                              markerId = markerId,
                               plotTitle = plotTitle,
                               labs = labs,
                               colours = colours)
 
-  if(!is.null(index_ids) || !is.null(marker_ids)) {
+  if(!is.null(indexId) || !is.null(markerId)) {
     all_names <- attr(cdm[[joinedTable]], "cohort_set") %>%
       dplyr::select("marker_name", "index_name", "index_id", "marker_id") %>%
       dplyr::collect()
@@ -59,13 +59,13 @@ plotSequenceRatio <- function(cdm,
       visOmopResults::splitGroup() %>%
       dplyr::left_join(all_names,
                        by = c("index_cohort_name" = "index_name", "marker_cohort_name" = "marker_name"))
-    if(!is.null(index_ids)) {
+    if(!is.null(indexId)) {
       sequenceRatio <- sequenceRatio %>%
-        dplyr::filter(.data$index_id %in% index_ids)
+        dplyr::filter(.data$index_id %in% indexId)
     }
-    if(!is.null(marker_ids)) {
+    if(!is.null(markerId)) {
       sequenceRatio <- sequenceRatio %>%
-        dplyr::filter(.data$marker_id %in% marker_ids)
+        dplyr::filter(.data$marker_id %in% markerId)
     }
     sequenceRatio <- sequenceRatio %>%
       dplyr::select(-c("index_id", "marker_id"))

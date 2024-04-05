@@ -23,8 +23,8 @@ test_that("plot working", {
   result <- summariseSequenceRatio(cdm, "joined_cohort")
 
   plotSR <- plotSequenceRatio(cdm, "joined_cohort", result)
-  plotSR2 <- plotSequenceRatio(cdm, "joined_cohort", result, index_ids = 1)
-  plotSR3 <- plotSequenceRatio(cdm, "joined_cohort", result, marker_ids = 2)
+  plotSR2 <- plotSequenceRatio(cdm, "joined_cohort", result, indexId = 1)
+  plotSR3 <- plotSequenceRatio(cdm, "joined_cohort", result, markerId = 2)
   plotSR4 <- plotSequenceRatio(cdm, "joined_cohort", result, plotTitle = "Test plot")
   plotSR5 <- plotSequenceRatio(cdm, "joined_cohort", result, labs = c("xlab", "ylab"))
   plotSR6 <- plotSequenceRatio(cdm, "joined_cohort", result, colours = c("blue", "green"))
@@ -77,8 +77,8 @@ test_that("expected errors", {
   expect_error(plotSequenceRatio(cdm, "joined_cohort", result, labs = NULL))
   expect_error(plotSequenceRatio(cdm, "joined_cohort", result, labs = c(2,3)))
   expect_error(plotSequenceRatio(cdm, "joined_cohort", result, labs = c("a", "b", "c")))
-  expect_error(plotSequenceRatio(cdm, "joined_cohort", result, index_ids = 6))
-  expect_error(plotSequenceRatio(cdm, "joined_cohort", result, marker_ids = c("1", "2")))
+  expect_error(plotSequenceRatio(cdm, "joined_cohort", result, indexId = 6))
+  expect_error(plotSequenceRatio(cdm, "joined_cohort", result, markerId = c("1", "2")))
   expect_error(plotSequenceRatio(cdm, "joined_cohort", result, onlyaSR = 3))
   expect_error(plotSequenceRatio(cdm, "joined_cohort", result, onlyaSR = TRUE, colours = c("red", "blue")))
 
