@@ -60,13 +60,15 @@ aspirin (index_cohort) against amoxicillin (marker_cohort)
 ``` r
 library(dplyr)
 library(DrugUtilisation)
-cdm <- DrugUtilisation::generateIngredientCohortSet(cdm = cdm,
-                                                    name = "aspirin",
-                                                    ingredient = "aspirin")
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm, 
+  name = "aspirin",
+  ingredient = "aspirin")
 
-cdm <- DrugUtilisation::generateIngredientCohortSet(cdm = cdm,
-                                                    name = "amoxicillin",
-                                                    ingredient = "amoxicillin")
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "amoxicillin",
+  ingredient = "amoxicillin")
 ```
 
 ### Step 1: generateSequenceCohortSet
@@ -92,7 +94,7 @@ cdm$aspirin_amoxicillin %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpUBIYbH\file4f2062731fd8.duckdb]
+#> Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmp2VgLAW\file5e685c7d25a3.duckdb]
 #> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
 #> $ subject_id           <int> 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …
 #> $ cohort_start_date    <date> 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …
@@ -152,7 +154,30 @@ gt_results <- CohortSymmetry::tableSequenceRatios(result = res)
 gt_results
 ```
 
-![](./man/figures/README-gt_table.png)
+![](./man/figures/README-gt_table.png) Note that flextable is also an
+option, users may specify this by using the `type` argument.
+
+One could also visualise the plot, for example, the following is the
+plot of the adjusted sequence ratio.
+
+``` r
+CohortSymmetry::plotSequenceRatio(cdm = cdm,
+                                  joinedTable = "aspirin_amoxicillin",
+                                  onlyaSR = T,
+                                  sequenceRatio = res,
+                                  colours = "black")
+```
+
+![](./man/figures/plotSR.png)
+
+The user also has the freedom to plot temporal trend like so:
+
+``` r
+CohortSymmetry::plotTemporalSymmetry(cdm = cdm,
+                                     joinedTable = "aspirin_amoxicillin")
+```
+
+![](./man/figures/plot_temporal.png)
 
 ### Disconnect from the cdm database connection
 

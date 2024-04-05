@@ -57,13 +57,15 @@ If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommende
 ```{r Example - Step 0: Using DrugUtilisation, eval=TRUE, warning=FALSE}
 library(dplyr)
 library(DrugUtilisation)
-cdm <- DrugUtilisation::generateIngredientCohortSet(cdm = cdm,
-                                                    name = "aspirin",
-                                                    ingredient = "aspirin")
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm, 
+  name = "aspirin",
+  ingredient = "aspirin")
 
-cdm <- DrugUtilisation::generateIngredientCohortSet(cdm = cdm,
-                                                    name = "amoxicillin",
-                                                    ingredient = "amoxicillin")
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "amoxicillin",
+  ingredient = "amoxicillin")
 ```
  
 ### Step 1: generateSequenceCohortSet
@@ -102,18 +104,38 @@ The user could then visualise their results using a wide array of provided tools
 
 For example, the following produces a gt table.
 
-```{r Step 3: visualise the results, eval=FALSE, warning=FALSE}
+```{r Step 3: visualise the results - tables, eval=FALSE, warning=FALSE}
 gt_results <- CohortSymmetry::tableSequenceRatios(result = res)
 
 gt_results
 ```
 
 ![](./man/figures/README-gt_table.png)
+Note that flextable is also an option, users may specify this by using the `type` argument.
+
+One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.
+
+```{r Step 3: visualise the results - plots, eval=FALSE, warning=FALSE}
+CohortSymmetry::plotSequenceRatio(cdm = cdm,
+                                  joinedTable = "aspirin_amoxicillin",
+                                  onlyaSR = T,
+                                  sequenceRatio = res,
+                                  colours = "black")
+```
+![](./man/figures/plotSR.png)
+
+The user also has the freedom to plot temporal trend like so:
+
+```{r Step 3: visualise the results - plot temporal, eval=FALSE, warning=FALSE}
+CohortSymmetry::plotTemporalSymmetry(cdm = cdm,
+                                     joinedTable = "aspirin_amoxicillin")
+```
+![](./man/figures/plot_temporal.png)
 
 ### Disconnect from the cdm database connection
 ```{r Disconnect from the cdm database connection, eval=TRUE, warning=FALSE}
 CDMConnector::cdmDisconnect(cdm = cdm)
-
 ```
+
 ## References
 1. Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry analysis: assessing risk, temporality, and consistency for adverse drug reactions across datasets in five countries. Pharmacoepidemiol Drug Saf. 2015;24(8):858-864.
