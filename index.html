@@ -55,7 +55,7 @@
 </h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>The goal of CohortSymmetry is to carry out the necessary calculations for Sequence Symmetry Analysis (SSA). It is highly recommended that this method is tested beforehand against well-known positive benchmarks and negative benchmarks. Such benchmarks could be found using the paper in the Reference.</p>
+<p>The goal of CohortSymmetry is to carry out the necessary calculations for Sequence Symmetry Analysis (SSA). It is highly recommended that this method is tested beforehand against well-known positive and negative controls. Such controls could be found using the paper in the Reference. <sup>1</sup></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -70,7 +70,7 @@
 <div class="section level3">
 <h3 id="create-a-reference-to-data-in-the-omop-cdm-format">Create a reference to data in the OMOP CDM format<a class="anchor" aria-label="anchor" href="#create-a-reference-to-data-in-the-omop-cdm-format"></a>
 </h3>
-<p>The CohortSymmetry package is designed to work with data in the OMOP CDM (Common Data Model) format, so our first step is to create a reference to the data using the CDMConnector package.</p>
+<p>The CohortSymmetry package is designed to work with data in the OMOP CDM (Common Data Model) format, so our first step is to create a reference to the data using the <code>CDMConnector</code> package.</p>
 <p>As an example, we will be using Eunomia data set.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu.github.io/CDMConnector/" class="external-link">CDMConnector</a></span><span class="op">)</span></span>
@@ -90,63 +90,58 @@
 <h3 id="step-0-instantiate-two-cohorts-in-the-cdm-reference">Step 0: Instantiate two cohorts in the cdm reference<a class="anchor" aria-label="anchor" href="#step-0-instantiate-two-cohorts-in-the-cdm-reference"></a>
 </h3>
 <p>This will be entirely user’s choice on how to generate such cohorts. Minimally, this package requires two cohort tables in the cdm reference, namely the index_cohort and the marker_cohort.</p>
-<p>If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. As an example, amiodarone and levothyroxine are used. This is a known positive benchmark reported in the literature.<sup>1</sup></p>
+<p>If one wants to generate two drugs cohorts in cdm, DrugUtilisation is recommended. For merely illustration purposes, we will carry out PSSA on aspirin (index_cohort) against amoxicillin (marker_cohort)</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/" class="external-link">DrugUtilisation</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu.github.io/CodelistGenerator/" class="external-link">CodelistGenerator</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span> </span>
-<span><span class="va">index_drug</span> <span class="op">&lt;-</span> <span class="fu">CodelistGenerator</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CodelistGenerator/reference/getDrugIngredientCodes.html" class="external-link">getDrugIngredientCodes</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>, name <span class="op">=</span> <span class="st">"amiodarone"</span><span class="op">)</span></span>
-<span><span class="va">marker_drug</span> <span class="op">&lt;-</span> <span class="fu">CodelistGenerator</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CodelistGenerator/reference/getDrugIngredientCodes.html" class="external-link">getDrugIngredientCodes</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>, name <span class="op">=</span> <span class="st">"levothyroxine"</span><span class="op">)</span></span>
-<span> </span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">DrugUtilisation</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/reference/generateDrugUtilisationCohortSet.html" class="external-link">generateDrugUtilisationCohortSet</a></span><span class="op">(</span></span>
-<span>    cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"cohort_index"</span>,</span>
-<span>    conceptSet <span class="op">=</span> <span class="va">index_drug</span></span>
-<span>  <span class="op">)</span></span>
-<span> </span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">DrugUtilisation</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/reference/generateDrugUtilisationCohortSet.html" class="external-link">generateDrugUtilisationCohortSet</a></span><span class="op">(</span></span>
-<span>    cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>    name <span class="op">=</span> <span class="st">"cohort_marker"</span>,</span>
-<span>    conceptSet <span class="op">=</span> <span class="va">marker_drug</span></span>
-<span>  <span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/" class="external-link">DrugUtilisation</a></span><span class="op">)</span></span>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">DrugUtilisation</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/reference/generateIngredientCohortSet.html" class="external-link">generateIngredientCohortSet</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>, </span>
+<span>  name <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
+<span>  ingredient <span class="op">=</span> <span class="st">"aspirin"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">DrugUtilisation</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/reference/generateIngredientCohortSet.html" class="external-link">generateIngredientCohortSet</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"amoxicillin"</span>,</span>
+<span>  ingredient <span class="op">=</span> <span class="st">"amoxicillin"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-1-generatesequencecohortset">Step 1: generateSequenceCohortSet<a class="anchor" aria-label="anchor" href="#step-1-generatesequencecohortset"></a>
 </h3>
-<p>In order to initiate the calculations, the two cohorts tables need to be intersected using <code><a href="reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code> function. This process will filter out the individuals who appeared on both tables according to a user-specified parameters. This includes <code>timeGap</code>, <code>washoutWindow</code>, <code>indexMarkerGap</code> and <code>daysPriorObservation</code>. Details on these parameters could be found on the vignette.</p>
+<p>In order to initiate the calculations, the two cohorts tables need to be intersected using <code><a href="reference/generateSequenceCohortSet.html">CohortSymmetry::generateSequenceCohortSet()</a></code>. This process will output all the individuals who appeared on both tables according to a user-specified parameters. This includes <code>timeGap</code>, <code>washoutWindow</code>, <code>indexMarkerGap</code> and <code>daysPriorObservation</code>. Details on these parameters could be found on the vignette.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span>
 <span> </span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span><span class="va">cdm</span>,</span>
-<span>                   indexTable <span class="op">=</span> <span class="st">"cohort_index"</span>,</span>
-<span>                   markerTable <span class="op">=</span> <span class="st">"cohort_marker"</span>,</span>
-<span>                   name <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span>,</span>
-<span>                   combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
-<span> </span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">amiodarone_levothyroxine</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span></span>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
+<span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
+<span>  markerTable <span class="op">=</span> <span class="st">"amoxicillin"</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">aspirin_amoxicillin</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpGavWVO\file55246568bc.duckdb]</span></span>
-<span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1</span></span>
-<span><span class="co">#&gt; $ subject_id           &lt;int&gt; 2006</span></span>
-<span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 2014-01-17</span></span>
-<span><span class="co">#&gt; $ cohort_end_date      &lt;date&gt; 2017-12-31</span></span>
-<span><span class="co">#&gt; $ index_date           &lt;date&gt; 2014-01-17</span></span>
-<span><span class="co">#&gt; $ marker_date          &lt;date&gt; 2017-12-31</span></span></code></pre></div>
+<span><span class="co">#&gt; Database: DuckDB 0.8.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmp2VgLAW\file5e685c7d25a3.duckdb]</span></span>
+<span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
+<span><span class="co">#&gt; $ subject_id           &lt;int&gt; 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      &lt;date&gt; 1969-06-18, 1968-04-07, 1947-04-12, 1979-09-04, …</span></span>
+<span><span class="co">#&gt; $ index_date           &lt;date&gt; 1969-06-18, 1967-05-28, 1947-04-07, 1978-10-30, …</span></span>
+<span><span class="co">#&gt; $ marker_date          &lt;date&gt; 1968-07-29, 1968-04-07, 1947-04-12, 1979-09-04, …</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="step-2-summarisesequenceratio">Step 2: summariseSequenceRatio<a class="anchor" aria-label="anchor" href="#step-2-summarisesequenceratio"></a>
 </h3>
-<p>To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function. The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
+<p>To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into <code><a href="reference/summariseSequenceRatio.html">CohortSymmetry::summariseSequenceRatio()</a></code> The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>                                         sequenceTable <span class="op">=</span> <span class="st">"amiodarone_levothyroxine"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; -- 1 combination of 1 had index always before marker</span></span>
-<span><span class="co">#&gt; Joining with `by = join_by(days_prior_observation, washout_window, index_marker_gap, combination_window, confidence_interval, moving_average_restriction, cdm_name)`</span></span>
-<span><span class="co">#&gt; ! The following column type were changed:</span></span>
-<span><span class="co">#&gt; • result_id: from character to integer</span></span>
+<span>                                         sequenceTable <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Joining with `by = join_by(days_prior_observation, washout_window,</span></span>
+<span><span class="co">#&gt; index_marker_gap, combination_window, confidence_interval,</span></span>
+<span><span class="co">#&gt; moving_average_restriction, cdm_name)`</span></span>
+<span><span class="co">#&gt; ! The following column type were changed: • result_id: from character to</span></span>
+<span><span class="co">#&gt; integer</span></span>
 <span> </span>
 <span><span class="va">res</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 16</span></span>
@@ -157,14 +152,14 @@
 <span><span class="co">#&gt; $ package_name     &lt;chr&gt; "CohortSymmetry", "CohortSymmetry", "CohortSymmetry",…</span></span>
 <span><span class="co">#&gt; $ package_version  &lt;chr&gt; "0.0.0.9000", "0.0.0.9000", "0.0.0.9000", "0.0.0.9000…</span></span>
 <span><span class="co">#&gt; $ group_name       &lt;chr&gt; "index_cohort_name and marker_cohort_name", "index_co…</span></span>
-<span><span class="co">#&gt; $ group_level      &lt;chr&gt; "amiodarone and levothyroxine", "amiodarone and levot…</span></span>
+<span><span class="co">#&gt; $ group_level      &lt;chr&gt; "aspirin and amoxicillin", "aspirin and amoxicillin",…</span></span>
 <span><span class="co">#&gt; $ strata_name      &lt;chr&gt; "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ strata_level     &lt;chr&gt; "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ variable_name    &lt;chr&gt; "first_pharmac", "first_pharmac", "first_pharmac", "f…</span></span>
 <span><span class="co">#&gt; $ variable_level   &lt;chr&gt; "index", "index", "marker", "marker", "crude", "adjus…</span></span>
 <span><span class="co">#&gt; $ estimate_name    &lt;chr&gt; "count", "percentage", "count", "percentage", "point_…</span></span>
 <span><span class="co">#&gt; $ estimate_type    &lt;chr&gt; "integer", "numeric", "integer", "numeric", "numeric"…</span></span>
-<span><span class="co">#&gt; $ estimate_value   &lt;chr&gt; "1", "100", "0", "0", "Inf", NA, "0.0934922743508363"…</span></span>
+<span><span class="co">#&gt; $ estimate_value   &lt;chr&gt; "56", "58.9", "39", "41.1", "1.43589743589744", "1.35…</span></span>
 <span><span class="co">#&gt; $ additional_name  &lt;chr&gt; "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ additional_level &lt;chr&gt; "overall", "overall", "overall", "overall", "overall"…</span></span></code></pre></div>
 </div>
@@ -172,16 +167,30 @@
 <h3 id="step-3-visualise-the-results">Step 3: visualise the results<a class="anchor" aria-label="anchor" href="#step-3-visualise-the-results"></a>
 </h3>
 <p>The user could then visualise their results using a wide array of provided tools.</p>
+<p>For example, the following produces a gt table.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nice_results</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">res</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gt_results</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">res</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">nice_results</span></span></code></pre></div>
-<p><img src="./reference/figures/README-unnamed-chunk-7-1.png"></p>
+<span><span class="va">gt_results</span></span></code></pre></div>
+<p><img src="./reference/figures/README-gt_table.png"> Note that flextable is also an option, users may specify this by using the <code>type</code> argument.</p>
+<p>One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/plotSequenceRatio.html">plotSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
+<span>                                  joinedTable <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span>,</span>
+<span>                                  onlyaSR <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                                  sequenceRatio <span class="op">=</span> <span class="va">res</span>,</span>
+<span>                                  colours <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="./reference/figures/plotSR.png"></p>
+<p>The user also has the freedom to plot temporal trend like so:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/plotTemporalSymmetry.html">plotTemporalSymmetry</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
+<span>                                     joinedTable <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="./reference/figures/plot_temporal.png"></p>
 </div>
 <div class="section level3">
 <h3 id="disconnect-from-the-cdm-database-connection">Disconnect from the cdm database connection<a class="anchor" aria-label="anchor" href="#disconnect-from-the-cdm-database-connection"></a>
 </h3>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
