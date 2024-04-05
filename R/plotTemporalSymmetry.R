@@ -6,8 +6,8 @@
 #' @param cdm A cdm object.
 #' @param joinedTable The name of a table in the cdm of the form of the output
 #' of generateSequenceCohortSet.
-#' @param index_ids What index ids to plot, if NULL all will be plotted.
-#' @param marker_ids What marker ids to plot, if NULL all will be plotted.
+#' @param indexId What index ids to plot, if NULL all will be plotted.
+#' @param markerId What marker ids to plot, if NULL all will be plotted.
 #' @param plotTitle Title of the plot, if NULL no title will be plotted.
 #' @param labs Axis labels for the plot.
 #' @param timescale Timescale for the x axis of the plot (month, day, year).
@@ -34,8 +34,8 @@
 #' }
 plotTemporalSymmetry <- function(cdm,
                                  joinedTable,
-                                 index_ids = NULL,
-                                 marker_ids = NULL,
+                                 indexId = NULL,
+                                 markerId = NULL,
                                  plotTitle = NULL,
                                  labs = c("Time (months)", "Individuals (N)"),
                                  timescale = "month",
@@ -45,8 +45,8 @@ plotTemporalSymmetry <- function(cdm,
   # checks
   checkInputPlotTemporalSymmetry(cdm = cdm,
                                  joinedTable = joinedTable,
-                                 index_ids = index_ids,
-                                 marker_ids = marker_ids,
+                                 indexId = indexId,
+                                 markerId = markerId,
                                  plotTitle = plotTitle,
                                  labs = labs,
                                  xlim = xlim,
@@ -76,14 +76,14 @@ plotTemporalSymmetry <- function(cdm,
     dplyr::select(-c("cohort_definition_id")) %>%
     dplyr::compute()
 
-  if(!is.null(index_ids)) {
+  if(!is.null(indexId)) {
     plot_data <- plot_data %>%
-      dplyr::filter(.data$index_id %in% .env$index_ids)
+      dplyr::filter(.data$index_id %in% .env$indexId)
   }
 
-  if(!is.null(marker_ids)) {
+  if(!is.null(markerId)) {
     plot_data <- plot_data %>%
-      dplyr::filter(.data$marker_id %in% .env$marker_ids)
+      dplyr::filter(.data$marker_id %in% .env$markerId)
   }
 
   plot_data <- plot_data %>%
