@@ -180,15 +180,15 @@ test_that("attrition: combinationWindow", {
                    1)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                dplyr::filter(reason == "Events available within the prespecified combination window") %>%
+                dplyr::filter(reason == "Events excluded due to the prespecified combination window") %>%
                 dplyr::pull(excluded_subjects)==1)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                dplyr::filter(reason == "Events within the prespecified time gap") %>%
+                dplyr::filter(reason == "Events excluded due to the prespecified index marker gap") %>%
                 dplyr::pull(excluded_subjects)==0)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                dplyr::filter(reason == "Prior history requirement fulfilled") %>%
+                dplyr::filter(reason == "Events excluded due to insufficient prior history") %>%
                 dplyr::pull(excluded_subjects)==0)
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
@@ -223,15 +223,15 @@ test_that("attrition: combinationWindow", {
                    1)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                dplyr::filter(reason == "Events available within the prespecified combination window") %>%
+                dplyr::filter(reason == "Events excluded due to the prespecified combination window") %>%
                 dplyr::pull(excluded_subjects)==4)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                dplyr::filter(reason == "Events within the prespecified time gap") %>%
+                dplyr::filter(reason == "Events excluded due to the prespecified index marker gap") %>%
                 dplyr::pull(excluded_subjects)==0)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                dplyr::filter(reason == "Prior history requirement fulfilled") %>%
+                dplyr::filter(reason == "Events excluded due to insufficient prior history") %>%
                 dplyr::pull(excluded_subjects)==0)
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
@@ -271,7 +271,7 @@ test_that("attrition: combinationWindow", {
                                                    markerId=3)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts_3) %>%
-                dplyr::filter(reason == "Events available within the prespecified combination window") %>%
+                dplyr::filter(reason == "Events excluded due to the prespecified combination window") %>%
                 dplyr::pull(excluded_subjects)==4)
 
   expect_identical((cdm$joined_cohorts_3 %>% dplyr::collect() %>% dplyr::pull(subject_id)),
@@ -319,7 +319,7 @@ test_that("attrition: indexMarkerGap", {
                                                    indexMarkerGap=60)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts_2) %>%
-                dplyr::filter(reason =="Events within the prespecified time gap") %>%
+                dplyr::filter(reason =="Events excluded due to the prespecified index marker gap") %>%
                 dplyr::pull(excluded_subjects)==3)
 
   expect_identical(cdm$joined_cohorts_2 %>%
@@ -338,15 +338,15 @@ test_that("attrition: indexMarkerGap", {
                                                    indexMarkerGap = 365)
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts_3) %>%
-                dplyr::filter(reason =="Events within the prespecified time gap") %>%
+                dplyr::filter(reason =="Events excluded due to the prespecified index marker gap") %>%
                 dplyr::pull(excluded_subjects)==2)
 
   expect_true(all(omopgenerics::attrition(cdm$joined_cohorts_2) %>%
-                dplyr::filter(!reason =="Events within the prespecified time gap") %>%
+                dplyr::filter(!reason =="Events excluded due to the prespecified index marker gap") %>%
                 dplyr::pull(excluded_subjects)==0))
 
   expect_true(all(omopgenerics::attrition(cdm$joined_cohorts_2) %>%
-                    dplyr::filter(!reason =="Events within the prespecified time gap") %>%
+                    dplyr::filter(!reason =="Events excluded due to the prespecified index marker gap") %>%
                     dplyr::pull(excluded_records)==0))
 
   expect_identical(cdm$joined_cohorts_3 %>%
@@ -398,11 +398,11 @@ test_that("attrition: daysPriorObservation", {
                                                    combinationWindow = c(0, Inf))
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                dplyr::filter(reason =="Prior history requirement fulfilled") %>%
+                dplyr::filter(reason =="Events excluded due to insufficient prior history") %>%
                 dplyr::pull(excluded_subjects)==1)
 
   expect_true(all(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                dplyr::filter(!reason =="Prior history requirement fulfilled") %>%
+                dplyr::filter(!reason =="Events excluded due to insufficient prior history") %>%
                 dplyr::pull(excluded_subjects)==0))
 
   expect_identical(cdm$joined_cohorts %>%
@@ -535,10 +535,278 @@ test_that("attrition: washoutWindow", {
                    1)
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
-                     dplyr::filter(reason == "Washout window fulfilled") %>%
+                     dplyr::filter(reason == "Events excluded due to insufficient washout window") %>%
                      dplyr::pull(excluded_records) %>%
                      as.numeric(),
                    1)
+
+  CDMConnector::cdmDisconnect(cdm = cdm)
+})
+
+test_that("attrition: complete example 1", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = rep(1, 20),
+    subject_id = rep(c(1:4),5),
+    cohort_start_date = as.Date(
+      c(as.Date("2010-01-01"): as.Date("2010-01-20"))
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = rep(1, 20),
+    subject_id = rep(c(2,3,1,4),5),
+    cohort_start_date = as.Date(
+      c(as.Date("2010-02-01"): as.Date("2010-02-20"))
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+                                            markerCohort = markerCohort)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
+                                                   indexTable = "cohort_1",
+                                                   markerTable = "cohort_2",
+                                                   daysPriorObservation = 365,
+                                                   washoutWindow = 30,
+                                                   indexMarkerGap = 30,
+                                                   combinationWindow = c(0, 30)
+                                                   )
+
+  expect_true(all(c(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                      dplyr::select(reason_id) %>%
+                      dplyr::pull()
+  ) %in%
+    c(1:5)
+  ))
+
+  expect_true(all(c(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                      dplyr::select(cohort_definition_id) %>%
+                      dplyr::distinct() %>%
+                      dplyr::pull()
+  ) %in%
+    c(1)
+  ))
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 1) %>%
+                     dplyr::pull(number_records) %>%
+                     as.numeric(),
+                   4
+                   )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 1) %>%
+                     dplyr::pull(number_subjects) %>%
+                     as.numeric(),
+                   4
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 2) %>%
+                     dplyr::pull(number_records) %>%
+                     as.numeric(),
+                   2
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 2) %>%
+                     dplyr::pull(number_subjects) %>%
+                     as.numeric(),
+                   2
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 2) %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   2
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 2) %>%
+                     dplyr::pull(excluded_subjects) %>%
+                     as.numeric(),
+                   2
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 3) %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 3) %>%
+                     dplyr::pull(excluded_subjects) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 4) %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 4) %>%
+                     dplyr::pull(excluded_subjects) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 5) %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 5) %>%
+                     dplyr::pull(excluded_subjects) %>%
+                     as.numeric(),
+                   0
+  )
+
+  CDMConnector::cdmDisconnect(cdm = cdm)
+})
+
+test_that("attrition: complete example 2", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = rep(1, 20),
+    subject_id = rep(c(1:4),5),
+    cohort_start_date = as.Date(
+      c(as.Date("2010-01-01"): as.Date("2010-01-20"))
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = rep(1, 20),
+    subject_id = rep(c(2,3,1,4),5),
+    cohort_start_date = as.Date(
+      c(as.Date("2010-02-01"): as.Date("2010-02-20"))
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+                                            markerCohort = markerCohort)
+
+  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+                                                   name = "joined_cohorts",
+                                                   indexTable = "cohort_1",
+                                                   markerTable = "cohort_2",
+                                                   cohortDateRange = c(as.Date("2010-01-02"), NA),
+                                                   daysPriorObservation = 365,
+                                                   washoutWindow = 30,
+                                                   indexMarkerGap = 30,
+                                                   combinationWindow = c(0, 90))
+
+  expect_true(all(c(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                      dplyr::select(reason_id) %>%
+                      dplyr::pull()
+  ) %in%
+    c(1:5)
+  ))
+
+  expect_true(all(c(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                      dplyr::select(cohort_definition_id) %>%
+                      dplyr::distinct() %>%
+                      dplyr::pull()
+  ) %in%
+    c(1)
+  ))
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 1) %>%
+                     dplyr::pull(number_records) %>%
+                     as.numeric(),
+                   4
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 1) %>%
+                     dplyr::pull(number_subjects) %>%
+                     as.numeric(),
+                   4
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 2) %>%
+                     dplyr::pull(number_records) %>%
+                     as.numeric(),
+                   4
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 2) %>%
+                     dplyr::pull(number_subjects) %>%
+                     as.numeric(),
+                   4
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 2) %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 2) %>%
+                     dplyr::pull(excluded_subjects) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 3) %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   1
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 3) %>%
+                     dplyr::pull(excluded_subjects) %>%
+                     as.numeric(),
+                   1
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 4) %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 4) %>%
+                     dplyr::pull(excluded_subjects) %>%
+                     as.numeric(),
+                   0
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 5) %>%
+                     dplyr::pull(excluded_records) %>%
+                     as.numeric(),
+                   1
+  )
+
+  expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
+                     dplyr::filter(reason_id == 5) %>%
+                     dplyr::pull(excluded_subjects) %>%
+                     as.numeric(),
+                   1
+  )
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
