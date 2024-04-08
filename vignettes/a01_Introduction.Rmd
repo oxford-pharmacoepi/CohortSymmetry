@@ -1,0 +1,67 @@
+---
+title: "Introduction to CohortSymmetry"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{a01_Introduction_to_CohortSymmetry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  eval = Sys.getenv("$RUNNER_OS") != "macOS"
+)
+```
+
+To do a study of Prescription Sequence Symmetry Analysis (PSSA), the analytics functions from this package that you will interact with are:
+
+1. `generateSequenceCohortSet()`: this function will create a cohort with the intersected individuals of the two interested cohorts.
+ 
+2. `summariseSequenceRatio()`: this function will calculate the sequence ratio.
+
+Below, we show an example analysis to provide an broad overview of how this functionality provided by the CohortSymmetry package can be used. More context and further examples for each of these functions are provided in later vignettes.
+
+First, let’s load relevant libraries.
+
+```{r message= FALSE, warning=FALSE}
+library(CDMConnector)
+library(dplyr)
+library(DBI)
+library(omock)
+library(CohortSymmetry)
+```
+
+The CohortSymmetry package works with data mapped to the OMOP CDM and we will first need to connect to a database, after which we can use the CDMConnector package to represent our mapped data as a single R object. As an example, we will be using Omock package to generate two cohorts: the **index_cohort** and the **marker_cohort**.
+
+```{r message= FALSE, warning=FALSE}
+cdm <- emptyCdmReference(cdmName = "mock") |>
+  mockPerson(nPerson = 1000) |>
+  mockObservationPeriod() |>
+  mockCohort(
+    tableName = "index_cohort",
+    numberCohorts = 1,
+    cohortName = c("index_cohort")
+  ) |>
+   mockCohort(
+    tableName = "marker_cohort",
+    numberCohorts = 1,
+    cohortName = c("marker_cohort")
+  )
+
+cdm
+```
+Once we have a connection to the database set-up, we can use the `generateSequenceCohortSet()` to intersect the two cohorts. This function will output all the individuals who appeared on both tables. 
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "index_cohort",
+  markerTable = "marker_cohort",
+  name = "index_marker"
+)
+
+cdm$index_marker |> glimpse()
+```

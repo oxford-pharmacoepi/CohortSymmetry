@@ -41,11 +41,13 @@ Suggests:
     duckdb,
     cli,
     checkmate,
-    odbc, 
+    odbc,
     RPostgres,
     tidyselect,
     flextable,
-    gt
+    gt,
+    knitr,
+    rmarkdown
 Imports: 
     CDMConnector (>= 1.3.0),
     dplyr,
@@ -67,3 +69,4 @@ Remotes:
    darwin-eu-dev/PatientProfiles
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
+VignetteBuilder: knitr
