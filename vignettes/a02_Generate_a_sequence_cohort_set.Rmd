@@ -23,11 +23,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
-library(knitr)
-library(here)
-knitr::include_graphics(here("vignettes/dpop1.png"))
-```
+
 
 # Introduction
 In this vignette we will explore the functionalities of `generateSequenceCohort()`. 
@@ -35,48 +31,81 @@ In this vignette we will explore the functionalities of `generateSequenceCohort(
 ## Create a cdm object
 CohortSymmetry package is designed to work with data mapped to OMOP, so the first step is to create a reference to the data using the CDMConnector package. We will use the Eunomia dataset for the subsequent examples. 
 
-```{r setup}
+```{r message= FALSE, warning=FALSE}
 library(CDMConnector)
 library(dplyr)
 library(DBI)
 library(omock)
 library(CohortSymmetry)
 library(duckdb)
+library(here)
 
-db <- DBI::dbConnect(duckdb::duckdb(), 
-                     dbdir = CDMConnector::eunomia_dir())
+con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
 
-cdm <- cdm_from_con(
-  con = db,
+cdm <- CDMConnector::cdm_from_con(
+  con = con,
   cdm_schema = "main",
   write_schema = "main"
 )
 ```
 
 ## Instantiate two cohorts in the cdm reference
-CohortSymmetry package requires that the cdm object contains two cohorts tables: one for the index cohort and the other one for the marker cohort. There are a lot of different ways on how to do this, and it will depend on what the index cohort and marker cohort represent. If one wants to generate two drugs cohorts in the cdm, DrugUtilisation package is recommended. For illustrative purposes,  we will carry out PSSA on aspirin (index_cohort) against amoxicillin (marker_cohort).
+CohortSymmetry package requires that the cdm object contains two cohorts tables: one for the index cohort and the other one for the marker cohort. There are a lot of different ways to create these cohorts, and it will depend on what the index cohort and marker cohort represent. Here, we use the DrugUtilisation package to generate two drug cohorts in the cdm object. For illustrative purposes, we will carry out PSSA on aspirin (index_cohort) against acetaminophen (marker_cohort).
 
-```{r setup}
+```{r message= FALSE, warning=FALSE}
 library(DrugUtilisation)
 cdm <- DrugUtilisation::generateIngredientCohortSet(
-  cdm = cdm, 
+  cdm = cdm,
   name = "aspirin",
   ingredient = "aspirin")
 
 cdm <- DrugUtilisation::generateIngredientCohortSet(
   cdm = cdm,
-  name = "amoxicillin",
-  ingredient = "amoxicillin")
+  name = "acetaminophen",
+  ingredient = "acetaminophen")
 ```
 
 # Generate a sequence cohort
 In order to initiate the calculations, the two cohorts tables need to be intersected using `generateSequenceCohortSet()`. This process will output all the individuals who appeared on both tables according to user-specified parameters. Let's go through a few examples to see how this function works.
 
 ## No specific requirements
-Let's study the simplest case, where no study period, prior history, washout window, or time gap between the index and the marker, are specified. See the below figure for 
-```{r setup}
+Let's study the simplest case, where no study period, prior history, washout window, or time gap between the index and the marker, are specified. See figure below to see an example of a dataset containing five different participants.
 
+```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+knitr::include_graphics(here("vignettes/figures/1-NoRestrictions.png"))
 ```
 
+See that only the first event or episode (either for the marker and for the index) is included in the analysis. As there is no restriction criteria and all the individuals have an episode of the marker and the index cohort, all the subjects are included in the database. We can get a sequence cohort without including any particular requirement like so:
 
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  combinationWindow = c(0, Inf))
+
+cdm$intercept
+```
+
+## Restrict study period
+We can also specify the study period of the analysis using the `cohortDateRange` input. Hence, the observation period will be restricted to this dates and only events or episodes happening during these dates will be accounted for the analysis, as represented in the below figure:
+
+```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+knitr::include_graphics(here("vignettes/figures/2-studyPeriod.png"))
+```
+
+Notice that, by imposing a restriction on study period, some of the participants might be excluded as no enough episodes will be included. Let's restrict our study period to 
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+  combinationWindow = c(0, Inf))
+
+cdm$intercept
+```
 
