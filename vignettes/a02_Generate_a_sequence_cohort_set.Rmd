@@ -23,7 +23,60 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+library(knitr)
+library(here)
+knitr::include_graphics(here("vignettes/dpop1.png"))
+```
+
+# Introduction
+In this vignette we will explore the functionalities of `generateSequenceCohort()`. 
+
+## Create a cdm object
+CohortSymmetry package is designed to work with data mapped to OMOP, so the first step is to create a reference to the data using the CDMConnector package. We will use the Eunomia dataset for the subsequent examples. 
 
 ```{r setup}
+library(CDMConnector)
+library(dplyr)
+library(DBI)
+library(omock)
 library(CohortSymmetry)
+library(duckdb)
+
+db <- DBI::dbConnect(duckdb::duckdb(), 
+                     dbdir = CDMConnector::eunomia_dir())
+
+cdm <- cdm_from_con(
+  con = db,
+  cdm_schema = "main",
+  write_schema = "main"
+)
 ```
+
+## Instantiate two cohorts in the cdm reference
+CohortSymmetry package requires that the cdm object contains two cohorts tables: one for the index cohort and the other one for the marker cohort. There are a lot of different ways on how to do this, and it will depend on what the index cohort and marker cohort represent. If one wants to generate two drugs cohorts in the cdm, DrugUtilisation package is recommended. For illustrative purposes,  we will carry out PSSA on aspirin (index_cohort) against amoxicillin (marker_cohort).
+
+```{r setup}
+library(DrugUtilisation)
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm, 
+  name = "aspirin",
+  ingredient = "aspirin")
+
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "amoxicillin",
+  ingredient = "amoxicillin")
+```
+
+# Generate a sequence cohort
+In order to initiate the calculations, the two cohorts tables need to be intersected using `generateSequenceCohortSet()`. This process will output all the individuals who appeared on both tables according to user-specified parameters. Let's go through a few examples to see how this function works.
+
+## No specific requirements
+Let's study the simplest case, where no study period, prior history, washout window, or time gap between the index and the marker, are specified. See the below figure for 
+```{r setup}
+
+```
+
+
+
