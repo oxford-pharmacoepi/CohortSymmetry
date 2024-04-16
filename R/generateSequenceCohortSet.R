@@ -210,13 +210,13 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::filter(abs(.data$gap) > .env$time_1 &
                   abs(.data$gap) <= .env$time_2) |>
   dplyr::compute(name = name, temporary = FALSE) |>
-  omopgenerics::recordCohortAttrition(reason="Events available within the prespecified combination window")
+  omopgenerics::recordCohortAttrition(reason="Events excluded due to the prespecified combination window")
 
   # 2) indexMarkerGap
   cdm[[name]] <- cdm[[name]] %>%
     dplyr::filter(.data$cei <= .env$indexMarkerGap) |>
   dplyr::compute(name = name, temporary = FALSE) |>
-  omopgenerics::recordCohortAttrition(reason="Events within the prespecified time gap")
+  omopgenerics::recordCohortAttrition(reason="Events excluded due to the prespecified index marker gap")
 
   # 3) days prior observation
   cdm[[name]] <- cdm[[name]] %>%
@@ -224,7 +224,7 @@ generateSequenceCohortSet <- function(cdm,
       .data$prior_observation >= .env$daysPriorObservation
     ) |>
     dplyr::compute(name = name, temporary = FALSE) |>
-  omopgenerics::recordCohortAttrition(reason="Prior history requirement fulfilled")
+  omopgenerics::recordCohortAttrition(reason="Events excluded due to insufficient prior history")
 
   # 4) washoutWindow
   cdm[[name]] <- cdm[[name]] %>%
@@ -233,7 +233,7 @@ generateSequenceCohortSet <- function(cdm,
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
     ) |>
     dplyr::compute(name = name, temporary = FALSE) |>
-  omopgenerics::recordCohortAttrition(reason="Washout window fulfilled")
+  omopgenerics::recordCohortAttrition(reason="Events excluded due to insufficient washout window")
 
   # final output table
   cdm[[name]] <- cdm[[name]] %>%
