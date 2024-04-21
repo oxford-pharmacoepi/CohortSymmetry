@@ -23,6 +23,18 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r, include = FALSE}
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 # Introduction
 
 In this vignette we will explore the functionalities of `generateSequenceCohort()`.
