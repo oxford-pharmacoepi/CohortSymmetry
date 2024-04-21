@@ -65,9 +65,7 @@ Imports:
     omopgenerics,
     here
 Remotes: 
-   oxford-pharmacoepi/omock,
-   darwin-eu-dev/omopgenerics,
-   darwin-eu-dev/PatientProfiles
+   oxford-pharmacoepi/omock
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
 VignetteBuilder: knitr
