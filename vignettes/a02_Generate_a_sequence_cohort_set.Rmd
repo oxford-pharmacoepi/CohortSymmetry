@@ -38,7 +38,6 @@ library(DBI)
 library(omock)
 library(CohortSymmetry)
 library(duckdb)
-library(here)
 
 con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
 
@@ -77,6 +76,7 @@ Let's study the simplest case, where no study period, prior history, washout win
 <center>
 
 ```{r, echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+library(here)
 knitr::include_graphics(here("vignettes/figures/1-NoRestrictions.png"))
 ```
 
