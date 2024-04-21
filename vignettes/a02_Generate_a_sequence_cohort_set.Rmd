@@ -39,13 +39,21 @@ library(omock)
 library(CohortSymmetry)
 library(duckdb)
 
-con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-
-cdm <- CDMConnector::cdm_from_con(
-  con = con,
+db <- DBI::dbConnect(duckdb::duckdb(), 
+                     dbdir = CDMConnector::eunomia_dir())
+cdm <- cdm_from_con(
+  con = db,
   cdm_schema = "main",
   write_schema = "main"
 )
+# 
+# con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+# 
+# cdm <- CDMConnector::cdm_from_con(
+#   con = con,
+#   cdm_schema = "main",
+#   write_schema = "main"
+# )
 ```
 
 ## Instantiate two cohorts in the cdm reference
