@@ -86,10 +86,10 @@ See below that the generated cohort follows the format of an OMOP CDM cohort wit
 cdm$intersect
 ```
 
-Observe that, automatically, in the settings of the generated cohort we will be able to identify which cohort corresponds to the *indexTable* and which one to the *markerTable*, as *cohort_name* has the following form:
+Observe that, automatically, in the settings of the generated cohort we will be able to identify which cohort corresponds to the indexTable and which one to the markerTable, as cohort_name has the following form:
 
 <center>
-*index\_{indexTable}marker*{markerTable}
+*index*\_{indexTable}_*marker*\_{markerTable}
 </center>
 ```{r message= FALSE, warning=FALSE}
 settings(cdm$intersect)
