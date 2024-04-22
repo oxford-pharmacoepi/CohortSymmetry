@@ -1,0 +1,380 @@
+---
+title: "Step 1. Generate a sequence cohort"
+output:
+    html_document:
+    pandoc_args: [
+      "--number-offset=1,0"
+      ]
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{a02_Generate_a_sequence_cohort}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  eval = Sys.getenv("$RUNNER_OS") != "macOS"
+)
+```
+
+```{r, include = FALSE}
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+In this vignette we will explore the functionalities of `generateSequenceCohort()`.
+
+## Create a cdm object
+
+CohortSymmetry package is designed to work with data mapped to OMOP, so the first step is to create a reference to the data using the CDMConnector package. We will use the Eunomia dataset for the subsequent examples.
+
+```{r message= FALSE, warning=FALSE}
+library(CDMConnector)
+library(dplyr)
+library(DBI)
+library(omock)
+library(CohortSymmetry)
+library(duckdb)
+
+db <- DBI::dbConnect(duckdb::duckdb(), 
+                     dbdir = CDMConnector::eunomia_dir())
+cdm <- cdm_from_con(
+  con = db,
+  cdm_schema = "main",
+  write_schema = "main"
+)
+# 
+# con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
+# 
+# cdm <- CDMConnector::cdm_from_con(
+#   con = con,
+#   cdm_schema = "main",
+#   write_schema = "main"
+# )
+```
+
+## Instantiate two cohorts in the cdm reference
+
+CohortSymmetry package requires that the cdm object contains two cohort tables: one for the index cohort and the other one for the marker cohort. There are a lot of different ways to create these cohorts, and it will depend on what the index cohort and marker cohort represent. Here, we use the DrugUtilisation package to generate two drug cohorts in the cdm object. For illustrative purposes, we will carry out PSSA on aspirin (index_cohort) against acetaminophen (marker_cohort).
+
+```{r message= FALSE, warning=FALSE}
+library(DrugUtilisation)
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "aspirin",
+  ingredient = "aspirin")
+
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "acetaminophen",
+  ingredient = "acetaminophen")
+```
+
+# Generate a sequence cohort
+
+In order to initiate the calculations, the two cohorts tables need to be intersected using `generateSequenceCohortSet()`. This process will output all the individuals who appear on both tables. Let's go through a few examples to see how this function works.
+
+## No specific requirements
+
+Let's study the simplest case, where no study period, prior history, washout window, or time gap between the index and the marker, are specified. See figure below to see an example of a dataset containing five different participants.
+
+<center>
+
+```{r, echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+library(here)
+knitr::include_graphics(here("vignettes/figures/1-NoRestrictions.png"))
+```
+
+</center>
+
+See that only the first event or episode (either for the index and the marker) is included in the analysis. As there is no restriction criteria and all the individuals have an episode in the index and the marker cohort, all the subjects are included in the database. We can get a sequence cohort without including any particular requirement like so:
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  combinationWindow = c(0,Inf))
+
+cdm$intercept 
+```
+
+See that the generated table has the format of an OMOP CDM cohort, but it also includes two additional columns: the index_date and the marker_date, which are the dates of the index and marker episode, respectively. The cohort_start_date and the cohort_end_date are defined as: 
+
+- **cohort_start_date**: earliest cohort_start_date between the index and the marker events.
+- **cohort_end_date**: latest cohort_end_date between the index and the marker events.
+
+If we had more than one cohort in the index or the marker tables, we would be able to specify the one of interest by using `indexId` and `markerId` arguments.
+
+## Specified study period
+We can restrict the study period of the analysis to only include episodes or events happening during a specific period of time. Hence, the observation period will be restricted to these dates and only events or episodes happening during this period will be accounted for the analysis, as represented in the below figure:
+
+<center>
+
+```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+knitr::include_graphics(here("vignettes/figures/2-studyPeriod.png"))
+```
+
+</center>
+
+Notice that, by imposing a restriction on study period, some of the participants might be excluded. The study period can be restricted using the `cohortDateRange` argument, which is defined as:
+
+<center>
+
+`cohortDateRange = c(start_of_the_study_period, end_of_the_study_period)`
+
+</center>
+
+See an example of the usage below, where we have restricted the `cohortDateRange` within 01/01/1950 until 01/01/1969. Consequently, the cohort range falls into the pre-specified period:
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+  combinationWindow = c(0,Inf))
+
+cdm$intercept |> 
+  summarise(min_cohort_start_date = min(cohort_start_date), 
+            max_cohort_start_date = max(cohort_start_date),
+            min_cohort_end_date   = min(cohort_end_date),
+            max_cohort_end_date   = max(cohort_end_date))
+```
+
+
+## Specified study period and prior history requirement
+
+We can also specify the minimum prior history that an individual has to have before the start of the first event. Individuals with not enough prior history will be excluded. See the figure below, where we have excluded individual number 5 because the first event happening within the study period did not have more than 31 days of prior history:
+
+<center>
+```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+knitr::include_graphics(here("vignettes/figures/3-PriorObservation.png"))
+```
+</center>
+
+The number of days of prior history required can be implemented using the argument `daysPriorObservation`. See an example below, where we focus on two different individuals: subjects 2 and 53. Without a prior history requirement, both individuals are included in the analysis:
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+  daysPriorObservation = 0,
+  combinationWindow = c(0,Inf))
+
+cdm$intercept |> 
+  inner_join(
+    cdm$observation_period |> 
+      select("subject_id" = "person_id", "observation_period_start_date")
+  ) |>
+  filter(subject_id %in% c(2,53)) |>
+  mutate(daysPriorObservation = cohort_start_date - observation_period_start_date)
+```
+Now we impose a prior history requirement of 365 days. As seen, subject 53 is excluded as it does not have enough days (>365) of prior observation before the included event.
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1980-01-01")),
+  daysPriorObservation = 365,
+  combinationWindow = c(0,Inf))
+
+cdm$intercept |> 
+  inner_join(
+    cdm$observation_period |> 
+      select("subject_id" = "person_id", "observation_period_start_date")
+  ) |>
+  filter(subject_id %in% c(2,53))
+```
+
+
+## Specified study period, prior history requirement and washout period
+
+We can also specify the minimum washout period required for an event or episode to be included. In the following figure, we exclude participant number 6 as another episode took place within the washout period:
+<center>
+```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+knitr::include_graphics(here("vignettes/figures/4-washoutPeriod.png"))
+```
+</center>
+This functionality can be implemented using the `washoutWindow` argument. See an example of its implementation below, where we analyse the case of subject_id number 1936 and 3565. 
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1980-01-01")),
+  daysPriorObservation = 365,
+  washoutWindow = 0,
+  combinationWindow = c(0, Inf))
+
+cdm[["aspirin"]] |>
+  filter(subject_id %in% c(1936,3565)) |>
+  group_by(subject_id) |>
+  arrange(cohort_start_date)
+
+cdm[["intercept"]] |>
+  filter(subject_id %in% c(1936,3565)) 
+```
+Notice that by setting a washout window of 0, both participants are included. However, see that the included episode of subject 1936 happens at 1950-05-06, and a previous episode (not included within the study period), happened just 210 days before this one (1949-10-08). Hence, by using a `washoutWindow` of 365, this participant is excluded from the analysis:
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+  daysPriorObservation = 365,
+  washoutWindow = 365,
+  combinationWindow = c(0, Inf))
+
+cdm[["intercept"]] |>
+  filter(subject_id %in% c(1936,3565)) |>
+  arrange(subject_id, cohort_start_date)
+```
+
+
+## Specified study period, prior history requirement and combination window
+
+We define the combination window as the minimum and the maximum days between the start of the first event (either if is the index or the marker) and the start of the next event. In other words:
+
+<center>
+
+`x = second_episode(start_date) - first_episode(start_date)`
+
+`combinationWindow[1] $\leq$ x $\leq$ combinationWindow[2]`
+
+</center>
+
+See in the figure below an example, where we define `combinationWindow = c(0,20)`. This means that the gap between the start date of the second episode and the start of the first episode should be larger than 0 and less or equal than 20. As subjects 2 and 3 do not fulfill this condition, they are excluded from the analysis.
+<center>
+```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+knitr::include_graphics(here("vignettes/figures/5-combinationWindow_numbers.png"))
+```
+</center>
+
+
+In the `generateSequenceCohortSet()`function, this is implemented using the `combinationWindow` argument. Notice that in the previous examples, as we did not want any combination window requirement, we have set this argument to `combinationWindow = c(0,Inf)`, as by default is `combinationWindow = c(0, 365)`. In the following example, we explore subject_id 80 and 187 to see the functionality of this argument. When using no restriction for the combination window, both are included in the **intersect** cohort:
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+  daysPriorObservation = 365,
+  combinationWindow = c(0, Inf))
+
+cdm[["intercept"]] |>
+  filter(subject_id %in% c(80,187)) |>
+  mutate(combinationWindow = pmax(index_date, marker_date) - pmin(index_date, marker_date))
+```
+
+However, when restricting a maximum combination window of 365 days, subject 187 is excluded from the analysis, as its `combinationWindow` is larger than 365:
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+  daysPriorObservation = 365,
+  combinationWindow = c(0, Inf))
+
+cdm[["intercept"]] |>
+  filter(subject_id %in% c(80,187))
+```
+
+## Specified study period, prior history requirement and index gap
+
+We define the index-marker gap to refer to the maximum number of days between the start of the second episode (either if is the index or the marker) and the end of the first episode. That means:
+
+<center>
+
+`x = second_episode(cohort_start_date) - first_episode(cohort_end_date)`
+
+`x $\leq$ indexMarkerGap`
+
+</center>
+
+See an example below, where all subjects with an index-marker gap higher than 30 days are excluded from the analysis:
+
+<center>
+```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
+knitr::include_graphics(here("vignettes/figures/6-indexGap.png"))
+```
+</center>
+
+Use `indexGap` argument to impose this restriction. See how this affect subject 80 and 754 in the example below:
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+  daysPriorObservation = 365,
+  indexMarkerGap = NULL)
+
+cdm$intercept |>
+  filter(subject_id %in% c(80,754)) |>
+  inner_join(
+    # As for both, acetaminophen (marker) is the first event:
+    cdm[["acetaminophen"]] |> 
+      select("subject_id", 
+             "marker_date" = "cohort_start_date", 
+             "first_episode_end_date" = "cohort_end_date"),
+    by = c("subject_id", "marker_date")
+  ) |>
+  inner_join(
+    cdm[["aspirin"]] |> 
+      select("subject_id", 
+             "index_date" = "cohort_start_date",
+             "second_episode_start_date" = "cohort_start_date"),
+    by = c("subject_id", "index_date")
+  ) |>
+  mutate(indexMarkerGap = second_episode_start_date - first_episode_end_date)
+  
+```
+By using a `indexMarkerGap = 30`, subject 80 is excluded from the analysis, as is index-marker gap is larger than 30:
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+  daysPriorObservation = 365,
+  indexMarkerGap = 30)
+
+cdm$intercept |>
+  filter(subject_id %in% c(80,754)) 
+```

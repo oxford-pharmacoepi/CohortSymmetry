@@ -41,11 +41,13 @@ Suggests:
     duckdb,
     cli,
     checkmate,
-    odbc, 
+    odbc,
     RPostgres,
     tidyselect,
     flextable,
-    gt
+    gt,
+    knitr,
+    rmarkdown
 Imports: 
     CDMConnector (>= 1.3.0),
     dplyr,
@@ -60,10 +62,10 @@ Imports:
     tidyr,
     omock (>= 0.1.0),
     stats,
-    omopgenerics
+    omopgenerics,
+    here
 Remotes: 
-   oxford-pharmacoepi/omock,
-   darwin-eu-dev/omopgenerics,
-   darwin-eu-dev/PatientProfiles
+   oxford-pharmacoepi/omock
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
+VignetteBuilder: knitr

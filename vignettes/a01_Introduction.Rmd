@@ -1,0 +1,123 @@
+---
+title: "Introduction to CohortSymmetry"
+output:
+    html_document:
+    pandoc_args: [
+      "--number-offset=1,0"
+      ]
+    number_sections: yes
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{a01_Introduction_to_CohortSymmetry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  eval = Sys.getenv("$RUNNER_OS") != "macOS"
+)
+```
+
+CohortSymmetry provides tools to perform a Sequence Symmetry Analysis (SSA). The main functions you will interact with are:
+
+1.  `generateSequenceCohortSet()`: this function will create a cohort with individuals present in both, the index and the marker cohort.
+
+2.  `summariseSequenceRatio()`: this function will calculate the sequence ratio.
+
+3.  `tableSequenceRatios()`, `plotSequenceRatio()` and `plotTemporalSymmetry()`: these functions will help us to visualise the results.
+
+Below, you will find an example analysis that offers a comprehensive overview of the package's functionalities. More context and further examples for each of these functions are provided in later vignettes.
+
+First, let’s load the relevant libraries.
+
+```{r message= FALSE, warning=FALSE}
+library(CDMConnector)
+library(dplyr)
+library(DBI)
+library(omock)
+library(CohortSymmetry)
+library(duckdb)
+```
+
+The CohortSymmetry package works with data mapped to the OMOP CDM. Hence, the initial step involves connecting to a database. As an example, we will be using Omock package to generate a mock database with two mock cohorts: the **index_cohort** and the **marker_cohort**.
+
+```{r message= FALSE, warning=FALSE}
+cdm <- emptyCdmReference(cdmName = "mock") |>
+  mockPerson(nPerson = 100) |>
+  mockObservationPeriod() |>
+  mockCohort(
+    tableName = "index_cohort",
+    numberCohorts = 1,
+    cohortName = c("index_cohort"),
+    seed = 1,
+  ) |>
+  mockCohort(
+    tableName = "marker_cohort",
+    numberCohorts = 1,
+    cohortName = c("marker_cohort"), 
+    seed = 2
+  )
+
+con <- dbConnect(duckdb::duckdb())
+cdm <- copyCdmTo(con = con, cdm = cdm, schema = "main")
+
+cdm
+```
+
+Once we have established a connection to the database, we can use the `generateSequenceCohortSet()` function to find the intersection of the two cohorts. This function will provide us with the individuals who appear in both cohorts.
+
+```{r message= FALSE, warning=FALSE}
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "index_cohort",
+  markerTable = "marker_cohort",
+  name = "intersect"
+)
+```
+
+See below that the generated cohort follows the format of an OMOP CDM cohort with the addition of two extra columns: *index_date* and *marker_date*. These columns correspond to the *cohort_start_date* in the **index_cohort** and the **marker_cohort**, respectively.
+
+```{r message= FALSE, warning=FALSE}
+cdm$intersect
+```
+
+Observe that, automatically, in the settings of the generated cohort we will be able to identify which cohort corresponds to the indexTable and which one to the markerTable, as cohort_name has the following form:
+
+<center>
+*index*\_{indexTable}_*marker*\_{markerTable}
+</center>
+```{r message= FALSE, warning=FALSE}
+settings(cdm$intersect)
+```
+
+Once we have the **intersect** cohort, you are able to explore the temporal trend by using `plotTemporalSymmetry()`:
+```{r message= FALSE, warning=FALSE}
+plotTemporalSymmetry(cdm = cdm,
+                     joinedTable = "intersect")
+```
+
+Next, we will use the `generateSequenceCohortSet()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
+```{r message= FALSE, warning=FALSE}
+result <- summariseSequenceRatio(cdm = cdm,
+                                 sequenceTable = "intersect")
+
+result
+```
+Finally, we can visualise the results using `tableSequenceRatios()`:
+```{r message= FALSE, warning=FALSE}
+tableSequenceRatios(result)
+```
+Or create a plot with the adjusted sequence ratios:
+
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatio(cdm = cdm,
+                  joinedTable = "intersect",
+                  sequenceRatio = result,
+                  onlyaSR = T,
+                  colour = "black")
+```
