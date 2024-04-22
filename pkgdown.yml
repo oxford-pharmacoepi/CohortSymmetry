@@ -1,8 +1,10 @@
 pandoc: 3.1.11
-pkgdown: 2.0.8
+pkgdown: 2.0.9
 pkgdown_sha: ~
-articles: {}
-last_built: 2024-04-16T09:43Z
+articles:
+  a01_Introduction: a01_Introduction.html
+  a02_Generate_a_sequence_cohort_set: a02_Generate_a_sequence_cohort_set.html
+last_built: 2024-04-22T08:35Z
 urls:
   reference: https://oxford-pharmacoepi.github.io/CohortSymmetry/reference
   article: https://oxford-pharmacoepi.github.io/CohortSymmetry/articles
