@@ -1,12 +1,6 @@
 ---
 title: "Step 1. Generate a sequence cohort"
-output:
-    html_document:
-    pandoc_args: [
-      "--number-offset=1,0"
-      ]
-    number_sections: yes
-    toc: yes
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{a02_Generate_a_sequence_cohort}
   %\VignetteEngine{knitr::rmarkdown}
