@@ -1,0 +1,97 @@
+---
+title: "Step 2. Obtain the sequence ratios"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{a03_Summarise_sequence_ratio}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE}
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+In this vignette we will explore the functionality and arguments of `summariseSequenceRatio()` function, which is used to generate the sequence ratios of the SSA. As this function uses the output of the `generateSequenceCohortSet()` function, explained in detail in the vignette: **Step 1. Generate a sequence cohort**, we will pick up the explanation from where we left off in the previous vignette. 
+
+Hence, let's start by generating the sequence cohort table:
+
+```{r message= FALSE, warning=FALSE}
+# Load libraries
+library(CDMConnector)
+library(dplyr)
+library(DBI)
+library(omock)
+library(CohortSymmetry)
+library(duckdb)
+library(DrugUtilisation)
+
+# Connect to the database
+db <- DBI::dbConnect(duckdb::duckdb(), 
+                     dbdir = CDMConnector::eunomia_dir())
+cdm <- cdm_from_con(
+  con = db,
+  cdm_schema = "main",
+  write_schema = "main"
+)
+
+# Generate cohorts
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "aspirin",
+  ingredient = "aspirin")
+
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "acetaminophen",
+  ingredient = "acetaminophen")
+
+# Generate a sequence cohort
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  combinationWindow = c(0,Inf))
+```
+
+
+# Obtain the sequence ratios
+```{r message = FALSE, warning = FALSE}
+summariseSequenceRatio(
+  cdm = cdm,
+  sequenceTable = "intercept"
+)
+```
+## Modify the confidence interval
+```{r message = FALSE, warning = FALSE}
+summariseSequenceRatio(
+  cdm = cdm,
+  sequenceTable = "intercept",
+  confidenceInterval = 99
+)
+```
+
+## Modify the moving window
+```{r message = FALSE, warning = FALSE}
+summariseSequenceRatio(
+  cdm = cdm,
+  sequenceTable = "intercept",
+  movingAverageRestriction = 600
+)
+```

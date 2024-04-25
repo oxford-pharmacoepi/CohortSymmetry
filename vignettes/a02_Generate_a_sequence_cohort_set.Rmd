@@ -52,19 +52,11 @@ cdm <- cdm_from_con(
   cdm_schema = "main",
   write_schema = "main"
 )
-# 
-# con <- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())
-# 
-# cdm <- CDMConnector::cdm_from_con(
-#   con = con,
-#   cdm_schema = "main",
-#   write_schema = "main"
-# )
 ```
 
 ## Instantiate two cohorts in the cdm reference
 
-CohortSymmetry package requires that the cdm object contains two cohort tables: one for the index cohort and the other one for the marker cohort. There are a lot of different ways to create these cohorts, and it will depend on what the index cohort and marker cohort represent. Here, we use the DrugUtilisation package to generate two drug cohorts in the cdm object. For illustrative purposes, we will carry out PSSA on aspirin (index_cohort) against acetaminophen (marker_cohort).
+CohortSymmetry package requires that the cdm object contains two cohort tables: one for the index cohort and the other one for the marker cohort. There are a lot of different ways to create these cohorts, and it will depend on what the index cohort and marker cohort represent. Here, we use the DrugUtilisation package to generate two drug cohorts in the cdm object. For illustrative purposes, we will carry out SSA on aspirin (index_cohort) against acetaminophen (marker_cohort).
 
 ```{r message= FALSE, warning=FALSE}
 library(DrugUtilisation)
