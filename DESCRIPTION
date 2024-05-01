@@ -62,8 +62,8 @@ Imports:
     tidyr,
     omock (>= 0.1.0),
     stats,
-    omopgenerics,
-    here
+    here,
+    omopgenerics
 Remotes: 
    oxford-pharmacoepi/omock
 Config/testthat/edition: 3
