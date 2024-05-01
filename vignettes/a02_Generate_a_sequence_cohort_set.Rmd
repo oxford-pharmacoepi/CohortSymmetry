@@ -41,7 +41,6 @@ CohortSymmetry package is designed to work with data mapped to OMOP, so the firs
 library(CDMConnector)
 library(dplyr)
 library(DBI)
-library(omock)
 library(CohortSymmetry)
 library(duckdb)
 

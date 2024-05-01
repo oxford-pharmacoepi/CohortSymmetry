@@ -36,7 +36,6 @@ Hence, let's start by generating the sequence cohort table:
 library(CDMConnector)
 library(dplyr)
 library(DBI)
-library(omock)
 library(CohortSymmetry)
 library(duckdb)
 library(DrugUtilisation)
