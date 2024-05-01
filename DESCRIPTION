@@ -63,7 +63,7 @@ Imports:
     omock (>= 0.1.0),
     stats,
     here,
-    omopgenerics
+    omopgenerics (== 0.1.2)
 Remotes: 
    oxford-pharmacoepi/omock
 Config/testthat/edition: 3
