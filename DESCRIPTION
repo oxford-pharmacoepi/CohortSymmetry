@@ -58,12 +58,12 @@ Imports:
     rlang,
     stringr,
     tibble,
-    visOmopResults (== 0.2.1),
+    visOmopResults,
     tidyr,
     omock (>= 0.1.0),
     stats,
     here,
-    omopgenerics (== 0.0.3)
+    omopgenerics
 Remotes: 
    oxford-pharmacoepi/omock
 Config/testthat/edition: 3
