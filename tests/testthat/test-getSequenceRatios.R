@@ -102,10 +102,10 @@ test_that("summariseSequenceRatio - testing ratios and CIs", {
   expect_true(all(res$index_marker_gap==365))
   expect_true(all(res$confidence_interval==95))
   expect_true(all(res$moving_average_restriction==548))
-  expect_true(all(as.integer(res$index_first_pharmac_percentage)<=100 & 0 <= as.integer(res$index_first_pharmac_percentage)))
+  expect_true(all(as.integer(res$first_pharmac_index_percentage)<=100 & 0 <= as.integer(res$first_pharmac_index_percentage)))
 
   int <- res %>%
-    dplyr::mutate(crude_ci_check = .data$crude_sequence_ratio_lower_CI <= .data$crude_sequence_ratio_upper_CI)
+    dplyr::mutate(crude_ci_check = .data$sequence_ratio_crude_lower_CI <= .data$sequence_ratio_crude_upper_CI)
 
   expect_true(all(as.integer(int$crude_ci_check== T)))
   CDMConnector::cdmDisconnect(cdm)
@@ -166,14 +166,13 @@ test_that("summariseSequenceRatio - testing ratios and CIs", {
   expect_true(all(res$moving_average_restriction==548))
   expect_true(res$index_cohort_name =="cohort_1")
   expect_true(res$marker_cohort_name == "cohort_3")
-  expect_true(all(as.integer(res$index_first_pharmac_percentage)<=100 & 0 <= as.integer(res$index_first_pharmac_percentage)))
+  expect_true(all(as.integer(res$first_pharmac_marker_percentage)<=100 & 0 <= as.integer(res$first_pharmac_marker_percentage)))
 
   int <- res %>%
-    dplyr::mutate(crude_ci_check = .data$crude_sequence_ratio_lower_CI <= .data$crude_sequence_ratio_upper_CI,
-                  adjusted_ci_check = .data$adjusted_sequence_ratio_lower_CI <= .data$adjusted_sequence_ratio_upper_CI)
+    dplyr::mutate(crude_ci_check = .data$sequence_ratio_crude_lower_CI <= .data$sequence_ratio_crude_upper_CI,
+                  adjusted_ci_check = .data$sequence_ratio_adjusted_lower_CI <= .data$sequence_ratio_adjusted_lower_CI)
 
   expect_true(all(as.integer(int$crude_ci_check== T)))
   expect_true(all(as.integer(int$adjusted_ci_check== T)))
   CDMConnector::cdmDisconnect(cdm)
 })
-

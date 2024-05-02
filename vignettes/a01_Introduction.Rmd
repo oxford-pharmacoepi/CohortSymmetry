@@ -113,5 +113,5 @@ plotSequenceRatio(cdm = cdm,
                   joinedTable = "intersect",
                   sequenceRatio = result,
                   onlyaSR = T,
-                  colour = "black")
+                  colours = "black")
 ```
