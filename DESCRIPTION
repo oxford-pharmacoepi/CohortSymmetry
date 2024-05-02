@@ -58,7 +58,7 @@ Imports:
     rlang,
     stringr,
     tibble,
-    visOmopResults,
+    visOmopResults (>= 0.3.0),
     tidyr,
     omock (>= 0.1.0),
     stats,
