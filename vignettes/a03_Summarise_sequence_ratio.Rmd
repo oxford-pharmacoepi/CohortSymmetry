@@ -1,0 +1,105 @@
+---
+title: "Step 2. Obtain the sequence ratios"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{a03_Summarise_sequence_ratio}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r, include = FALSE}
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+In this vignette we will explore the functionality and arguments of `summariseSequenceRatio()` function, which is used to generate the sequence ratios of the SSA. As this function uses the output of `generateSequenceCohortSet()` function (explained in detail in the vignette: **Step 1. Generate a sequence cohort**), we will pick up the explanation from where we left off in the previous vignette. 
+
+Hence, let's start by generating the sequence cohort table:
+
+```{r message= FALSE, warning=FALSE}
+# Load libraries
+library(CDMConnector)
+library(dplyr)
+library(DBI)
+library(CohortSymmetry)
+library(duckdb)
+library(DrugUtilisation)
+
+# Connect to the database
+db <- DBI::dbConnect(duckdb::duckdb(), 
+                     dbdir = CDMConnector::eunomia_dir())
+cdm <- cdm_from_con(
+  con = db,
+  cdm_schema = "main",
+  write_schema = "main"
+)
+
+# Generate cohorts
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "aspirin",
+  ingredient = "aspirin")
+
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "acetaminophen",
+  ingredient = "acetaminophen")
+
+# Generate a sequence cohort
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intercept",
+  combinationWindow = c(0,Inf))
+```
+
+
+# Obtain the sequence ratios
+One can obtain the crude and adjusted sequence ratios (with its corresponding confidence intervals) using `summariseSequenceRatio()` function:
+```{r message = FALSE, warning = FALSE}
+summariseSequenceRatio(
+  cdm = cdm,
+  sequenceTable = "intercept"
+)
+```
+The obtained output has a summarised result format. In the later vignette (**Step 3. Visualise results**) we will explore how to visualise the results in a more understandable way. 
+
+## Modify the confidence interval
+By default, the `summariseSequenceRatio()` function will use 95% confidence interval. If another confidence interval is desired, one can use the `confidenceInterval` argument:
+```{r message = FALSE, warning = FALSE}
+summariseSequenceRatio(
+  cdm = cdm,
+  sequenceTable = "intercept",
+  confidenceInterval = 99
+)
+```
+
+## Modify the moving window
+We define the moving window as the specified number of days for observation time window. This is mainly used to calculate the null sequence ratio (please, refer to Reference<sup>1</sup> for more details on this parameter). By default, the argument is defined as `movingAverageRestriction = 548` <sup>2</sup>, but can be modified:
+```{r message = FALSE, warning = FALSE}
+summariseSequenceRatio(
+  cdm = cdm,
+  sequenceTable = "intercept",
+  movingAverageRestriction = 600
+)
+```
+
+# References
+1. Lai EC, Pratt N, Hsieh CY, Lin SJ, Pottegård A, Roughead EE, Kao Yang YH, Hallas J. Sequence symmetry analysis in pharmacovigilance and pharmacoepidemiologic studies. Eur J Epidemiol. 2017 Jul;32(7):567-582. doi: 10.1007/s10654-017-0281-8. Epub 2017 Jul 11. PMID: 28698923.
+2. Tsiropoulos I, Andersen M, Hallas J. Adverse events with use of antiepileptic drugs: a prescription and event symmetry analysis. Pharmacoepidemiol Drug Saf. 2009 Jun;18(6):483-91. doi: 10.1002/pds.1736. PMID: 19326363.

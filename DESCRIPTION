@@ -58,14 +58,14 @@ Imports:
     rlang,
     stringr,
     tibble,
-    visOmopResults,
+    visOmopResults (>= 0.3.0),
     tidyr,
     omock (>= 0.1.0),
     stats,
-    omopgenerics,
-    here
+    here,
+    omopgenerics
 Remotes: 
-   oxford-pharmacoepi/omock
+   darwin-eu-dev/omopgenerics
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
 VignetteBuilder: knitr

@@ -68,12 +68,12 @@ tableSequenceRatios <- function(result,
     dplyr::pull("confidence_interval") |>
     unique()
 
-  result <- result |>
-    dplyr::filter(.data$variable_level != "settings")
-
   if (length(ci) > 1) {
     cli::cli_abort("Provide results generated using the same confidence interval.")
   }
+
+  result <- result %>%
+    visOmopResults::filterSettings(.data$result_type == "sequence_ratios")
 
   # get study population
   if (studyPopulation) {
@@ -81,17 +81,16 @@ tableSequenceRatios <- function(result,
       dplyr::mutate(
         estimate_value = as.numeric(.data$estimate_value)
       ) |>
-      dplyr::filter(.data$variable_name == "first_pharmac") |>
+      dplyr::filter(.data$variable_level == "first_pharmac") |>
       dplyr::filter(.data$estimate_name == "count") |>
-      tidyr::pivot_wider(names_from = "variable_level",
+      tidyr::pivot_wider(names_from = "variable_name",
                          values_from = "estimate_value") |>
       dplyr::mutate(estimate_value = as.character(.data$index + .data$marker),
                     estimate_name = "Study population") |>
       visOmopResults::splitGroup() |>
-      dplyr::select(!c("result_type", "package_name", "package_version",
-                       "estimate_type", dplyr::starts_with("additional"),
+      dplyr::select(!c("estimate_type", dplyr::starts_with("additional"),
                        dplyr::starts_with("strata"), "index", "marker")) |>
-      dplyr::select(-"variable_name")
+      dplyr::select(-"variable_level")
   }
 
   # columns to export
@@ -123,20 +122,19 @@ tableSequenceRatios <- function(result,
       useFormatOrder = .options$useFormatOrder
     ) |>
     visOmopResults::splitGroup() |>
-    dplyr::select(!c("result_type", "package_name", "package_version",
-                     "estimate_type", dplyr::starts_with("additional"),
+    dplyr::select(!c("estimate_type", dplyr::starts_with("additional"),
                      dplyr::starts_with("strata"))) %>%
     dplyr::mutate(
       estimate_name = dplyr::case_when(
-        .data$variable_level == "crude" ~ paste0("CSR (", ci, "% CI)"),
-        .data$variable_level == "adjusted" ~ paste0("ASR (", ci, "% CI)"),
+        .data$variable_name == "crude" ~ paste0("CSR (", ci, "% CI)"),
+        .data$variable_name == "adjusted" ~ paste0("ASR (", ci, "% CI)"),
         .default = .data$estimate_name
       ),
       estimate_name = dplyr::case_when(
-        .data$variable_level == "crude" ~ paste0("CSR (", ci, "% CI)"),
-        .data$variable_level == "adjusted" ~ paste0("ASR (", ci, "% CI)"),
-        .data$variable_level == "index" ~ "Index first, N (%)",
-        .data$variable_level == "marker" ~ "Marker first, N (%)"
+        .data$variable_name == "crude" ~ paste0("CSR (", ci, "% CI)"),
+        .data$variable_name == "adjusted" ~ paste0("ASR (", ci, "% CI)"),
+        .data$variable_name == "index" ~ "Index first, N (%)",
+        .data$variable_name == "marker" ~ "Marker first, N (%)"
       )
     ) |>
     dplyr::select(-dplyr::all_of(c("variable_name", "variable_level"))) %>%
@@ -160,7 +158,6 @@ tableSequenceRatios <- function(result,
     } else .} %>%
     tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") %>%
     dplyr::select(dplyr::all_of(order_columns))
-
 
   # output type
   if (type == "tibble") {

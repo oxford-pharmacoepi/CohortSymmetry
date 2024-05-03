@@ -75,8 +75,8 @@ plotSequenceRatio <- function(cdm,
   }
 
   sr_tidy <- sequenceRatio %>%
-    dplyr::filter(.data$variable_name == "sequence_ratio") %>%
-    dplyr::select(-c("cdm_name", "result_type", "package_name", "package_version", "strata_name", "strata_level", "variable_name")) %>%
+    visOmopResults::filterSettings(.data$result_type == "sequence_ratios") %>%
+    dplyr::select(-c("cdm_name", "strata_name", "strata_level", "variable_level")) %>%
     visOmopResults::splitAdditional() %>%
     tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") %>%
     dplyr::mutate(group = paste0(.data$index_cohort_name, " -> ", .data$marker_cohort_name)) %>%
@@ -85,7 +85,7 @@ plotSequenceRatio <- function(cdm,
       point_estimate = as.numeric(.data$point_estimate),
       lower_CI = as.numeric(.data$lower_CI),
       upper_CI = as.numeric(.data$upper_CI),
-      variable_level = as.factor(.data$variable_level)
+      variable_name = as.factor(.data$variable_name)
     ) %>%
     dplyr::select(tidyselect::where( ~ dplyr::n_distinct(.) > 1)|.data$group) %>%
     dplyr::rename(
@@ -95,13 +95,13 @@ plotSequenceRatio <- function(cdm,
 
   if(onlyaSR) {
     sr_tidy <- sr_tidy %>%
-      dplyr::filter(.data$variable_level != "crude")
+      dplyr::filter(.data$variable_name != "crude")
     colours = c("adjusted" = colours[1])
   } else {
     colours = c("crude" = colours[1], "adjusted" = colours[2])
   }
 
-  facet_wrap_vars <- colnames(sr_tidy)[! colnames(sr_tidy) %in% c(labs[2], labs[1], "lower_CI", "upper_CI", "variable_level")]
+  facet_wrap_vars <- colnames(sr_tidy)[! colnames(sr_tidy) %in% c(labs[2], labs[1], "lower_CI", "upper_CI", "variable_name")]
   for(i in facet_wrap_vars) {
     sr_tidy <- sr_tidy %>%
       dplyr::mutate(!!i := paste0(i, " = ", .data[[i]]))
@@ -110,9 +110,9 @@ plotSequenceRatio <- function(cdm,
 
   if(length(facet_wrap_vars) == 0) {
     ggplot2::ggplot(data = sr_tidy, ggplot2::aes(
-      x = .data[[labs[1]]], y = .data[[labs[2]]], group = .data$variable_level)) +
-      ggplot2::geom_errorbarh(ggplot2::aes(xmin = .data$lower_CI, xmax = .data$upper_CI, colour = .data$variable_level), height = 0.2) +
-      ggplot2::geom_point(ggplot2::aes(colour = .data$variable_level, shape = .data$variable_level), size = 3) +
+      x = .data[[labs[1]]], y = .data[[labs[2]]], group = .data$variable_name)) +
+      ggplot2::geom_errorbarh(ggplot2::aes(xmin = .data$lower_CI, xmax = .data$upper_CI, colour = .data$variable_name), height = 0.2) +
+      ggplot2::geom_point(ggplot2::aes(colour = .data$variable_name, shape = .data$variable_name), size = 3) +
       ggplot2::geom_vline(ggplot2::aes(xintercept = 1), linetype = 2) +
       ggplot2::scale_shape_manual(values = rep(19, 5)) +
       ggplot2::scale_colour_manual(values = colours) +
@@ -123,9 +123,9 @@ plotSequenceRatio <- function(cdm,
       )
   } else {
     ggplot2::ggplot(data = sr_tidy, ggplot2::aes(
-      x = .data[[labs[1]]], y = .data[[labs[2]]], group = .data$variable_level)) +
-      ggplot2::geom_errorbarh(ggplot2::aes(xmin = .data$lower_CI, xmax = .data$upper_CI, colour = .data$variable_level), height = 0.2) +
-      ggplot2::geom_point(ggplot2::aes(colour = .data$variable_level, shape = .data$variable_level), size = 3) +
+      x = .data[[labs[1]]], y = .data[[labs[2]]], group = .data$variable_name)) +
+      ggplot2::geom_errorbarh(ggplot2::aes(xmin = .data$lower_CI, xmax = .data$upper_CI, colour = .data$variable_name), height = 0.2) +
+      ggplot2::geom_point(ggplot2::aes(colour = .data$variable_name, shape = .data$variable_name), size = 3) +
       ggplot2::geom_vline(ggplot2::aes(xintercept = 1), linetype = 2) +
       ggplot2::scale_shape_manual(values = rep(19, 5)) +
       ggplot2::scale_colour_manual(values = colours) +

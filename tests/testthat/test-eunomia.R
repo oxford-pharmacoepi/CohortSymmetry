@@ -47,15 +47,15 @@ test_that("eunomia - generateSequenceCohortSet", {
  expect_true(nrow(res) > 0)
 
  expect_no_error(
-   expect_warning(nice_table <- CohortSymmetry::tableSequenceRatios(res))
+   nice_table <- CohortSymmetry::tableSequenceRatios(res)
  )
 
  expect_no_error(
-   expect_warning(nice_table <- CohortSymmetry::tableSequenceRatios(res, type = "flextable"))
+   nice_table <- CohortSymmetry::tableSequenceRatios(res, type = "flextable")
  )
 
  expect_no_error(
-   expect_warning(nice_table <- CohortSymmetry::tableSequenceRatios(res, type = "tibble"))
+   nice_table <- CohortSymmetry::tableSequenceRatios(res, type = "tibble")
  )
 
   CDMConnector::cdm_disconnect(cdm)

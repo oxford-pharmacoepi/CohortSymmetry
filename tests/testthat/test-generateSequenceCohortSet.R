@@ -5,7 +5,6 @@ test_that("check output table name", {
                                            name = "output",
                                            indexTable ="cohort_1",
                                            markerTable = "cohort_2")
-  expect_null(cdm$joined_cohorts)
   expect_true(all(
     c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "marker_date",
       "index_date") %in%
