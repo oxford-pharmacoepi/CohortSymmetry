@@ -60,7 +60,7 @@ cdm <- emptyCdmReference(cdmName = "mock") |>
 con <- dbConnect(duckdb::duckdb())
 cdm <- copyCdmTo(con = con, cdm = cdm, schema = "main")
 
-cdm
+cdm 
 ```
 
 Once we have established a connection to the database, we can use the `generateSequenceCohortSet()` function to find the intersection of the two cohorts. This function will provide us with the individuals who appear in both cohorts.
@@ -77,7 +77,7 @@ cdm <- generateSequenceCohortSet(
 See below that the generated cohort follows the format of an OMOP CDM cohort with the addition of two extra columns: *index_date* and *marker_date*. These columns correspond to the *cohort_start_date* in the **index_cohort** and the **marker_cohort**, respectively.
 
 ```{r message= FALSE, warning=FALSE}
-cdm$intersect
+cdm$intersect |> glimpse()
 ```
 
 Observe that, automatically, in the settings of the generated cohort we will be able to identify which cohort corresponds to the indexTable and which one to the markerTable, as cohort_name has the following form:
@@ -86,7 +86,7 @@ Observe that, automatically, in the settings of the generated cohort we will be 
 *index*\_{indexTable}_*marker*\_{markerTable}
 </center>
 ```{r message= FALSE, warning=FALSE}
-settings(cdm$intersect)
+settings(cdm$intersect) |> glimpse()
 ```
 
 Once we have the **intersect** cohort, you are able to explore the temporal trend by using `plotTemporalSymmetry()`:
@@ -100,7 +100,7 @@ Next, we will use the `generateSequenceCohortSet()` function to get the crude se
 result <- summariseSequenceRatio(cdm = cdm,
                                  sequenceTable = "intersect")
 
-result
+result |> glimpse()
 ```
 Finally, we can visualise the results using `tableSequenceRatios()`:
 ```{r message= FALSE, warning=FALSE}
