@@ -97,7 +97,7 @@ cdm <- generateSequenceCohortSet(
   name = "intercept",
   combinationWindow = c(0,Inf))
 
-cdm$intercept 
+cdm$intercept |> glimpse()
 ```
 
 See that the generated table has the format of an OMOP CDM cohort, but it also includes two additional columns: the index_date and the marker_date, which are the dates of the index and marker episode, respectively. The cohort_start_date and the cohort_end_date are defined as: 
@@ -141,7 +141,8 @@ cdm$intercept |>
   summarise(min_cohort_start_date = min(cohort_start_date), 
             max_cohort_start_date = max(cohort_start_date),
             min_cohort_end_date   = min(cohort_end_date),
-            max_cohort_end_date   = max(cohort_end_date))
+            max_cohort_end_date   = max(cohort_end_date)) |> 
+  glimpse()
 ```
 
 
@@ -173,7 +174,8 @@ cdm$intercept |>
       select("subject_id" = "person_id", "observation_period_start_date")
   ) |>
   filter(subject_id %in% c(2,53)) |>
-  mutate(daysPriorObservation = cohort_start_date - observation_period_start_date)
+  mutate(daysPriorObservation = cohort_start_date - observation_period_start_date) |>
+  glimpse()
 ```
 Now we impose a prior history requirement of 365 days. As seen, subject 53 is excluded as it does not have enough days (>365) of prior observation before the included event.
 
@@ -192,7 +194,8 @@ cdm$intercept |>
     cdm$observation_period |> 
       select("subject_id" = "person_id", "observation_period_start_date")
   ) |>
-  filter(subject_id %in% c(2,53))
+  filter(subject_id %in% c(2,53)) |>
+  glimpse()
 ```
 
 
@@ -223,7 +226,8 @@ cdm[["aspirin"]] |>
   arrange(cohort_start_date)
 
 cdm[["intercept"]] |>
-  filter(subject_id %in% c(1936,3565)) 
+  filter(subject_id %in% c(1936,3565)) |> 
+  glimpse()
 ```
 Notice that by setting a washout window of 0, both participants are included. However, see that the included episode of subject 1936 happens at 1950-05-06, and a previous episode (not included within the study period), happened just 210 days before this one (1949-10-08). Hence, by using a `washoutWindow` of 365, this participant is excluded from the analysis:
 
@@ -240,7 +244,8 @@ cdm <- generateSequenceCohortSet(
 
 cdm[["intercept"]] |>
   filter(subject_id %in% c(1936,3565)) |>
-  arrange(subject_id, cohort_start_date)
+  arrange(subject_id, cohort_start_date) |>
+  glimpse()
 ```
 
 
@@ -250,9 +255,9 @@ We define the combination window as the minimum and the maximum days between the
 
 <center>
 
-`x = second_episode(start_date) - first_episode(start_date)`
+x = second_episode(start_date) - first_episode(start_date)
 
-`combinationWindow[1] $\leq$ x $\leq$ combinationWindow[2]`
+combinationWindow[1] $\leq$ x $\leq$ combinationWindow[2]
 
 </center>
 
@@ -303,9 +308,9 @@ We define the index-marker gap to refer to the maximum number of days between th
 
 <center>
 
-`x = second_episode(cohort_start_date) - first_episode(cohort_end_date)`
+x = second_episode(cohort_start_date) - first_episode(cohort_end_date)
 
-`x $\leq$ indexMarkerGap`
+x $\leq$ indexMarkerGap
 
 </center>
 
