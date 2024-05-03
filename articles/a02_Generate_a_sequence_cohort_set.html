@@ -43,6 +43,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/a01_Introduction.html">Introduction to CohortSymmetry</a>
     <a class="dropdown-item" href="../articles/a02_Generate_a_sequence_cohort_set.html">Step 1. Generate a sequence cohort</a>
+    <a class="dropdown-item" href="../articles/a03_Summarise_sequence_ratio.html">Step 2. Obtain the sequence ratios</a>
+    <a class="dropdown-item" href="../articles/a04_Visualise_results.html">Step 3. Visualise the results</a>
   </div>
 </li>
       </ul>
@@ -87,7 +89,6 @@ examples.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu.github.io/CDMConnector/" class="external-link">CDMConnector</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/omock/" class="external-link">omock</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span>
 <span></span>
@@ -97,15 +98,7 @@ examples.</p>
 <span>  con <span class="op">=</span> <span class="va">db</span>,</span>
 <span>  cdm_schema <span class="op">=</span> <span class="st">"main"</span>,</span>
 <span>  write_schema <span class="op">=</span> <span class="st">"main"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># con &lt;- DBI::dbConnect(duckdb::duckdb(), CDMConnector::eunomia_dir())</span></span>
-<span><span class="co"># </span></span>
-<span><span class="co"># cdm &lt;- CDMConnector::cdm_from_con(</span></span>
-<span><span class="co">#   con = con,</span></span>
-<span><span class="co">#   cdm_schema = "main",</span></span>
-<span><span class="co">#   write_schema = "main"</span></span>
-<span><span class="co"># )</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="instantiate-two-cohorts-in-the-cdm-reference">Instantiate two cohorts in the cdm reference<a class="anchor" aria-label="anchor" href="#instantiate-two-cohorts-in-the-cdm-reference"></a>
@@ -115,7 +108,7 @@ cohort tables: one for the index cohort and the other one for the marker
 cohort. There are a lot of different ways to create these cohorts, and
 it will depend on what the index cohort and marker cohort represent.
 Here, we use the DrugUtilisation package to generate two drug cohorts in
-the cdm object. For illustrative purposes, we will carry out PSSA on
+the cdm object. For illustrative purposes, we will carry out SSA on
 aspirin (index_cohort) against acetaminophen (marker_cohort).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/" class="external-link">DrugUtilisation</a></span><span class="op">)</span></span>
@@ -163,7 +156,7 @@ so:</p>
 <span></span>
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">intercept</span> </span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;main.intercept&gt; [?? x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;    cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>                    1          6 1965-06-23        1969-12-20      1965-06-23</span></span>
@@ -230,7 +223,7 @@ Consequently, the cohort range falls into the pre-specified period:</p>
 <span>            min_cohort_end_date   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">cohort_end_date</span><span class="op">)</span>,</span>
 <span>            max_cohort_end_date   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cohort_end_date</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [1 x 4]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;   min_cohort_start_date max_cohort_start_date min_cohort_end_date</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>                <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 1950-01-02            1968-09-08            1950-07-19         </span></span>
@@ -270,7 +263,7 @@ analysis:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">53</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>daysPriorObservation <span class="op">=</span> <span class="va">cohort_start_date</span> <span class="op">-</span> <span class="va">observation_period_start_date</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 8]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         53 1962-12-13        1965-05-01      1965-05-01</span></span>
@@ -297,7 +290,7 @@ prior observation before the included event.</p>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">53</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [1 x 7]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1          2 1952-07-13        1955-10-22      1952-07-13</span></span>
@@ -333,22 +326,22 @@ implementation below, where we analyse the case of subject_id number
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">subject_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">cohort_start_date</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:     SQL [6 x 4]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:     subject_id</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Ordered by: cohort_start_date</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1       <span style="text-decoration: underline;">1</span>936 1950-05-06        1950-05-20     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                    1       <span style="text-decoration: underline;">1</span>936 1955-08-04        1955-08-25     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                    1       <span style="text-decoration: underline;">1</span>936 1949-10-08        1949-11-05     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                    1       <span style="text-decoration: underline;">3</span>565 1945-12-24        1946-01-07     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                    1       <span style="text-decoration: underline;">3</span>565 1945-12-24        1946-01-07     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                    1       <span style="text-decoration: underline;">1</span>936 1949-10-08        1949-11-05     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                    1       <span style="text-decoration: underline;">3</span>565 1950-01-02        1950-01-30     </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>                    1       <span style="text-decoration: underline;">3</span>565 1957-11-19        1957-12-24</span></span>
 <span></span>
 <span><span class="va">cdm</span><span class="op">[[</span><span class="st">"intercept"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1936</span>,<span class="fl">3565</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1       <span style="text-decoration: underline;">1</span>936 1950-05-06        1951-09-26      1950-05-06</span></span>
@@ -375,7 +368,7 @@ from the analysis:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1936</span>,<span class="fl">3565</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">subject_id</span>, <span class="va">cohort_start_date</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:     SQL [1 x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Ordered by: subject_id, cohort_start_date</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
@@ -425,7 +418,7 @@ in the <strong>intersect</strong> cohort:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">187</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">index_date</span>, <span class="va">marker_date</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">index_date</span>, <span class="va">marker_date</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 7]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
@@ -447,7 +440,7 @@ subject 187 is excluded from the analysis, as its
 <span><span class="va">cdm</span><span class="op">[[</span><span class="st">"intercept"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">187</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
@@ -500,7 +493,7 @@ how this affect subject 80 and 754 in the example below:</p>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>indexMarkerGap <span class="op">=</span> <span class="va">second_episode_start_date</span> <span class="op">-</span> <span class="va">first_episode_end_date</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 9]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
@@ -522,7 +515,7 @@ from the analysis, as is index-marker gap is larger than 30:</p>
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">intercept</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">754</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [1 x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.1 [unknown@Linux 6.5.0-1018-azure:R 4.3.3//tmp/RtmppUsMxp/file195f3ca218ab.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1018-azure:R 4.4.0//tmp/Rtmp07b9yB/file1ad45f1bd21d.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1        754 1950-08-12        1950-09-20      1950-09-20</span></span>
