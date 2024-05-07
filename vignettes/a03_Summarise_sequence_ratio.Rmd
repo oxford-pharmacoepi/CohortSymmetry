@@ -75,8 +75,8 @@ One can obtain the crude and adjusted sequence ratios (with its corresponding co
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatio(
   cdm = cdm,
-  sequenceTable = "intercept"
-)
+  sequenceTable = "intercept") |>
+  glimpse()
 ```
 The obtained output has a summarised result format. In the later vignette (**Step 3. Visualise results**) we will explore how to visualise the results in a more understandable way. 
 
@@ -86,8 +86,8 @@ By default, the `summariseSequenceRatio()` function will use 95% confidence inte
 summariseSequenceRatio(
   cdm = cdm,
   sequenceTable = "intercept",
-  confidenceInterval = 99
-)
+  confidenceInterval = 99) |>
+  glimpse()
 ```
 
 ## Modify the moving window
@@ -96,8 +96,8 @@ We define the moving window as the specified number of days for observation time
 summariseSequenceRatio(
   cdm = cdm,
   sequenceTable = "intercept",
-  movingAverageRestriction = 600
-)
+  movingAverageRestriction = 600) |>
+  glimpse()
 ```
 
 # References
