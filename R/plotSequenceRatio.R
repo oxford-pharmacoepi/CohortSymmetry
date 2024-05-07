@@ -101,7 +101,7 @@ plotSequenceRatio <- function(cdm,
     colours = c("crude" = colours[1], "adjusted" = colours[2])
   }
 
-  facet_wrap_vars <- colnames(sr_tidy)[! colnames(sr_tidy) %in% c(labs[2], labs[1], "lower_CI", "upper_CI", "variable_name")]
+  facet_wrap_vars <- colnames(sr_tidy)[! colnames(sr_tidy) %in% c(labs[2], labs[1], "lower_CI", "upper_CI", "variable_name", "count", "percentage", "variable_name", "estimate_type")]
   for(i in facet_wrap_vars) {
     sr_tidy <- sr_tidy %>%
       dplyr::mutate(!!i := paste0(i, " = ", .data[[i]]))
