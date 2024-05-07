@@ -102,10 +102,10 @@ tableSequenceRatios <- function(result,
                                    studyPopulation, TRUE, TRUE, TRUE, TRUE)]
 
   # correct names
-  if (!is.null(.options$groupNameCol)) {
-    ind <- c("cdm_name", "index_cohort_name", "marker_cohort_name") %in% .options$groupNameCol
+  if (!is.null(.options$groupColumn)) {
+    ind <- c("cdm_name", "index_cohort_name", "marker_cohort_name") %in% .options$groupColumn
     if (any(ind)) {
-      .options$groupNameCol <- c("Database name", "Index", "Marker")[ind]
+      .options$groupColumn <- c("Database name", "Index", "Marker")[ind]
     }
   }
 
@@ -173,8 +173,8 @@ tableSequenceRatios <- function(result,
         title = .options$title,
         subtitle = .options$subtitle,
         caption = .options$caption,
-        groupNameCol = .options$groupNameCol,
-        groupNameAsColumn = .options$groupNameAsColumn,
+        groupColumn = .options$groupColumn,
+        groupAsColumn = .options$groupAsColumn,
         groupOrder = .options$groupOrder,
         colsToMergeRows = .options$colsToMergeRows
       )
@@ -190,8 +190,8 @@ tableSequenceRatios <- function(result,
         title = .options$title,
         subtitle = .options$subtitle,
         caption = .options$caption,
-        groupNameCol = .options$groupNameCol,
-        groupNameAsColumn = .options$groupNameAsColumn,
+        groupColumn = .options$groupColumn,
+        groupAsColumn = .options$groupAsColumn,
         groupOrder = .options$groupOrder,
         colsToMergeRows = .options$colsToMergeRows
       )
@@ -214,8 +214,8 @@ defaultOptions <- function(userOptions) {
     title = NULL,
     subtitle = NULL,
     caption = NULL,
-    groupNameCol = NULL,
-    groupNameAsColumn = FALSE,
+    groupColumn = NULL,
+    groupAsColumn = FALSE,
     groupOrder = NULL,
     colsToMergeRows = "all_columns"
   )

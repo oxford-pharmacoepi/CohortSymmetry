@@ -6,7 +6,7 @@
 \usage{
 plotSequenceRatio(
   cdm,
-  joinedTable,
+  sequenceTable,
   sequenceRatio,
   onlyaSR = FALSE,
   indexId = NULL,
@@ -19,7 +19,7 @@ plotSequenceRatio(
 \arguments{
 \item{cdm}{A cdm object.}
 
-\item{joinedTable}{The name of a table in the cdm of the form of the output
+\item{sequenceTable}{The name of a table in the cdm of the form of the output
 of generateSequenceCohortSet.}
 
 \item{sequenceRatio}{A table of the form of the output of summariseSequenceRatio.}

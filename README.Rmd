@@ -117,7 +117,7 @@ One could also visualise the plot, for example, the following is the plot of the
 
 ```{r Step 3: visualise the results - plots, eval=FALSE, warning=FALSE}
 CohortSymmetry::plotSequenceRatio(cdm = cdm,
-                                  joinedTable = "aspirin_amoxicillin",
+                                  sequenceTable = "aspirin_amoxicillin",
                                   onlyaSR = T,
                                   sequenceRatio = res,
                                   colours = "black")
@@ -128,7 +128,7 @@ The user also has the freedom to plot temporal trend like so:
 
 ```{r Step 3: visualise the results - plot temporal, eval=FALSE, warning=FALSE}
 CohortSymmetry::plotTemporalSymmetry(cdm = cdm,
-                                     joinedTable = "aspirin_amoxicillin")
+                                     sequenceTable = "aspirin_amoxicillin")
 ```
 ![](./man/figures/plot_temporal.png)
 
