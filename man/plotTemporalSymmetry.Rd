@@ -6,7 +6,7 @@
 \usage{
 plotTemporalSymmetry(
   cdm,
-  joinedTable,
+  sequenceTable,
   indexId = NULL,
   markerId = NULL,
   plotTitle = NULL,
@@ -20,7 +20,7 @@ plotTemporalSymmetry(
 \arguments{
 \item{cdm}{A cdm object.}
 
-\item{joinedTable}{The name of a table in the cdm of the form of the output
+\item{sequenceTable}{The name of a table in the cdm of the form of the output
 of generateSequenceCohortSet.}
 
 \item{indexId}{What index ids to plot, if NULL all will be plotted.}

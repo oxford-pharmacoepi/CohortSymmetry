@@ -4,7 +4,7 @@
 #' It provides a ggplot of the sequence ratios of index and marker cohorts.
 #'
 #' @param cdm A cdm object.
-#' @param joinedTable The name of a table in the cdm of the form of the output
+#' @param sequenceTable The name of a table in the cdm of the form of the output
 #' of generateSequenceCohortSet.
 #' @param sequenceRatio A table of the form of the output of summariseSequenceRatio.
 #' @param onlyaSR If the only SR to be plotted is the adjusted SR.
@@ -31,7 +31,7 @@
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 plotSequenceRatio <- function(cdm,
-                              joinedTable,
+                              sequenceTable,
                               sequenceRatio,
                               onlyaSR = FALSE,
                               indexId = NULL,
@@ -42,7 +42,7 @@ plotSequenceRatio <- function(cdm,
                               ) {
   # checks
   checkInputPlotSequenceRatio(cdm = cdm,
-                              joinedTable = joinedTable,
+                              sequenceTable = sequenceTable,
                               sequenceRatio = sequenceRatio,
                               onlyaSR = onlyaSR,
                               indexId = indexId,
@@ -52,7 +52,7 @@ plotSequenceRatio <- function(cdm,
                               colours = colours)
 
   if(!is.null(indexId) || !is.null(markerId)) {
-    all_names <- attr(cdm[[joinedTable]], "cohort_set") %>%
+    all_names <- attr(cdm[[sequenceTable]], "cohort_set") %>%
       dplyr::select("marker_name", "index_name", "index_id", "marker_id") %>%
       dplyr::collect()
     sequenceRatio <- sequenceRatio %>%
@@ -95,13 +95,15 @@ plotSequenceRatio <- function(cdm,
 
   if(onlyaSR) {
     sr_tidy <- sr_tidy %>%
-      dplyr::filter(.data$variable_name != "crude")
+      dplyr::filter(.data$variable_name == "adjusted")
     colours = c("adjusted" = colours[1])
   } else {
+    sr_tidy <- sr_tidy %>%
+      dplyr::filter(.data$variable_name == "adjusted"|.data$variable_name == "crude")
     colours = c("crude" = colours[1], "adjusted" = colours[2])
   }
 
-  facet_wrap_vars <- colnames(sr_tidy)[! colnames(sr_tidy) %in% c(labs[2], labs[1], "lower_CI", "upper_CI", "variable_name")]
+  facet_wrap_vars <- colnames(sr_tidy)[! colnames(sr_tidy) %in% c(labs[2], labs[1], "lower_CI", "upper_CI", "variable_name", "count", "percentage", "variable_name", "estimate_type")]
   for(i in facet_wrap_vars) {
     sr_tidy <- sr_tidy %>%
       dplyr::mutate(!!i := paste0(i, " = ", .data[[i]]))

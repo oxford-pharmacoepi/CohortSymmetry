@@ -99,7 +99,7 @@ checksFormatSequenceSymmetry <- function(type, crude, adjusted, studyPopulation,
 }
 
 checkInputPlotTemporalSymmetry <- function(cdm,
-                                           joinedTable,
+                                           sequenceTable,
                                            indexId,
                                            markerId,
                                            plotTitle,
@@ -108,13 +108,13 @@ checkInputPlotTemporalSymmetry <- function(cdm,
                                            colours,
                                            scales) {
   # Check index/marker table
-  checkCdm(cdm, tables = joinedTable)
+  checkCdm(cdm, tables = sequenceTable)
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
   ## Check ids
-  checkPlotIds(cdm, joinedTable, indexId, markerId, errorMessage)
+  checkPlotIds(cdm, sequenceTable, indexId, markerId, errorMessage)
 
   ## Check plot title and labs
   checkPlotTitleLabs(plotTitle, labs, errorMessage)
@@ -133,7 +133,7 @@ checkInputPlotTemporalSymmetry <- function(cdm,
 }
 
 checkInputPlotSequenceRatio <- function(cdm,
-                                        joinedTable,
+                                        sequenceTable,
                                         sequenceRatio,
                                         onlyaSR,
                                         indexId,
@@ -142,7 +142,7 @@ checkInputPlotSequenceRatio <- function(cdm,
                                         labs,
                                         colours) {
   # Check index/marker table
-  checkCdm(cdm, tables = joinedTable)
+  checkCdm(cdm, tables = sequenceTable)
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
@@ -151,7 +151,7 @@ checkInputPlotSequenceRatio <- function(cdm,
   checkSequenceSymmetry(sequenceRatio)
 
   ## Check ids
-  checkPlotIds(cdm, joinedTable, indexId, markerId, errorMessage)
+  checkPlotIds(cdm, sequenceTable, indexId, markerId, errorMessage)
 
   ## Check plot title and labs
   checkPlotTitleLabs(plotTitle, labs, errorMessage)
@@ -364,7 +364,7 @@ checkColoursaSR <- function(colours, onlyaSR, errorMessage) {
   }
 }
 
-checkPlotIds<- function(cdm, joinedTable, indexId, markerId, errorMessage) {
+checkPlotIds<- function(cdm, sequenceTable, indexId, markerId, errorMessage) {
   checkmate::assert_integerish(indexId,
                                null.ok = TRUE,
                                lower = 0,
@@ -373,7 +373,7 @@ checkPlotIds<- function(cdm, joinedTable, indexId, markerId, errorMessage) {
                                null.ok = TRUE,
                                lower = 0,
                                add = errorMessage)
-  cohort_set_table <- attr(cdm[[joinedTable]], "cohort_set") %>%
+  cohort_set_table <- attr(cdm[[sequenceTable]], "cohort_set") %>%
     dplyr::collect()
   if(!(all(indexId %in% cohort_set_table$index_id))) {
     cli::cli_abort("Some of the indexId provided are not index ids in the cohort")

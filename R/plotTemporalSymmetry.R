@@ -4,7 +4,7 @@
 #' It provides a ggplot of the temporal symmetry of two or more cohorts.
 #'
 #' @param cdm A cdm object.
-#' @param joinedTable The name of a table in the cdm of the form of the output
+#' @param sequenceTable The name of a table in the cdm of the form of the output
 #' of generateSequenceCohortSet.
 #' @param indexId What index ids to plot, if NULL all will be plotted.
 #' @param markerId What marker ids to plot, if NULL all will be plotted.
@@ -33,7 +33,7 @@
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 plotTemporalSymmetry <- function(cdm,
-                                 joinedTable,
+                                 sequenceTable,
                                  indexId = NULL,
                                  markerId = NULL,
                                  plotTitle = NULL,
@@ -44,7 +44,7 @@ plotTemporalSymmetry <- function(cdm,
                                  scales = "free") {
   # checks
   checkInputPlotTemporalSymmetry(cdm = cdm,
-                                 joinedTable = joinedTable,
+                                 sequenceTable = sequenceTable,
                                  indexId = indexId,
                                  markerId = markerId,
                                  plotTitle = plotTitle,
@@ -53,12 +53,12 @@ plotTemporalSymmetry <- function(cdm,
                                  colours = colours,
                                  scales = scales)
 
-  index_names <- attr(cdm[[joinedTable]], "cohort_set") %>%
+  index_names <- attr(cdm[[sequenceTable]], "cohort_set") %>%
     dplyr::select("cohort_definition_id", "index_name", "index_id", "marker_id")
-  marker_names <- attr(cdm[[joinedTable]], "cohort_set") %>%
+  marker_names <- attr(cdm[[sequenceTable]], "cohort_set") %>%
     dplyr::select("cohort_definition_id", "marker_name")
 
-  plot_data <- cdm[[joinedTable]] %>%
+  plot_data <- cdm[[sequenceTable]] %>%
     dplyr::mutate(time = as.numeric(!!CDMConnector::datediff(
       "index_date", "marker_date", interval = timescale))) %>%
     dplyr::select("cohort_definition_id", "time") %>%
