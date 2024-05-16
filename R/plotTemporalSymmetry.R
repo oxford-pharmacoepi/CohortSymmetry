@@ -29,7 +29,8 @@
 #'                                                  indexTable = "cohort_1",
 #'                                                  markerTable = "cohort_2",
 #'                                                  name = "joined_cohort")
-#' plotTemporalSymmetry(cdm, "joined_cohort")
+#' plotTemporalSymmetry(cdm = cdm,
+#'                      sequenceTable = "joined_cohort")
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 plotTemporalSymmetry <- function(cdm,

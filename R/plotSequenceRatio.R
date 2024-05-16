@@ -27,7 +27,9 @@
 #'                                                  markerTable = "cohort_2",
 #'                                                  name = "joined_cohort")
 #' sr <- CohortSymmetry::summariseSequenceRatio(cdm, "joined_cohort")
-#' plotSequenceRatio(cdm, "joined_cohort", sr)
+#' plotSequenceRatio(cdm = cdm,
+#'                   sequenceTable = "joined_cohort",
+#'                   sequenceRatio = sr)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
 plotSequenceRatio <- function(cdm,
