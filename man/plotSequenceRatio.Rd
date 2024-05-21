@@ -48,10 +48,10 @@ library(CohortSymmetry)
 
 cdm <- mockCohortSymmetry()
 cdm <- generateSequenceCohortSet(cdm = cdm,
-                                                 indexTable = "cohort_1",
-                                                 markerTable = "cohort_2",
-                                                 name = "joined_cohort")
-sr <- summariseSequenceRatio(cdm, "joined_cohort")
+                                 indexTable = "cohort_1",
+                                 markerTable = "cohort_2",
+                                 name = "joined_cohort")
+sr <- summariseSequenceRatio(cohort = cdm$joined_cohort)
 plotSequenceRatio(cdm = cdm,
                   sequenceTable = "joined_cohort",
                   sequenceRatio = sr)
