@@ -65,7 +65,8 @@ mockCohortSymmetry <- function(indexCohort = NULL,
 
   cdm <-
     omock::mockCdmReference() |> omock::mockCdmFromTables(tables = list(cohort_1 = indexCohort,
-                                                                            cohort_2 = markerCohort))
+                                                                            cohort_2 = markerCohort),
+                                                          seed = 1)
 
   cdm <- CDMConnector::copy_cdm_to(con = con,
                                    cdm = cdm,
