@@ -60,7 +60,7 @@ Imports:
     tibble,
     visOmopResults (>= 0.3.0),
     tidyr,
-    omock (>= 0.1.0),
+    omock (>= 0.2.0),
     stats,
     here,
     omopgenerics
