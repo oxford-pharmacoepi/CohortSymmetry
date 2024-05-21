@@ -7,7 +7,7 @@
 summariseSequenceRatio(
   cdm,
   sequenceTable,
-  sequenceId = NULL,
+  cohortId = NULL,
   confidenceInterval = 95,
   movingAverageRestriction = 548
 )
@@ -17,7 +17,7 @@ summariseSequenceRatio(
 
 \item{sequenceTable}{A table in the CDM that the output of generateSequenceCohortSet resides.}
 
-\item{sequenceId}{The Ids in the sequenceTable that are wished to be included in the analyses.}
+\item{cohortId}{The Ids in the sequenceTable that are wished to be included in the analyses.}
 
 \item{confidenceInterval}{Default is 95, indicating the central 95\% confidence interval.}
 
