@@ -3,13 +3,13 @@ test_that("plot working", {
     omock::mockPerson(nPerson = 100) |>
     omock::mockObservationPeriod() |>
     omock::mockCohort(
-      tableName = "marker_cohort",
+      name = "marker_cohort",
       numberCohorts = 2,
       cohortName = c("marker_a", "marker_b"),
       seed = 11
     ) |>
     omock::mockCohort(
-      tableName = "index_cohort",
+      name = "index_cohort",
       numberCohorts = 2,
       cohortName = c("index_a", "index_b"),
       seed = 33
@@ -49,13 +49,13 @@ test_that("expected errors", {
     omock::mockPerson(nPerson = 100) |>
     omock::mockObservationPeriod() |>
     omock::mockCohort(
-      tableName = "marker_cohort",
+      name = "marker_cohort",
       numberCohorts = 2,
       cohortName = c("marker_a", "marker_b"),
       seed = 11
     ) |>
     omock::mockCohort(
-      tableName = "index_cohort",
+      name = "index_cohort",
       numberCohorts = 2,
       cohortName = c("index_a", "index_b"),
       seed = 33
@@ -89,4 +89,3 @@ test_that("expected errors", {
 
   CDMConnector::cdmDisconnect(cdm)
 })
-
