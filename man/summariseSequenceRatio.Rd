@@ -5,19 +5,16 @@
 \title{Sequence ratio calculations}
 \usage{
 summariseSequenceRatio(
-  cdm,
-  sequenceTable,
+  cohort,
   cohortId = NULL,
   confidenceInterval = 95,
   movingAverageRestriction = 548
 )
 }
 \arguments{
-\item{cdm}{A CDM reference.}
+\item{cohort}{A cohort table in the cdm.}
 
-\item{sequenceTable}{A table in the CDM that the output of generateSequenceCohortSet resides.}
-
-\item{cohortId}{The Ids in the sequenceTable that are wished to be included in the analyses.}
+\item{cohortId}{The Ids in the cohort that are to be included in the analyses.}
 
 \item{confidenceInterval}{Default is 95, indicating the central 95\% confidence interval.}
 
@@ -37,7 +34,7 @@ cdm <- generateSequenceCohortSet(cdm = cdm,
                                  name = "joined_cohorts",
                                  indexTable = "cohort_1",
                                  markerTable = "cohort_2")
-pssa_result <- summariseSequenceRatio(cdm = cdm, sequenceTable = "joined_cohorts")
+pssa_result <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
 pssa_result
 CDMConnector::cdmDisconnect(cdm)
 }

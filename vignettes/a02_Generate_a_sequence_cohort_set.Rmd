@@ -94,10 +94,10 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   combinationWindow = c(0,Inf))
 
-cdm$intercept |> glimpse()
+cdm$intersect |> glimpse()
 ```
 
 See that the generated table has the format of an OMOP CDM cohort, but it also includes two additional columns: the index_date and the marker_date, which are the dates of the index and marker episode, respectively. The cohort_start_date and the cohort_end_date are defined as: 
@@ -133,11 +133,11 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   combinationWindow = c(0,Inf))
 
-cdm$intercept |> 
+cdm$intersect |> 
   summarise(min_cohort_start_date = min(cohort_start_date), 
             max_cohort_start_date = max(cohort_start_date),
             min_cohort_end_date   = min(cohort_end_date),
@@ -163,12 +163,12 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   daysPriorObservation = 0,
   combinationWindow = c(0,Inf))
 
-cdm$intercept |> 
+cdm$intersect |> 
   inner_join(
     cdm$observation_period |> 
       select("subject_id" = "person_id", "observation_period_start_date")
@@ -184,12 +184,12 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1980-01-01")),
   daysPriorObservation = 365,
   combinationWindow = c(0,Inf))
 
-cdm$intercept |> 
+cdm$intersect |> 
   inner_join(
     cdm$observation_period |> 
       select("subject_id" = "person_id", "observation_period_start_date")
@@ -214,7 +214,7 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1980-01-01")),
   daysPriorObservation = 365,
   washoutWindow = 0,
@@ -225,7 +225,7 @@ cdm[["aspirin"]] |>
   group_by(subject_id) |>
   arrange(cohort_start_date)
 
-cdm[["intercept"]] |>
+cdm[["intersect"]] |>
   filter(subject_id %in% c(1936,3565)) |> 
   glimpse()
 ```
@@ -236,13 +236,13 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   daysPriorObservation = 365,
   washoutWindow = 365,
   combinationWindow = c(0, Inf))
 
-cdm[["intercept"]] |>
+cdm[["intersect"]] |>
   filter(subject_id %in% c(1936,3565)) |>
   arrange(subject_id, cohort_start_date) |>
   glimpse()
@@ -276,12 +276,12 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   daysPriorObservation = 365,
   combinationWindow = c(0, Inf))
 
-cdm[["intercept"]] |>
+cdm[["intersect"]] |>
   filter(subject_id %in% c(80,187)) |>
   mutate(combinationWindow = pmax(index_date, marker_date) - pmin(index_date, marker_date))
 ```
@@ -293,12 +293,12 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   daysPriorObservation = 365,
   combinationWindow = c(0, Inf))
 
-cdm[["intercept"]] |>
+cdm[["intersect"]] |>
   filter(subject_id %in% c(80,187))
 ```
 
@@ -329,12 +329,12 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   daysPriorObservation = 365,
   indexMarkerGap = NULL)
 
-cdm$intercept |>
+cdm$intersect |>
   filter(subject_id %in% c(80,754)) |>
   inner_join(
     # As for both, acetaminophen (marker) is the first event:
@@ -360,11 +360,11 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   daysPriorObservation = 365,
   indexMarkerGap = 30)
 
-cdm$intercept |>
+cdm$intersect |>
   filter(subject_id %in% c(80,754)) 
 ```

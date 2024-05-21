@@ -53,14 +53,19 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkInputSummariseSequenceRatio <- function(cdm,
-                                        sequenceTable,
-                                        cohortId,
-                                        confidenceInterval,
-                                        movingAverageRestriction) {
+checkInputSummariseSequenceRatio <- function(cohort,
+                                             cohortId,
+                                             confidenceInterval,
+                                             movingAverageRestriction) {
 
   # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables = sequenceTable)
+  cdm <- omopgenerics::cdmReference(cohort)
+  checkCdm(cdm)
+
+  cohort_row <- cohort %>% dplyr::tally() %>% dplyr::pull()
+  if (cohort_row <=0){
+    cli::cli_abort("Aborted! The cohort has no rows, please revisit the cohort")
+  }
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()

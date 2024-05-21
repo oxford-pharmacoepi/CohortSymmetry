@@ -25,6 +25,12 @@ CohortSymmetry provides tools to perform a Sequence Symmetry Analysis (SSA). The
 
 3.  `tableSequenceRatios()`, `plotSequenceRatio()` and `plotTemporalSymmetry()`: these functions will help us to visualise the results.
 
+Before using the package, it is highly recommended that this
+method is tested beforehand against well-known positive and negative
+controls. Such controls could be found using the paper in the Reference.
+<sup>1</sup>
+
+
 Below, you will find an example analysis that offers a comprehensive overview of the package's functionalities. More context and further examples for each of these functions are provided in later vignettes.
 
 First, let’s load the relevant libraries.
@@ -97,8 +103,7 @@ plotTemporalSymmetry(cdm = cdm,
 
 Next, we will use the `generateSequenceCohortSet()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
 ```{r message= FALSE, warning=FALSE}
-result <- summariseSequenceRatio(cdm = cdm,
-                                 sequenceTable = "intersect")
+result <- summariseSequenceRatio(cohort = cdm$intersect)
 
 result |> glimpse()
 ```
@@ -115,3 +120,10 @@ plotSequenceRatio(cdm = cdm,
                   onlyaSR = T,
                   colours = "black")
 ```
+
+## References
+
+1.  Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry
+    analysis: assessing risk, temporality, and consistency for adverse
+    drug reactions across datasets in five countries. Pharmacoepidemiol
+    Drug Saf. 2015;24(8):858-864.

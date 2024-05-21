@@ -92,8 +92,7 @@ To get the sequence ratios, we would need the output of the generateSequenceCoho
 The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
 
 ```{r Step 2: summariseSequenceRatio, eval=TRUE, warning=FALSE}
-res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                         sequenceTable = "aspirin_amoxicillin")
+res <- CohortSymmetry::summariseSequenceRatio(cohort = cdm$aspirin_amoxicillin)
  
 res %>% glimpse()
 ```
