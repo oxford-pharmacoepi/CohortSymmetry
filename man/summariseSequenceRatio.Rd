@@ -37,10 +37,10 @@ cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
                                                  name = "joined_cohorts",
                                                  indexTable = "cohort_1",
                                                  markerTable = "cohort_2")
-pssa_result <- CohortSymmetry::summariseSequenceRatio (cdm = cdm,
-                                                       sequenceTable = "joined_cohorts")
- pssa_result
- CDMConnector::cdmDisconnect(cdm)
+pssa_result <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
+                                                      sequenceTable = "joined_cohorts")
+pssa_result
+CDMConnector::cdmDisconnect(cdm)
 }
 
 }
