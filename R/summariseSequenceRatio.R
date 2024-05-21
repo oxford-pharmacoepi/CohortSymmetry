@@ -27,17 +27,17 @@
 #' }
 #'
 summariseSequenceRatio <- function(cdm,
-                              sequenceTable,
-                              cohortId = NULL,
-                              confidenceInterval = 95,
-                              movingAverageRestriction = 548) {
+                                   sequenceTable,
+                                   cohortId = NULL,
+                                   confidenceInterval = 95,
+                                   movingAverageRestriction = 548) {
 
   # checks
   checkInputSummariseSequenceRatio(cdm = cdm,
-                              sequenceTable = sequenceTable,
-                              cohortId = cohortId,
-                              confidenceInterval = confidenceInterval,
-                              movingAverageRestriction = movingAverageRestriction)
+                                   sequenceTable = sequenceTable,
+                                   cohortId = cohortId,
+                                   confidenceInterval = confidenceInterval,
+                                   movingAverageRestriction = movingAverageRestriction)
 
   if (is.null(cohortId)){
     cohortId <- cdm[[sequenceTable]] %>%

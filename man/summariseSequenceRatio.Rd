@@ -32,13 +32,12 @@ Using generateSequenceCohortSet to obtain sequence ratios for the desired outcom
 \examples{
 \donttest{
 library(CohortSymmetry)
-cdm <- CohortSymmetry::mockCohortSymmetry()
-cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-                                                 name = "joined_cohorts",
-                                                 indexTable = "cohort_1",
-                                                 markerTable = "cohort_2")
-pssa_result <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                                      sequenceTable = "joined_cohorts")
+cdm <- mockCohortSymmetry()
+cdm <- generateSequenceCohortSet(cdm = cdm,
+                                 name = "joined_cohorts",
+                                 indexTable = "cohort_1",
+                                 markerTable = "cohort_2")
+pssa_result <- summariseSequenceRatio(cdm = cdm, sequenceTable = "joined_cohorts")
 pssa_result
 CDMConnector::cdmDisconnect(cdm)
 }
