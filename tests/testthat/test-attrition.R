@@ -399,7 +399,7 @@ test_that("attrition: daysPriorObservation", {
 
   expect_true(omopgenerics::attrition(cdm$joined_cohorts) %>%
                 dplyr::filter(reason =="Events excluded due to insufficient prior history") %>%
-                dplyr::pull(excluded_subjects)==1)
+                dplyr::pull(excluded_subjects)==3)
 
   expect_true(all(omopgenerics::attrition(cdm$joined_cohorts) %>%
                 dplyr::filter(!reason =="Events excluded due to insufficient prior history") %>%
@@ -411,7 +411,7 @@ test_that("attrition: daysPriorObservation", {
                      dplyr::arrange(subject_id) %>%
                      dplyr::pull(subject_id) %>%
                      as.numeric(),
-                   c(1, 2, 3, 5)
+                   c(1,2)
   )
 
   CDMConnector::cdmDisconnect(cdm = cdm)
@@ -860,28 +860,28 @@ test_that("attrition: complete example 2", {
                      dplyr::filter(reason_id == 4) %>%
                      dplyr::pull(excluded_records) %>%
                      as.numeric(),
-                   0
+                   1
   )
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
                      dplyr::filter(reason_id == 4) %>%
                      dplyr::pull(excluded_subjects) %>%
                      as.numeric(),
-                   0
+                   1
   )
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
                      dplyr::filter(reason_id == 5) %>%
                      dplyr::pull(excluded_records) %>%
                      as.numeric(),
-                   1
+                   0
   )
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) %>%
                      dplyr::filter(reason_id == 5) %>%
                      dplyr::pull(excluded_subjects) %>%
                      as.numeric(),
-                   1
+                   0
   )
 
   CDMConnector::cdmDisconnect(cdm = cdm)

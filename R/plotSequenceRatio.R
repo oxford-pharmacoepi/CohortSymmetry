@@ -21,12 +21,13 @@
 #' @examples
 #' \donttest{
 #' library(CohortSymmetry)
-#' cdm <- CohortSymmetry::mockCohortSymmetry()
-#' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+#'
+#' cdm <- mockCohortSymmetry()
+#' cdm <- generateSequenceCohortSet(cdm = cdm,
 #'                                                  indexTable = "cohort_1",
 #'                                                  markerTable = "cohort_2",
 #'                                                  name = "joined_cohort")
-#' sr <- CohortSymmetry::summariseSequenceRatio(cdm, "joined_cohort")
+#' sr <- summariseSequenceRatio(cdm, "joined_cohort")
 #' plotSequenceRatio(cdm = cdm,
 #'                   sequenceTable = "joined_cohort",
 #'                   sequenceRatio = sr)
@@ -110,7 +111,6 @@ plotSequenceRatio <- function(cdm,
     sr_tidy <- sr_tidy %>%
       dplyr::mutate(!!i := paste0(i, " = ", .data[[i]]))
   }
-
 
   if(length(facet_wrap_vars) == 0) {
     ggplot2::ggplot(data = sr_tidy, ggplot2::aes(

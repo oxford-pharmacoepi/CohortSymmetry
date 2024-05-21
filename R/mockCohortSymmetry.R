@@ -64,8 +64,9 @@ mockCohortSymmetry <- function(indexCohort = NULL,
   checkmate::assert_tibble(markerCohort)
 
   cdm <-
-    omock::mockCdmReference() |> omock::mockCdmFromTable(cohortTable = list(cohort_1 = indexCohort,
-                                                                            cohort_2 = markerCohort))
+    omock::mockCdmReference() |> omock::mockCdmFromTables(tables = list(cohort_1 = indexCohort,
+                                                                            cohort_2 = markerCohort),
+                                                          seed = 1)
 
   cdm <- CDMConnector::copy_cdm_to(con = con,
                                    cdm = cdm,

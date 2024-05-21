@@ -24,11 +24,11 @@
 #' @examples
 #' \donttest{
 #' library(CohortSymmetry)
-#' cdm <- CohortSymmetry::mockCohortSymmetry()
-#' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-#'                                                  indexTable = "cohort_1",
-#'                                                  markerTable = "cohort_2",
-#'                                                  name = "joined_cohort")
+#' cdm <- mockCohortSymmetry()
+#' cdm <- generateSequenceCohortSet(cdm = cdm,
+#'                                  indexTable = "cohort_1",
+#'                                  markerTable = "cohort_2",
+#'                                  name = "joined_cohort")
 #' plotTemporalSymmetry(cdm = cdm,
 #'                      sequenceTable = "joined_cohort")
 #' CDMConnector::cdmDisconnect(cdm = cdm)

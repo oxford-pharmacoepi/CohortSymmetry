@@ -45,13 +45,13 @@ cdm <- emptyCdmReference(cdmName = "mock") |>
   mockPerson(nPerson = 100) |>
   mockObservationPeriod() |>
   mockCohort(
-    tableName = "index_cohort",
+    name = "index_cohort",
     numberCohorts = 1,
     cohortName = c("index_cohort"),
     seed = 1,
   ) |>
   mockCohort(
-    tableName = "marker_cohort",
+    name = "marker_cohort",
     numberCohorts = 1,
     cohortName = c("marker_cohort"), 
     seed = 2
