@@ -22,7 +22,7 @@
 #'                                  indexTable = "cohort_1",
 #'                                  markerTable = "cohort_2",
 #'                                  name = "joined_cohort")
-#' sr <- summariseresult(cohort = cdm$joined_cohort)
+#' sr <- summariseSequenceRatio(cohort = cdm$joined_cohort)
 #' plotSequenceRatio(result = sr)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
