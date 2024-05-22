@@ -169,7 +169,7 @@ checkInputPlotTemporalSymmetry <- function(cdm,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkInputPlotSequenceRatio <- function(sequenceRatio,
+checkInputPlotSequenceRatio <- function(result,
                                         onlyaSR,
                                         plotTitle,
                                         labs,
@@ -178,8 +178,8 @@ checkInputPlotSequenceRatio <- function(sequenceRatio,
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
-  ## Check sequenceRatio
-  checkSequenceSymmetry(sequenceRatio)
+  ## Check result
+  checkSequenceSymmetry(result)
 
   ## Check plot title and labs
   checkPlotTitleLabs(plotTitle, labs, errorMessage)

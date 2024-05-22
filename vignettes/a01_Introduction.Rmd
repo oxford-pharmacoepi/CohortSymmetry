@@ -114,7 +114,7 @@ tableSequenceRatios(result)
 Or create a plot with the adjusted sequence ratios:
 
 ```{r message= FALSE, warning=FALSE}
-plotSequenceRatio(sequenceRatio = result,
+plotSequenceRatio(result = result,
                   onlyaSR = T,
                   colours = "black")
 ```

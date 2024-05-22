@@ -3,7 +3,7 @@
 #' @description
 #' It provides a ggplot of the sequence ratios of index and marker cohorts.
 #'
-#' @param sequenceRatio A table of the form of the output of summariseSequenceRatio.
+#' @param result Table output from summariseSequenceRatio.
 #' @param onlyaSR If the only SR to be plotted is the adjusted SR.
 #' @param plotTitle Title of the plot, if NULL no title will be plotted.
 #' @param labs Axis labels for the plot.
@@ -22,27 +22,27 @@
 #'                                  indexTable = "cohort_1",
 #'                                  markerTable = "cohort_2",
 #'                                  name = "joined_cohort")
-#' sr <- summariseSequenceRatio(cohort = cdm$joined_cohort)
-#' plotSequenceRatio(sequenceRatio = sr)
+#' sr <- summariseresult(cohort = cdm$joined_cohort)
+#' plotSequenceRatio(result = sr)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
-plotSequenceRatio <- function(sequenceRatio,
+plotSequenceRatio <- function(result,
                               onlyaSR = FALSE,
                               plotTitle = NULL,
                               labs = c("SR", "Drug Pairs"),
                               colours = c("red", "blue")
                               ) {
   # checks
-  checkInputPlotSequenceRatio(sequenceRatio = sequenceRatio,
+  checkInputPlotSequenceRatio(result = result,
                               onlyaSR = onlyaSR,
                               plotTitle = plotTitle,
                               labs = labs,
                               colours = colours)
 
-  sequenceRatio <- sequenceRatio %>%
+  result <- result %>%
     visOmopResults::splitGroup()
 
-  sr_tidy <- sequenceRatio %>%
+  sr_tidy <- result %>%
     visOmopResults::filterSettings(.data$result_type == "sequence_ratios") %>%
     dplyr::select(-c("cdm_name", "strata_name", "strata_level", "variable_level")) %>%
     visOmopResults::splitAdditional() %>%
