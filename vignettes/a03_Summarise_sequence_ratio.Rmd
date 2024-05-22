@@ -65,7 +65,7 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   combinationWindow = c(0,Inf))
 ```
 
@@ -74,8 +74,8 @@ cdm <- generateSequenceCohortSet(
 One can obtain the crude and adjusted sequence ratios (with its corresponding confidence intervals) using `summariseSequenceRatio()` function:
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatio(
-  cdm = cdm,
-  sequenceTable = "intercept") |>
+  cohort = cdm$intersect
+) |>
   glimpse()
 ```
 The obtained output has a summarised result format. In the later vignette (**Step 3. Visualise results**) we will explore how to visualise the results in a more understandable way. 
@@ -84,8 +84,7 @@ The obtained output has a summarised result format. In the later vignette (**Ste
 By default, the `summariseSequenceRatio()` function will use 95% confidence interval. If another confidence interval is desired, one can use the `confidenceInterval` argument:
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatio(
-  cdm = cdm,
-  sequenceTable = "intercept",
+  cohort = cdm$intersect,
   confidenceInterval = 99) |>
   glimpse()
 ```
@@ -94,8 +93,7 @@ summariseSequenceRatio(
 We define the moving window as the specified number of days for observation time window. This is mainly used to calculate the null sequence ratio (please, refer to Reference<sup>1</sup> for more details on this parameter). By default, the argument is defined as `movingAverageRestriction = 548` <sup>2</sup>, but can be modified:
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatio(
-  cdm = cdm,
-  sequenceTable = "intercept",
+  cohort = cdm$intersect,
   movingAverageRestriction = 600) |>
   glimpse()
 ```

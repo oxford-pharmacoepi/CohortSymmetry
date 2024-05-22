@@ -70,12 +70,12 @@ cdm <- DrugUtilisation::generateIngredientCohortSet(
  
 ### Step 1: generateSequenceCohortSet
  
-In order to initiate the calculations, the two cohorts tables need to be intersected using `CohortSymmetry::generateSequenceCohortSet()`. This process will output all the individuals who appeared on both tables according to a user-specified parameters. This includes `timeGap`, `washoutWindow`, `indexMarkerGap` and `daysPriorObservation`. Details on these parameters could be found on the vignette.
+In order to initiate the calculations, the two cohorts tables need to be intersected using `generateSequenceCohortSet()`. This process will output all the individuals who appeared on both tables according to a user-specified parameters. This includes `timeGap`, `washoutWindow`, `indexMarkerGap` and `daysPriorObservation`. Details on these parameters could be found on the vignette.
  
 ```{r Step 1: generateSequenceCohortSet, eval=TRUE, warning=FALSE}
 library(CohortSymmetry)
  
-cdm <- CohortSymmetry::generateSequenceCohortSet(
+cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "amoxicillin",
@@ -88,12 +88,11 @@ cdm$aspirin_amoxicillin %>%
 
 ### Step 2: summariseSequenceRatio
  
-To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into `CohortSymmetry::summariseSequenceRatio()` 
+To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into `summariseSequenceRatio()` 
 The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
 
 ```{r Step 2: summariseSequenceRatio, eval=TRUE, warning=FALSE}
-res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                         sequenceTable = "aspirin_amoxicillin")
+res <- summariseSequenceRatio(cohort = cdm$aspirin_amoxicillin)
  
 res %>% glimpse()
 ```
@@ -105,7 +104,7 @@ The user could then visualise their results using a wide array of provided tools
 For example, the following produces a gt table.
 
 ```{r Step 3: visualise the results - tables, eval=FALSE, warning=FALSE}
-gt_results <- CohortSymmetry::tableSequenceRatios(result = res)
+gt_results <- tableSequenceRatios(result = res)
 
 gt_results
 ```
@@ -116,7 +115,7 @@ Note that flextable is also an option, users may specify this by using the `type
 One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.
 
 ```{r Step 3: visualise the results - plots, eval=FALSE, warning=FALSE}
-CohortSymmetry::plotSequenceRatio(cdm = cdm,
+plotSequenceRatio(cdm = cdm,
                                   sequenceTable = "aspirin_amoxicillin",
                                   onlyaSR = T,
                                   sequenceRatio = res,
@@ -127,8 +126,7 @@ CohortSymmetry::plotSequenceRatio(cdm = cdm,
 The user also has the freedom to plot temporal trend like so:
 
 ```{r Step 3: visualise the results - plot temporal, eval=FALSE, warning=FALSE}
-CohortSymmetry::plotTemporalSymmetry(cdm = cdm,
-                                     sequenceTable = "aspirin_amoxicillin")
+plotTemporalSymmetry(cdm = cdm, sequenceTable = "aspirin_amoxicillin")
 ```
 ![](./man/figures/plot_temporal.png)
 

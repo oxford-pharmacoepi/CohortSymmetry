@@ -53,20 +53,32 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkInputSummariseSequenceRatio <- function(cdm,
-                                        sequenceTable,
-                                        cohortId,
-                                        confidenceInterval,
-                                        movingAverageRestriction) {
+checkInputSummariseSequenceRatio <- function(cohort,
+                                             cohortId,
+                                             confidenceInterval,
+                                             movingAverageRestriction) {
 
   # Check cdm objects, writing schema and index/marker tables
-  checkCdm(cdm, tables = sequenceTable)
+  cdm <- omopgenerics::cdmReference(cohort)
+  checkCdm(cdm)
+
+  cohort_row <- cohort %>% dplyr::tally() %>% dplyr::pull()
+  if (cohort_row <=0){
+    cli::cli_abort("Aborted! The cohort has no rows, please revisit the cohort")
+  }
+
+  if (!is.null(cohortId)) {
+    ids <- cohort %>%
+      dplyr::select("cohort_definition_id") %>%
+      dplyr::distinct() %>%
+      dplyr::pull()
+    if(!isTRUE(all(cohortId %in% ids))){
+      errorMessage$push("Some of the cohort ids given do not exist in the cohort table provided.")
+    }
+  }
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
-
-  # Check cohortId
-  checkCohortIds(cdm, sequenceTable, cohortId, errorMessage)
 
   ## Check confidenceInterval
   checkConfidenceInterval(confidenceInterval, errorMessage)
@@ -180,16 +192,6 @@ checkCdm <- function(cdm, tables = NULL) {
   }
   invisible(NULL)
 }
-
-# # Check writing schema
-# assertWriteSchema <- function(cdm, call = rlang::env_parent()) {
-#   if (!("write_schema" %in% names(attributes(cdm)))) {
-#     cli::cli_abort(
-#       message = "write_schema must be provided in the cdm object to use this function",
-#       call = call
-#     )
-#   }
-# }
 
 # Checks Index and Marker ids cohorts
 checkCohortIds <- function(cdm, CohortTable, CohortId, errorMessage) {

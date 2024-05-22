@@ -20,7 +20,7 @@
 #' @param markerName whether to report marker names
 #' @param cdmName whether to report database names.
 #' @param .options named list with additional formatting options.
-#' CohortSymmetry::tableSequenceRatiosOptions() shows allowed arguments and
+#' tableSequenceRatiosOptions() shows allowed arguments and
 #' their default values.
 #'
 #' @return A formatted version of the sequence_symmetry object.
@@ -29,13 +29,12 @@
 #' @examples
 #' \donttest{
 #' library(CohortSymmetry)
-#' cdm <- CohortSymmetry::mockCohortSymmetry()
-#' cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+#' cdm <- mockCohortSymmetry()
+#' cdm <- generateSequenceCohortSet(cdm = cdm,
 #'                                                  indexTable = "cohort_1",
 #'                                                  markerTable = "cohort_2",
 #'                                                  name = "joined_cohort")
-#' res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-#'                                          sequenceTable = "joined_cohort")
+#' res <- summariseSequenceRatio(cohort = cdm$joined_cohort)
 #' gtResult <- tableSequenceRatios(res)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }

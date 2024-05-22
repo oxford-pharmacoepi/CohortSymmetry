@@ -70,13 +70,12 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intercept",
+  name = "intersect",
   combinationWindow = c(0,Inf))
 
 # Calculate the sequence ratio
 result <- summariseSequenceRatio(
-  cdm = cdm,
-  sequenceTable = "intercept"
+  cohort = cdm$intersect
 )
 ```
 

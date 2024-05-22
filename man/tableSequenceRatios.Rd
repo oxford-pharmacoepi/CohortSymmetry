@@ -46,7 +46,7 @@ style, or NULL for gt/flextable default styling.}
 \item{cdmName}{whether to report database names.}
 
 \item{.options}{named list with additional formatting options.
-CohortSymmetry::tableSequenceRatiosOptions() shows allowed arguments and
+tableSequenceRatiosOptions() shows allowed arguments and
 their default values.}
 }
 \value{
@@ -59,13 +59,12 @@ output.
 \examples{
 \donttest{
 library(CohortSymmetry)
-cdm <- CohortSymmetry::mockCohortSymmetry()
-cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+cdm <- mockCohortSymmetry()
+cdm <- generateSequenceCohortSet(cdm = cdm,
                                                  indexTable = "cohort_1",
                                                  markerTable = "cohort_2",
                                                  name = "joined_cohort")
-res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                         sequenceTable = "joined_cohort")
+res <- summariseSequenceRatio(cohort = cdm$joined_cohort)
 gtResult <- tableSequenceRatios(res)
 CDMConnector::cdmDisconnect(cdm = cdm)
 }

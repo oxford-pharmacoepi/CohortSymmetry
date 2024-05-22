@@ -31,31 +31,30 @@ test_that("eunomia - generateSequenceCohortSet", {
   )
 
   expect_no_error(
-    cdm <- CohortSymmetry::generateSequenceCohortSet(cdm,
-                                                     name = "joined_cohorts",
-                                                     indexTable ="cohort1",
-                                                     markerTable = "cohort2",
-                                                     combinationWindow = c(0,Inf)))
+    cdm <- generateSequenceCohortSet(cdm,
+                                     name = "joined_cohorts",
+                                     indexTable ="cohort1",
+                                     markerTable = "cohort2",
+                                     combinationWindow = c(0,Inf)))
 
  expect_true(nrow(cdm$joined_cohorts %>% dplyr::collect()) > 0)
 
  expect_no_error(
-   res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                                 sequenceTable = "joined_cohorts")
+   res <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
  )
 
  expect_true(nrow(res) > 0)
 
  expect_no_error(
-   nice_table <- CohortSymmetry::tableSequenceRatios(res)
+   nice_table <- tableSequenceRatios(res)
  )
 
  expect_no_error(
-   nice_table <- CohortSymmetry::tableSequenceRatios(res, type = "flextable")
+   nice_table <- tableSequenceRatios(res, type = "flextable")
  )
 
  expect_no_error(
-   nice_table <- CohortSymmetry::tableSequenceRatios(res, type = "tibble")
+   nice_table <- tableSequenceRatios(res, type = "tibble")
  )
 
   CDMConnector::cdm_disconnect(cdm)
