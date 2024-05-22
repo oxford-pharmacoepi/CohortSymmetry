@@ -114,9 +114,7 @@ tableSequenceRatios(result)
 Or create a plot with the adjusted sequence ratios:
 
 ```{r message= FALSE, warning=FALSE}
-plotSequenceRatio(cdm = cdm,
-                  sequenceTable = "intersect",
-                  sequenceRatio = result,
+plotSequenceRatio(sequenceRatio = result,
                   onlyaSR = T,
                   colours = "black")
 ```

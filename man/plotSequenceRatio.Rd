@@ -5,30 +5,17 @@
 \title{A plot for the sequence ratios.}
 \usage{
 plotSequenceRatio(
-  cdm,
-  sequenceTable,
   sequenceRatio,
   onlyaSR = FALSE,
-  indexId = NULL,
-  markerId = NULL,
   plotTitle = NULL,
   labs = c("SR", "Drug Pairs"),
   colours = c("red", "blue")
 )
 }
 \arguments{
-\item{cdm}{A cdm object.}
-
-\item{sequenceTable}{The name of a table in the cdm of the form of the output
-of generateSequenceCohortSet.}
-
 \item{sequenceRatio}{A table of the form of the output of summariseSequenceRatio.}
 
 \item{onlyaSR}{If the only SR to be plotted is the adjusted SR.}
-
-\item{indexId}{What index ids to plot, if NULL all will be plotted.}
-
-\item{markerId}{What marker ids to plot, if NULL all will be plotted.}
 
 \item{plotTitle}{Title of the plot, if NULL no title will be plotted.}
 
@@ -52,9 +39,7 @@ cdm <- generateSequenceCohortSet(cdm = cdm,
                                  markerTable = "cohort_2",
                                  name = "joined_cohort")
 sr <- summariseSequenceRatio(cohort = cdm$joined_cohort)
-plotSequenceRatio(cdm = cdm,
-                  sequenceTable = "joined_cohort",
-                  sequenceRatio = sr)
+plotSequenceRatio(sequenceRatio = sr)
 CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

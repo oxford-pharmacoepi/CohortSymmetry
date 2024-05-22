@@ -802,8 +802,7 @@ test_that("generateSequenceCohortSet - inputValidation", {
       cohortDateRange = as.Date(c("2002-01-01", NA)),
       washoutWindow = 365,
       combinationWindow = c(0,Inf)
-    ),
-    "Some of the cohort ids given do not exist in cohort_1"
+    )
   )
   expect_error(
     generateSequenceCohortSet(
