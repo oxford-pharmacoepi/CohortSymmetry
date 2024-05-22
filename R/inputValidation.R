@@ -88,6 +88,33 @@ checkInputSummariseSequenceRatio <- function(cohort,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
+checkInputSummariseTemporalSymmetry <- function(cohort,
+                                                cohortId,
+                                                timescale) {
+
+  # Check cdm objects, writing schema and index/marker tables
+  cdm <- omopgenerics::cdmReference(cohort)
+  checkCdm(cdm)
+
+  cohort_row <- cohort %>% dplyr::tally() %>% dplyr::pull()
+  if (cohort_row <=0){
+    cli::cli_abort("Aborted! The cohort has no rows, please revisit the cohort")
+  }
+
+  checkCohortIds(cohort = cohort,
+                 cohortId = cohortId,
+                 errorMessage = errorMessage)
+
+  # Check the rest of inputs
+  errorMessage <- checkmate::makeAssertCollection()
+
+  # Check timescale
+  checktimeScale(timescale, errorMessage)
+
+  # Report errors
+  checkmate::reportAssertions(collection = errorMessage)
+}
+
 checkSequenceSymmetry <- function(result) {
   omopgenerics::newSummarisedResult(result)
 }
@@ -391,5 +418,14 @@ checkScales <- function(scales, errorMessage) {
                               add = errorMessage)
   if(!(scales %in% c("free", "fixed"))) {
     cli::cli_abort("The parameter 'scales' can only be set to 'free' or 'fixed'.")
+  }
+}
+
+checktimeScale <- function(timescale, errorMessage){
+  checkmate::assert_character(timescale,
+                              len = 1,
+                              add = errorMessage)
+  if(!(timescale %in% c("day", "month", "year"))) {
+    cli::cli_abort("The parameter 'timescale' can only be set to 'day', 'month' or 'year'.")
   }
 }
