@@ -131,7 +131,7 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCsCidN\file2eb89b83c51.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpuab8GQ\file32387f177107.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           &lt;int&gt; 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …</span></span>
@@ -180,11 +180,9 @@
 <p><img src="./reference/figures/README-gt_table.png"> Note that flextable is also an option, users may specify this by using the <code>type</code> argument.</p>
 <p>One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/plotSequenceRatio.html">plotSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>                                  sequenceTable <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span>,</span>
-<span>                                  onlyaSR <span class="op">=</span> <span class="cn">T</span>,</span>
-<span>                                  sequenceRatio <span class="op">=</span> <span class="va">res</span>,</span>
-<span>                                  colours <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plotSequenceRatio.html">plotSequenceRatio</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">res</span>,</span>
+<span>                  onlyaSR <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                  colours <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/plotSR.png"></p>
 <p>The user also has the freedom to plot temporal trend like so:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
