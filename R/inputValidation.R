@@ -30,8 +30,12 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
   checkcohortDateRange(cohortDateRange, errorMessage)
 
   ## Checks that Index and Marker ids exist in Index and Marker tables
-  checkCohortIds(cdm, indexTable, indexId, errorMessage)
-  checkCohortIds(cdm, markerTable, markerId, errorMessage)
+  checkCohortIds(cohort = cdm[[indexTable]],
+                 cohortId = indexId,
+                 errorMessage = errorMessage)
+  checkCohortIds(cohort = cdm[[markerTable]],
+                 cohortId = markerId,
+                 errorMessage = errorMessage)
 
   ## Checks columns in Index and Marker tables
   checkColumns(cdm, indexTable, errorMessage)
@@ -67,15 +71,9 @@ checkInputSummariseSequenceRatio <- function(cohort,
     cli::cli_abort("Aborted! The cohort has no rows, please revisit the cohort")
   }
 
-  if (!is.null(cohortId)) {
-    ids <- cohort %>%
-      dplyr::select("cohort_definition_id") %>%
-      dplyr::distinct() %>%
-      dplyr::pull()
-    if(!isTRUE(all(cohortId %in% ids))){
-      errorMessage$push("Some of the cohort ids given do not exist in the cohort table provided.")
-    }
-  }
+  checkCohortIds(cohort = cohort,
+                 cohortId = cohortId,
+                 errorMessage = errorMessage)
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
@@ -144,26 +142,17 @@ checkInputPlotTemporalSymmetry <- function(cdm,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkInputPlotSequenceRatio <- function(cdm,
-                                        sequenceTable,
-                                        sequenceRatio,
+checkInputPlotSequenceRatio <- function(sequenceRatio,
                                         onlyaSR,
-                                        indexId,
-                                        markerId,
                                         plotTitle,
                                         labs,
                                         colours) {
-  # Check index/marker table
-  checkCdm(cdm, tables = sequenceTable)
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
   ## Check sequenceRatio
   checkSequenceSymmetry(sequenceRatio)
-
-  ## Check ids
-  checkPlotIds(cdm, sequenceTable, indexId, markerId, errorMessage)
 
   ## Check plot title and labs
   checkPlotTitleLabs(plotTitle, labs, errorMessage)
@@ -194,16 +183,16 @@ checkCdm <- function(cdm, tables = NULL) {
 }
 
 # Checks Index and Marker ids cohorts
-checkCohortIds <- function(cdm, CohortTable, CohortId, errorMessage) {
-  checkmate::assertNumeric(CohortId, lower = 1, any.missing = FALSE,
+checkCohortIds <- function(cohort, cohortId, errorMessage) {
+  checkmate::assertNumeric(cohortId, lower = 1, any.missing = FALSE,
                            null.ok = TRUE, add = errorMessage)
-  if (!is.null(CohortId)) {
-    ids <- cdm[[CohortTable]] %>%
+  if (!is.null(cohortId)) {
+    ids <- cohort %>%
       dplyr::select("cohort_definition_id") %>%
       dplyr::distinct() %>%
       dplyr::pull()
-    if(!isTRUE(all(CohortId %in% ids))){
-      errorMessage$push(paste0("Some of the cohort ids given do not exist in ", CohortTable))
+    if(!isTRUE(all(cohortId %in% ids))){
+      errorMessage$push("Some of the cohort ids given do not exist in the cohort table(s) provided.")
     }
   }
 }

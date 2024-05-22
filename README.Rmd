@@ -115,11 +115,9 @@ Note that flextable is also an option, users may specify this by using the `type
 One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.
 
 ```{r Step 3: visualise the results - plots, eval=FALSE, warning=FALSE}
-plotSequenceRatio(cdm = cdm,
-                                  sequenceTable = "aspirin_amoxicillin",
-                                  onlyaSR = T,
-                                  sequenceRatio = res,
-                                  colours = "black")
+plotSequenceRatio(sequenceRatio = res,
+                  onlyaSR = T,
+                  colours = "black")
 ```
 ![](./man/figures/plotSR.png)
 

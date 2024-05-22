@@ -208,20 +208,20 @@ getHistogram <- function (pssa_output, time_scale = "weeks"){
 }
 ##### my fix
 library(CohortSymmetry)
-cdm <- CohortSymmetry::mockCohortSymmetry()
-cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+cdm <- mockCohortSymmetry()
+cdm <- generateSequenceCohortSet(cdm = cdm,
                                                  indexTable = "cohort_1",
                                                  indexId = 1,
                                                  markerTable = "cohort_2",
                                                  markerId = 3,
                                                  name = "joined_cohort")
 
-res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
+res <- summariseSequenceRatio(cdm = cdm,
                                               sequenceTable = "joined_cohort")
 
-gtResult <- CohortSymmetry::tableSequenceRatios(res)
+gtResult <- tableSequenceRatios(res)
 
-CohortSymmetry::plotSequenceRatio(cdm = cdm,
+plotSequenceRatio(cdm = cdm,
                                   joinedTable = "joined_cohort",
                                   sequenceRatio = res,
                                   onlyaSR = T)
