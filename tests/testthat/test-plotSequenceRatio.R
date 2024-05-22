@@ -20,7 +20,7 @@ test_that("plot working", {
                                    schema = "main",
                                    overwrite = TRUE)
   cdm <- generateSequenceCohortSet(cdm, "index_cohort", "marker_cohort", "joined_cohort", combinationWindow = c(0, Inf))
-  result <- summariseSequenceRatio(cdm, "joined_cohort")
+  result <- summariseSequenceRatio(cohort = cdm$joined_cohort)
 
   plotSR <- plotSequenceRatio(cdm, "joined_cohort", result)
   plotSR2 <- plotSequenceRatio(cdm, "joined_cohort", result, indexId = 1)
@@ -62,7 +62,7 @@ test_that("expected errors", {
                                    schema = "main",
                                    overwrite = TRUE)
   cdm <- generateSequenceCohortSet(cdm, "index_cohort", "marker_cohort", "joined_cohort", combinationWindow = c(0, Inf))
-  result <- summariseSequenceRatio(cdm, "joined_cohort")
+  result <- summariseSequenceRatio(cohort = cdm$joined_cohort)
   result2 <- result %>%
     dplyr::select(-c("group_level"))
 

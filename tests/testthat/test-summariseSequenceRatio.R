@@ -25,44 +25,44 @@ test_that("summariseSequenceRatio", {
     cohort_end_date = cohort_start_date
   )
 
-  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                                             markerCohort = markerCohort)
 
-  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable = "cohort_1",
-                                                   markerTable = "cohort_2")
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2")
 
   expect_warning(
     expect_no_error(
-      res <- CohortSymmetry::summariseSequenceRatio(
+      res <- summariseSequenceRatio(
         cohort = cdm$joined_cohorts)
     )
   )
 
   expect_true("summarised_result" %in% class(res))
   expect_error(
-    CohortSymmetry::summariseSequenceRatio(
+    summariseSequenceRatio(
       cohort = cdm$joined_cohorts2)
   )
   expect_error(
-    CohortSymmetry::summariseSequenceRatio(
+    summariseSequenceRatio(
       cohort = cdm2$joined_cohorts)
   )
   expect_error(
-    CohortSymmetry::summariseSequenceRatio(
+    summariseSequenceRatio(
       cohort = cdm$joined_cohorts,
       confidenceInterval = 101)
   )
 
   expect_error(
-    CohortSymmetry::summariseSequenceRatio(
+    summariseSequenceRatio(
       cohort = cdm$joined_cohorts,
       confidenceInterval = -101)
   )
 
     expect_error(
-      CohortSymmetry::summariseSequenceRatio(
+      summariseSequenceRatio(
         cohort = cdm$joined_cohorts,
       confidenceInterval = 101)
   )
@@ -95,16 +95,16 @@ test_that("summariseSequenceRatio - testing ratios and CIs, Example 1", {
     cohort_end_date = cohort_start_date
   )
 
-  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                                             markerCohort = markerCohort)
 
-  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+  cdm <- generateSequenceCohortSet(cdm = cdm,
                                                    name = "joined_cohorts",
                                            indexTable = "cohort_1",
                                            markerTable = "cohort_2")
 
   suppressWarnings(
-    res <- CohortSymmetry::summariseSequenceRatio(
+    res <- summariseSequenceRatio(
       cohort = cdm$joined_cohorts)
   )
 
@@ -158,15 +158,15 @@ test_that("summariseSequenceRatio - testing ratios and CIs, Example 2", {
     cohort_end_date = cohort_start_date
   )
 
-  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                                             markerCohort = markerCohort)
 
-  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+  cdm <- generateSequenceCohortSet(cdm = cdm,
                                                    name = "joined_cohorts",
                                            indexTable = "cohort_1",
                                            markerTable = "cohort_2")
 
-  res <- CohortSymmetry::summariseSequenceRatio(
+  res <- summariseSequenceRatio(
     cohort = cdm$joined_cohorts)
 
   res <- res |>
@@ -223,23 +223,23 @@ test_that("summariseSequenceRatio - testing CI", {
     cohort_end_date = cohort_start_date
   )
 
-  cdm <- CohortSymmetry::mockCohortSymmetry(indexCohort = indexCohort,
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                                             markerCohort = markerCohort)
 
-  cdm <- CohortSymmetry::generateSequenceCohortSet(cdm = cdm,
+  cdm <- generateSequenceCohortSet(cdm = cdm,
                                                    name = "joined_cohorts",
                                                    indexTable = "cohort_1",
                                                    markerTable = "cohort_2")
 
-  res_90 <- CohortSymmetry::summariseSequenceRatio(
+  res_90 <- summariseSequenceRatio(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 90)
 
-  res_95 <- CohortSymmetry::summariseSequenceRatio(
+  res_95 <- summariseSequenceRatio(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 95)
 
-  res_99 <- CohortSymmetry::summariseSequenceRatio(
+  res_99 <- summariseSequenceRatio(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 99)
 

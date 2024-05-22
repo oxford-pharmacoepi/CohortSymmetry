@@ -74,16 +74,16 @@ cdm <- DrugUtilisation::generateIngredientCohortSet(
 ### Step 1: generateSequenceCohortSet
 
 In order to initiate the calculations, the two cohorts tables need to be
-intersected using `CohortSymmetry::generateSequenceCohortSet()`. This
-process will output all the individuals who appeared on both tables
-according to a user-specified parameters. This includes `timeGap`,
-`washoutWindow`, `indexMarkerGap` and `daysPriorObservation`. Details on
-these parameters could be found on the vignette.
+intersected using `generateSequenceCohortSet()`. This process will
+output all the individuals who appeared on both tables according to a
+user-specified parameters. This includes `timeGap`, `washoutWindow`,
+`indexMarkerGap` and `daysPriorObservation`. Details on these parameters
+could be found on the vignette.
 
 ``` r
 library(CohortSymmetry)
  
-cdm <- CohortSymmetry::generateSequenceCohortSet(
+cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "amoxicillin",
@@ -94,7 +94,7 @@ cdm$aspirin_amoxicillin %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpWC6OBh\file357071d1493f.duckdb]
+#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCsCidN\file2eb89b83c51.duckdb]
 #> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
 #> $ subject_id           <int> 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …
 #> $ cohort_start_date    <date> 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …
@@ -107,13 +107,11 @@ cdm$aspirin_amoxicillin %>%
 
 To get the sequence ratios, we would need the output of the
 generateSequenceCohortSet() function to be fed into
-`CohortSymmetry::summariseSequenceRatio()` The output of this process
-contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and
-confidence intervals.
+`summariseSequenceRatio()` The output of this process contains cSR(crude
+sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
 
 ``` r
-res <- CohortSymmetry::summariseSequenceRatio(cdm = cdm,
-                                         sequenceTable = "aspirin_amoxicillin")
+res <- summariseSequenceRatio(cohort = cdm$aspirin_amoxicillin)
 #> Joining with `by = join_by(days_prior_observation, washout_window,
 #> index_marker_gap, combination_window, confidence_interval,
 #> moving_average_restriction, cdm_name)`
@@ -146,7 +144,7 @@ provided tools.
 For example, the following produces a gt table.
 
 ``` r
-gt_results <- CohortSymmetry::tableSequenceRatios(result = res)
+gt_results <- tableSequenceRatios(result = res)
 
 gt_results
 ```
@@ -158,7 +156,7 @@ One could also visualise the plot, for example, the following is the
 plot of the adjusted sequence ratio.
 
 ``` r
-CohortSymmetry::plotSequenceRatio(cdm = cdm,
+plotSequenceRatio(cdm = cdm,
                                   sequenceTable = "aspirin_amoxicillin",
                                   onlyaSR = T,
                                   sequenceRatio = res,
@@ -170,8 +168,7 @@ CohortSymmetry::plotSequenceRatio(cdm = cdm,
 The user also has the freedom to plot temporal trend like so:
 
 ``` r
-CohortSymmetry::plotTemporalSymmetry(cdm = cdm,
-                                     sequenceTable = "aspirin_amoxicillin")
+plotTemporalSymmetry(cdm = cdm, sequenceTable = "aspirin_amoxicillin")
 ```
 
 ![](./man/figures/plot_temporal.png)
