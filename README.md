@@ -94,7 +94,7 @@ cdm$aspirin_amoxicillin %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCsCidN\file2eb89b83c51.duckdb]
+#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\Rtmpuab8GQ\file32387f177107.duckdb]
 #> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
 #> $ subject_id           <int> 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …
 #> $ cohort_start_date    <date> 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …
@@ -156,11 +156,9 @@ One could also visualise the plot, for example, the following is the
 plot of the adjusted sequence ratio.
 
 ``` r
-plotSequenceRatio(cdm = cdm,
-                                  sequenceTable = "aspirin_amoxicillin",
-                                  onlyaSR = T,
-                                  sequenceRatio = res,
-                                  colours = "black")
+plotSequenceRatio(result = res,
+                  onlyaSR = T,
+                  colours = "black")
 ```
 
 ![](./man/figures/plotSR.png)

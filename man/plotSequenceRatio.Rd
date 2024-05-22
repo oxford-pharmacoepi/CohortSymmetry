@@ -5,7 +5,7 @@
 \title{A plot for the sequence ratios.}
 \usage{
 plotSequenceRatio(
-  sequenceRatio,
+  result,
   onlyaSR = FALSE,
   plotTitle = NULL,
   labs = c("SR", "Drug Pairs"),
@@ -13,7 +13,7 @@ plotSequenceRatio(
 )
 }
 \arguments{
-\item{sequenceRatio}{A table of the form of the output of summariseSequenceRatio.}
+\item{result}{Table output from summariseSequenceRatio.}
 
 \item{onlyaSR}{If the only SR to be plotted is the adjusted SR.}
 
@@ -39,7 +39,7 @@ cdm <- generateSequenceCohortSet(cdm = cdm,
                                  markerTable = "cohort_2",
                                  name = "joined_cohort")
 sr <- summariseSequenceRatio(cohort = cdm$joined_cohort)
-plotSequenceRatio(sequenceRatio = sr)
+plotSequenceRatio(result = sr)
 CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }
