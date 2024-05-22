@@ -119,7 +119,7 @@ style, or NULL for gt/flextable default styling.</p></dd>
 
 <dt>.options</dt>
 <dd><p>named list with additional formatting options.
-CohortSymmetry::tableSequenceRatiosOptions() shows allowed arguments and
+tableSequenceRatiosOptions() shows allowed arguments and
 their default values.</p></dd>
 
 </dl></div>
@@ -134,13 +134,12 @@ their default values.</p></dd>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="mockCohortSymmetry.html">mockCohortSymmetry</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
+<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockCohortSymmetry.html">mockCohortSymmetry</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
 <span class="r-in"><span>                                                 indexTable <span class="op">=</span> <span class="st">"cohort_1"</span>,</span></span>
 <span class="r-in"><span>                                                 markerTable <span class="op">=</span> <span class="st">"cohort_2"</span>,</span></span>
 <span class="r-in"><span>                                                 name <span class="op">=</span> <span class="st">"joined_cohort"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
-<span class="r-in"><span>                                         sequenceTable <span class="op">=</span> <span class="st">"joined_cohort"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohort</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>For at least some combinations, index is always before marker or marker always</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> before index</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -- 5 combinations of 8 had index always before marker</span>

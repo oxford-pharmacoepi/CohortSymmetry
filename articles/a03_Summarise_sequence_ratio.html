@@ -118,7 +118,7 @@ in the previous vignette.</p>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
 <span>  markerTable <span class="op">=</span> <span class="st">"acetaminophen"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"intercept"</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"intersect"</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -129,8 +129,8 @@ corresponding confidence intervals) using
 <code><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio()</a></code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span></span>
-<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>  sequenceTable <span class="op">=</span> <span class="st">"intercept"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
 <span><span class="co">#&gt; Columns: 13</span></span>
@@ -158,8 +158,7 @@ use 95% confidence interval. If another confidence interval is desired,
 one can use the <code>confidenceInterval</code> argument:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span></span>
-<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>  sequenceTable <span class="op">=</span> <span class="st">"intercept"</span>,</span>
+<span>  cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span>,</span>
 <span>  confidenceInterval <span class="op">=</span> <span class="fl">99</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
@@ -189,8 +188,7 @@ on this parameter). By default, the argument is defined as
 modified:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span></span>
-<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>  sequenceTable <span class="op">=</span> <span class="st">"intercept"</span>,</span>
+<span>  cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span>,</span>
 <span>  movingAverageRestriction <span class="op">=</span> <span class="fl">600</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>

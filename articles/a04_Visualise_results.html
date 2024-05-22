@@ -131,13 +131,12 @@ vignette.</p>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
 <span>  markerTable <span class="op">=</span> <span class="st">"acetaminophen"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"intercept"</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"intersect"</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Calculate the sequence ratio</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span></span>
-<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>  sequenceTable <span class="op">=</span> <span class="st">"intercept"</span></span>
+<span>  cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

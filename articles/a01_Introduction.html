@@ -86,6 +86,10 @@ calculate the sequence ratio.</p></li>
 <code><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry()</a></code>: these functions will help us to
 visualise the results.</p></li>
 </ol>
+<p>Before using the package, it is highly recommended that this method
+is tested beforehand against well-known positive and negative controls.
+Such controls could be found using the paper in the Reference.
+<sup>1</sup></p>
 <p>Below, you will find an example analysis that offers a comprehensive
 overview of the package’s functionalities. More context and further
 examples for each of these functions are provided in later
@@ -183,8 +187,7 @@ explore the temporal trend by using
 function to get the crude sequence ratios, adjusted sequence ratios, and
 the corresponding confidence intervals.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>                                 sequenceTable <span class="op">=</span> <span class="st">"intersect"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">result</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
@@ -677,6 +680,16 @@ the corresponding confidence intervals.</p>
 <span>                  onlyaSR <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>                  colours <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a01_Introduction_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<ol style="list-style-type: decimal">
+<li>Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry
+analysis: assessing risk, temporality, and consistency for adverse drug
+reactions across datasets in five countries. Pharmacoepidemiol Drug Saf.
+2015;24(8):858-864.</li>
+</ol>
+</div>
   </main>
 </div>
 

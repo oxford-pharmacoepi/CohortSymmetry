@@ -52,8 +52,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">summariseSequenceRatio</span><span class="op">(</span></span>
-<span>  <span class="va">cdm</span>,</span>
-<span>  <span class="va">sequenceTable</span>,</span>
+<span>  <span class="va">cohort</span>,</span>
 <span>  cohortId <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  confidenceInterval <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>  movingAverageRestriction <span class="op">=</span> <span class="fl">548</span></span>
@@ -62,16 +61,12 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>cdm</dt>
-<dd><p>A CDM reference.</p></dd>
-
-
-<dt>sequenceTable</dt>
-<dd><p>A table in the CDM that the output of generateSequenceCohortSet resides.</p></dd>
+    <dl><dt>cohort</dt>
+<dd><p>A cohort table in the cdm.</p></dd>
 
 
 <dt>cohortId</dt>
-<dd><p>The Ids in the sequenceTable that are wished to be included in the analyses.</p></dd>
+<dd><p>The Ids in the cohort that are to be included in the analyses.</p></dd>
 
 
 <dt>confidenceInterval</dt>
@@ -98,7 +93,7 @@
 <span class="r-in"><span>                                 name <span class="op">=</span> <span class="st">"joined_cohorts"</span>,</span></span>
 <span class="r-in"><span>                                 indexTable <span class="op">=</span> <span class="st">"cohort_1"</span>,</span></span>
 <span class="r-in"><span>                                 markerTable <span class="op">=</span> <span class="st">"cohort_2"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">pssa_result</span> <span class="op">&lt;-</span> <span class="fu">summariseSequenceRatio</span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>, sequenceTable <span class="op">=</span> <span class="st">"joined_cohorts"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pssa_result</span> <span class="op">&lt;-</span> <span class="fu">summariseSequenceRatio</span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohorts</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>For at least some combinations, index is always before marker or marker always</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> before index</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> -- 5 combinations of 8 had index always before marker</span>

@@ -116,11 +116,11 @@
 <div class="section level3">
 <h3 id="step-1-generatesequencecohortset">Step 1: generateSequenceCohortSet<a class="anchor" aria-label="anchor" href="#step-1-generatesequencecohortset"></a>
 </h3>
-<p>In order to initiate the calculations, the two cohorts tables need to be intersected using <code><a href="reference/generateSequenceCohortSet.html">CohortSymmetry::generateSequenceCohortSet()</a></code>. This process will output all the individuals who appeared on both tables according to a user-specified parameters. This includes <code>timeGap</code>, <code>washoutWindow</code>, <code>indexMarkerGap</code> and <code>daysPriorObservation</code>. Details on these parameters could be found on the vignette.</p>
+<p>In order to initiate the calculations, the two cohorts tables need to be intersected using <code><a href="reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code>. This process will output all the individuals who appeared on both tables according to a user-specified parameters. This includes <code>timeGap</code>, <code>washoutWindow</code>, <code>indexMarkerGap</code> and <code>daysPriorObservation</code>. Details on these parameters could be found on the vignette.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span>
 <span> </span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
 <span>  markerTable <span class="op">=</span> <span class="st">"amoxicillin"</span>,</span>
@@ -131,7 +131,7 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpWC6OBh\file357071d1493f.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpCsCidN\file2eb89b83c51.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           &lt;int&gt; 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …</span></span>
@@ -142,10 +142,9 @@
 <div class="section level3">
 <h3 id="step-2-summarisesequenceratio">Step 2: summariseSequenceRatio<a class="anchor" aria-label="anchor" href="#step-2-summarisesequenceratio"></a>
 </h3>
-<p>To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into <code><a href="reference/summariseSequenceRatio.html">CohortSymmetry::summariseSequenceRatio()</a></code> The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
+<p>To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into <code><a href="reference/summariseSequenceRatio.html">summariseSequenceRatio()</a></code> The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>                                         sequenceTable <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">aspirin_amoxicillin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Joining with `by = join_by(days_prior_observation, washout_window,</span></span>
 <span><span class="co">#&gt; index_marker_gap, combination_window, confidence_interval,</span></span>
 <span><span class="co">#&gt; moving_average_restriction, cdm_name)`</span></span>
@@ -175,13 +174,13 @@
 <p>The user could then visualise their results using a wide array of provided tools.</p>
 <p>For example, the following produces a gt table.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">gt_results</span> <span class="op">&lt;-</span> <span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">res</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">gt_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">res</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">gt_results</span></span></code></pre></div>
 <p><img src="./reference/figures/README-gt_table.png"> Note that flextable is also an option, users may specify this by using the <code>type</code> argument.</p>
 <p>One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/plotSequenceRatio.html">plotSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plotSequenceRatio.html">plotSequenceRatio</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>                                  sequenceTable <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span>,</span>
 <span>                                  onlyaSR <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>                                  sequenceRatio <span class="op">=</span> <span class="va">res</span>,</span>
@@ -189,8 +188,7 @@
 <p><img src="./reference/figures/plotSR.png"></p>
 <p>The user also has the freedom to plot temporal trend like so:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">CohortSymmetry</span><span class="fu">::</span><span class="fu"><a href="reference/plotTemporalSymmetry.html">plotTemporalSymmetry</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>                                     sequenceTable <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plotTemporalSymmetry.html">plotTemporalSymmetry</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>, sequenceTable <span class="op">=</span> <span class="st">"aspirin_amoxicillin"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/plot_temporal.png"></p>
 </div>
 <div class="section level3">
