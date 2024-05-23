@@ -28,13 +28,13 @@ nullSequenceRatio <- function(table, movingAverageRestriction = 548) {
     numer <-
       table %>%
       dplyr::mutate(
-        marker_cumsum = .data$n_marker_before_index - cumsum(.data$marker_first),
+        marker_cumsum = .env$n_marker_before_index - cumsum(.data$marker_first),
         numerator = .data$index_first * .data$marker_cumsum
       ) %>%
       dplyr::pull("numerator")
 
     numer <- sum(numer)
-    denom <- .data$n_marker_before_index * .data$n_index_before_marker
+    denom <- n_marker_before_index * n_index_before_marker
 
   }
 
