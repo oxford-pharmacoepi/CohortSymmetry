@@ -135,23 +135,18 @@ checksFormatSequenceSymmetry <- function(type, crude, adjusted, studyPopulation,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkInputPlotTemporalSymmetry <- function(cdm,
-                                           sequenceTable,
-                                           indexId,
-                                           markerId,
+checkInputPlotTemporalSymmetry <- function(result,
                                            plotTitle,
                                            labs,
                                            xlim,
                                            colours,
                                            scales) {
-  # Check index/marker table
-  checkCdm(cdm, tables = sequenceTable)
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
-  ## Check ids
-  checkPlotIds(cdm, sequenceTable, indexId, markerId, errorMessage)
+  ## Check result
+  checkSequenceSymmetry(result)
 
   ## Check plot title and labs
   checkPlotTitleLabs(plotTitle, labs, errorMessage)
