@@ -180,8 +180,8 @@ form:</p>
 explore the temporal trend by using
 <code><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
-<span>                     sequenceTable <span class="op">=</span> <span class="st">"intersect"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseTemporalSymmetry.html">summariseTemporalSymmetry</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a01_Introduction_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 <p>Next, we will use the <code><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code>
 function to get the crude sequence ratios, adjusted sequence ratios, and
