@@ -5,33 +5,20 @@
 \title{A plot for the temporal symmetry of cohorts.}
 \usage{
 plotTemporalSymmetry(
-  cdm,
-  sequenceTable,
-  indexId = NULL,
-  markerId = NULL,
+  result,
   plotTitle = NULL,
   labs = c("Time (months)", "Individuals (N)"),
-  timescale = "month",
   xlim = c(-12, 12),
   colours = c("blue", "red"),
   scales = "free"
 )
 }
 \arguments{
-\item{cdm}{A cdm object.}
-
-\item{sequenceTable}{The name of a table in the cdm of the form of the output
-of generateSequenceCohortSet.}
-
-\item{indexId}{What index ids to plot, if NULL all will be plotted.}
-
-\item{markerId}{What marker ids to plot, if NULL all will be plotted.}
+\item{result}{Table output from summariseTemporalSymmetry.}
 
 \item{plotTitle}{Title of the plot, if NULL no title will be plotted.}
 
 \item{labs}{Axis labels for the plot.}
-
-\item{timescale}{Timescale for the x axis of the plot (month, day, year).}
 
 \item{xlim}{Limits for the x axis of the plot.}
 
@@ -55,8 +42,8 @@ cdm <- generateSequenceCohortSet(cdm = cdm,
                                  indexTable = "cohort_1",
                                  markerTable = "cohort_2",
                                  name = "joined_cohort")
-plotTemporalSymmetry(cdm = cdm,
-                     sequenceTable = "joined_cohort")
+temporal_symmetry <- summariseTemporalSymmetry(cohort = cdm$joined_cohort)
+plotTemporalSymmetry(result = temporal_symmetry)
 CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

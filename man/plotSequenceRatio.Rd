@@ -38,8 +38,8 @@ cdm <- generateSequenceCohortSet(cdm = cdm,
                                  indexTable = "cohort_1",
                                  markerTable = "cohort_2",
                                  name = "joined_cohort")
-sr <- summariseSequenceRatio(cohort = cdm$joined_cohort)
-plotSequenceRatio(result = sr)
+sequence_ratio <- summariseSequenceRatio(cohort = cdm$joined_cohort)
+plotSequenceRatio(result = sequence_ratio)
 CDMConnector::cdmDisconnect(cdm = cdm)
 }
 }

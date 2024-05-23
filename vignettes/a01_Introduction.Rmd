@@ -97,8 +97,8 @@ settings(cdm$intersect) |> glimpse()
 
 Once we have the **intersect** cohort, you are able to explore the temporal trend by using `plotTemporalSymmetry()`:
 ```{r message= FALSE, warning=FALSE}
-plotTemporalSymmetry(cdm = cdm,
-                     sequenceTable = "intersect")
+result <- summariseTemporalSymmetry(cohort = cdm$intersect)
+plotTemporalSymmetry(result = result)
 ```
 
 Next, we will use the `generateSequenceCohortSet()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
