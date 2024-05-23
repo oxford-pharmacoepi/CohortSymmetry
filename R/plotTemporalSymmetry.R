@@ -55,8 +55,8 @@ plotTemporalSymmetry <- function(result,
     dplyr::mutate(colour = dplyr::if_else(.data$time > 0, "B", "A")) %>%
     dplyr::mutate(index_name = paste0("index = ", .data$index_name),
                   marker_name = paste0("marker = ", .data$marker_name)) %>%
-    dplyr::mutate(count = as.integer(count),
-                  time = as.integer(time)) %>%
+    dplyr::mutate(count = as.integer(.data$count),
+                  time = as.integer(.data$time)) %>%
     dplyr::compute()
 
   colours = c("A" = colours[1], "B" = colours[2])

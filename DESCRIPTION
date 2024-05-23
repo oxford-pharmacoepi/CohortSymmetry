@@ -62,7 +62,6 @@ Imports:
     tidyr,
     omock (>= 0.2.0),
     stats,
-    here,
     omopgenerics
 Remotes: 
    darwin-eu-dev/omopgenerics
