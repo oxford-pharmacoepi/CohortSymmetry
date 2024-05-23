@@ -125,9 +125,6 @@ indexDelta <- function(x, delta, direction){
 
 deltaCumulativeSum <- function(y, t, delta, backwards = TRUE) {
 
-  if (is.null(y)) {
-    y <- t
-  }
   y_cumsum <- cumsum(y)
 
   if (backwards) {

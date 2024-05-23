@@ -2,9 +2,9 @@
 test_that("check output table name", {
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
-                                           name = "output",
-                                           indexTable ="cohort_1",
-                                           markerTable = "cohort_2")
+                                   name = "output",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2")
   expect_true(all(
     c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "marker_date",
       "index_date") %in%
@@ -18,9 +18,9 @@ test_that("check output table name", {
 test_that("check output format, colnames", {
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                     indexTable ="cohort_1",
-                     markerTable = "cohort_2")
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2")
   expect_true(all(
     c("cohort_definition_id", "subject_id", "cohort_start_date", "cohort_end_date", "marker_date",
       "index_date") %in%
@@ -33,11 +33,11 @@ test_that("check output format, colnames", {
 test_that("one ID against one ID, example 1", {
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                     indexTable ="cohort_1",
-                     indexId=1,
-                     markerTable = "cohort_2",
-                     markerId=1)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=1,
+                                   markerTable = "cohort_2",
+                                   markerId=1)
   expect_true((cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n)) == 2)
   cdm$joined_cohorts <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -55,11 +55,11 @@ test_that("one ID against one ID, example 1", {
 test_that("one ID against one ID, example 2", {
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                     indexTable ="cohort_1",
-                     indexId=2,
-                     markerTable = "cohort_2",
-                     markerId=2)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=2,
+                                   markerTable = "cohort_2",
+                                   markerId=2)
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
@@ -74,11 +74,11 @@ test_that("one ID against one ID, example 2", {
 test_that("one ID against one ID, example 3", {
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                     indexTable ="cohort_1",
-                     indexId=1,
-                     markerTable = "cohort_2",
-                     markerId=2)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=1,
+                                   markerTable = "cohort_2",
+                                   markerId=2)
 
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -119,18 +119,20 @@ test_that("multiple entries per person", {
   )
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2")
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2")
+
   loc <- cdm$joined_cohorts %>% dplyr::collect()
   expect_true(all(loc %>% dplyr::group_by(subject_id) %>% dplyr::tally() %>% dplyr::select(n) == 1))
   expect_true(nrow(loc)==2)
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   combinationWindow = c(0, 90))
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   combinationWindow = c(0, 90))
+
   loc <- cdm$joined_cohorts %>% dplyr::collect()
   expect_true(all(loc %>% dplyr::group_by(subject_id) %>% dplyr::tally() %>% dplyr::select(n) == 1))
   expect_true(nrow(loc)==1)
@@ -145,12 +147,12 @@ test_that("change combinationWindow one ID against one ID, example 1", {
 
   ######
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                     indexTable ="cohort_1",
-                     indexId=1,
-                     markerTable = "cohort_2",
-                     markerId=2,
-                     combinationWindow = c(0,30))
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=1,
+                                   markerTable = "cohort_2",
+                                   markerId=2,
+                                   combinationWindow = c(0,30))
 
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -161,12 +163,12 @@ test_that("change combinationWindow one ID against one ID, example 1", {
 
   ######
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   indexId=1,
-                                                   markerTable = "cohort_2",
-                                                   markerId=2,
-                                                   combinationWindow = c(0,Inf))
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=1,
+                                   markerTable = "cohort_2",
+                                   markerId=2,
+                                   combinationWindow = c(0,Inf))
 
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -176,12 +178,12 @@ test_that("change combinationWindow one ID against one ID, example 1", {
 
   ######
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   indexId=1,
-                                                   markerTable = "cohort_2",
-                                                   markerId=2,
-                                                   combinationWindow = c(7,365))
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=1,
+                                   markerTable = "cohort_2",
+                                   markerId=2,
+                                   combinationWindow = c(7,365))
 
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -199,12 +201,12 @@ test_that("change combinationWindow one ID against one ID, example 2", {
 
   ######
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   indexId=3,
-                                                   markerTable = "cohort_2",
-                                                   markerId=1,
-                                                   combinationWindow = c(0,30))
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=3,
+                                   markerTable = "cohort_2",
+                                   markerId=1,
+                                   combinationWindow = c(0,30))
 
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -215,12 +217,12 @@ test_that("change combinationWindow one ID against one ID, example 2", {
 
   ######
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   indexId=3,
-                                                   markerTable = "cohort_2",
-                                                   markerId=1,
-                                                   combinationWindow = c(0,Inf))
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=3,
+                                   markerTable = "cohort_2",
+                                   markerId=1,
+                                   combinationWindow = c(0,Inf))
 
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -230,12 +232,12 @@ test_that("change combinationWindow one ID against one ID, example 2", {
 
   ######
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   indexId=3,
-                                                   markerTable = "cohort_2",
-                                                   markerId=1,
-                                                   combinationWindow = c(7,Inf))
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId=3,
+                                   markerTable = "cohort_2",
+                                   markerId=1,
+                                   combinationWindow = c(7,Inf))
 
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -778,6 +780,139 @@ test_that("tests involving indexMarkerGap", {
 }
 )
 ################################# Input Validation ################################
+test_that("unsuccessful examples - Inf prior observation", {
+  cdm <- mockCohortSymmetry()
+
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable ="cohort1",
+                                         markerTable = "cohort2",
+                                         daysPriorObservation = Inf
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("unsuccessful examples - name not in the right form", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joinCohorts",
+                                         indexTable = "cohort_1",
+                                         markerTable = "cohort_2",
+                                         daysPriorObservation = 0
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("unsuccessful examples - indexTable not strings", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = cohort1,
+                                         markerTable = "cohort2",
+                                         daysPriorObservation = 0
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("unsuccessful examples - markerTable not strings", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = cohort2,
+                                         daysPriorObservation = 0
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("unsuccessful examples - daysPriorObservation is not numeric", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "cohort2",
+                                         daysPriorObservation = "seven"
+  ))
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "cohort2",
+                                         daysPriorObservation = 2.5
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("unsuccessful examples - Ids outside of range", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "cohort2",
+                                         indexId = 2
+  ))
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "cohort2",
+                                         markerId = 2
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("unsuccessful examples - tables not in the CDM", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "cohort3",
+                                         indexId = 2
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("mock db: unsuccessful examples - tables not in the right format", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "drug_exposure"
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("mock db: unsuccessful examples - tables not in the right format", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "drug_exposure"
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("unsuccessful examples - negative parameters", {
+  cdm <- mockCohortSymmetry()
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "drug_exposure",
+                                         daysPriorObservation = -100
+  ))
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "drug_exposure",
+                                         washoutWindow = -100
+  ))
+  expect_error(generateSequenceCohortSet(cdm,
+                                         name = "joined_cohorts",
+                                         indexTable = "cohort1",
+                                         markerTable = "drug_exposure",
+                                         combinationWindow = c(-200,-100)
+  ))
+  CDMConnector::cdmDisconnect(cdm)
+})
+
 test_that("generateSequenceCohortSet - inputValidation", {
   cdm <- mockCohortSymmetry()
   expect_error(
@@ -845,6 +980,16 @@ test_that("generateSequenceCohortSet - inputValidation", {
       markerTable = "cohort_2",
       cohortDateRange = as.Date(c("2002-01-01", NA)),
       combinationWindow = c(80, 40)
+    )
+  )
+  expect_error(
+    generateSequenceCohortSet(
+      cdm = cdm,
+      name = "joined_cohorts",
+      indexTable = "cohort_1",
+      markerTable = "cohort_2",
+      cohortDateRange = as.Date(c("2002-01-01", NA)),
+      combinationWindow = c(Inf, Inf)
     )
   )
   CDMConnector::cdmDisconnect(cdm)

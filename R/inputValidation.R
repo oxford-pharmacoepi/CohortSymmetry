@@ -377,25 +377,6 @@ checkColoursaSR <- function(colours, onlyaSR, errorMessage) {
   }
 }
 
-checkPlotIds<- function(cdm, sequenceTable, indexId, markerId, errorMessage) {
-  checkmate::assert_integerish(indexId,
-                               null.ok = TRUE,
-                               lower = 0,
-                               add = errorMessage)
-  checkmate::assert_integerish(markerId,
-                               null.ok = TRUE,
-                               lower = 0,
-                               add = errorMessage)
-  cohort_set_table <- attr(cdm[[sequenceTable]], "cohort_set") %>%
-    dplyr::collect()
-  if(!(all(indexId %in% cohort_set_table$index_id))) {
-    cli::cli_abort("Some of the indexId provided are not index ids in the cohort")
-  }
-  if(!(all(markerId %in% cohort_set_table$marker_id))) {
-    cli::cli_abort("Some of the markerId provided are not marker ids in the cohort")
-  }
-}
-
 checkPlotTitleLabs <- function(plotTitle, labs, errorMessage) {
   checkmate::assert_character(plotTitle,
                               len = 1,
