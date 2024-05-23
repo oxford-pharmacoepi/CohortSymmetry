@@ -96,12 +96,12 @@ test_that("summariseSequenceRatio - testing ratios and CIs, Example 1", {
   )
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
-                                            markerCohort = markerCohort)
+                            markerCohort = markerCohort)
 
   cdm <- generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohorts",
-                                           indexTable = "cohort_1",
-                                           markerTable = "cohort_2")
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2")
 
   suppressWarnings(
     res <- summariseSequenceRatio(
@@ -224,24 +224,126 @@ test_that("summariseSequenceRatio - testing CI", {
   )
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
-                                            markerCohort = markerCohort)
+                            markerCohort = markerCohort)
 
   cdm <- generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable = "cohort_1",
-                                                   markerTable = "cohort_2")
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2")
 
   res_90 <- summariseSequenceRatio(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 90)
 
+  expect_equal(res_90 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "index",
+                                        estimate_name == "count") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               3)
+
+  expect_equal(res_90 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "index",
+                                        estimate_name == "percentage") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               75)
+  expect_equal(res_90 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "marker",
+                                        estimate_name == "count") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               1)
+
+  expect_equal(res_90 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "marker",
+                                        estimate_name == "percentage") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               25)
+
+  expect_equal(res_90 %>% dplyr::filter(variable_level == "sequence_ratio",
+                                        variable_name == "crude",
+                                        estimate_name == "point_estimate") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               3)
+
   res_95 <- summariseSequenceRatio(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 95)
 
+  expect_equal(res_95 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "index",
+                                        estimate_name == "count") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               3)
+
+  expect_equal(res_95 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "index",
+                                        estimate_name == "percentage") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               75)
+  expect_equal(res_95 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "marker",
+                                        estimate_name == "count") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               1)
+
+  expect_equal(res_95 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "marker",
+                                        estimate_name == "percentage") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               25)
+
+  expect_equal(res_95 %>% dplyr::filter(variable_level == "sequence_ratio",
+                                        variable_name == "crude",
+                                        estimate_name == "point_estimate") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               3)
+
   res_99 <- summariseSequenceRatio(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 99)
+
+  expect_equal(res_99 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "index",
+                                        estimate_name == "count") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               3)
+
+  expect_equal(res_99 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "index",
+                                        estimate_name == "percentage") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               75)
+  expect_equal(res_99 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "marker",
+                                        estimate_name == "count") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               1)
+
+  expect_equal(res_99 %>% dplyr::filter(variable_level == "first_pharmac",
+                                        variable_name == "marker",
+                                        estimate_name == "percentage") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               25)
+
+  expect_equal(res_99 %>% dplyr::filter(variable_level == "sequence_ratio",
+                                        variable_name == "crude",
+                                        estimate_name == "point_estimate") %>%
+                 dplyr::pull("estimate_value") %>%
+                 as.numeric(),
+               3)
 
   expect_true(
     (res_90 %>%
@@ -296,4 +398,435 @@ test_that("summariseSequenceRatio - testing CI", {
   )
 
   CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("summariseSequenceRatio - testing cohortId", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
+    subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
+    cohort_start_date = as.Date(
+      c(
+        "2020-04-01", "2021-06-01", "2022-05-22", "2010-01-01", "2019-08-01", "2019-04-07", "2021-01-01", "2008-02-02", "2010-09-09", "2021-01-01"
+      )
+    ),
+    cohort_end_date = as.Date(
+      c(
+        "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
+      )
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
+    subject_id = c(1, 3, 4, 2, 5, 1, 2, 3, 4, 5, 6),
+    cohort_start_date = as.Date(
+      c(
+        "2020-12-30", "2010-01-01","2021-05-25","2022-05-31", "2020-05-25", "2019-05-25", "2022-05-25", "2010-09-30", "2022-05-25", "2020-02-29", "2021-01-01"
+      )
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
+                            markerCohort = markerCohort)
+
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2",
+                                   daysPriorObservation = 0,
+                                   combinationWindow = c(0, Inf))
+
+  expect_no_error(
+    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts,
+                                     cohortId = 1) %>%
+      visOmopResults::splitAll()
+  )
+
+  expect_equal(
+    result %>%
+      dplyr::select("index_cohort_name") %>%
+      dplyr::distinct() %>%
+      as.character(),
+    "cohort_1"
+  )
+
+  expect_equal(
+    result %>%
+      dplyr::select("marker_cohort_name") %>%
+      dplyr::distinct() %>%
+      as.character(),
+    "cohort_1"
+  )
+
+  expect_equal(
+    attr(cdm$joined_cohorts, "cohort_set") %>%
+      dplyr::collect() %>%
+      dplyr::filter(cohort_definition_id == 1) |>
+      nrow() |>
+      as.numeric(),
+    1
+  )
+
+  expect_equal(
+    attr(cdm$joined_cohorts, "cohort_set") %>%
+      dplyr::collect() %>%
+      dplyr::filter(cohort_definition_id == 1) |>
+      dplyr::pull("index_name"),
+    "cohort_1")
+
+  expect_equal(
+    attr(cdm$joined_cohorts, "cohort_set") %>%
+      dplyr::collect() %>%
+      dplyr::filter(cohort_definition_id == 1) |>
+      dplyr::pull("marker_name"),
+    "cohort_1")
+
+  expect_no_error(
+    result2 <- summariseSequenceRatio(cohort = cdm$joined_cohorts,
+                                     cohortId = c(1,3)) %>%
+      visOmopResults::splitAll()
+  )
+
+  expect_equal(
+    result2 %>%
+      dplyr::group_by(index_cohort_name, marker_cohort_name) %>%
+      dplyr::tally() |>
+      nrow() |>
+      as.numeric(),
+    2
+  )
+
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("summariseSequenceRatio - testing moving average restriction, ex1", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
+    subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
+    cohort_start_date = as.Date(
+      c(
+        "2020-04-01", "2021-06-01", "2022-05-22", "2010-01-01", "2019-08-01", "2019-04-07", "2021-01-01", "2008-02-02", "2010-09-09", "2021-01-01"
+      )
+    ),
+    cohort_end_date = as.Date(
+      c(
+        "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
+      )
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
+    subject_id = c(1, 3, 4, 2, 5, 1, 2, 3, 4, 5, 6),
+    cohort_start_date = as.Date(
+      c(
+        "2020-12-30", "2010-01-01","2021-05-25","2022-05-31", "2020-05-25", "2019-05-25", "2022-05-25", "2010-09-30", "2022-05-25", "2020-02-29", "2021-01-01"
+      )
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
+                            markerCohort = markerCohort)
+
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2",
+                                   daysPriorObservation = 0,
+                                   combinationWindow = c(0, Inf))
+
+  expect_no_error(
+    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts,
+                                     cohortId = 1,
+                                     movingAverageRestriction = 730)
+  )
+
+  expect_true(
+    (result %>%
+      dplyr::filter(variable_name == "crude", estimate_name == "lower_CI") %>%
+      dplyr::pull("estimate_value") %>%
+      as.numeric())
+
+    <=
+
+      (result %>%
+         dplyr::filter(variable_name == "crude", estimate_name == "upper_CI") %>%
+         dplyr::pull("estimate_value") %>%
+         as.numeric())
+  )
+
+  expect_true(
+    (result %>%
+       dplyr::filter(variable_name == "adjusted", estimate_name == "lower_CI") %>%
+       dplyr::pull("estimate_value") %>%
+       as.numeric())
+
+    <=
+
+      (result %>%
+         dplyr::filter(variable_name == "adjusted", estimate_name == "upper_CI") %>%
+         dplyr::pull("estimate_value") %>%
+         as.numeric())
+  )
+
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("summariseSequenceRatio - testing moving average restriction, ex2", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
+    subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
+    cohort_start_date = as.Date(
+      c(
+        "2020-04-01", "2021-06-01", "2022-05-22", "2010-01-01", "2019-08-01", "2019-04-07", "2021-01-01", "2008-02-02", "2010-09-09", "2021-01-01"
+      )
+    ),
+    cohort_end_date = as.Date(
+      c(
+        "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
+      )
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
+    subject_id = c(1, 3, 4, 2, 5, 1, 2, 3, 4, 5, 6),
+    cohort_start_date = as.Date(
+      c(
+        "2020-12-30", "2010-01-01","2021-05-25","2022-05-31", "2020-05-25", "2019-05-25", "2022-05-25", "2010-09-30", "2022-05-25", "2020-02-29", "2021-01-01"
+      )
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
+                            markerCohort = markerCohort)
+
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2",
+                                   daysPriorObservation = 0,
+                                   combinationWindow = c(0, Inf))
+
+  expect_no_error(
+    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts,
+                                     movingAverageRestriction = Inf)
+  )
+
+  expect_true(all(
+    (result %>%
+       dplyr::filter(variable_name == "crude", estimate_name == "lower_CI") %>%
+       dplyr::pull("estimate_value") %>%
+       as.numeric())
+
+    <=
+
+      (result %>%
+         dplyr::filter(variable_name == "crude", estimate_name == "upper_CI") %>%
+         dplyr::pull("estimate_value") %>%
+         as.numeric())
+  ))
+
+  expect_true(all(
+    (result %>%
+       dplyr::filter(variable_name == "adjusted", estimate_name == "lower_CI") %>%
+       dplyr::pull("estimate_value") %>%
+       as.numeric())
+
+    <=
+
+      (result %>%
+         dplyr::filter(variable_name == "adjusted", estimate_name == "upper_CI") %>%
+         dplyr::pull("estimate_value") %>%
+         as.numeric())
+  ))
+
+  expect_equal(
+    omopgenerics::settings(result) %>%
+    dplyr::pull("moving_average_restriction") %>%
+    as.numeric(),
+    Inf)
+
+  res_90 <- summariseSequenceRatio(
+    cohort = cdm$joined_cohorts,
+    cohortId = 1,
+    confidenceInterval = 90,
+    movingAverageRestriction = Inf)
+
+  res_95 <- summariseSequenceRatio(
+    cohort = cdm$joined_cohorts,
+    cohortId = 1,
+    confidenceInterval = 95,
+    movingAverageRestriction = Inf)
+
+  res_99 <- summariseSequenceRatio(
+    cohort = cdm$joined_cohorts,
+    cohortId = 1,
+    confidenceInterval = 99,
+    movingAverageRestriction = Inf)
+
+  expect_true(
+    (res_90 %>%
+       dplyr::filter(estimate_name == "lower_CI",
+                     variable_name == "crude") %>%
+       dplyr::pull(estimate_value) %>%
+       as.numeric()) >=
+      (res_95 %>%
+         dplyr::filter(estimate_name == "lower_CI",
+                       variable_name == "crude") %>%
+         dplyr::pull(estimate_value) %>%
+         as.numeric())
+  )
+
+  expect_true(
+    (res_95 %>%
+       dplyr::filter(estimate_name == "lower_CI",
+                     variable_name == "crude") %>%
+       dplyr::pull(estimate_value) %>%
+       as.numeric()) >=
+      (res_99 %>%
+         dplyr::filter(estimate_name == "lower_CI",
+                       variable_name == "crude") %>%
+         dplyr::pull(estimate_value) %>%
+         as.numeric())
+  )
+
+  expect_true(
+    (res_90 %>%
+       dplyr::filter(estimate_name == "upper_CI",
+                     variable_name == "crude") %>%
+       dplyr::pull(estimate_value) %>%
+       as.numeric()) <=
+      (res_95 %>%
+         dplyr::filter(estimate_name == "upper_CI",
+                       variable_name == "crude") %>%
+         dplyr::pull(estimate_value) %>%
+         as.numeric())
+  )
+
+  expect_true(
+    (res_95 %>%
+       dplyr::filter(estimate_name == "upper_CI",
+                     variable_name == "crude") %>%
+       dplyr::pull(estimate_value) %>%
+       as.numeric()) <=
+      (res_99 %>%
+         dplyr::filter(estimate_name == "upper_CI",
+                       variable_name == "crude") %>%
+         dplyr::pull(estimate_value) %>%
+         as.numeric())
+  )
+
+  CDMConnector::cdmDisconnect(cdm)
+})
+
+test_that("edge case 1", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1),
+    subject_id = c(1),
+    cohort_start_date = as.Date(
+      c("2020-04-01")
+    ),
+    cohort_end_date = as.Date(
+      c("2020-04-01")
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1),
+    subject_id = c(1),
+    cohort_start_date = as.Date(
+      c("2020-04-01")
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
+                            markerCohort = markerCohort)
+
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2",
+                                   daysPriorObservation = 0,
+                                   combinationWindow = c(0, Inf))
+
+  expect_error(
+    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
+  )
+})
+
+test_that("edge case 2", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1),
+    subject_id = c(1),
+    cohort_start_date = as.Date(
+      c("2020-04-01")
+    ),
+    cohort_end_date = as.Date(
+      c("2020-04-01")
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1),
+    subject_id = c(1),
+    cohort_start_date = as.Date(
+      c("2020-04-02")
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
+                            markerCohort = markerCohort)
+
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2",
+                                   daysPriorObservation = 0,
+                                   combinationWindow = c(0, Inf))
+
+  expect_warning(
+    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
+  )
+})
+
+test_that("edge case 3", {
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1),
+    subject_id = c(1),
+    cohort_start_date = as.Date(
+      c("2020-04-03")
+    ),
+    cohort_end_date = as.Date(
+      c("2020-04-03")
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1),
+    subject_id = c(1),
+    cohort_start_date = as.Date(
+      c("2020-04-02")
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
+                            markerCohort = markerCohort)
+
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2",
+                                   daysPriorObservation = 0,
+                                   combinationWindow = c(0, Inf))
+
+  expect_warning(
+    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
+  )
 })
