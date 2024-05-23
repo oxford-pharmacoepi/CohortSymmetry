@@ -10,10 +10,7 @@ getConfidenceInterval <- function(table, nsr, confidenceInterval = 95){
   counts$index_first_by_nsr <- counts$index_first/nsr
   counts$marker_first_by_nsr <- counts$marker_first/nsr
 
-  if (counts$index_first == 0 & counts$marker_first == 0){
-    counts$lowerCSR_CI <- counts$upperCSR_CI <- NA
-    counts$lowerASR_CI <- counts$upperASR_CI <- NA
-  } else if (counts$index_first == 0){
+   if (counts$index_first == 0){
     counts$index_first <-  0.5
     counts$lowerCSR_CI <- stats::qbeta(confidenceIntervalLevel, counts$index_first + 0.5, counts$marker_first + 0.5)
     counts$upperCSR_CI <- stats::qbeta(1-confidenceIntervalLevel, counts$index_first + 0.5, counts$marker_first + 0.5)
