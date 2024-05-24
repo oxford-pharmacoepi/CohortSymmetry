@@ -1,6 +1,6 @@
 Package: CohortSymmetry
-Title: Sequence Symmetry Analysis using the Observational Medical Outcomes Partnership common data model
-Version: 0.0.0.9000
+Title: Sequence Symmetry Analysis Using the OMOP Common Data Model
+Version: 0.1.0
 Authors@R: c(
     person("Xihang", "Chen", , "xihang.chen@ndorms.ox.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-8112-8959")),
@@ -28,7 +28,9 @@ Authors@R: c(
            comment = c(ORCID = "0009-0002-4405-1814"))
   )
 Maintainer: Xihang Chen <xihang.chen@ndorms.ox.ac.uk>
-Description: Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the Observational Medical Outcomes Partnership common data model.
+Description: Calculating crude sequence ratio, adjusted sequence ratio and 
+    confidence intervals using data mapped to the OMOP (Observational Medical 
+    Outcomes Partnership) common data model.
 License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -47,11 +49,12 @@ Suggests:
     flextable,
     gt,
     knitr,
+    here,
+    dbplyr (>= 2.5.0),
     rmarkdown
 Imports: 
     CDMConnector (>= 1.3.0),
     dplyr,
-    dbplyr (>= 2.5.0),
     ggplot2,
     magrittr,
     PatientProfiles,
@@ -62,10 +65,8 @@ Imports:
     tidyr,
     omock (>= 0.2.0),
     stats,
-    here,
-    omopgenerics
-Remotes: 
-   darwin-eu-dev/omopgenerics
+    omopgenerics (>= 0.2.1)
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
+BugReports: https://github.com/oxford-pharmacoepi/CohortSymmetry/issues
 VignetteBuilder: knitr
