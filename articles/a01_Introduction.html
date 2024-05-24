@@ -73,26 +73,30 @@
 
     
     
-<p>CohortSymmetry provides tools to perform a Sequence Symmetry Analysis
-(SSA). The main functions you will interact with are:</p>
+<p>CohortSymmetry provides tools to perform Sequence Symmetry Analysis
+(SSA). Before using the package, it is highly recommended that this
+method is tested beforehand against well-known positive and negative
+controls. The details of SSA and the relevant controls could be found
+using the paper in the Reference. <sup>1</sup></p>
+<p>The functions you will interact with are:</p>
 <ol style="list-style-type: decimal">
 <li><p><code><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code>: this function will
-create a cohort with individuals present in both, the index and the
-marker cohort.</p></li>
+create a cohort with individuals present in both (the index and the
+marker) cohorts.</p></li>
 <li><p><code><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio()</a></code>: this function will
-calculate the sequence ratio.</p></li>
-<li><p><code><a href="../reference/tableSequenceRatios.html">tableSequenceRatios()</a></code>,
-<code><a href="../reference/plotSequenceRatio.html">plotSequenceRatio()</a></code> and
-<code><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry()</a></code>: these functions will help us to
-visualise the results.</p></li>
+calculate sequence ratios.</p></li>
+<li><p><code><a href="../reference/tableSequenceRatios.html">tableSequenceRatios()</a></code> and
+<code><a href="../reference/plotSequenceRatio.html">plotSequenceRatio()</a></code>: these functions will help us to
+visualise the sequence ratio results.</p></li>
+<li><p><code><a href="../reference/summariseTemporalSymmetry.html">summariseTemporalSymmetry()</a></code>: this function will
+produce aggregated results based on the time difference between two
+cohort start dates.</p></li>
+<li><p><code><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry()</a></code>: this function will help us
+to visualise the results from summariseTemporalSymmetry().</p></li>
 </ol>
-<p>Before using the package, it is highly recommended that this method
-is tested beforehand against well-known positive and negative controls.
-Such controls could be found using the paper in the Reference.
-<sup>1</sup></p>
-<p>Below, you will find an example analysis that offers a comprehensive
-overview of the package’s functionalities. More context and further
-examples for each of these functions are provided in later
+<p>Below, you will find an example analysis that offers a brief and
+comprehensive overview of the package’s functionalities. More context
+and further examples for each of these functions are provided in later
 vignettes.</p>
 <p>First, let’s load the relevant libraries.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -127,12 +131,32 @@ two mock cohorts: the <strong>index_cohort</strong> and the
 <span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/copy_cdm_to.html" class="external-link">copyCdmTo</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">con</span>, cdm <span class="op">=</span> <span class="va">cdm</span>, schema <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span> </span></code></pre></div>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">index_cohort</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: ??</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0/:memory:]</span></span>
+<span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 2, 6, 7, 10, 13, 13, 14, 14, 15, 17, 18,…</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-02-15, 2001-10-29, 2003-03-16, 1999-11-11, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-10-28, 2003-03-15, 2005-02-08, 2002-04-09, …</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">marker_cohort</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: ??</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0/:memory:]</span></span>
+<span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 2, 3, 3, 5, 5, 6, 6, 6, 8, 8, 8, 9, 9, 9, 1…</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-07-07, 2001-07-29, 1999-07-08, 2015-01-23, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-07-28, 2007-05-21, 2002-10-15, 2015-03-13, …</span></span></code></pre></div>
 <p>Once we have established a connection to the database, we can use the
 <code><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code> function to find the
 intersection of the two cohorts. This function will provide us with the
-individuals who appear in both cohorts.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+individuals who appear in both cohorts, which will be named
+<strong>intersect</strong> - another cohort in the cdm reference.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"index_cohort"</span>,</span>
@@ -144,8 +168,9 @@ cohort with the addition of two extra columns: <em>index_date</em> and
 <em>marker_date</em>. These columns correspond to the
 <em>cohort_start_date</em> in the <strong>index_cohort</strong> and the
 <strong>marker_cohort</strong>, respectively.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
 <span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0/:memory:]</span></span>
@@ -155,38 +180,35 @@ cohort with the addition of two extra columns: <em>index_date</em> and
 <span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-07-07, 1999-11-11, 2011-06-29, 2014-06-24, …</span></span>
 <span><span class="co">#&gt; $ index_date           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-02-15, 1999-11-11, 2011-03-07, 2014-06-24, …</span></span>
 <span><span class="co">#&gt; $ marker_date          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-07-07, 1999-07-08, 2011-06-29, 2014-06-14, …</span></span></code></pre></div>
-<p>Observe that, automatically, in the settings of the generated cohort
-we will be able to identify which cohort corresponds to the indexTable
-and which one to the markerTable, as cohort_name has the following
-form:</p>
-<center>
-<em>index</em>_{indexTable}_<em>marker</em>_{markerTable}
-</center>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://darwin-eu-dev.github.io/omopgenerics/reference/settings.html" class="external-link">settings</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 1</span></span>
-<span><span class="co">#&gt; Columns: 10</span></span>
-<span><span class="co">#&gt; $ cohort_definition_id   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
-<span><span class="co">#&gt; $ cohort_name            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "index_index_cohort_marker_marker_cohort"</span></span>
-<span><span class="co">#&gt; $ index_id               <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
-<span><span class="co">#&gt; $ index_name             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "index_cohort"</span></span>
-<span><span class="co">#&gt; $ marker_id              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
-<span><span class="co">#&gt; $ marker_name            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "marker_cohort"</span></span>
-<span><span class="co">#&gt; $ days_prior_observation <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0</span></span>
-<span><span class="co">#&gt; $ washout_window         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0</span></span>
-<span><span class="co">#&gt; $ index_marker_gap       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "365"</span></span>
-<span><span class="co">#&gt; $ combination_window     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "(0,365)"</span></span></code></pre></div>
-<p>Once we have the <strong>intersect</strong> cohort, you are able to
-explore the temporal trend by using
+<p>Once we have the intersect cohort, you are able to explore the
+temporal symmetry by using <code>summariseTemporalSymmetry</code> and
 <code><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry()</a></code>:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseTemporalSymmetry.html">summariseTemporalSymmetry</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a01_Introduction_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
-<p>Next, we will use the <code><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code>
-function to get the crude sequence ratios, adjusted sequence ratios, and
-the corresponding confidence intervals.</p>
+<span><span class="va">result</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 26</span></span>
+<span><span class="co">#&gt; Columns: 13</span></span>
+<span><span class="co">#&gt; $ result_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…</span></span>
+<span><span class="co">#&gt; $ cdm_name         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "mock", "mock", "mock", "mock", "mock", "mock", "mock…</span></span>
+<span><span class="co">#&gt; $ group_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "index_name &amp;&amp;&amp; marker_name", "index_name &amp;&amp;&amp; marker_…</span></span>
+<span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "index_cohort &amp;&amp;&amp; marker_cohort", "index_cohort &amp;&amp;&amp; m…</span></span>
+<span><span class="co">#&gt; $ strata_name      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
+<span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
+<span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "temporal_symmetry", "temporal_symmetry", "temporal_s…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "time_difference", "time_difference", "time_differenc…</span></span>
+<span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "time", "count", "time", "count", "time", "c…</span></span>
+<span><span class="co">#&gt; $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "integer", "numeric", "integer", "numeric", "integer"…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1", "4", "6", "-1", "1", "-3", "2", "1", "3", "0", "…</span></span>
+<span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
+<span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span><span class="op">)</span></span></code></pre></div>
+<p><img src="a01_Introduction_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<p>Next, we will use the <code><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio()</a></code> function
+to get the crude sequence ratios, adjusted sequence ratios, and the
+corresponding confidence intervals.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">result</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -207,7 +229,7 @@ the corresponding confidence intervals.</p>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span></code></pre></div>
 <p>Finally, we can visualise the results using
 <code><a href="../reference/tableSequenceRatios.html">tableSequenceRatios()</a></code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
 <div id="ymzrzqemfz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#ymzrzqemfz table {
@@ -673,11 +695,18 @@ the corresponding confidence intervals.</p>
 </table>
 </div>
 <p>Or create a plot with the adjusted sequence ratios:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSequenceRatio.html">plotSequenceRatio</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>,</span>
 <span>                  onlyaSR <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>                  colours <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="a01_Introduction_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+<p><img src="a01_Introduction_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<div class="section level2">
+<h2 id="as-a-diagram">As a diagram<a class="anchor" aria-label="anchor" href="#as-a-diagram"></a>
+</h2>
+<p>Diagrammatically, the work flow using CohortSymmetry resembles the
+following flow chat:</p>
+<p><img src="figures/workflow.png" width="100%"></p>
+</div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
@@ -688,7 +717,8 @@ reactions across datasets in five countries. Pharmacoepidemiol Drug Saf.
 2015;24(8):858-864.</li>
 </ol>
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
