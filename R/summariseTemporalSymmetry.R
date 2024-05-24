@@ -70,22 +70,24 @@ summariseTemporalSymmetry <- function(cohort,
     visOmopResults::uniteGroup(cols = c("index_name", "marker_name")) %>%
     tidyr::pivot_longer(
       cols = c("time"),
+      names_to = "additional_col",
+      values_to = "variable_level"
+    ) %>%
+    dplyr::select(-"additional_col") %>%
+    tidyr::pivot_longer(
+      cols = c("count"),
       names_to = "estimate_name",
       values_to = "estimate_value"
     ) %>%
-    tidyr::pivot_longer(
-      cols = c("count"),
-      names_to = "additional_name",
-      values_to = "additional_level"
-    ) %>%
     dplyr::mutate(variable_name  = "temporal_symmetry",
-                  variable_level = "time_difference",
+                  variable_level = as.integer(.data$variable_level),
                   strata_name = "overall", #to change
                   strata_level = "overall",
+                  additional_name = "overall",
+                  additional_level = "overall",
                   estimate_type =
                     dplyr::case_when(
-                      (.data$estimate_name == "count") ~ "integer",
-                      (.data$estimate_name == "time") ~ "numeric"
+                      (.data$estimate_name == "count") ~ "integer"
                     )) %>%
     dplyr::inner_join(cohort_settings, by = "cohort_definition_id") %>%
     dplyr::select(c(-"cohort_name", -"cohort_definition_id"))
