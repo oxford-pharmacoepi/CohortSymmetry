@@ -17,21 +17,24 @@ knitr::opts_chunk$set(
 )
 ```
 
-CohortSymmetry provides tools to perform a Sequence Symmetry Analysis (SSA). The main functions you will interact with are:
-
-1.  `generateSequenceCohortSet()`: this function will create a cohort with individuals present in both, the index and the marker cohort.
-
-2.  `summariseSequenceRatio()`: this function will calculate the sequence ratio.
-
-3.  `tableSequenceRatios()`, `plotSequenceRatio()` and `plotTemporalSymmetry()`: these functions will help us to visualise the results.
-
-Before using the package, it is highly recommended that this
+CohortSymmetry provides tools to perform Sequence Symmetry Analysis (SSA). Before using the package, it is highly recommended that this
 method is tested beforehand against well-known positive and negative
-controls. Such controls could be found using the paper in the Reference.
+controls. The details of SSA and the relevant controls could be found using the paper in the Reference.
 <sup>1</sup>
 
+The functions you will interact with are:
 
-Below, you will find an example analysis that offers a comprehensive overview of the package's functionalities. More context and further examples for each of these functions are provided in later vignettes.
+1.  `generateSequenceCohortSet()`: this function will create a cohort with individuals present in both (the index and the marker) cohorts.
+
+2.  `summariseSequenceRatio()`: this function will calculate sequence ratios.
+
+3.  `tableSequenceRatios()` and `plotSequenceRatio()`: these functions will help us to visualise the sequence ratio results.
+
+4. `summariseTemporalSymmetry()`: this function will produce aggregated results based on the time difference between two cohort start dates.
+
+5. `plotTemporalSymmetry()`: this function will help us to visualise the results from summariseTemporalSymmetry().
+
+Below, you will find an example analysis that offers a brief and comprehensive overview of the package's functionalities. More context and further examples for each of these functions are provided in later vignettes.
 
 First, let’s load the relevant libraries.
 
@@ -66,10 +69,15 @@ cdm <- emptyCdmReference(cdmName = "mock") |>
 con <- dbConnect(duckdb::duckdb())
 cdm <- copyCdmTo(con = con, cdm = cdm, schema = "main")
 
-cdm 
+cdm$index_cohort %>% 
+  dplyr::glimpse()
+
+cdm$marker_cohort %>% 
+  dplyr::glimpse()
+
 ```
 
-Once we have established a connection to the database, we can use the `generateSequenceCohortSet()` function to find the intersection of the two cohorts. This function will provide us with the individuals who appear in both cohorts.
+Once we have established a connection to the database, we can use the `generateSequenceCohortSet()` function to find the intersection of the two cohorts. This function will provide us with the individuals who appear in both cohorts, which will be named **intersect** - another cohort in the cdm reference.
 
 ```{r message= FALSE, warning=FALSE}
 cdm <- generateSequenceCohortSet(
@@ -83,25 +91,20 @@ cdm <- generateSequenceCohortSet(
 See below that the generated cohort follows the format of an OMOP CDM cohort with the addition of two extra columns: *index_date* and *marker_date*. These columns correspond to the *cohort_start_date* in the **index_cohort** and the **marker_cohort**, respectively.
 
 ```{r message= FALSE, warning=FALSE}
-cdm$intersect |> glimpse()
+cdm$intersect %>% 
+  dplyr::glimpse()
 ```
 
-Observe that, automatically, in the settings of the generated cohort we will be able to identify which cohort corresponds to the indexTable and which one to the markerTable, as cohort_name has the following form:
+Once we have the intersect cohort, you are able to explore the temporal symmetry by using `summariseTemporalSymmetry` and `plotTemporalSymmetry()`:
 
-<center>
-*index*\_{indexTable}_*marker*\_{markerTable}
-</center>
-```{r message= FALSE, warning=FALSE}
-settings(cdm$intersect) |> glimpse()
-```
-
-Once we have the **intersect** cohort, you are able to explore the temporal trend by using `plotTemporalSymmetry()`:
 ```{r message= FALSE, warning=FALSE}
 result <- summariseTemporalSymmetry(cohort = cdm$intersect)
+result %>% dplyr::glimpse()
+
 plotTemporalSymmetry(result = result)
 ```
 
-Next, we will use the `generateSequenceCohortSet()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
+Next, we will use the `summariseSequenceRatio()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
 ```{r message= FALSE, warning=FALSE}
 result <- summariseSequenceRatio(cohort = cdm$intersect)
 
@@ -117,6 +120,15 @@ Or create a plot with the adjusted sequence ratios:
 plotSequenceRatio(result = result,
                   onlyaSR = T,
                   colours = "black")
+```
+
+## As a diagram
+
+Diagrammatically, the work flow using CohortSymmetry resembles the following flow chat:
+
+```{r, echo=FALSE, message=FALSE, out.width="100%", warning=FALSE}
+library(here)
+knitr::include_graphics(here("vignettes/figures/workflow.png"))
 ```
 
 ## References
