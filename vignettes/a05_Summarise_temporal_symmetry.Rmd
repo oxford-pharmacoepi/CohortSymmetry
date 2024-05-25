@@ -1,0 +1,19 @@
+---
+title: "Obtain aggregated data on temporal symmetry"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Obtain aggregated data on temporal symmetry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CohortSymmetry)
+```
