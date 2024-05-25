@@ -9,8 +9,13 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  eval = Sys.getenv("$RUNNER_OS") != "macOS"
 )
 ```
 

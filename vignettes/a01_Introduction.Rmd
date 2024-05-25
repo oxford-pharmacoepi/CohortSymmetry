@@ -108,7 +108,7 @@ Next, we will use the `summariseSequenceRatio()` function to get the crude seque
 ```{r message= FALSE, warning=FALSE}
 result <- summariseSequenceRatio(cohort = cdm$intersect)
 
-result |> glimpse()
+result %>% dplyr::glimpse()
 ```
 Finally, we can visualise the results using `tableSequenceRatios()`:
 ```{r message= FALSE, warning=FALSE}
