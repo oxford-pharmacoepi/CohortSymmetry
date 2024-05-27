@@ -71,7 +71,7 @@ cdm <- generateSequenceCohortSet(
 ```
 
 
-# Obtain the sequence ratios
+# Obtain sequence ratios
 One can obtain the crude and adjusted sequence ratios (with its corresponding confidence intervals) using `summariseSequenceRatios()` function:
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatios(

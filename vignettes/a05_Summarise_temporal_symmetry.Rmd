@@ -19,6 +19,91 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r, include = FALSE}
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
+```
+
+# Introduction
+In this vignette we will explore the functionality and arguments of `summariseTemporalSymmetry()` function. This function uses `cdm$intersect` introduced in the previous vignette **Step 1. Generate a sequence cohort** to produce aggregated statistics containing the frequency for different time gaps between the initiation of the marker and the initiation of the index (`marker_date` $-$ `index_date`). The work of this function is best illustrated via an example. 
+
+```{r message= FALSE, warning=FALSE, include=FALSE}
+# Load libraries
+library(CDMConnector)
+library(dplyr)
+library(DBI)
 library(CohortSymmetry)
+library(duckdb)
+library(DrugUtilisation)
+
+# Connect to the database
+db <- DBI::dbConnect(duckdb::duckdb(), 
+                     dbdir = CDMConnector::eunomia_dir())
+cdm <- cdm_from_con(
+  con = db,
+  cdm_schema = "main",
+  write_schema = "main"
+)
+
+# Generate cohorts
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "aspirin",
+  ingredient = "aspirin")
+
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "acetaminophen",
+  ingredient = "acetaminophen")
+```
+
+Recall that in the previous vignette, we've used `cdm$aspirin` and `cdm$acetaminophen` to generate `cdm$intersect` like so:
+
+```{r message= FALSE, warning=FALSE}
+# Generate a sequence cohort
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intersect",
+  combinationWindow = c(0,Inf))
+```
+
+# Obtaining temporal symmetry
+
+```{r message= FALSE, warning=FALSE}
+summariseTemporalSymmetry(cohort = cdm$intersect,
+                          cohortId = 1) %>% 
+  dplyr::glimpse()
+```
+
+The default unit of the difference of two initiations is measured in months. In this example, the first row is showing there are $6$ cases of *index* happening **after** *marker* with the gap being $29$ months whereas the second row is showing there are $7$ cases of *index* happening **before** *marker* with the gap being $40$ months.
+
+## Modify the cohort based on `cohort_definition_id`
+
+This parameter is used to subset the cohort table inputted to the `summariseTemporalSymmetry()`. Imagine the user only wants to include `cohort_definition_id` $= 1$ in the `summariseTemporalSymmetry()`, then one could do the following:
+
+```{r message= FALSE, warning=FALSE}
+summariseTemporalSymmetry(cohort = cdm$intersect,
+                          cohortId = 1) %>% 
+  dplyr::glimpse()
+```
+
+Of course in this case this does nothing because every entry in `cdm$intersect` has `cohort_definition_id` $= 1$.
+
+## Modify timescale
+
+Recall the default for the timescale is `month`, one could also change this to either `day` or `year`.
+
+```{r message= FALSE, warning=FALSE}
+summariseTemporalSymmetry(cohort = cdm$intersect,
+                          timescale = "day") %>% 
+  dplyr::glimpse()
+```
+
+```{r message= FALSE, warning=FALSE}
+summariseTemporalSymmetry(cohort = cdm$intersect,
+                          timescale = "year") %>% 
+  dplyr::glimpse()
 ```
