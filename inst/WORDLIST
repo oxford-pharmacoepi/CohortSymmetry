@@ -5,7 +5,6 @@ CDM
 CDMConnector
 CSR
 CY
-CatalC
 Choi
 Colours
 DrugUtilisation
@@ -19,7 +18,7 @@ Herraiz
 Hsieh
 Kao
 Lai
-MercadC
+Mercadé
 NK
 OMOP
 ORCID
@@ -28,7 +27,6 @@ PMID
 PSSA
 Pharmacoepidemiol
 Pottegård
-RaventC
 Roughead
 Saf
 Summarise
@@ -40,6 +38,7 @@ al
 antiepileptic
 cSR
 cdm
+colour
 doi
 et
 flextable
@@ -56,8 +55,7 @@ pds
 pharmacoepidemiologic
 pharmacovigilance
 pre
-ria
-summariseSequenceRatio
+summariseSequenceRatios
 summariseTemporalSymmetry
 summarised
 summarising

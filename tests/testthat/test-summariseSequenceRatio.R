@@ -1,4 +1,4 @@
-test_that("summariseSequenceRatio", {
+test_that("summariseSequenceRatios", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -35,40 +35,40 @@ test_that("summariseSequenceRatio", {
 
   expect_warning(
     expect_no_error(
-      res <- summariseSequenceRatio(
+      res <- summariseSequenceRatios(
         cohort = cdm$joined_cohorts)
     )
   )
 
   expect_true("summarised_result" %in% class(res))
   expect_error(
-    summariseSequenceRatio(
+    summariseSequenceRatios(
       cohort = cdm$joined_cohorts2)
   )
   expect_error(
-    summariseSequenceRatio(
+    summariseSequenceRatios(
       cohort = cdm2$joined_cohorts)
   )
   expect_error(
-    summariseSequenceRatio(
+    summariseSequenceRatios(
       cohort = cdm$joined_cohorts,
       confidenceInterval = 101)
   )
 
   expect_error(
-    summariseSequenceRatio(
+    summariseSequenceRatios(
       cohort = cdm$joined_cohorts,
       confidenceInterval = -101)
   )
 
     expect_error(
-      summariseSequenceRatio(
+      summariseSequenceRatios(
         cohort = cdm$joined_cohorts,
       confidenceInterval = 101)
   )
 })
 
-test_that("summariseSequenceRatio - testing ratios and CIs, Example 1", {
+test_that("summariseSequenceRatios - testing ratios and CIs, Example 1", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -104,7 +104,7 @@ test_that("summariseSequenceRatio - testing ratios and CIs, Example 1", {
                                    markerTable = "cohort_2")
 
   suppressWarnings(
-    res <- summariseSequenceRatio(
+    res <- summariseSequenceRatios(
       cohort = cdm$joined_cohorts)
   )
 
@@ -131,7 +131,7 @@ test_that("summariseSequenceRatio - testing ratios and CIs, Example 1", {
   CDMConnector::cdmDisconnect(cdm)
   })
 
-test_that("summariseSequenceRatio - testing ratios and CIs, Example 2", {
+test_that("summariseSequenceRatios - testing ratios and CIs, Example 2", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
     subject_id = c(1, 4, 2, 3, 5, 7, 8, 9, 6, 10),
@@ -166,7 +166,7 @@ test_that("summariseSequenceRatio - testing ratios and CIs, Example 2", {
                                            indexTable = "cohort_1",
                                            markerTable = "cohort_2")
 
-  res <- summariseSequenceRatio(
+  res <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts)
 
   res <- res |>
@@ -196,7 +196,7 @@ test_that("summariseSequenceRatio - testing ratios and CIs, Example 2", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("summariseSequenceRatio - testing CI", {
+test_that("summariseSequenceRatios - testing CI", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
     subject_id = c(1, 4, 2, 3, 5, 7, 8, 9, 6, 10),
@@ -231,7 +231,7 @@ test_that("summariseSequenceRatio - testing CI", {
                                    indexTable = "cohort_1",
                                    markerTable = "cohort_2")
 
-  res_90 <- summariseSequenceRatio(
+  res_90 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 90)
 
@@ -269,7 +269,7 @@ test_that("summariseSequenceRatio - testing CI", {
                  as.numeric(),
                3)
 
-  res_95 <- summariseSequenceRatio(
+  res_95 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 95)
 
@@ -307,7 +307,7 @@ test_that("summariseSequenceRatio - testing CI", {
                  as.numeric(),
                3)
 
-  res_99 <- summariseSequenceRatio(
+  res_99 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     confidenceInterval = 99)
 
@@ -400,7 +400,7 @@ test_that("summariseSequenceRatio - testing CI", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("summariseSequenceRatio - testing cohortId", {
+test_that("summariseSequenceRatios - testing cohortId", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -438,7 +438,7 @@ test_that("summariseSequenceRatio - testing cohortId", {
                                    combinationWindow = c(0, Inf))
 
   expect_no_error(
-    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts,
+    result <- summariseSequenceRatios(cohort = cdm$joined_cohorts,
                                      cohortId = 1) %>%
       visOmopResults::splitAll()
   )
@@ -483,7 +483,7 @@ test_that("summariseSequenceRatio - testing cohortId", {
     "cohort_1")
 
   expect_no_error(
-    result2 <- summariseSequenceRatio(cohort = cdm$joined_cohorts,
+    result2 <- summariseSequenceRatios(cohort = cdm$joined_cohorts,
                                      cohortId = c(1,3)) %>%
       visOmopResults::splitAll()
   )
@@ -500,7 +500,7 @@ test_that("summariseSequenceRatio - testing cohortId", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("summariseSequenceRatio - testing moving average restriction, ex1", {
+test_that("summariseSequenceRatios - testing moving average restriction, ex1", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -538,7 +538,7 @@ test_that("summariseSequenceRatio - testing moving average restriction, ex1", {
                                    combinationWindow = c(0, Inf))
 
   expect_no_error(
-    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts,
+    result <- summariseSequenceRatios(cohort = cdm$joined_cohorts,
                                      cohortId = 1,
                                      movingAverageRestriction = 730)
   )
@@ -574,7 +574,7 @@ test_that("summariseSequenceRatio - testing moving average restriction, ex1", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-test_that("summariseSequenceRatio - testing moving average restriction, ex2", {
+test_that("summariseSequenceRatios - testing moving average restriction, ex2", {
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -612,7 +612,7 @@ test_that("summariseSequenceRatio - testing moving average restriction, ex2", {
                                    combinationWindow = c(0, Inf))
 
   expect_no_error(
-    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts,
+    result <- summariseSequenceRatios(cohort = cdm$joined_cohorts,
                                      movingAverageRestriction = Inf)
   )
 
@@ -650,19 +650,19 @@ test_that("summariseSequenceRatio - testing moving average restriction, ex2", {
     as.numeric(),
     Inf)
 
-  res_90 <- summariseSequenceRatio(
+  res_90 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     cohortId = 1,
     confidenceInterval = 90,
     movingAverageRestriction = Inf)
 
-  res_95 <- summariseSequenceRatio(
+  res_95 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     cohortId = 1,
     confidenceInterval = 95,
     movingAverageRestriction = Inf)
 
-  res_99 <- summariseSequenceRatio(
+  res_99 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     cohortId = 1,
     confidenceInterval = 99,
@@ -755,7 +755,7 @@ test_that("edge case 1", {
                                    combinationWindow = c(0, Inf))
 
   expect_error(
-    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
+    result <- summariseSequenceRatios(cohort = cdm$joined_cohorts)
   )
 })
 
@@ -791,7 +791,7 @@ test_that("edge case 2", {
                                    combinationWindow = c(0, Inf))
 
   expect_warning(
-    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
+    result <- summariseSequenceRatios(cohort = cdm$joined_cohorts)
   )
 })
 
@@ -827,6 +827,6 @@ test_that("edge case 3", {
                                    combinationWindow = c(0, Inf))
 
   expect_warning(
-    result <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
+    result <- summariseSequenceRatios(cohort = cdm$joined_cohorts)
   )
 })

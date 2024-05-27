@@ -3,7 +3,7 @@
 #' @description
 #' It provides a ggplot of the sequence ratios of index and marker cohorts.
 #'
-#' @param result Table output from summariseSequenceRatio.
+#' @param result Table output from summariseSequenceRatios.
 #' @param onlyaSR If the only SR to be plotted is the adjusted SR.
 #' @param plotTitle Title of the plot, if NULL no title will be plotted.
 #' @param labs Axis labels for the plot.
@@ -22,7 +22,7 @@
 #'                                  indexTable = "cohort_1",
 #'                                  markerTable = "cohort_2",
 #'                                  name = "joined_cohort")
-#' sequence_ratio <- summariseSequenceRatio(cohort = cdm$joined_cohort)
+#' sequence_ratio <- summariseSequenceRatios(cohort = cdm$joined_cohort)
 #' plotSequenceRatios(result = sequence_ratio)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }

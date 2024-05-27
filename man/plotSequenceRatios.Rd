@@ -13,7 +13,7 @@ plotSequenceRatios(
 )
 }
 \arguments{
-\item{result}{Table output from summariseSequenceRatio.}
+\item{result}{Table output from summariseSequenceRatios.}
 
 \item{onlyaSR}{If the only SR to be plotted is the adjusted SR.}
 
@@ -38,7 +38,7 @@ cdm <- generateSequenceCohortSet(cdm = cdm,
                                  indexTable = "cohort_1",
                                  markerTable = "cohort_2",
                                  name = "joined_cohort")
-sequence_ratio <- summariseSequenceRatio(cohort = cdm$joined_cohort)
+sequence_ratio <- summariseSequenceRatios(cohort = cdm$joined_cohort)
 plotSequenceRatios(result = sequence_ratio)
 CDMConnector::cdmDisconnect(cdm = cdm)
 }

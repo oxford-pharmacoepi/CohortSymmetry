@@ -27,7 +27,7 @@ The functions you will interact with are:
 
 1.  `generateSequenceCohortSet()`: this function will create a cohort with individuals present in both (the index and the marker) cohorts.
 
-2.  `summariseSequenceRatio()`: this function will calculate sequence ratios.
+2.  `summariseSequenceRatios()`: this function will calculate sequence ratios.
 
 3.  `tableSequenceRatios()` and `plotSequenceRatios()`: these functions will help us to visualise the sequence ratio results.
 
@@ -105,9 +105,9 @@ result %>% dplyr::glimpse()
 plotTemporalSymmetry(result = result)
 ```
 
-Next, we will use the `summariseSequenceRatio()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
+Next, we will use the `summariseSequenceRatios()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
 ```{r message= FALSE, warning=FALSE}
-result <- summariseSequenceRatio(cohort = cdm$intersect)
+result <- summariseSequenceRatios(cohort = cdm$intersect)
 
 result %>% dplyr::glimpse()
 ```

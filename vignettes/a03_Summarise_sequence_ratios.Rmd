@@ -2,7 +2,7 @@
 title: "Step 2. Obtain the sequence ratios"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{a03_Summarise_sequence_ratio}
+  %\VignetteIndexEntry{a03_Summarise_sequence_ratios}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -26,7 +26,7 @@ if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
 ```
 
 # Introduction
-In this vignette we will explore the functionality and arguments of `summariseSequenceRatio()` function, which is used to generate the sequence ratios of the SSA. As this function uses the output of `generateSequenceCohortSet()` function (explained in detail in the vignette: **Step 1. Generate a sequence cohort**), we will pick up the explanation from where we left off in the previous vignette. 
+In this vignette we will explore the functionality and arguments of `summariseSequenceRatios()` function, which is used to generate the sequence ratios of the SSA. As this function uses the output of `generateSequenceCohortSet()` function (explained in detail in the vignette: **Step 1. Generate a sequence cohort**), we will pick up the explanation from where we left off in the previous vignette. 
 
 ```{r message= FALSE, warning=FALSE, include=FALSE}
 # Load libraries
@@ -72,9 +72,9 @@ cdm <- generateSequenceCohortSet(
 
 
 # Obtain the sequence ratios
-One can obtain the crude and adjusted sequence ratios (with its corresponding confidence intervals) using `summariseSequenceRatio()` function:
+One can obtain the crude and adjusted sequence ratios (with its corresponding confidence intervals) using `summariseSequenceRatios()` function:
 ```{r message = FALSE, warning = FALSE}
-summariseSequenceRatio(
+summariseSequenceRatios(
   cohort = cdm$intersect
 ) %>% 
   dplyr::glimpse()
@@ -83,9 +83,9 @@ summariseSequenceRatio(
 The obtained output has a summarised result format. In the later vignette (**Step 3. Visualise results**) we will explore how to visualise the results in a more intuitive way. 
 
 ## Modify the confidence interval
-By default, the `summariseSequenceRatio()` function will use 95% (two-sided) confidence interval. If another confidence interval is desired, for example 99% confidence interval, one can use the `confidenceInterval` argument:
+By default, the `summariseSequenceRatios()` function will use 95% (two-sided) confidence interval. If another confidence interval is desired, for example 99% confidence interval, one can use the `confidenceInterval` argument:
 ```{r message = FALSE, warning = FALSE}
-summariseSequenceRatio(
+summariseSequenceRatios(
   cohort = cdm$intersect,
   confidenceInterval = 99) %>% 
   dplyr::glimpse()
@@ -94,7 +94,7 @@ summariseSequenceRatio(
 ## Modify the moving average restriction
 The idea of moving average restriction is necessary only for the null sequence ratio calculation, please refer to Lai et al.<sup>1</sup> for more details on this parameter (parameter d when calculating P in page 578). Following Tsiropoulos et al<sup>2</sup>, by default, the argument `movingAverageRestriction` is set to be  $548$ ($18$ months). Should one wish to modify this, one could do something like:
 ```{r message = FALSE, warning = FALSE}
-summariseSequenceRatio(
+summariseSequenceRatios(
   cohort = cdm$intersect,
   movingAverageRestriction = 600) %>% 
   dplyr::glimpse()

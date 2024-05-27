@@ -94,24 +94,25 @@ cdm$aspirin_amoxicillin %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpUvBWxR\file4a802c933d9b.duckdb]
+#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpiEXmDQ\file644034f02d4d.duckdb]
 #> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-#> $ subject_id           <int> 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …
+#> $ subject_id           <int> 65, 119, 185, 144, 235, 197, 310, 280, 316, 331, …
 #> $ cohort_start_date    <date> 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …
 #> $ cohort_end_date      <date> 1969-06-18, 1968-04-07, 1947-04-12, 1979-09-04, …
 #> $ index_date           <date> 1969-06-18, 1967-05-28, 1947-04-07, 1978-10-30, …
 #> $ marker_date          <date> 1968-07-29, 1968-04-07, 1947-04-12, 1979-09-04, …
 ```
 
-### Step 2: summariseSequenceRatio
+### Step 2: summariseSequenceRatios
 
 To get the sequence ratios, we would need the output of the
 generateSequenceCohortSet() function to be fed into
-`summariseSequenceRatio()` The output of this process contains cSR(crude
-sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
+`summariseSequenceRatios()` The output of this process contains
+cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence
+intervals.
 
 ``` r
-res <- summariseSequenceRatio(cohort = cdm$aspirin_amoxicillin)
+res <- summariseSequenceRatios(cohort = cdm$aspirin_amoxicillin)
 #> Joining with `by = join_by(days_prior_observation, washout_window,
 #> index_marker_gap, combination_window, confidence_interval,
 #> moving_average_restriction, cdm_name)`
@@ -156,7 +157,7 @@ One could also visualise the plot, for example, the following is the
 plot of the adjusted sequence ratio.
 
 ``` r
-plotSequenceRatio(result = res,
+plotSequenceRatios(result = res,
                   onlyaSR = T,
                   colours = "black")
 ```
