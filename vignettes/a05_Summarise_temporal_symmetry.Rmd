@@ -91,7 +91,7 @@ summariseTemporalSymmetry(cohort = cdm$intersect,
 
 Of course in this case this does nothing because every entry in `cdm$intersect` has `cohort_definition_id` $= 1$.
 
-## Modify timescale
+## Modify `timescale`
 
 Recall the default for the timescale is `month`, one could also change this to either `day` or `year`.
 

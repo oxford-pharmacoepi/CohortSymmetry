@@ -240,6 +240,7 @@ defaultOptions <- function(userOptions) {
 #'
 #' @examples
 #' {
+#'  tableSequenceRatiosOptions()
 #' }
 #'
 tableSequenceRatiosOptions <- function() {
