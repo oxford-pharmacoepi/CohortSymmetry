@@ -85,10 +85,12 @@ plotSequenceRatios <- function(result,
       ggplot2::geom_vline(ggplot2::aes(xintercept = 1), linetype = 2) +
       ggplot2::scale_shape_manual(values = rep(19, 5)) +
       ggplot2::scale_colour_manual(values = colours) +
+      ggplot2::labs(title = plotTitle) +
       ggplot2::theme_bw() +
       ggplot2::theme(panel.border = ggplot2::element_blank(),
                      axis.line = ggplot2::element_line(),
-                     legend.title = ggplot2::element_blank()
+                     legend.title = ggplot2::element_blank(),
+                     plot.title = ggplot2::element_text(hjust = 0.5)
       )
   } else {
     ggplot2::ggplot(data = sr_tidy, ggplot2::aes(
@@ -99,10 +101,12 @@ plotSequenceRatios <- function(result,
       ggplot2::scale_shape_manual(values = rep(19, 5)) +
       ggplot2::scale_colour_manual(values = colours) +
       ggplot2::facet_wrap(stats::as.formula(paste("~", paste(facet_wrap_vars, collapse = " + ")))) +
+      ggplot2::labs(title = plotTitle) +
       ggplot2::theme_bw() +
       ggplot2::theme(panel.border = ggplot2::element_blank(),
                      axis.line = ggplot2::element_line(),
-                     legend.title = ggplot2::element_blank()
+                     legend.title = ggplot2::element_blank(),
+                     plot.title = ggplot2::element_text(hjust = 0.5)
       )
   }
 }
