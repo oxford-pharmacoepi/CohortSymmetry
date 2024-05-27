@@ -118,4 +118,27 @@ Similarly, we also have `plotSequenceRatios()` to visualise the results.
 plotSequenceRatios(result = result)
 ```
 
+By default, it plots both the adjusted sequence ratios (and its CIs) and crude sequence ratios (and its CIs). One may wish to only plot adjusted one like so (note since only adjusted is plotted, only one colour needs to be specified):
 
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatios(result = result,
+                   onlyaSR = T,
+                   colours = "black")
+```
+
+One could change the colour like so: 
+
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatios(result = result,
+                   onlyaSR = T,
+                   colours = "red")
+```
+
+One could set the title like so:
+
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatios(result = result,
+                   onlyaSR = T,
+                   plotTitle = "Adjusted Sequence Ratio",
+                   colour = "black")
+```
