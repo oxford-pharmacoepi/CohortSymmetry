@@ -164,7 +164,7 @@ checkInputPlotTemporalSymmetry <- function(result,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkInputPlotSequenceRatio <- function(result,
+checkInputPlotSequenceRatios <- function(result,
                                         onlyaSR,
                                         plotTitle,
                                         labs,

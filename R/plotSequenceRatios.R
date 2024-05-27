@@ -23,21 +23,21 @@
 #'                                  markerTable = "cohort_2",
 #'                                  name = "joined_cohort")
 #' sequence_ratio <- summariseSequenceRatio(cohort = cdm$joined_cohort)
-#' plotSequenceRatio(result = sequence_ratio)
+#' plotSequenceRatios(result = sequence_ratio)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
-plotSequenceRatio <- function(result,
-                              onlyaSR = FALSE,
-                              plotTitle = NULL,
-                              labs = c("SR", "Drug Pairs"),
-                              colours = c("red", "blue")
-                              ) {
+plotSequenceRatios <- function(result,
+                               onlyaSR = FALSE,
+                               plotTitle = NULL,
+                               labs = c("SR", "Drug Pairs"),
+                               colours = c("red", "blue")
+                               ) {
   # checks
-  checkInputPlotSequenceRatio(result = result,
-                              onlyaSR = onlyaSR,
-                              plotTitle = plotTitle,
-                              labs = labs,
-                              colours = colours)
+  checkInputPlotSequenceRatios(result = result,
+                               onlyaSR = onlyaSR,
+                               plotTitle = plotTitle,
+                               labs = labs,
+                               colours = colours)
 
   result <- result %>%
     visOmopResults::splitGroup()

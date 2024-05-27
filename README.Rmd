@@ -115,7 +115,7 @@ Note that flextable is also an option, users may specify this by using the `type
 One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.
 
 ```{r Step 3: visualise the results - plots, eval=FALSE, warning=FALSE}
-plotSequenceRatio(result = res,
+plotSequenceRatios(result = res,
                   onlyaSR = T,
                   colours = "black")
 ```
