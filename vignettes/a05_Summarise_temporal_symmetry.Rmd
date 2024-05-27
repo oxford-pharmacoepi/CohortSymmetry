@@ -1,8 +1,8 @@
 ---
-title: "Obtain aggregated data on temporal symmetry"
+title: "Step 4: Obtain aggregated data on temporal symmetry"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Obtain aggregated data on temporal symmetry}
+  %\VignetteIndexEntry{a05_Summarise_temporal_symmetry}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -73,8 +73,7 @@ cdm <- generateSequenceCohortSet(
 # Obtaining temporal symmetry
 
 ```{r message= FALSE, warning=FALSE}
-summariseTemporalSymmetry(cohort = cdm$intersect,
-                          cohortId = 1) %>% 
+summariseTemporalSymmetry(cohort = cdm$intersect) %>% 
   dplyr::glimpse()
 ```
 

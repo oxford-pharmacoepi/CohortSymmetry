@@ -30,7 +30,7 @@ In this vignette we will explore the functionality and arguments of a set of fun
 - `tableSequenceRatios()`: to generate a table summarising the results.
 - `plotSequenceRatios()`: to plot the sequence ratios.
 
-This function builds-up on previous functions, such as `generateSequenceCohortSet()` and `summariseSequenceRatios()` function (explained in detail in previous vignettes: **Step 1. Generate a sequence cohort** and **Step 2. Summarise sequence ratio** respectively). Hence, we will pick up the explanation from where we left off in the previous vignette. 
+This function builds-up on previous functions, such as `generateSequenceCohortSet()` and `summariseSequenceRatios()` function (explained in detail in previous vignettes: **Step 1. Generate a sequence cohort** and **Step 2. Obtain the sequence ratios** respectively). Hence, we will pick up the explanation from where we left off in the previous vignette. 
 
 ```{r message= FALSE, warning=FALSE, include=FALSE}
 # Load libraries
@@ -70,7 +70,7 @@ cdm <- generateSequenceCohortSet(
   combinationWindow = c(0,Inf))
 ```
 
-Recall we had the table **intersect** in the cdm reference and that the results of sequence ratio could produced as follows:
+Recall we had the table **intersect** in the cdm reference and that the results of sequence ratio could produced as follows (**Step 2. Obtain the sequence ratios**):
 
 ```{r message= FALSE, warning=FALSE}
 result <- summariseSequenceRatios(cohort = cdm$intersect)
@@ -82,12 +82,18 @@ The function `tableSequenceRatios` inputs the result from `summariseSequenceRati
 ```{r message= FALSE, warning=FALSE}
 tableSequenceRatios(result = result)
 ```
-By default, it has many columns such as Index (name), Marker (name), Study population, CSR and ASR, each of these columns could be suppressed with relevant parameters. For example if one wants to not display study population, one could do the following, 
+
+By default, it has many columns such as Index (name), Marker (name), Study population, CSR and ASR, each of these columns could be suppressed with relevant parameters. For example if one wants to not display study population, one could do the following: 
+
+## Arguments used to suppress columns
 
 ```{r message= FALSE, warning=FALSE}
 tableSequenceRatios(result = result,
                     studyPopulation = FALSE)
 ```
+
+## Modify `type`
+
 Instead of a gt table, the user may also want to put the sequence ratio results in a flex table format:
 
 ```{r message= FALSE, warning=FALSE}
@@ -120,6 +126,8 @@ plotSequenceRatios(result = result)
 
 By default, it plots both the adjusted sequence ratios (and its CIs) and crude sequence ratios (and its CIs). One may wish to only plot adjusted one like so (note since only adjusted is plotted, only one colour needs to be specified):
 
+## Modify `onlyaSR` and `colours`
+
 ```{r message= FALSE, warning=FALSE}
 plotSequenceRatios(result = result,
                    onlyaSR = T,
@@ -134,6 +142,8 @@ plotSequenceRatios(result = result,
                    colours = "red")
 ```
 
+## Modify `plotTitle`
+
 One could set the title like so:
 
 ```{r message= FALSE, warning=FALSE}
@@ -142,6 +152,8 @@ plotSequenceRatios(result = result,
                    plotTitle = "Adjusted Sequence Ratio",
                    colour = "black")
 ```
+
+## Modify `labs`
 
 One could also change the $x$ and $y$ labels like so:
 
