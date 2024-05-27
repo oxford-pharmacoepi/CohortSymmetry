@@ -28,9 +28,7 @@ if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
 # Introduction
 In this vignette we will explore the functionality and arguments of `summariseSequenceRatio()` function, which is used to generate the sequence ratios of the SSA. As this function uses the output of `generateSequenceCohortSet()` function (explained in detail in the vignette: **Step 1. Generate a sequence cohort**), we will pick up the explanation from where we left off in the previous vignette. 
 
-Hence, let's start by generating the sequence cohort table:
-
-```{r message= FALSE, warning=FALSE}
+```{r message= FALSE, warning=FALSE, include=FALSE}
 # Load libraries
 library(CDMConnector)
 library(dplyr)
@@ -58,7 +56,11 @@ cdm <- DrugUtilisation::generateIngredientCohortSet(
   cdm = cdm,
   name = "acetaminophen",
   ingredient = "acetaminophen")
+```
 
+Recall that in the previous vignette: Step 1. Generate a sequence cohort, we've generated `cdm$aspirin` and `cdm$acetaminophen` before and using them we could generate `cdm$intersect` like so:
+
+```{r message= FALSE, warning=FALSE}
 # Generate a sequence cohort
 cdm <- generateSequenceCohortSet(
   cdm = cdm,
@@ -74,27 +76,28 @@ One can obtain the crude and adjusted sequence ratios (with its corresponding co
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatio(
   cohort = cdm$intersect
-) |>
-  glimpse()
+) %>% 
+  dplyr::glimpse()
 ```
-The obtained output has a summarised result format. In the later vignette (**Step 3. Visualise results**) we will explore how to visualise the results in a more understandable way. 
+
+The obtained output has a summarised result format. In the later vignette (**Step 3. Visualise results**) we will explore how to visualise the results in a more intuitive way. 
 
 ## Modify the confidence interval
-By default, the `summariseSequenceRatio()` function will use 95% confidence interval. If another confidence interval is desired, one can use the `confidenceInterval` argument:
+By default, the `summariseSequenceRatio()` function will use 95% (two-sided) confidence interval. If another confidence interval is desired, for example 99% confidence interval, one can use the `confidenceInterval` argument:
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatio(
   cohort = cdm$intersect,
-  confidenceInterval = 99) |>
-  glimpse()
+  confidenceInterval = 99) %>% 
+  dplyr::glimpse()
 ```
 
-## Modify the moving window
-We define the moving window as the specified number of days for observation time window. This is mainly used to calculate the null sequence ratio (please, refer to Reference<sup>1</sup> for more details on this parameter). By default, the argument is defined as `movingAverageRestriction = 548` <sup>2</sup>, but can be modified:
+## Modify the moving average restriction
+The idea of moving average restriction is necessary only for the null sequence ratio calculation, please refer to Lai et al.<sup>1</sup> for more details on this parameter (parameter d when calculating P in page 578). Following Tsiropoulos et al<sup>2</sup>, by default, the argument `movingAverageRestriction` is set to be  $548$ ($18$ months). Should one wish to modify this, one could do something like:
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatio(
   cohort = cdm$intersect,
-  movingAverageRestriction = 600) |>
-  glimpse()
+  movingAverageRestriction = 600) %>% 
+  dplyr::glimpse()
 ```
 
 # References
