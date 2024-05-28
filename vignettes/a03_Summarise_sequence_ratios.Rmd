@@ -82,6 +82,18 @@ summariseSequenceRatios(
 
 The obtained output has a summarised result format. In the later vignette (**Step 3. Visualise results**) we will explore how to visualise the results in a more intuitive way. 
 
+## Modify the cohort based on `cohort_definition_id`
+
+This parameter is used to subset the cohort table inputted to the `summariseSequenceRatios()`. Imagine the user only wants to include `cohort_definition_id` $= 1$ from `cdm$intersect` in the `summariseSequenceRatios()`, then one could do the following:
+
+```{r message= FALSE, warning=FALSE}
+summariseSequenceRatios(cohort = cdm$intersect,
+                          cohortId = 1) %>% 
+  dplyr::glimpse()
+```
+
+Of course in this case this does nothing because every entry in `cdm$intersect` has `cohort_definition_id` $= 1$.
+
 ## Modify the confidence interval
 By default, the `summariseSequenceRatios()` function will use 95% (two-sided) confidence interval. If another confidence interval is desired, for example 99% confidence interval, one can use the `confidenceInterval` argument:
 ```{r message = FALSE, warning = FALSE}
