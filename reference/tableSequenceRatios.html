@@ -68,11 +68,7 @@ output.</p>
 <span>  estimateNameFormat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`N (%)` <span class="op">=</span> <span class="st">"&lt;count&gt; (&lt;percentage&gt; %)"</span>, `SR (CI)` <span class="op">=</span></span>
 <span>    <span class="st">"&lt;point_estimate&gt; (&lt;lower_CI&gt; - &lt;upper_CI&gt;)"</span><span class="op">)</span>,</span>
 <span>  style <span class="op">=</span> <span class="st">"default"</span>,</span>
-<span>  crude <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  adjusted <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  studyPopulation <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  indexName <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  markerName <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  cdmName <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  .options <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -101,24 +97,8 @@ how to define a style. Alternatively, use "default" to get visOmopResults
 style, or NULL for gt/flextable default styling.</p></dd>
 
 
-<dt>crude</dt>
-<dd><p>whether to report crude results.</p></dd>
-
-
-<dt>adjusted</dt>
-<dd><p>whether to report adjusted results.</p></dd>
-
-
 <dt>studyPopulation</dt>
 <dd><p>whether to report the study population.</p></dd>
-
-
-<dt>indexName</dt>
-<dd><p>whether to report index names.</p></dd>
-
-
-<dt>markerName</dt>
-<dd><p>whether to report marker names</p></dd>
 
 
 <dt>cdmName</dt>
@@ -144,9 +124,9 @@ their default values.</p></dd>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="mockCohortSymmetry.html">mockCohortSymmetry</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span>,</span></span>
-<span class="r-in"><span>                                                 indexTable <span class="op">=</span> <span class="st">"cohort_1"</span>,</span></span>
-<span class="r-in"><span>                                                 markerTable <span class="op">=</span> <span class="st">"cohort_2"</span>,</span></span>
-<span class="r-in"><span>                                                 name <span class="op">=</span> <span class="st">"joined_cohort"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                 indexTable <span class="op">=</span> <span class="st">"cohort_1"</span>,</span></span>
+<span class="r-in"><span>                                 markerTable <span class="op">=</span> <span class="st">"cohort_2"</span>,</span></span>
+<span class="r-in"><span>                                 name <span class="op">=</span> <span class="st">"joined_cohort"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="summariseSequenceRatios.html">summariseSequenceRatios</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">joined_cohort</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>For at least some combinations, index is always before marker or marker always</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> before index</span>
