@@ -1,0 +1,166 @@
+---
+title: "Step 3. Visualise the sequence ratios"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{a04_Visualise_sequence_ratios}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  eval = Sys.getenv("$RUNNER_OS") != "macOS"
+)
+```
+
+```{r, include = FALSE}
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
+```
+
+# Introduction
+In this vignette we will explore the functionality and arguments of a set of functions that will help us to understand and visualise the sequence ratio results. In particular, we will delve into the following functions:
+
+- `tableSequenceRatios()`: to generate a table summarising the results.
+- `plotSequenceRatios()`: to plot the sequence ratios.
+
+This function builds-up on previous functions, such as `generateSequenceCohortSet()` and `summariseSequenceRatios()` function (explained in detail in previous vignettes: **Step 1. Generate a sequence cohort** and **Step 2. Obtain the sequence ratios** respectively). Hence, we will pick up the explanation from where we left off in the previous vignette. 
+
+```{r message= FALSE, warning=FALSE, include=FALSE}
+# Load libraries
+library(CDMConnector)
+library(dplyr)
+library(DBI)
+library(CohortSymmetry)
+library(duckdb)
+library(DrugUtilisation)
+
+# Connect to the database
+db <- DBI::dbConnect(duckdb::duckdb(), 
+                     dbdir = CDMConnector::eunomia_dir())
+cdm <- cdm_from_con(
+  con = db,
+  cdm_schema = "main",
+  write_schema = "main"
+)
+
+# Generate cohorts
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "aspirin",
+  ingredient = "aspirin")
+
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "acetaminophen",
+  ingredient = "acetaminophen")
+
+# Generate a sequence cohort
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intersect",
+  combinationWindow = c(0,Inf))
+```
+
+Recall we had the table **intersect** in the cdm reference and that the results of sequence ratio could produced as follows (**Step 2. Obtain the sequence ratios**):
+
+```{r message= FALSE, warning=FALSE}
+result <- summariseSequenceRatios(cohort = cdm$intersect)
+```
+
+# Table output of the sequence ratio results
+The function `tableSequenceRatios` inputs the result from `summariseSequenceRatios`, the default outputs a gt table.
+
+```{r message= FALSE, warning=FALSE}
+tableSequenceRatios(result = result)
+```
+
+By default, it has many columns such as Index (name), Marker (name), Study population, CSR and ASR, each of these columns could be suppressed with relevant parameters. For example if one wants to not display study population, one could do the following: 
+
+## Arguments used to suppress columns
+
+```{r message= FALSE, warning=FALSE}
+tableSequenceRatios(result = result,
+                    studyPopulation = FALSE)
+```
+
+## Modify `type`
+
+Instead of a gt table, the user may also want to put the sequence ratio results in a flex table format:
+
+```{r message= FALSE, warning=FALSE}
+tableSequenceRatios(result = result,
+                    type = "flextable")
+```
+
+Or a tibble:
+
+```{r message= FALSE, warning=FALSE}
+tableSequenceRatios(result = result,
+                    type = "tibble")
+```
+
+One may also wish to change the style of the output, see the R package visOmopResults for more information on how to define a style. The default style inherits from visOmopResults, however the user may set it to NULL for the gt/flextable default styling.
+
+```{r message= FALSE, warning=FALSE}
+tableSequenceRatios(result = result,
+                    type = "flextable",
+                    style = NULL)
+```
+
+# Plot output of the sequence ratio results
+
+Similarly, we also have `plotSequenceRatios()` to visualise the results.
+
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatios(result = result)
+```
+
+By default, it plots both the adjusted sequence ratios (and its CIs) and crude sequence ratios (and its CIs). One may wish to only plot adjusted one like so (note since only adjusted is plotted, only one colour needs to be specified):
+
+## Modify `onlyaSR` and `colours`
+
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatios(result = result,
+                   onlyaSR = T,
+                   colours = "black")
+```
+
+One could change the colour like so: 
+
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatios(result = result,
+                   onlyaSR = T,
+                   colours = "red")
+```
+
+## Modify `plotTitle`
+
+One could set the title like so:
+
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatios(result = result,
+                   onlyaSR = T,
+                   plotTitle = "Adjusted Sequence Ratio",
+                   colour = "black")
+```
+
+## Modify `labs`
+
+One could also change the $x$ and $y$ labels like so:
+
+```{r message= FALSE, warning=FALSE}
+plotSequenceRatios(result = result,
+                   onlyaSR = T,
+                   plotTitle = "Adjusted Sequence Ratio",
+                   colour = "black",
+                   labs = c("sequence ratios", "analysis"))
+```

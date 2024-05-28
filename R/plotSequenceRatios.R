@@ -3,7 +3,7 @@
 #' @description
 #' It provides a ggplot of the sequence ratios of index and marker cohorts.
 #'
-#' @param result Table output from summariseSequenceRatio.
+#' @param result Table output from summariseSequenceRatios.
 #' @param onlyaSR If the only SR to be plotted is the adjusted SR.
 #' @param plotTitle Title of the plot, if NULL no title will be plotted.
 #' @param labs Axis labels for the plot.
@@ -22,22 +22,22 @@
 #'                                  indexTable = "cohort_1",
 #'                                  markerTable = "cohort_2",
 #'                                  name = "joined_cohort")
-#' sequence_ratio <- summariseSequenceRatio(cohort = cdm$joined_cohort)
-#' plotSequenceRatio(result = sequence_ratio)
+#' sequence_ratio <- summariseSequenceRatios(cohort = cdm$joined_cohort)
+#' plotSequenceRatios(result = sequence_ratio)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
-plotSequenceRatio <- function(result,
-                              onlyaSR = FALSE,
-                              plotTitle = NULL,
-                              labs = c("SR", "Drug Pairs"),
-                              colours = c("red", "blue")
-                              ) {
+plotSequenceRatios <- function(result,
+                               onlyaSR = FALSE,
+                               plotTitle = NULL,
+                               labs = c("SR", "Drug Pairs"),
+                               colours = c("red", "blue")
+                               ) {
   # checks
-  checkInputPlotSequenceRatio(result = result,
-                              onlyaSR = onlyaSR,
-                              plotTitle = plotTitle,
-                              labs = labs,
-                              colours = colours)
+  checkInputPlotSequenceRatios(result = result,
+                               onlyaSR = onlyaSR,
+                               plotTitle = plotTitle,
+                               labs = labs,
+                               colours = colours)
 
   result <- result %>%
     visOmopResults::splitGroup()
@@ -85,10 +85,12 @@ plotSequenceRatio <- function(result,
       ggplot2::geom_vline(ggplot2::aes(xintercept = 1), linetype = 2) +
       ggplot2::scale_shape_manual(values = rep(19, 5)) +
       ggplot2::scale_colour_manual(values = colours) +
+      ggplot2::labs(title = plotTitle) +
       ggplot2::theme_bw() +
       ggplot2::theme(panel.border = ggplot2::element_blank(),
                      axis.line = ggplot2::element_line(),
-                     legend.title = ggplot2::element_blank()
+                     legend.title = ggplot2::element_blank(),
+                     plot.title = ggplot2::element_text(hjust = 0.5)
       )
   } else {
     ggplot2::ggplot(data = sr_tidy, ggplot2::aes(
@@ -99,10 +101,12 @@ plotSequenceRatio <- function(result,
       ggplot2::scale_shape_manual(values = rep(19, 5)) +
       ggplot2::scale_colour_manual(values = colours) +
       ggplot2::facet_wrap(stats::as.formula(paste("~", paste(facet_wrap_vars, collapse = " + ")))) +
+      ggplot2::labs(title = plotTitle) +
       ggplot2::theme_bw() +
       ggplot2::theme(panel.border = ggplot2::element_blank(),
                      axis.line = ggplot2::element_line(),
-                     legend.title = ggplot2::element_blank()
+                     legend.title = ggplot2::element_blank(),
+                     plot.title = ggplot2::element_text(hjust = 0.5)
       )
   }
 }

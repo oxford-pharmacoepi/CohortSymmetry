@@ -15,6 +15,7 @@ tableSequenceRatios and their given default value.
 }
 \examples{
 {
+ tableSequenceRatiosOptions()
 }
 
 }

@@ -1,0 +1,127 @@
+---
+title: "Step 5: Visualise temporal symmetry"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{a06_Visualise_temporal_symmetry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  eval = Sys.getenv("$RUNNER_OS") != "macOS"
+)
+```
+
+```{r, include = FALSE}
+if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
+if (!dir.exists(Sys.getenv("EUNOMIA_DATA_FOLDER"))) dir.create(Sys.getenv("EUNOMIA_DATA_FOLDER"))
+if (!CDMConnector::eunomia_is_available()) CDMConnector::downloadEunomiaData()
+```
+
+# Introduction
+In this vignette we will explore the functionality and arguments of a set of functions that will help us to understand and visualise the temporal symmetry results (produced **Step 4: Obtain aggregated data on temporal symmetry**). In particular, we will delve into the following function:
+
+- `plotTemporalSymmetry()`: to plot the temporal symmetry.
+
+This function builds-up on previous functions, such as `generateSequenceCohortSet()` and `summariseTemporalSymmetry()` function.
+
+```{r message= FALSE, warning=FALSE, include=FALSE}
+# Load libraries
+library(CDMConnector)
+library(dplyr)
+library(DBI)
+library(CohortSymmetry)
+library(duckdb)
+library(DrugUtilisation)
+
+# Connect to the database
+db <- DBI::dbConnect(duckdb::duckdb(), 
+                     dbdir = CDMConnector::eunomia_dir())
+cdm <- cdm_from_con(
+  con = db,
+  cdm_schema = "main",
+  write_schema = "main"
+)
+
+# Generate cohorts
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "aspirin",
+  ingredient = "aspirin")
+
+cdm <- DrugUtilisation::generateIngredientCohortSet(
+  cdm = cdm,
+  name = "acetaminophen",
+  ingredient = "acetaminophen")
+
+# Generate a sequence cohort
+cdm <- generateSequenceCohortSet(
+  cdm = cdm,
+  indexTable = "aspirin",
+  markerTable = "acetaminophen",
+  name = "intersect",
+  combinationWindow = c(0,Inf))
+```
+
+Let's regather the output from `summariseTemporalSymmetry()`
+
+```{r message= FALSE, warning=FALSE}
+temporal_symmetry <- summariseTemporalSymmetry(cohort = cdm$intersect)
+```
+
+With this established, much like `summariseSequenceRatios()`, the object `temporal_symmetry` could then be fed into `summariseTemporalSymmetry()` to visualise the results:
+
+```{r message= FALSE, warning=FALSE}
+plotTemporalSymmetry(result = temporal_symmetry)
+```
+Note that the $x$ axis is the time, which we recall to be the initiation of the marker minus the initiation of the index. The unit of the time difference here is month as this is the default from `summarisTemporalSymmetry()`. 
+
+## Modify `xlim` and `labs`
+
+If one changes the `timescale` for `summarisTemporalSymmetry()` to be `day` then logically one should change the `xlim` and `labs` accordingly like so:
+
+```{r message= FALSE, warning=FALSE}
+temporal_symmetry_day <- summariseTemporalSymmetry(cohort = cdm$intersect, timescale = "day")
+
+plotTemporalSymmetry(result = temporal_symmetry_day,
+                     labs = c("Time (days)", "Individuals (N)"),
+                     xlim = c(-365, 365))
+```
+
+## Modify `plotTitle`
+
+Much like what we already saw in **Step 3. Visualise the sequence ratios**. One could do the following: 
+
+```{r message= FALSE, warning=FALSE}
+plotTemporalSymmetry(result = temporal_symmetry,
+                     plotTitle = "Plot Temporal Symmetry")
+```
+
+## Modify `colours`
+
+`colours` could be modified like so (remember two colours are required):
+
+```{r message= FALSE, warning=FALSE}
+plotTemporalSymmetry(result = temporal_symmetry,
+                     colours = c("orange", "purple"))
+```
+
+## Modify `scales`
+
+The `scale` parameter is designed for the users to have a choice as to whether to set free y scales for the facet wrap when there are multiple plots (i.e. each plot has its own scaled y axis) or set them equal for all. Only accepts "free" for the former and "fixed" for the latter.
+
+For the `cdm$intersect` we have, it does not make a difference setting it to "fixed" or "free" (default). However, should one wish to set it to "fixed", one should do: 
+
+```{r message= FALSE, warning=FALSE, eval=FALSE}
+plotTemporalSymmetry(result = temporal_symmetry,
+                     scales = "fixed")
+```
+
+**That would be the end of the vignette, have fun with the package!**

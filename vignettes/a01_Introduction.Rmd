@@ -2,7 +2,7 @@
 title: "Introduction to CohortSymmetry"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{a01_Introduction_to_CohortSymmetry}
+  %\VignetteIndexEntry{a01_Introduction}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
   fig.height = 5,
   eval = Sys.getenv("$RUNNER_OS") != "macOS"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 CohortSymmetry provides tools to perform Sequence Symmetry Analysis (SSA). Before using the package, it is highly recommended that this
@@ -26,9 +27,9 @@ The functions you will interact with are:
 
 1.  `generateSequenceCohortSet()`: this function will create a cohort with individuals present in both (the index and the marker) cohorts.
 
-2.  `summariseSequenceRatio()`: this function will calculate sequence ratios.
+2.  `summariseSequenceRatios()`: this function will calculate sequence ratios.
 
-3.  `tableSequenceRatios()` and `plotSequenceRatio()`: these functions will help us to visualise the sequence ratio results.
+3.  `tableSequenceRatios()` and `plotSequenceRatios()`: these functions will help us to visualise the sequence ratio results.
 
 4. `summariseTemporalSymmetry()`: this function will produce aggregated results based on the time difference between two cohort start dates.
 
@@ -104,11 +105,11 @@ result %>% dplyr::glimpse()
 plotTemporalSymmetry(result = result)
 ```
 
-Next, we will use the `summariseSequenceRatio()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
+Next, we will use the `summariseSequenceRatios()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
 ```{r message= FALSE, warning=FALSE}
-result <- summariseSequenceRatio(cohort = cdm$intersect)
+result <- summariseSequenceRatios(cohort = cdm$intersect)
 
-result |> glimpse()
+result %>% dplyr::glimpse()
 ```
 Finally, we can visualise the results using `tableSequenceRatios()`:
 ```{r message= FALSE, warning=FALSE}
@@ -117,7 +118,7 @@ tableSequenceRatios(result)
 Or create a plot with the adjusted sequence ratios:
 
 ```{r message= FALSE, warning=FALSE}
-plotSequenceRatio(result = result,
+plotSequenceRatios(result = result,
                   onlyaSR = T,
                   colours = "black")
 ```

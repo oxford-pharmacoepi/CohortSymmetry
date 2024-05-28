@@ -7,7 +7,7 @@ test_that("tableSequenceRatios - gt output", {
                                                    markerId = 3,
                                                    name = "joined_cohort")
 
-  res <- summariseSequenceRatio(cohort = cdm$joined_cohort)
+  res <- summariseSequenceRatios(cohort = cdm$joined_cohort)
 
   gtResult <- tableSequenceRatios(res)
   expect_true("gt_tbl" %in% (gtResult %>% class()))
@@ -32,7 +32,7 @@ test_that("tableSequenceRatios - tibble output", {
                                                    markerId = 3,
                                                    name = "joined_cohort")
 
-  res <- summariseSequenceRatio(cohort = cdm$joined_cohort)
+  res <- summariseSequenceRatios(cohort = cdm$joined_cohort)
 
   tibble_res <- tableSequenceRatios(res, type = "tibble")
 
@@ -55,7 +55,7 @@ test_that("tableSequenceRatios - flextable output", {
                                                    markerId = 3,
                                                    name = "joined_cohort")
 
-  res <- summariseSequenceRatio(cohort = cdm$joined_cohort)
+  res <- summariseSequenceRatios(cohort = cdm$joined_cohort)
 
   flextable_res <- tableSequenceRatios(res, type = "flextable")
 

@@ -57,7 +57,7 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkInputSummariseSequenceRatio <- function(cohort,
+checkInputSummariseSequenceRatios <- function(cohort,
                                              cohortId,
                                              confidenceInterval,
                                              movingAverageRestriction) {
@@ -168,7 +168,7 @@ checkInputPlotTemporalSymmetry <- function(result,
   checkmate::reportAssertions(collection = errorMessage)
 }
 
-checkInputPlotSequenceRatio <- function(result,
+checkInputPlotSequenceRatios <- function(result,
                                         onlyaSR,
                                         plotTitle,
                                         labs,

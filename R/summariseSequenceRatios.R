@@ -20,18 +20,18 @@
 #'                                  name = "joined_cohorts",
 #'                                  indexTable = "cohort_1",
 #'                                  markerTable = "cohort_2")
-#' pssa_result <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
+#' pssa_result <- summariseSequenceRatios(cohort = cdm$joined_cohorts)
 #' pssa_result
 #' CDMConnector::cdmDisconnect(cdm)
 #' }
 #'
-summariseSequenceRatio <- function(cohort,
+summariseSequenceRatios <- function(cohort,
                                    cohortId = NULL,
                                    confidenceInterval = 95,
                                    movingAverageRestriction = 548) {
 
   # checks
-  checkInputSummariseSequenceRatio(cohort = cohort,
+  checkInputSummariseSequenceRatios(cohort = cohort,
                                    cohortId = cohortId,
                                    confidenceInterval = confidenceInterval,
                                    movingAverageRestriction = movingAverageRestriction)
