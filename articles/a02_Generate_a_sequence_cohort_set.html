@@ -43,8 +43,10 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/a01_Introduction.html">Introduction to CohortSymmetry</a>
     <a class="dropdown-item" href="../articles/a02_Generate_a_sequence_cohort_set.html">Step 1. Generate a sequence cohort</a>
-    <a class="dropdown-item" href="../articles/a03_Summarise_sequence_ratio.html">Step 2. Obtain the sequence ratios</a>
-    <a class="dropdown-item" href="../articles/a04_Visualise_results.html">Step 3. Visualise the results</a>
+    <a class="dropdown-item" href="../articles/a03_Summarise_sequence_ratios.html">Step 2. Obtain the sequence ratios</a>
+    <a class="dropdown-item" href="../articles/a04_Visualise_sequence_ratios.html">Step 3. Visualise the sequence ratios</a>
+    <a class="dropdown-item" href="../articles/a05_Summarise_temporal_symmetry.html">Step 4: Obtain aggregated data on temporal symmetry</a>
+    <a class="dropdown-item" href="../articles/a06_Visualise_temporal_symmetry.html">Step 5: Visualise temporal symmetry</a>
   </div>
 </li>
       </ul>
@@ -111,12 +113,12 @@ examples.</p>
 <h3 id="instantiate-two-cohorts-in-the-cdm-reference">Instantiate two cohorts in the cdm reference<a class="anchor" aria-label="anchor" href="#instantiate-two-cohorts-in-the-cdm-reference"></a>
 </h3>
 <p>CohortSymmetry package requires that the cdm object contains two
-cohort tables: one for the index cohort and the other one for the marker
-cohort. There are a lot of different ways to create these cohorts, and
-it will depend on what the index cohort and marker cohort represent.
-Here, we use the DrugUtilisation package to generate two drug cohorts in
-the cdm object. For illustrative purposes, we will carry out SSA on
-aspirin (index_cohort) against acetaminophen (marker_cohort).</p>
+cohort tables: the index cohort and the marker cohort. There are a lot
+of different ways to create these cohorts, and it will depend on what
+the index cohort and marker cohort represent. Here, we use the
+DrugUtilisation package to generate two drug cohorts in the cdm object.
+For illustrative purposes, we will carry out SSA on aspirin
+(index_cohort) against acetaminophen (marker_cohort).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/" class="external-link">DrugUtilisation</a></span><span class="op">)</span></span>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">DrugUtilisation</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/reference/generateIngredientCohortSet.html" class="external-link">generateIngredientCohortSet</a></span><span class="op">(</span></span>
@@ -127,7 +129,28 @@ aspirin (index_cohort) against acetaminophen (marker_cohort).</p>
 <span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu">DrugUtilisation</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu-dev.github.io/DrugUtilisation/reference/generateIngredientCohortSet.html" class="external-link">generateIngredientCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  name <span class="op">=</span> <span class="st">"acetaminophen"</span>,</span>
-<span>  ingredient <span class="op">=</span> <span class="st">"acetaminophen"</span><span class="op">)</span></span></code></pre></div>
+<span>  ingredient <span class="op">=</span> <span class="st">"acetaminophen"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">aspirin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: ??</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span>
+<span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 78, 334, 334, 730, 730, 730, 842, 842, 929, 92…</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1970-12-03, 1967-07-04, 1937-03-26, 1982-02-08, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1970-12-31, 1967-07-18, 1937-04-09, 1982-03-08, …</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">acetaminophen</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: ??</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span>
+<span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 78, 78, 141, 141, 300, 300, 334, 334, 384, …</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1958-03-11, 1978-06-22, 1968-03-13, 2009-04-14, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1958-06-09, 1978-06-22, 1968-03-27, 2009-04-21, …</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -135,80 +158,128 @@ aspirin (index_cohort) against acetaminophen (marker_cohort).</p>
 </h2>
 <p>In order to initiate the calculations, the two cohorts tables need to
 be intersected using <code><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code>. This
-process will output all the individuals who appear on both tables. Let’s
-go through a few examples to see how this function works.</p>
+process will output all the individuals who appear on both tables
+subject to different parameters. Each parameter corresponds to a
+specific requirement. The parameters for this function include
+<code>cohortDateRange</code>, <code>daysPriorObservation</code>,
+<code>washoutWindow</code>, <code>indexMarkerGap</code> and
+<code>combinationWindow</code>. Let’s go through examples to see how
+each parameter works.</p>
 <div class="section level3">
 <h3 id="no-specific-requirements">No specific requirements<a class="anchor" aria-label="anchor" href="#no-specific-requirements"></a>
 </h3>
-<p>Let’s study the simplest case, where no study period, prior history,
-washout window, or time gap between the index and the marker, are
-specified. See figure below to see an example of a dataset containing
-five different participants.</p>
+<p>Let’s study the simplest case where no requirements are imposed. See
+figure below to see an example of an analysis containing six different
+participants.</p>
 <center>
 <p><img src="figures/1-NoRestrictions.png" width="80%"></p>
 </center>
-<p>See that only the first event or episode (either for the index and
-the marker) is included in the analysis. As there is no restriction
-criteria and all the individuals have an episode in the index and the
-marker cohort, all the subjects are included in the database. We can get
-a sequence cohort without including any particular requirement like
+<p>See that only the first event/episode (for both the index and the
+marker) is included in the analysis. As there is no restriction criteria
+and all the individuals have an episode in the index and the marker
+cohort, all the subjects are included in the analysis. We can get a
+sequence cohort without including any particular requirement like
 so:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
 <span>  markerTable <span class="op">=</span> <span class="st">"acetaminophen"</span>,</span>
 <span>  name <span class="op">=</span> <span class="st">"intersect"</span>,</span>
+<span>  cohortDateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>, <span class="co">#default</span></span>
+<span>  daysPriorObservation <span class="op">=</span> <span class="fl">0</span>, <span class="co">#default</span></span>
+<span>  washoutWindow <span class="op">=</span> <span class="fl">0</span>, <span class="co">#default</span></span>
+<span>  indexMarkerGap <span class="op">=</span> <span class="cn">NULL</span>, <span class="co">#default</span></span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 6, 16, 42, 35, 40, 53, 49, 11, 32, 43, 12, 17, 63…</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1965-06-23, 1972-04-10, 1914-07-09, 1960-06-20, …</span></span>
 <span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1969-12-20, 1974-06-11, 1937-09-07, 1993-04-28, …</span></span>
 <span><span class="co">#&gt; $ index_date           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1965-06-23, 1972-04-10, 1914-07-09, 1993-04-28, …</span></span>
 <span><span class="co">#&gt; $ marker_date          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1969-12-20, 1974-06-11, 1937-09-07, 1960-06-20, …</span></span></code></pre></div>
+<div class="section level4">
+<h4 id="important-observations">Important Observations<a class="anchor" aria-label="anchor" href="#important-observations"></a>
+</h4>
 <p>See that the generated table has the format of an OMOP CDM cohort,
-but it also includes two additional columns: the index_date and the
-marker_date, which are the dates of the index and marker episode,
-respectively. The cohort_start_date and the cohort_end_date are defined
-as:</p>
+but it also includes two additional columns: the <code>index_date</code>
+and the <code>marker_date</code>, which are the
+<code>cohort_start_date</code> of the index and marker episode
+respectively. The cohort_start_date and the <code>cohort_end_date</code>
+are defined as:</p>
 <ul>
 <li>
-<strong>cohort_start_date</strong>: earliest cohort_start_date
-between the index and the marker events.</li>
+<strong><code>cohort_start_date</code></strong>: earliest
+<code>cohort_start_date</code> between the index and the marker
+events.</li>
 <li>
-<strong>cohort_end_date</strong>: latest cohort_end_date between the
-index and the marker events.</li>
+<strong><code>cohort_end_date</code></strong>: latest
+<code>cohort_start_date</code> between the index and the marker
+events.</li>
 </ul>
-<p>If we had more than one cohort in the index or the marker tables, we
-would be able to specify the one of interest by using
-<code>indexId</code> and <code>markerId</code> arguments.</p>
+<p>The <code>cohort_definition_id</code> in the output is associated
+with the <code>cohort_definition_id}</code> of the index table
+(<code>indexId</code>) and the <code>cohort_definition_id</code> of the
+marker table (<code>markerId</code>). To see the correspondence, one
+could do the following:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span>, <span class="st">"cohort_set"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;main.intersect_set&gt; [1 x 10]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span></span>
+<span><span class="co">#&gt;   cohort_definition_id cohort_name     index_id index_name marker_id marker_name</span></span>
+<span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1 index_aspirin_…        1 aspirin            1 acetaminop…</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: days_prior_observation &lt;dbl&gt;, washout_window &lt;dbl&gt;,</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;">#   index_marker_gap &lt;chr&gt;, combination_window &lt;chr&gt;</span></span></span></code></pre></div>
+<p>The user may also wish to subset the index table and marker table
+based on their cohort_definition_id using <code>indexId</code> and
+<code>markerId</code> respectively. For example, the following code only
+includes <code>cohort_definidtion_id</code> <span class="math inline">\(= 1\)</span> from both the index and the marker
+table.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
+<span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
+<span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
+<span>  markerTable <span class="op">=</span> <span class="st">"acetaminophen"</span>,</span>
+<span>  name <span class="op">=</span> <span class="st">"intersect"</span>,</span>
+<span>  cohortDateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  indexId <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  markerId <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  daysPriorObservation <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  washoutWindow <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  indexMarkerGap <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
 <div class="section level3">
 <h3 id="specified-study-period">Specified study period<a class="anchor" aria-label="anchor" href="#specified-study-period"></a>
 </h3>
 <p>We can restrict the study period of the analysis to only include
-episodes or events happening during a specific period of time. Hence,
-the observation period will be restricted to these dates and only events
-or episodes happening during this period will be accounted for the
-analysis, as represented in the below figure:</p>
+episodes or events happening during a specific period of time. See
+figure below to see an example of an analysis containing six different
+participants.</p>
 <center>
 <p><img src="figures/2-studyPeriod.png" width="80%"></p>
 </center>
 <p>Notice that, by imposing a restriction on study period, some of the
-participants might be excluded. The study period can be restricted using
-the <code>cohortDateRange</code> argument, which is defined as:</p>
+participants might be excluded. For example, participant 4 is excluded
+because the only index episode is outside of the study period whereas
+participant 6 is included because he/she does have an index episode
+within the study period.</p>
+<p>The study period can be restricted using the
+<code>cohortDateRange</code> argument, which is defined as:</p>
 <center>
 <p><code>cohortDateRange = c(start_of_the_study_period, end_of_the_study_period)</code></p>
 </center>
 <p>See an example of the usage below, where we have restricted the
 <code>cohortDateRange</code> within 01/01/1950 until 01/01/1969.
 Consequently, the cohort range falls into the pre-specified period:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -217,15 +288,15 @@ Consequently, the cohort range falls into the pre-specified period:</p>
 <span>  cohortDateRange <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1950-01-01"</span>,<span class="st">"1969-01-01"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>min_cohort_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">cohort_start_date</span><span class="op">)</span>, </span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>  </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>min_cohort_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">cohort_start_date</span><span class="op">)</span>, </span>
 <span>            max_cohort_start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cohort_start_date</span><span class="op">)</span>,</span>
 <span>            min_cohort_end_date   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">cohort_end_date</span><span class="op">)</span>,</span>
-<span>            max_cohort_end_date   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cohort_end_date</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>            max_cohort_end_date   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">cohort_end_date</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span>
 <span><span class="co">#&gt; $ min_cohort_start_date <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1950-01-02</span></span>
 <span><span class="co">#&gt; $ max_cohort_start_date <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1968-09-08</span></span>
 <span><span class="co">#&gt; $ min_cohort_end_date   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1950-07-19</span></span>
@@ -236,18 +307,19 @@ Consequently, the cohort range falls into the pre-specified period:</p>
 </h3>
 <p>We can also specify the minimum prior history that an individual has
 to have before the start of the first event. Individuals with not enough
-prior history will be excluded. See the figure below, where we have
-excluded individual number 5 because the first event happening within
-the study period did not have more than 31 days of prior history:</p>
+prior history will be excluded. See the figure below, imagine the prior
+observation history is set to be 31 days, then participant 5 would be
+excluded because the first event happening within the study period does
+not have more than (or equal to) 31 days of prior history:</p>
 <center>
 <img src="figures/3-PriorObservation.png" width="80%">
 </center>
 <p>The number of days of prior history required can be implemented using
 the argument <code>daysPriorObservation</code>. See an example below,
-where we focus on two different individuals: subjects 2 and 53. Without
-a prior history requirement, both individuals are included in the
-analysis:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+where we focus on two different individuals: participant 2 and 53.
+Without a prior history requirement, both individuals are included in
+the analysis:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -257,17 +329,17 @@ analysis:</p>
 <span>  daysPriorObservation <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span>
-<span>    <span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"subject_id"</span> <span class="op">=</span> <span class="st">"person_id"</span>, <span class="st">"observation_period_start_date"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">53</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>daysPriorObservation <span class="op">=</span> <span class="va">cohort_start_date</span> <span class="op">-</span> <span class="va">observation_period_start_date</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span>
+<span>    <span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"subject_id"</span> <span class="op">=</span> <span class="st">"person_id"</span>, <span class="st">"observation_period_start_date"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">53</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>daysPriorObservation <span class="op">=</span> <span class="va">cohort_start_date</span> <span class="op">-</span> <span class="va">observation_period_start_date</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 8</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1</span></span>
 <span><span class="co">#&gt; $ subject_id                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 53, 2</span></span>
 <span><span class="co">#&gt; $ cohort_start_date             <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1962-12-13, 1952-07-13</span></span>
@@ -277,9 +349,9 @@ analysis:</p>
 <span><span class="co">#&gt; $ observation_period_start_date <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1962-08-15, 1920-06-01</span></span>
 <span><span class="co">#&gt; $ daysPriorObservation          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 120, 11730</span></span></code></pre></div>
 <p>Now we impose a prior history requirement of 365 days. As seen,
-subject 53 is excluded as it does not have enough days (&gt;365) of
-prior observation before the included event.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+participant 53 is excluded as it does not have enough days of prior
+observation before the included event.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -289,16 +361,16 @@ prior observation before the included event.</p>
 <span>  daysPriorObservation <span class="op">=</span> <span class="fl">365</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span>
-<span>    <span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"subject_id"</span> <span class="op">=</span> <span class="st">"person_id"</span>, <span class="st">"observation_period_start_date"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">53</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span>
+<span>    <span class="va">cdm</span><span class="op">$</span><span class="va">observation_period</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"subject_id"</span> <span class="op">=</span> <span class="st">"person_id"</span>, <span class="st">"observation_period_start_date"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">53</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
 <span><span class="co">#&gt; $ subject_id                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2</span></span>
 <span><span class="co">#&gt; $ cohort_start_date             <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1952-07-13</span></span>
@@ -311,17 +383,18 @@ prior observation before the included event.</p>
 <h3 id="specified-study-period-prior-history-requirement-and-washout-period">Specified study period, prior history requirement and washout
 period<a class="anchor" aria-label="anchor" href="#specified-study-period-prior-history-requirement-and-washout-period"></a>
 </h3>
-We can also specify the minimum washout period required for an event or
-episode to be included. In the following figure, we exclude participant
-number 6 as another episode took place within the washout period:
+<p>We can also specify the minimum washout period required for an event
+or episode to be included. In the following figure, we exclude
+participant 6 as another episode took place within the washout period.
+Washout period is applied to index and marker respectively.</p>
 <center>
 <img src="figures/4-washoutPeriod.png" width="80%">
 </center>
 <p>This functionality can be implemented using the
 <code>washoutWindow</code> argument. See an example of its
-implementation below, where we analyse the case of subject_id number
-1936 and 3565.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+implementation below, where we analyse the case of
+<code>subject_id</code> number 1936 and 3565.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -332,30 +405,30 @@ implementation below, where we analyse the case of subject_id number
 <span>  washoutWindow <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">[[</span><span class="st">"aspirin"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1936</span>,<span class="fl">3565</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">subject_id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">cohort_start_date</span><span class="op">)</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">aspirin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1936</span>,<span class="fl">3565</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">subject_id</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">cohort_start_date</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:     SQL [6 x 4]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:     subject_id</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Ordered by: cohort_start_date</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1       <span style="text-decoration: underline;">1</span>936 1950-05-06        1950-05-20     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                    1       <span style="text-decoration: underline;">1</span>936 1955-08-04        1955-08-25     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                    1       <span style="text-decoration: underline;">3</span>565 1945-12-24        1946-01-07     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                    1       <span style="text-decoration: underline;">1</span>936 1949-10-08        1949-11-05     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                    1       <span style="text-decoration: underline;">3</span>565 1950-01-02        1950-01-30     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>                    1       <span style="text-decoration: underline;">3</span>565 1957-11-19        1957-12-24</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1       <span style="text-decoration: underline;">1</span>936 1949-10-08        1949-11-05     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                    1       <span style="text-decoration: underline;">1</span>936 1950-05-06        1950-05-20     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                    1       <span style="text-decoration: underline;">1</span>936 1955-08-04        1955-08-25     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                    1       <span style="text-decoration: underline;">3</span>565 1950-01-02        1950-01-30     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                    1       <span style="text-decoration: underline;">3</span>565 1957-11-19        1957-12-24     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>                    1       <span style="text-decoration: underline;">3</span>565 1945-12-24        1946-01-07</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">cdm</span><span class="op">[[</span><span class="st">"intersect"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1936</span>,<span class="fl">3565</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1936</span>,<span class="fl">3565</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1</span></span>
 <span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1936, 3565</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1950-05-06, 1950-01-02</span></span>
@@ -363,12 +436,12 @@ implementation below, where we analyse the case of subject_id number
 <span><span class="co">#&gt; $ index_date           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1950-05-06, 1950-01-02</span></span>
 <span><span class="co">#&gt; $ marker_date          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1951-09-26, 1951-08-27</span></span></code></pre></div>
 <p>Notice that by setting a washout window of 0, both participants are
-included. However, see that the included episode of subject 1936 happens
-at 1950-05-06, and a previous episode (not included within the study
-period), happened just 210 days before this one (1949-10-08). Hence, by
-using a <code>washoutWindow</code> of 365, this participant is excluded
-from the analysis:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+included. However, see that the included episode of participant 1936
+happens at 1950-05-06, and a previous episode (not included within the
+study period), happened just 210 days before this one (1949-10-08).
+Hence, by using a <code>washoutWindow</code> of 365, this participant is
+excluded from the analysis:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -379,13 +452,13 @@ from the analysis:</p>
 <span>  washoutWindow <span class="op">=</span> <span class="fl">365</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">[[</span><span class="st">"intersect"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1936</span>,<span class="fl">3565</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">subject_id</span>, <span class="va">cohort_start_date</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1936</span>,<span class="fl">3565</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">subject_id</span>, <span class="va">cohort_start_date</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span>
 <span><span class="co">#&gt; Ordered by: subject_id, cohort_start_date</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
 <span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 3565</span></span>
@@ -402,20 +475,22 @@ window<a class="anchor" aria-label="anchor" href="#specified-study-period-prior-
 between the start of the first event (either if is the index or the
 marker) and the start of the next event. In other words:</p>
 <center>
-<p>x = second_episode(start_date) - first_episode(start_date)</p>
-<p>combinationWindow[1] <span class="math inline">\(\leq\)</span> x
-<span class="math inline">\(\leq\)</span> combinationWindow[2]</p>
+<p><span class="math inline">\(x =\)</span>
+<code>second_episode(start_date)</code> <span class="math inline">\(-\)</span>
+<code>first_episode(start_date)</code>;</p>
+<p><code>combinationWindow[1]</code> <span class="math inline">\(&lt; x
+\leq\)</span> <code>combinationWindow[2]</code></p>
 </center>
 See in the figure below an example, where we define
 <code>combinationWindow = c(0,20)</code>. This means that the gap
 between the start date of the second episode and the start of the first
-episode should be larger than 0 and less or equal than 20. As subjects 2
-and 3 do not fulfill this condition, they are excluded from the
-analysis.
+episode should be larger than 0 and less or equal than 20. As
+participant 2 and 3 do not fulfill this condition, they are excluded
+from the analysis.
 <center>
 <img src="figures/5-combinationWindow_numbers.png" width="80%">
 </center>
-<p>In the <code><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code>function, this is
+<p>In the <code><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code> function, this is
 implemented using the <code>combinationWindow</code> argument. Notice
 that in the previous examples, as we did not want any combination window
 requirement, we have set this argument to
@@ -424,7 +499,7 @@ requirement, we have set this argument to
 explore subject_id 80 and 187 to see the functionality of this argument.
 When using no restriction for the combination window, both are included
 in the <strong>intersect</strong> cohort:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -434,20 +509,20 @@ in the <strong>intersect</strong> cohort:</p>
 <span>  daysPriorObservation <span class="op">=</span> <span class="fl">365</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">[[</span><span class="st">"intersect"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">187</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">index_date</span>, <span class="va">marker_date</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">index_date</span>, <span class="va">marker_date</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">187</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">index_date</span>, <span class="va">marker_date</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">index_date</span>, <span class="va">marker_date</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 7]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                    1        187 1957-04-20        1965-10-07      1957-04-20</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2 more variables: marker_date &lt;date&gt;, combinationWindow &lt;dbl&gt;</span></span></span></code></pre></div>
 <p>However, when restricting a maximum combination window of 365 days,
-subject 187 is excluded from the analysis, as its
-<code>combinationWindow</code> is larger than 365:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+participant 187 is excluded from the analysis, as the difference between
+two initiations is greater than 365:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -457,10 +532,10 @@ subject 187 is excluded from the analysis, as its
 <span>  daysPriorObservation <span class="op">=</span> <span class="fl">365</span>,</span>
 <span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">[[</span><span class="st">"intersect"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">187</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">187</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
@@ -471,21 +546,24 @@ subject 187 is excluded from the analysis, as its
 <h3 id="specified-study-period-prior-history-requirement-and-index-gap">Specified study period, prior history requirement and index gap<a class="anchor" aria-label="anchor" href="#specified-study-period-prior-history-requirement-and-index-gap"></a>
 </h3>
 <p>We define the index-marker gap to refer to the maximum number of days
-between the start of the second episode (either if is the index or the
-marker) and the end of the first episode. That means:</p>
+between the start of the second episode and the end of the first
+episode. That means:</p>
 <center>
-<p>x = second_episode(cohort_start_date) -
-first_episode(cohort_end_date)</p>
-<p>x <span class="math inline">\(\leq\)</span> indexMarkerGap</p>
+<p><span class="math inline">\(x =\)</span>
+<code>second_episode(cohort_start_date)</code> <span class="math inline">\(-\)</span>
+<code>first_episode(cohort_end_date)</code>;</p>
+<p>x <span class="math inline">\(\leq\)</span>
+<code>indexMarkerGap</code></p>
 </center>
-<p>See an example below, where all subjects with an index-marker gap
-higher than 30 days are excluded from the analysis:</p>
+<p>See an example below, where all participants with an index-marker gap
+higher than 30 days are excluded from the analysis (participant 2, 3 and
+6):</p>
 <center>
 <img src="figures/6-indexGap.png" width="80%">
 </center>
 <p>Use <code>indexGap</code> argument to impose this restriction. See
-how this affect subject 80 and 754 in the example below:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+how this affects participant 80 and 754 in the example below:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -495,35 +573,36 @@ how this affect subject 80 and 754 in the example below:</p>
 <span>  daysPriorObservation <span class="op">=</span> <span class="fl">365</span>,</span>
 <span>  indexMarkerGap <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">754</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">754</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span>
 <span>    <span class="co"># As for both, acetaminophen (marker) is the first event:</span></span>
-<span>    <span class="va">cdm</span><span class="op">[[</span><span class="st">"acetaminophen"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"subject_id"</span>, </span>
+<span>    <span class="va">cdm</span><span class="op">$</span><span class="va">acetaminophen</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"subject_id"</span>, </span>
 <span>             <span class="st">"marker_date"</span> <span class="op">=</span> <span class="st">"cohort_start_date"</span>, </span>
 <span>             <span class="st">"first_episode_end_date"</span> <span class="op">=</span> <span class="st">"cohort_end_date"</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"marker_date"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span>
-<span>    <span class="va">cdm</span><span class="op">[[</span><span class="st">"aspirin"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span> </span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"subject_id"</span>, </span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">inner_join</a></span><span class="op">(</span></span>
+<span>    <span class="va">cdm</span><span class="op">$</span><span class="va">aspirin</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="st">"subject_id"</span>, </span>
 <span>             <span class="st">"index_date"</span> <span class="op">=</span> <span class="st">"cohort_start_date"</span>,</span>
 <span>             <span class="st">"second_episode_start_date"</span> <span class="op">=</span> <span class="st">"cohort_start_date"</span><span class="op">)</span>,</span>
 <span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"subject_id"</span>, <span class="st">"index_date"</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>indexMarkerGap <span class="op">=</span> <span class="va">second_episode_start_date</span> <span class="op">-</span> <span class="va">first_episode_end_date</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>indexMarkerGap <span class="op">=</span> <span class="va">second_episode_start_date</span> <span class="op">-</span> <span class="va">first_episode_end_date</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 9]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                    1        754 1950-08-12        1950-09-20      1950-09-20</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1        754 1950-08-12        1950-09-20      1950-09-20</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 4 more variables: marker_date &lt;date&gt;, first_episode_end_date &lt;date&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   second_episode_start_date &lt;date&gt;, indexMarkerGap &lt;dbl&gt;</span></span></span></code></pre></div>
-<p>By using a <code>indexMarkerGap = 30</code>, subject 80 is excluded
-from the analysis, as is index-marker gap is larger than 30:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<p>By using a <code>indexMarkerGap = 30</code>, participant 80 is
+excluded from the analysis, as is index-marker gap is larger than
+30:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet</a></span><span class="op">(</span></span>
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"aspirin"</span>,</span>
@@ -533,10 +612,10 @@ from the analysis, as is index-marker gap is larger than 30:</p>
 <span>  daysPriorObservation <span class="op">=</span> <span class="fl">365</span>,</span>
 <span>  indexMarkerGap <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">754</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">754</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [1 x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmp4N9ezp/file193469092042.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/Rtmps9LQh4/file19344eab1110.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1        754 1950-08-12        1950-09-20      1950-09-20</span></span>

@@ -43,8 +43,10 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="articles/a01_Introduction.html">Introduction to CohortSymmetry</a>
     <a class="dropdown-item" href="articles/a02_Generate_a_sequence_cohort_set.html">Step 1. Generate a sequence cohort</a>
-    <a class="dropdown-item" href="articles/a03_Summarise_sequence_ratio.html">Step 2. Obtain the sequence ratios</a>
-    <a class="dropdown-item" href="articles/a04_Visualise_results.html">Step 3. Visualise the results</a>
+    <a class="dropdown-item" href="articles/a03_Summarise_sequence_ratios.html">Step 2. Obtain the sequence ratios</a>
+    <a class="dropdown-item" href="articles/a04_Visualise_sequence_ratios.html">Step 3. Visualise the sequence ratios</a>
+    <a class="dropdown-item" href="articles/a05_Summarise_temporal_symmetry.html">Step 4: Obtain aggregated data on temporal symmetry</a>
+    <a class="dropdown-item" href="articles/a06_Visualise_temporal_symmetry.html">Step 5: Visualise temporal symmetry</a>
   </div>
 </li>
       </ul>
@@ -138,20 +140,20 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpUvBWxR\file4a802c933d9b.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpiEXmDQ\file644034f02d4d.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
-<span><span class="co">#&gt; $ subject_id           &lt;int&gt; 65, 119, 185, 144, 235, 197, 310, 316, 331, 363, …</span></span>
+<span><span class="co">#&gt; $ subject_id           &lt;int&gt; 65, 119, 185, 144, 235, 197, 310, 280, 316, 331, …</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …</span></span>
 <span><span class="co">#&gt; $ cohort_end_date      &lt;date&gt; 1969-06-18, 1968-04-07, 1947-04-12, 1979-09-04, …</span></span>
 <span><span class="co">#&gt; $ index_date           &lt;date&gt; 1969-06-18, 1967-05-28, 1947-04-07, 1978-10-30, …</span></span>
 <span><span class="co">#&gt; $ marker_date          &lt;date&gt; 1968-07-29, 1968-04-07, 1947-04-12, 1979-09-04, …</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="step-2-summarisesequenceratio">Step 2: summariseSequenceRatio<a class="anchor" aria-label="anchor" href="#step-2-summarisesequenceratio"></a>
+<h3 id="step-2-summarisesequenceratios">Step 2: summariseSequenceRatios<a class="anchor" aria-label="anchor" href="#step-2-summarisesequenceratios"></a>
 </h3>
-<p>To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into <code><a href="reference/summariseSequenceRatio.html">summariseSequenceRatio()</a></code> The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
+<p>To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into <code><a href="reference/summariseSequenceRatios.html">summariseSequenceRatios()</a></code> The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summariseSequenceRatio.html">summariseSequenceRatio</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">aspirin_amoxicillin</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summariseSequenceRatios.html">summariseSequenceRatios</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">aspirin_amoxicillin</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Joining with `by = join_by(days_prior_observation, washout_window,</span></span>
 <span><span class="co">#&gt; index_marker_gap, combination_window, confidence_interval,</span></span>
 <span><span class="co">#&gt; moving_average_restriction, cdm_name)`</span></span>
@@ -187,7 +189,7 @@
 <p><img src="./reference/figures/README-gt_table.png"> Note that flextable is also an option, users may specify this by using the <code>type</code> argument.</p>
 <p>One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/plotSequenceRatio.html">plotSequenceRatio</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">res</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/plotSequenceRatios.html">plotSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">res</span>,</span>
 <span>                  onlyaSR <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>                  colours <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/plotSR.png"></p>
