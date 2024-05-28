@@ -58,9 +58,10 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
 }
 
 checkInputSummariseSequenceRatios <- function(cohort,
-                                             cohortId,
-                                             confidenceInterval,
-                                             movingAverageRestriction) {
+                                              cohortId,
+                                              confidenceInterval,
+                                              movingAverageRestriction,
+                                              minCellCount) {
 
   # Check cdm objects, writing schema and index/marker tables
   cdm <- omopgenerics::cdmReference(cohort)
@@ -77,6 +78,9 @@ checkInputSummariseSequenceRatios <- function(cohort,
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
+
+  # Check minCellCount
+  checkMinCellCount(minCellCount, errorMessage)
 
   ## Check confidenceInterval
   checkConfidenceInterval(confidenceInterval, errorMessage)
@@ -146,6 +150,14 @@ checkInputPlotTemporalSymmetry <- function(result,
                                            colours,
                                            scales) {
 
+  result_check <- result %>%
+    dplyr::pull("estimate_value")
+
+  if (all(is.na(result_check))){
+    cli::cli_abort("Aborted! All the temporal symmetry results are NAs, no plots
+    could be produced")
+  }
+
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
@@ -173,6 +185,15 @@ checkInputPlotSequenceRatios <- function(result,
                                         plotTitle,
                                         labs,
                                         colours) {
+
+  result_check <- result %>%
+    dplyr::filter(.data$estimate_name == "point_estimate") %>%
+    dplyr::pull("estimate_value")
+
+  if (all(is.na(result_check))){
+    cli::cli_abort("Aborted! All the sequence ratios are NAs, no plots could be
+                   produced")
+  }
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()

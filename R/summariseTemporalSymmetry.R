@@ -111,6 +111,6 @@ summariseTemporalSymmetry <- function(cohort,
     omopgenerics::newSummarisedResult(
       settings = setting
     ) |>
-    omopgenerics::suppress()
+    omopgenerics::suppress(minCellCount = minCellCount)
   return(output_sum)
 }
