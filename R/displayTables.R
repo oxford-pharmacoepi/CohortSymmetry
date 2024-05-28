@@ -13,11 +13,7 @@
 #'  gt table or flextable. See visOmopResults package for more information on
 #'  how to define a style. Alternatively, use "default" to get visOmopResults
 #'  style, or NULL for gt/flextable default styling.
-#' @param crude whether to report crude results.
-#' @param adjusted whether to report adjusted results.
 #' @param studyPopulation whether to report the study population.
-#' @param indexName whether to report index names.
-#' @param markerName whether to report marker names
 #' @param cdmName whether to report database names.
 #' @param .options named list with additional formatting options.
 #' tableSequenceRatiosOptions() shows allowed arguments and
@@ -31,9 +27,9 @@
 #' library(CohortSymmetry)
 #' cdm <- mockCohortSymmetry()
 #' cdm <- generateSequenceCohortSet(cdm = cdm,
-#'                                                  indexTable = "cohort_1",
-#'                                                  markerTable = "cohort_2",
-#'                                                  name = "joined_cohort")
+#'                                  indexTable = "cohort_1",
+#'                                  markerTable = "cohort_2",
+#'                                  name = "joined_cohort")
 #' res <- summariseSequenceRatios(cohort = cdm$joined_cohort)
 #' gtResult <- tableSequenceRatios(res)
 #' CDMConnector::cdmDisconnect(cdm = cdm)
@@ -46,14 +42,14 @@ tableSequenceRatios <- function(result,
                                   c("N (%)" = "<count> (<percentage> %)",
                                     "SR (CI)" = "<point_estimate> (<lower_CI> - <upper_CI>)"),
                                 style = "default",
-                                crude = TRUE,
-                                adjusted = TRUE,
                                 studyPopulation = TRUE,
-                                indexName = TRUE,
-                                markerName = TRUE,
                                 cdmName = TRUE,
                                 .options = NULL) {
   # checks
+  crude <- T
+  adjusted <- T
+  indexName <- T
+  markerName <- T
   checkSequenceSymmetry(result)
   checksFormatSequenceSymmetry(type, crude, adjusted, studyPopulation, indexName,
                                markerName, cdmName, .options)

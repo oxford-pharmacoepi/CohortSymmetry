@@ -10,11 +10,7 @@ tableSequenceRatios(
   estimateNameFormat = c(`N (\%)` = "<count> (<percentage> \%)", `SR (CI)` =
     "<point_estimate> (<lower_CI> - <upper_CI>)"),
   style = "default",
-  crude = TRUE,
-  adjusted = TRUE,
   studyPopulation = TRUE,
-  indexName = TRUE,
-  markerName = TRUE,
   cdmName = TRUE,
   .options = NULL
 )
@@ -33,15 +29,7 @@ gt table or flextable. See visOmopResults package for more information on
 how to define a style. Alternatively, use "default" to get visOmopResults
 style, or NULL for gt/flextable default styling.}
 
-\item{crude}{whether to report crude results.}
-
-\item{adjusted}{whether to report adjusted results.}
-
 \item{studyPopulation}{whether to report the study population.}
-
-\item{indexName}{whether to report index names.}
-
-\item{markerName}{whether to report marker names}
 
 \item{cdmName}{whether to report database names.}
 
@@ -61,9 +49,9 @@ output.
 library(CohortSymmetry)
 cdm <- mockCohortSymmetry()
 cdm <- generateSequenceCohortSet(cdm = cdm,
-                                                 indexTable = "cohort_1",
-                                                 markerTable = "cohort_2",
-                                                 name = "joined_cohort")
+                                 indexTable = "cohort_1",
+                                 markerTable = "cohort_2",
+                                 name = "joined_cohort")
 res <- summariseSequenceRatios(cohort = cdm$joined_cohort)
 gtResult <- tableSequenceRatios(res)
 CDMConnector::cdmDisconnect(cdm = cdm)
