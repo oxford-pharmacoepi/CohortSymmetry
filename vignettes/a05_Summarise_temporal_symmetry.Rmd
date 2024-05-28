@@ -81,7 +81,7 @@ The default unit of the difference of two initiations is measured in months. In 
 
 ## Modify the cohort based on `cohort_definition_id`
 
-This parameter is used to subset the cohort table inputted to the `summariseTemporalSymmetry()`. Imagine the user only wants to include `cohort_definition_id` $= 1$ in the `summariseTemporalSymmetry()`, then one could do the following:
+This parameter is used to subset the cohort table inputted to the `summariseTemporalSymmetry()`. Imagine the user only wants to include `cohort_definition_id` $= 1$ from `cdm$intersect` in the `summariseTemporalSymmetry()`, then one could do the following:
 
 ```{r message= FALSE, warning=FALSE}
 summariseTemporalSymmetry(cohort = cdm$intersect,
@@ -89,7 +89,7 @@ summariseTemporalSymmetry(cohort = cdm$intersect,
   dplyr::glimpse()
 ```
 
-Of course in this case this does nothing because every entry in `cdm$intersect` has `cohort_definition_id` $= 1$.
+Of course and once again this does nothing because every entry in `cdm$intersect` has `cohort_definition_id` $= 1$.
 
 ## Modify `timescale`
 
@@ -104,5 +104,15 @@ summariseTemporalSymmetry(cohort = cdm$intersect,
 ```{r message= FALSE, warning=FALSE}
 summariseTemporalSymmetry(cohort = cdm$intersect,
                           timescale = "year") %>% 
+  dplyr::glimpse()
+```
+
+## Modify `minCellCount`
+
+By default, the minimum number of events to reported is 5, below which results will be obscured. If 0, all results will be reported and the user could do this via: 
+
+```{r message= FALSE, warning=FALSE}
+summariseTemporalSymmetry(cohort = cdm$intersect,
+                          minCellCount = 0) %>% 
   dplyr::glimpse()
 ```

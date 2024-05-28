@@ -80,3 +80,54 @@ test_that("expected errors", {
 
   CDMConnector::cdmDisconnect(cdm)
 })
+
+test_that("empty result error",{
+  indexCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
+    subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
+    cohort_start_date = as.Date(
+      c(
+        "2020-04-01", "2021-06-01", "2022-05-22", "2010-01-01", "2019-08-01", "2019-04-07", "2021-01-01", "2008-02-02", "2010-09-09", "2021-01-01"
+      )
+    ),
+    cohort_end_date = as.Date(
+      c(
+        "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
+      )
+    )
+  )
+
+  markerCohort <- dplyr::tibble(
+    cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
+    subject_id = c(1, 3, 4, 2, 5, 1, 2, 3, 4, 5, 6),
+    cohort_start_date = as.Date(
+      c(
+        "2020-12-30", "2010-01-01","2021-05-25","2022-05-31", "2020-05-25", "2019-05-25", "2022-05-25", "2010-09-30", "2022-05-25", "2020-02-29", "2021-01-01"
+      )
+    ),
+    cohort_end_date = cohort_start_date
+  )
+
+  cdm <- mockCohortSymmetry(indexCohort = indexCohort,
+                            markerCohort = markerCohort)
+
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2")
+
+  ts <- summariseTemporalSymmetry(cohort = cdm$joined_cohorts)
+
+  expect_error(
+    plotTemporalSymmetry(ts)
+  )
+
+  ts2 <- summariseTemporalSymmetry(cohort = cdm$joined_cohorts,
+                                     minCellCount = 0)
+
+  expect_no_error(
+    plotTemporalSymmetry(ts2)
+  )
+
+  CDMConnector::cdm_disconnect(cdm = cdm)
+})

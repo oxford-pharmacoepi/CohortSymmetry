@@ -27,7 +27,7 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
   checkmate::assertCharacter(name, len = 1, any.missing = FALSE, add = errorMessage)
 
   ## Check date
-  checkcohortDateRange(cohortDateRange, errorMessage)
+  checkCohortDateRange(cohortDateRange, errorMessage)
 
   ## Checks that Index and Marker ids exist in Index and Marker tables
   checkCohortIds(cohort = cdm[[indexTable]],
@@ -58,9 +58,10 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
 }
 
 checkInputSummariseSequenceRatios <- function(cohort,
-                                             cohortId,
-                                             confidenceInterval,
-                                             movingAverageRestriction) {
+                                              cohortId,
+                                              confidenceInterval,
+                                              movingAverageRestriction,
+                                              minCellCount) {
 
   # Check cdm objects, writing schema and index/marker tables
   cdm <- omopgenerics::cdmReference(cohort)
@@ -78,11 +79,14 @@ checkInputSummariseSequenceRatios <- function(cohort,
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
+  # Check minCellCount
+  checkMinCellCount(minCellCount, errorMessage)
+
   ## Check confidenceInterval
   checkConfidenceInterval(confidenceInterval, errorMessage)
 
   ## Check movingAverageRestriction
-  checkmovingAverageRestriction(movingAverageRestriction, errorMessage)
+  checkMovingAverageRestriction(movingAverageRestriction, errorMessage)
 
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
@@ -90,7 +94,8 @@ checkInputSummariseSequenceRatios <- function(cohort,
 
 checkInputSummariseTemporalSymmetry <- function(cohort,
                                                 cohortId,
-                                                timescale) {
+                                                timescale,
+                                                minCellCount) {
 
   # Check cdm objects, writing schema and index/marker tables
   cdm <- omopgenerics::cdmReference(cohort)
@@ -108,8 +113,11 @@ checkInputSummariseTemporalSymmetry <- function(cohort,
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
+  # Check minCellCount
+  checkMinCellCount(minCellCount, errorMessage)
+
   # Check timescale
-  checktimeScale(timescale, errorMessage)
+  checkTimeScale(timescale, errorMessage)
 
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
@@ -142,6 +150,14 @@ checkInputPlotTemporalSymmetry <- function(result,
                                            colours,
                                            scales) {
 
+  result_check <- result %>%
+    dplyr::pull("estimate_value")
+
+  if (all(is.na(result_check))){
+    cli::cli_abort("Aborted! All the temporal symmetry results are NAs, no plots
+    could be produced")
+  }
+
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
 
@@ -169,6 +185,15 @@ checkInputPlotSequenceRatios <- function(result,
                                         plotTitle,
                                         labs,
                                         colours) {
+
+  result_check <- result %>%
+    dplyr::filter(.data$estimate_name == "point_estimate") %>%
+    dplyr::pull("estimate_value")
+
+  if (all(is.na(result_check))){
+    cli::cli_abort("Aborted! All the sequence ratios are NAs, no plots could be
+                   produced")
+  }
 
   # Check the rest of inputs
   errorMessage <- checkmate::makeAssertCollection()
@@ -255,7 +280,7 @@ checkWashoutWindow <- function(washoutWindow, errorMessage) {
 }
 
 # Check movingAverageRestriction (Inf or numeric)
-checkmovingAverageRestriction <- function(movingAverageRestriction, errorMessage){
+checkMovingAverageRestriction <- function(movingAverageRestriction, errorMessage){
   if (movingAverageRestriction != Inf) {
     checkmate::assertIntegerish(
       movingAverageRestriction,
@@ -274,6 +299,19 @@ checkDaysPriorObservation <- function(daysPriorObservation, errorMessage){
   }
   if(!(is.finite(daysPriorObservation))){
     errorMessage$push("daysPriorObservation has to be finite.")
+  }
+}
+
+# Check minCellCount (has to be numeric)
+checkMinCellCount <- function(minCellCount, errorMessage){
+  if (minCellCount != Inf) {
+    checkmate::assertIntegerish(
+      minCellCount,
+      lower = 0, any.missing = FALSE, max.len = 4, add = errorMessage
+    )
+  }
+  if(!(is.finite(minCellCount))){
+    errorMessage$push("minCellCount has to be finite.")
   }
 }
 
@@ -298,7 +336,7 @@ checkCombinationWindow <- function(combinationWindow, errorMessage){
   }
 }
 
-checkcohortDateRange <- function(cohortDateRange, errorMessage) {
+checkCohortDateRange <- function(cohortDateRange, errorMessage) {
   checkmate::assertDate(cohortDateRange, len = 2, add = errorMessage)
   if (all(!is.na(cohortDateRange))) {
     if (cohortDateRange[1] >= cohortDateRange[2]) {
@@ -397,7 +435,7 @@ checkScales <- function(scales, errorMessage) {
   }
 }
 
-checktimeScale <- function(timescale, errorMessage){
+checkTimeScale <- function(timescale, errorMessage){
   checkmate::assert_character(timescale,
                               len = 1,
                               add = errorMessage)
