@@ -1,14 +1,18 @@
 #' Summarise temporal symmetry
 #'
 #' @description
-#' Using generateSequenceCohortSet to obtain temporal symmetry (aggregated counts) of two cohorts.
+#' Using generateSequenceCohortSet to obtain temporal symmetry (aggregated
+#' counts) of two cohorts.
 #'
 #' @param cohort A cohort table in the cdm.
 #' @param cohortId The Ids in the cohort that are to be included in the analyses.
 #' @param timescale Timescale for the x axis of the plot (month, day, year).
+#' @param minCellCount The minimum number of events to reported, below which
+#' results will be obscured. If 0, all results will be reported.
 #'
 #' @return
-#' An aggregated table with difference in time (marker - index) and the relevant counts.
+#' An aggregated table with difference in time (marker - index) and the relevant
+#'  counts.
 #' @export
 #'
 #' @examples
@@ -24,12 +28,14 @@
 #'
 summariseTemporalSymmetry <- function(cohort,
                                       cohortId = NULL,
-                                      timescale = "month") {
+                                      timescale = "month",
+                                      minCellCount = 5) {
 
   # checks
   checkInputSummariseTemporalSymmetry(cohort = cohort,
                                       cohortId = cohortId,
-                                      timescale = timescale)
+                                      timescale = timescale,
+                                      minCellCount = minCellCount)
 
   index_names <- attr(cohort, "cohort_set") %>%
     dplyr::select("cohort_definition_id", "index_name", "index_id", "marker_id")
@@ -104,6 +110,7 @@ summariseTemporalSymmetry <- function(cohort,
     dplyr::select(dplyr::all_of(omopgenerics::resultColumns())) |>
     omopgenerics::newSummarisedResult(
       settings = setting
-    )
+    ) |>
+    omopgenerics::suppress()
   return(output_sum)
 }

@@ -4,14 +4,15 @@
 \name{CohortSymmetry-package}
 \alias{CohortSymmetry}
 \alias{CohortSymmetry-package}
-\title{CohortSymmetry: Sequence Symmetry Analysis using the Observational Medical Outcomes Partnership common data model}
+\title{CohortSymmetry: Sequence Symmetry Analysis Using the OMOP Common Data Model}
 \description{
-Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the Observational Medical Outcomes Partnership common data model.
+Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the OMOP (Observational Medical Outcomes Partnership) common data model.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://oxford-pharmacoepi.github.io/CohortSymmetry/}
+  \item Report bugs at \url{https://github.com/oxford-pharmacoepi/CohortSymmetry/issues}
 }
 
 }
