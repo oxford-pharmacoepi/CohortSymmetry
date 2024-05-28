@@ -40,7 +40,7 @@ test_that("eunomia - generateSequenceCohortSet", {
  expect_true(nrow(cdm$joined_cohorts %>% dplyr::collect()) > 0)
 
  expect_no_error(
-   res <- summariseSequenceRatio(cohort = cdm$joined_cohorts)
+   res <- summariseSequenceRatios(cohort = cdm$joined_cohorts)
  )
 
  expect_true(nrow(res) > 0)

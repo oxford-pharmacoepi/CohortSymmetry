@@ -53,7 +53,7 @@ their default values.}
 A formatted version of the sequence_symmetry object.
 }
 \description{
-It provides a formatted table with the contents of the summariseSequenceRatio
+It provides a formatted table with the contents of the summariseSequenceRatios
 output.
 }
 \examples{
@@ -64,7 +64,7 @@ cdm <- generateSequenceCohortSet(cdm = cdm,
                                                  indexTable = "cohort_1",
                                                  markerTable = "cohort_2",
                                                  name = "joined_cohort")
-res <- summariseSequenceRatio(cohort = cdm$joined_cohort)
+res <- summariseSequenceRatios(cohort = cdm$joined_cohort)
 gtResult <- tableSequenceRatios(res)
 CDMConnector::cdmDisconnect(cdm = cdm)
 }

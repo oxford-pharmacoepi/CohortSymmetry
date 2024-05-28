@@ -86,13 +86,13 @@ cdm$aspirin_amoxicillin %>%
   dplyr::glimpse()
 ```
 
-### Step 2: summariseSequenceRatio
+### Step 2: summariseSequenceRatios
  
-To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into `summariseSequenceRatio()` 
+To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into `summariseSequenceRatios()` 
 The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.
 
-```{r Step 2: summariseSequenceRatio, eval=TRUE, warning=FALSE}
-res <- summariseSequenceRatio(cohort = cdm$aspirin_amoxicillin)
+```{r Step 2: summariseSequenceRatios, eval=TRUE, warning=FALSE}
+res <- summariseSequenceRatios(cohort = cdm$aspirin_amoxicillin)
  
 res %>% glimpse()
 ```
@@ -115,7 +115,7 @@ Note that flextable is also an option, users may specify this by using the `type
 One could also visualise the plot, for example, the following is the plot of the adjusted sequence ratio.
 
 ```{r Step 3: visualise the results - plots, eval=FALSE, warning=FALSE}
-plotSequenceRatio(result = res,
+plotSequenceRatios(result = res,
                   onlyaSR = T,
                   colours = "black")
 ```
