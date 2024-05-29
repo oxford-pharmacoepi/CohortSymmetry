@@ -82,7 +82,7 @@ test_that("tableSequenceRatio options", {
                                    name = "joined_cohort")
 
   expect_warning(
-    res <- summariseSequenceRatios(cohort = cdm$joined_cohort, minCellCount = 0)
+    result <- summariseSequenceRatios(cohort = cdm$joined_cohort, minCellCount = 0)
   )
 
   expect_no_error(
