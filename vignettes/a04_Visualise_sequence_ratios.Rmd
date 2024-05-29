@@ -83,13 +83,20 @@ The function `tableSequenceRatios` inputs the result from `summariseSequenceRati
 tableSequenceRatios(result = result)
 ```
 
-By default, it has many columns such as Index (name), Marker (name), Study population, CSR and ASR, each of these columns could be suppressed with relevant parameters. For example if one wants to not display study population, one could do the following: 
-
 ## Arguments used to suppress columns
+
+By default, it has many columns such as Index (name), Marker (name), Study population, CSR and ASR, some of these columns could be suppressed with relevant parameters. For example if one wants to not display study population, one could do the following: 
 
 ```{r message= FALSE, warning=FALSE}
 tableSequenceRatios(result = result,
                     studyPopulation = FALSE)
+```
+
+Or suppress `cdmName` like so 
+
+```{r message= FALSE, warning=FALSE}
+tableSequenceRatios(result = result,
+                    cdmName = FALSE)
 ```
 
 ## Modify `type`
