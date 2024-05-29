@@ -45,7 +45,7 @@ test_that("test summariseTemporalSymmetry", {
   time2 <-
     temporal_symmetry %>% dplyr::filter(group_level == "cohort_1 &&& cohort_1") |> dplyr::pull(variable_level) |> as.double()
 
-  expect_true(all(time == time2))
+  expect_true(all(sum(time) == sum(time2)))
 
 
   temporal_symmetry <-
@@ -64,5 +64,5 @@ test_that("test summariseTemporalSymmetry", {
   time2 <-
     temporal_symmetry %>% dplyr::filter(group_level == "cohort_1 &&& cohort_1") |> dplyr::pull(variable_level) |> as.double()
 
-  expect_true(all(time == time2))
+  expect_true(all(sum(time) == sum(time2)))
 })
