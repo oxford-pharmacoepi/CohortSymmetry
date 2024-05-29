@@ -145,12 +145,12 @@ tableSequenceRatios <- function(result,
       Index = stringr::str_to_sentence(gsub("_", " ", .data$Index)),
       Marker = stringr::str_to_sentence(gsub("_", " ", .data$Marker))
     ) %>%
-    {if (!indexName) {
-      dplyr::select(., -"Index")
-    } else .} %>%
-    {if (!markerName) {
-      dplyr::select(., -"Marker")
-    } else .} %>%
+    # {if (!indexName) {
+    #   dplyr::select(., -"Index")
+    # } else .} %>%
+    # {if (!markerName) {
+    #   dplyr::select(., -"Marker")
+    # } else .} %>%
     tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") %>%
     dplyr::select(dplyr::all_of(order_columns))
 
