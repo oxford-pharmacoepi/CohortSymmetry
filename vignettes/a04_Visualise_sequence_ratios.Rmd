@@ -99,9 +99,18 @@ tableSequenceRatios(result = result,
                     cdmName = FALSE)
 ```
 
+There are also `.options` argument that one may wish to specify. For example, the user can specify a title:
+
+```{r message= FALSE, warning=FALSE}
+tableSequenceRatios(result = result,
+                    .options = list(title = "Title"))
+```
+
+Similarly, `subtitle` and `caption` can also be defined this way.
+
 ## Modify `type`
 
-Instead of a gt table, the user may also want to put the sequence ratio results in a flex table format:
+Instead of a gt table, the user may also want to put the sequence ratio results in a flex table format (the rest of the arguments that we saw for a gt table also applies here):
 
 ```{r message= FALSE, warning=FALSE}
 tableSequenceRatios(result = result,
