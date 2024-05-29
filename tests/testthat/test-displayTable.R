@@ -87,6 +87,22 @@ test_that("tableSequenceRatio options", {
 
   expect_no_error(
     tableSequenceRatios(result = result,
+                        .options = NULL)
+  )
+
+  expect_error(
+    tableSequenceRatios(result = result,
+                        .options = list(titless = "Title"))
+  )
+
+  expect_no_error(
+    tableSequenceRatios(result = result,
+                        .options = list(
+                          groupColumn = c("cdm_name")
+                          )))
+
+  expect_no_error(
+    tableSequenceRatios(result = result,
                         .options = list(bigMark = " < "))
   )
 
@@ -142,4 +158,5 @@ test_that("tableSequenceRatio options", {
                         .options = list(groupAsColumn = T))
   )
 
+  CDMConnector::cdm_disconnect(cdm = cdm)
 })

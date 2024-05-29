@@ -893,6 +893,20 @@ test_that("min cell count",{
   )
   )
 
+  expect_error(
+    result_error <- summariseSequenceRatios(
+      cohort = cdm$joined_cohort,
+      minCellCount = Inf
+    )
+  )
+
+  expect_error(
+    result_error2 <- summariseSequenceRatios(
+      cohort = cdm$joined_cohort,
+      minCellCount = -1
+    )
+  )
+
   expect_no_error(
     expect_warning(
     result2 <- summariseSequenceRatios(
