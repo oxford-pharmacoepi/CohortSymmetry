@@ -135,22 +135,22 @@ For illustrative purposes, we will carry out SSA on aspirin
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
-<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 227, 260, 352, 376, 376, 727, 727, 753, 795, 820,…</span></span>
-<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1974-04-04, 1969-10-10, 1978-06-13, 1965-04-06, …</span></span>
-<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1974-04-18, 1969-10-24, 1978-06-27, 1965-07-05, …</span></span></code></pre></div>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 7, 57, 80, 187, 187, 187, 211, 250, 363, 394, 502…</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1969-10-02, 1971-02-27, 1938-08-01, 1947-09-28, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1969-10-23, 1971-03-13, 1938-08-22, 1947-10-11, …</span></span></code></pre></div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">acetaminophen</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
-<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 227, 260, 260, 334, 334, 352, 352, 376, 376, 431,…</span></span>
-<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1980-07-01, 1971-03-15, 1979-09-06, 1992-03-25, …</span></span>
-<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1980-09-29, 1971-03-29, 1979-09-13, 1992-04-08, …</span></span></code></pre></div>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 95, 95, 99, 123, 123, 219, 245, 245, 276, 276, 33…</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1962-10-08, 1973-11-04, 2015-09-20, 1952-02-03, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1962-10-22, 1973-11-11, 2015-12-19, 1952-02-10, …</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -196,7 +196,7 @@ so:</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 6, 16, 42, 35, 40, 53, 49, 11, 32, 43, 12, 17, 63…</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1965-06-23, 1972-04-10, 1914-07-09, 1960-06-20, …</span></span>
@@ -230,7 +230,7 @@ could do the following:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span>, <span class="st">"cohort_set"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   table&lt;main.intersect_set&gt; [1 x 10]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id cohort_name     index_id index_name marker_id marker_name</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1 index_aspirin_…        1 aspirin            1 acetaminop…</span></span>
@@ -296,7 +296,7 @@ Consequently, the cohort range falls into the pre-specified period:</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span>
 <span><span class="co">#&gt; $ min_cohort_start_date <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1950-01-02</span></span>
 <span><span class="co">#&gt; $ max_cohort_start_date <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1968-09-08</span></span>
 <span><span class="co">#&gt; $ min_cohort_end_date   <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1950-07-19</span></span>
@@ -339,7 +339,7 @@ the analysis:</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 8</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1</span></span>
 <span><span class="co">#&gt; $ subject_id                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 53, 2</span></span>
 <span><span class="co">#&gt; $ cohort_start_date             <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1962-12-13, 1952-07-13</span></span>
@@ -370,7 +370,7 @@ observation before the included event.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 7</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id          <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
 <span><span class="co">#&gt; $ subject_id                    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 2</span></span>
 <span><span class="co">#&gt; $ cohort_start_date             <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1952-07-13</span></span>
@@ -410,17 +410,17 @@ implementation below, where we analyse the case of
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">subject_id</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">cohort_start_date</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:     SQL [6 x 4]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database:   DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Groups:     subject_id</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Ordered by: cohort_start_date</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>         </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1       <span style="text-decoration: underline;">1</span>936 1949-10-08        1949-11-05     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                    1       <span style="text-decoration: underline;">1</span>936 1950-05-06        1950-05-20     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                    1       <span style="text-decoration: underline;">1</span>936 1955-08-04        1955-08-25     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                    1       <span style="text-decoration: underline;">3</span>565 1950-01-02        1950-01-30     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                    1       <span style="text-decoration: underline;">3</span>565 1957-11-19        1957-12-24     </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>                    1       <span style="text-decoration: underline;">3</span>565 1945-12-24        1946-01-07</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1       <span style="text-decoration: underline;">1</span>936 1950-05-06        1950-05-20     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span>                    1       <span style="text-decoration: underline;">1</span>936 1955-08-04        1955-08-25     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span>                    1       <span style="text-decoration: underline;">1</span>936 1949-10-08        1949-11-05     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span>                    1       <span style="text-decoration: underline;">3</span>565 1945-12-24        1946-01-07     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span>                    1       <span style="text-decoration: underline;">3</span>565 1950-01-02        1950-01-30     </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span>                    1       <span style="text-decoration: underline;">3</span>565 1957-11-19        1957-12-24</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
@@ -428,7 +428,7 @@ implementation below, where we analyse the case of
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1</span></span>
 <span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1936, 3565</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1950-05-06, 1950-01-02</span></span>
@@ -458,7 +458,7 @@ excluded from the analysis:</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span>
 <span><span class="co">#&gt; Ordered by: subject_id, cohort_start_date</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1</span></span>
 <span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 3565</span></span>
@@ -513,7 +513,7 @@ in the <strong>intersect</strong> cohort:</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">187</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmax</a></span><span class="op">(</span><span class="va">index_date</span>, <span class="va">marker_date</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">pmin</a></span><span class="op">(</span><span class="va">index_date</span>, <span class="va">marker_date</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 7]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
@@ -535,7 +535,7 @@ two initiations is greater than 365:</p>
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">187</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1         80 1953-02-24        1953-12-31      1953-12-31</span></span>
@@ -592,7 +592,7 @@ how this affects participant 80 and 754 in the example below:</p>
 <span>  <span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>indexMarkerGap <span class="op">=</span> <span class="va">second_episode_start_date</span> <span class="op">-</span> <span class="va">first_episode_end_date</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [2 x 9]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1        754 1950-08-12        1950-09-20      1950-09-20</span></span>
@@ -615,7 +615,7 @@ excluded from the analysis, as is index-marker gap is larger than
 <span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">subject_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>,<span class="fl">754</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [1 x 6]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpMd428w/file19096c5c6b06.duckdb]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB v0.10.2 [unknown@Linux 6.5.0-1021-azure:R 4.4.0//tmp/RtmpenoBP4/file190a29f3d761.duckdb]</span></span></span>
 <span><span class="co">#&gt;   cohort_definition_id subject_id cohort_start_date cohort_end_date index_date</span></span>
 <span><span class="co">#&gt;                  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>    </span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span>                    1        754 1950-08-12        1950-09-20      1950-09-20</span></span>
