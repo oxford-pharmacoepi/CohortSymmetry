@@ -4,9 +4,9 @@
 \name{CohortSymmetry-package}
 \alias{CohortSymmetry}
 \alias{CohortSymmetry-package}
-\title{CohortSymmetry: Sequence Symmetry Analysis Using the OMOP Common Data Model}
+\title{CohortSymmetry: Sequence Symmetry Analysis Using the Observational Medical Outcomes Partnership Common Data Model}
 \description{
-Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the OMOP (Observational Medical Outcomes Partnership) common data model.
+Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the Observational Medical Outcomes Partnership Common Data Model.
 }
 \seealso{
 Useful links:

@@ -1,5 +1,6 @@
 #################################### Basic checks ####################################
 test_that("check output table name", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "output",
@@ -16,6 +17,7 @@ test_that("check output table name", {
 
 # check colnames
 test_that("check output format, colnames", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -53,6 +55,7 @@ test_that("one ID against one ID, example 1", {
 )
 
 test_that("one ID against one ID, example 2", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -72,6 +75,7 @@ test_that("one ID against one ID, example 2", {
 )
 
 test_that("one ID against one ID, example 3", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -145,7 +149,6 @@ test_that("multiple entries per person", {
 test_that("change combinationWindow one ID against one ID, example 1", {
   cdm <- mockCohortSymmetry()
 
-  ######
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
                                    indexTable ="cohort_1",
@@ -161,7 +164,6 @@ test_that("change combinationWindow one ID against one ID, example 1", {
   expect_true(all(0 < abs(loc$marker_date - loc$index_date)))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 1)
 
-  ######
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
                                    indexTable ="cohort_1",
@@ -176,7 +178,6 @@ test_that("change combinationWindow one ID against one ID, example 1", {
   expect_true(all(0 < abs(loc$marker_date - loc$index_date)))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 3)
 
-  ######
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
                                    indexTable ="cohort_1",
@@ -197,9 +198,9 @@ test_that("change combinationWindow one ID against one ID, example 1", {
 )
 
 test_that("change combinationWindow one ID against one ID, example 2", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
 
-  ######
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
                                    indexTable ="cohort_1",
@@ -215,7 +216,6 @@ test_that("change combinationWindow one ID against one ID, example 2", {
   expect_true(all(0 < abs(loc$marker_date - loc$index_date)))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_3" & marker_name=="cohort_1") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 1)
 
-  ######
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
                                    indexTable ="cohort_1",
@@ -230,7 +230,6 @@ test_that("change combinationWindow one ID against one ID, example 2", {
   expect_true(all(0 < abs(loc$marker_date - loc$index_date)))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_3" & marker_name=="cohort_1") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 2)
 
-  ######
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
                                    indexTable ="cohort_1",
@@ -253,12 +252,13 @@ test_that("change combinationWindow one ID against one ID, example 2", {
 )
 
 test_that("all IDs against all IDs", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                     indexTable = "cohort_1",
-                     markerTable = "cohort_2",
-                     combinationWindow = c(0,Inf))
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2",
+                                   combinationWindow = c(0,Inf))
 
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
@@ -322,13 +322,14 @@ test_that("one index (rsp. marker) ID against all marker (rsp. index) IDs", {
 )
 
 test_that("a subset of IDs against a subset of IDs", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                     indexTable ="cohort_1",
-                     indexId = c(1,2),
-                     markerTable = "cohort_2",
-                     markerId = c(2,3)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId = c(1,2),
+                                   markerTable = "cohort_2",
+                                   markerId = c(2,3)
   )
 
   loc <- cdm$joined_cohorts %>%
@@ -447,11 +448,11 @@ test_that("priorObservation and cohortDateRange", {
   )
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                           indexTable ="cohort_1",
-                                           markerTable = "cohort_2",
-                                           daysPriorObservation = 0,
-                                           combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   daysPriorObservation = 0,
+                                   combinationWindow = c(0,Inf)
   )
 
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 3)
@@ -477,23 +478,23 @@ test_that("priorObservation and cohortDateRange", {
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1,2,4)))
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   cohortDateRange = as.Date(c("2000-01-01", "2022-01-01")),
-                                                   daysPriorObservation = 30,
-                                                   combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   cohortDateRange = as.Date(c("2000-01-01", "2022-01-01")),
+                                   daysPriorObservation = 30,
+                                   combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 2)
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1,4)))
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   cohortDateRange = as.Date(c("2000-01-01", "2023-01-01")),
-                                                   daysPriorObservation = 365,
-                                                   combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   cohortDateRange = as.Date(c("2000-01-01", "2023-01-01")),
+                                   daysPriorObservation = 365,
+                                   combinationWindow = c(0,Inf)
   )
  # expect_equal(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n), 3)
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(subject_id) %in% c(1, 2, 4)))
@@ -534,13 +535,13 @@ test_that("tests involving washout", {
   )
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
-                                            markerCohort = markerCohort)
+                            markerCohort = markerCohort)
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 
@@ -597,31 +598,31 @@ test_that("tests involving washout", {
   expect_true(test_index %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   cohortDateRange = as.Date(c("2002-01-01", NA)),
-                                                   washoutWindow = 365,
-                                                   combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   cohortDateRange = as.Date(c("2002-01-01", NA)),
+                                   washoutWindow = 365,
+                                   combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   cohortDateRange = as.Date(c("2020-04-01", NA)),
-                                                   washoutWindow = 365,
-                                                   combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   cohortDateRange = as.Date(c("2020-04-01", NA)),
+                                   washoutWindow = 365,
+                                   combinationWindow = c(0,Inf)
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0) #washout fails
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   washoutWindow = 365,
-                                                   combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   washoutWindow = 365,
+                                   combinationWindow = c(0,Inf)
   )
 
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
@@ -642,12 +643,12 @@ test_that("tests involving washout", {
   )
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   cohortDateRange = as.Date(c("2020-01-01", NA)),
-                                                   washoutWindow = 0,
-                                                   combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   cohortDateRange = as.Date(c("2020-01-01", NA)),
+                                   washoutWindow = 0,
+                                   combinationWindow = c(0,Inf)
   )
 
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
@@ -668,12 +669,12 @@ test_that("tests involving washout", {
   )
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   markerTable = "cohort_2",
-                                                   cohortDateRange = as.Date(c("2020-01-01", NA)),
-                                                   washoutWindow = 365,
-                                                   combinationWindow = c(0,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   markerTable = "cohort_2",
+                                   cohortDateRange = as.Date(c("2020-01-01", NA)),
+                                   washoutWindow = 365,
+                                   combinationWindow = c(0,Inf)
   )
 
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
@@ -781,6 +782,7 @@ test_that("tests involving indexMarkerGap", {
 )
 ################################# Input Validation ################################
 test_that("unsuccessful examples - Inf prior observation", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
 
   expect_error(generateSequenceCohortSet(cdm,
@@ -793,6 +795,7 @@ test_that("unsuccessful examples - Inf prior observation", {
 })
 
 test_that("unsuccessful examples - name not in the right form", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joinCohorts",
@@ -804,6 +807,7 @@ test_that("unsuccessful examples - name not in the right form", {
 })
 
 test_that("unsuccessful examples - indexTable not strings", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joined_cohorts",
@@ -815,6 +819,7 @@ test_that("unsuccessful examples - indexTable not strings", {
 })
 
 test_that("unsuccessful examples - markerTable not strings", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joined_cohorts",
@@ -826,6 +831,7 @@ test_that("unsuccessful examples - markerTable not strings", {
 })
 
 test_that("unsuccessful examples - daysPriorObservation is not numeric", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joined_cohorts",
@@ -843,6 +849,7 @@ test_that("unsuccessful examples - daysPriorObservation is not numeric", {
 })
 
 test_that("unsuccessful examples - Ids outside of range", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joined_cohorts",
@@ -860,6 +867,7 @@ test_that("unsuccessful examples - Ids outside of range", {
 })
 
 test_that("unsuccessful examples - tables not in the CDM", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joined_cohorts",
@@ -871,6 +879,7 @@ test_that("unsuccessful examples - tables not in the CDM", {
 })
 
 test_that("mock db: unsuccessful examples - tables not in the right format", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joined_cohorts",
@@ -881,6 +890,7 @@ test_that("mock db: unsuccessful examples - tables not in the right format", {
 })
 
 test_that("mock db: unsuccessful examples - tables not in the right format", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joined_cohorts",
@@ -891,6 +901,7 @@ test_that("mock db: unsuccessful examples - tables not in the right format", {
 })
 
 test_that("unsuccessful examples - negative parameters", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(generateSequenceCohortSet(cdm,
                                          name = "joined_cohorts",
@@ -914,6 +925,7 @@ test_that("unsuccessful examples - negative parameters", {
 })
 
 test_that("generateSequenceCohortSet - inputValidation", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   expect_error(
     generateSequenceCohortSet(

@@ -94,6 +94,7 @@ test_that("test cohortId",{
 })
 
 test_that("input validation",{
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(
     cdm = cdm,
@@ -151,6 +152,7 @@ test_that("input validation",{
 })
 
 test_that("edge case",{
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(
     cdm = cdm,

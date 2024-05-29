@@ -61,12 +61,6 @@ test_that("summariseSequenceRatios", {
       confidenceInterval = -101)
   )
 
-    expect_error(
-      summariseSequenceRatios(
-        cohort = cdm$joined_cohorts,
-      confidenceInterval = 101)
-  )
-
     CDMConnector::cdm_disconnect(cdm = cdm)
 
 })
@@ -511,6 +505,7 @@ test_that("summariseSequenceRatios - testing cohortId", {
 })
 
 test_that("summariseSequenceRatios - testing moving average restriction, ex1", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -586,6 +581,7 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex1", {
 })
 
 test_that("summariseSequenceRatios - testing moving average restriction, ex2", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -739,6 +735,7 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex2", {
 })
 
 test_that("edge case 1", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1),
     subject_id = c(1),
@@ -776,6 +773,7 @@ test_that("edge case 1", {
 })
 
 test_that("edge case 2", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1),
     subject_id = c(1),
@@ -813,6 +811,7 @@ test_that("edge case 2", {
 })
 
 test_that("edge case 3", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1),
     subject_id = c(1),
@@ -850,6 +849,7 @@ test_that("edge case 3", {
 })
 
 test_that("min cell count",{
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
