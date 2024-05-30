@@ -1,4 +1,5 @@
 test_that("attrition: output structure", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -55,6 +56,7 @@ test_that("attrition: output structure", {
 })
 
 test_that("attrition: cohortDateRange", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -103,13 +105,13 @@ test_that("attrition: cohortDateRange", {
                     dplyr::select(number_records) == 5))
 
   cdm <- generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable = "cohort_1",
-                                                   indexId = 1,
-                                                   markerTable = "cohort_2",
-                                                   markerId = 3,
-                                                   cohortDateRange=as.Date(c("2019-12-01", "2022-12-31")),
-                                                   combinationWindow = c(0, Inf))
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   indexId = 1,
+                                   markerTable = "cohort_2",
+                                   markerId = 3,
+                                   cohortDateRange=as.Date(c("2019-12-01", "2022-12-31")),
+                                   combinationWindow = c(0, Inf))
 
   expect_true(all(c(
     "cohort_definition_id", "number_records", "number_subjects",
@@ -136,6 +138,7 @@ test_that("attrition: cohortDateRange", {
 })
 
 test_that("attrition: combinationWindow", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -281,6 +284,7 @@ test_that("attrition: combinationWindow", {
 })
 
 test_that("attrition: indexMarkerGap", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -359,6 +363,7 @@ test_that("attrition: indexMarkerGap", {
 })
 
 test_that("attrition: daysPriorObservation", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 1),
     subject_id = c(1, 3, 4, 2, 5, 1, 2, 3, 4, 5, 1),
@@ -418,6 +423,7 @@ test_that("attrition: daysPriorObservation", {
 })
 
 test_that("attrition: washoutWindow", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 1, 1, 2, 2, 1, 1, 1, 2, 2),
@@ -544,6 +550,7 @@ test_that("attrition: washoutWindow", {
 })
 
 test_that("attrition: complete example 1", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = rep(1, 20),
     subject_id = rep(c(1:4),5),
@@ -716,6 +723,7 @@ test_that("attrition: complete example 1", {
 })
 
 test_that("attrition: complete example 2", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = rep(1, 20),
     subject_id = rep(c(1:4),5),

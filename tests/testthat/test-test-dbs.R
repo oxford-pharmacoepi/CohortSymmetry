@@ -1,4 +1,5 @@
 test_that("SQL Server", {
+  skip_on_cran()
   skip_if(Sys.getenv("SQL_SERVER_DRIVER") == "")
 
   db <- DBI::dbConnect(odbc::odbc(),
@@ -46,6 +47,7 @@ CDMConnector::cdm_disconnect(cdm)
 })
 
 test_that("Redshift", {
+  skip_on_cran()
   skip_if(Sys.getenv("CDM5_REDSHIFT_DBNAME") == "")
   db <- DBI::dbConnect(RPostgres::Redshift(),
                        dbname   = Sys.getenv("CDM5_REDSHIFT_DBNAME"),

@@ -1,4 +1,5 @@
 test_that("eunomia - generateSequenceCohortSet", {
+  skip_on_cran()
 
   if (Sys.getenv("EUNOMIA_DATA_FOLDER") == "") {
     Sys.setenv("EUNOMIA_DATA_FOLDER" = tempdir())
