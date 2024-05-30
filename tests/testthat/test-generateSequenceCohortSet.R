@@ -95,6 +95,7 @@ test_that("one ID against one ID, example 3", {
 
 ### Check multiple entries per person
 test_that("multiple entries per person", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 1, 1),
     subject_id = c(1, 1, 1, 1, 2, 2, 2),
@@ -402,12 +403,12 @@ test_that("example of changed combinationWindow", {
   expect_true(loc %>% dplyr::select(subject_id) %>% dplyr::pull() == 1)
 
   cdm <- generateSequenceCohortSet(cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable ="cohort_1",
-                                                   indexId = 3,
-                                                   markerTable = "cohort_2",
-                                                   markerId = 1,
-                                                   combinationWindow = c(7,Inf)
+                                   name = "joined_cohorts",
+                                   indexTable ="cohort_1",
+                                   indexId = 3,
+                                   markerTable = "cohort_2",
+                                   markerId = 1,
+                                   combinationWindow = c(7,Inf)
   )
   loc <- cdm$joined_cohorts %>%
     dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%

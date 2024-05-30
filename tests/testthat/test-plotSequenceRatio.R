@@ -38,6 +38,7 @@ test_that("plot working", {
 })
 
 test_that("expected errors", {
+  skip_on_cran()
   cdm <- omock::mockCdmReference(cdmName = "mock") |>
     omock::mockPerson(nPerson = 100) |>
     omock::mockObservationPeriod() |>

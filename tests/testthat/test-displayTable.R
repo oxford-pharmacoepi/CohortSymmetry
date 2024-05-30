@@ -25,6 +25,7 @@ test_that("tableSequenceRatios - gt output", {
 })
 
 test_that("tableSequenceRatios - tibble output", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm = cdm,
                                                    indexTable = "cohort_1",
@@ -50,6 +51,7 @@ test_that("tableSequenceRatios - tibble output", {
 })
 
 test_that("tableSequenceRatios - flextable output", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm = cdm,
                                    indexTable = "cohort_1",
@@ -75,6 +77,7 @@ test_that("tableSequenceRatios - flextable output", {
 })
 
 test_that("tableSequenceRatio options", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm = cdm,
                                    indexTable = "cohort_1",
