@@ -70,6 +70,7 @@ test_that("test summariseTemporalSymmetry", {
 })
 
 test_that("test cohortId",{
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(
     cdm = cdm,
