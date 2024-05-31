@@ -5,6 +5,7 @@
 \title{Creates mock cdm object for testing}
 \usage{
 mockCohortSymmetry(
+  seed = 1,
   indexCohort = NULL,
   markerCohort = NULL,
   con = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
@@ -12,6 +13,8 @@ mockCohortSymmetry(
 )
 }
 \arguments{
+\item{seed}{The seed to be inputted.}
+
 \item{indexCohort}{The tibble of your index cohort.
 Default is NULL, which means the default indexCohort is being used.}
 

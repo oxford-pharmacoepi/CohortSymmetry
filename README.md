@@ -9,8 +9,7 @@
 The goal of CohortSymmetry is to carry out the necessary calculations
 for Sequence Symmetry Analysis (SSA). It is highly recommended that this
 method is tested beforehand against well-known positive and negative
-controls. Such controls could be found using the paper in the Reference.
-<sup>1</sup>
+controls. Such controls could be found using Pratt et al (2015).
 
 ## Installation
 
@@ -94,7 +93,7 @@ cdm$aspirin_amoxicillin %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpItoTy4\file480c3f693d88.duckdb]
+#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpuuMM3E\file37c411847eae.duckdb]
 #> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
 #> $ subject_id           <int> 65, 119, 185, 144, 235, 197, 310, 280, 316, 331, …
 #> $ cohort_start_date    <date> 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …
@@ -177,10 +176,3 @@ plotTemporalSymmetry(cdm = cdm, sequenceTable = "aspirin_amoxicillin")
 ``` r
 CDMConnector::cdmDisconnect(cdm = cdm)
 ```
-
-## References
-
-1.  Pratt N, Chan EW, Choi NK, et al. Prescription sequence symmetry
-    analysis: assessing risk, temporality, and consistency for adverse
-    drug reactions across datasets in five countries. Pharmacoepidemiol
-    Drug Saf. 2015;24(8):858-864.
