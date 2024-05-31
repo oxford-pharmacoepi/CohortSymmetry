@@ -104,7 +104,7 @@ summariseSequenceRatios(
 ```
 
 ## Modify `movingAverageRestriction`
-The idea of moving average restriction is necessary only for the null sequence ratio calculation, please refer to Lai et al.<sup>1</sup> for more details on this parameter (parameter d when calculating P in page 578). Following Tsiropoulos et al<sup>2</sup>, by default, the argument `movingAverageRestriction` is set to be  $548$ ($18$ months). Should one wish to modify this, one could do something like:
+The idea of moving average restriction is necessary only for the null sequence ratio calculation, please refer to Lai et al. (2017) for more details on this parameter (parameter d when calculating P in page 578). Following Tsiropoulos et al. (2009), by default, the argument `movingAverageRestriction` is set to be  $548$ ($18$ months). Should one wish to modify this, one could do something like:
 
 ```{r message = FALSE, warning = FALSE}
 summariseSequenceRatios(
@@ -122,8 +122,3 @@ summariseSequenceRatios(cohort = cdm$intersect,
                         minCellCount = 0) %>% 
   dplyr::glimpse()
 ```
-
-
-# References
-1. Lai EC, Pratt N, Hsieh CY, Lin SJ, Pottegård A, Roughead EE, Kao Yang YH, Hallas J. Sequence symmetry analysis in pharmacovigilance and pharmacoepidemiologic studies. Eur J Epidemiol. 2017 Jul;32(7):567-582. doi: 10.1007/s10654-017-0281-8. Epub 2017 Jul 11. PMID: 28698923.
-2. Tsiropoulos I, Andersen M, Hallas J. Adverse events with use of antiepileptic drugs: a prescription and event symmetry analysis. Pharmacoepidemiol Drug Saf. 2009 Jun;18(6):483-91. doi: 10.1002/pds.1736. PMID: 19326363.
