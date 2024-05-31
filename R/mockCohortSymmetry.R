@@ -4,6 +4,7 @@
 #' one is the index cohort and the other one is the marker cohort.
 #' However the users could specify them should they wish.
 #'
+#' @param seed The seed to be inputted.
 #' @param indexCohort The tibble of your index cohort.
 #' Default is NULL, which means the default indexCohort is being used.
 #' @param markerCohort The tibble of your marker cohort.
@@ -21,7 +22,8 @@
 #' cdm
 #' CDMConnector::cdmDisconnect(cdm = cdm)
 #' }
-mockCohortSymmetry <- function(indexCohort = NULL,
+mockCohortSymmetry <- function(seed = 1,
+                               indexCohort = NULL,
                                markerCohort = NULL,
                                con = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
                                schema = "main") {
@@ -65,8 +67,8 @@ mockCohortSymmetry <- function(indexCohort = NULL,
 
   cdm <-
     omock::mockCdmReference() |> omock::mockCdmFromTables(tables = list(cohort_1 = indexCohort,
-                                                                            cohort_2 = markerCohort),
-                                                          seed = 1)
+                                                                        cohort_2 = markerCohort),
+                                                          seed = seed)
 
   cdm <- CDMConnector::copy_cdm_to(con = con,
                                    cdm = cdm,
