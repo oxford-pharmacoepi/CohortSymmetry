@@ -85,7 +85,7 @@ Let's study the simplest case where no requirements are imposed. See figure belo
 
 ```{r, echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
 library(here)
-knitr::include_graphics(here("vignettes/figures/1-NoRestrictions.png"))
+knitr::include_graphics(here("vignettes/1-NoRestrictions.png"))
 ```
 
 </center>
@@ -144,7 +144,7 @@ We can restrict the study period of the analysis to only include episodes or eve
 <center>
 
 ```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
-knitr::include_graphics(here("vignettes/figures/2-studyPeriod.png"))
+knitr::include_graphics(here("vignettes/2-studyPeriod.png"))
 ```
 
 </center>
@@ -185,7 +185,7 @@ We can also specify the minimum prior history that an individual has to have bef
 
 <center>
 ```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
-knitr::include_graphics(here("vignettes/figures/3-PriorObservation.png"))
+knitr::include_graphics(here("vignettes/3-PriorObservation.png"))
 ```
 </center>
 
@@ -238,7 +238,7 @@ We can also specify the minimum washout period required for an event or episode 
 
 <center>
 ```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
-knitr::include_graphics(here("vignettes/figures/4-washoutPeriod.png"))
+knitr::include_graphics(here("vignettes/4-washoutPeriod.png"))
 ```
 </center>
 This functionality can be implemented using the `washoutWindow` argument. See an example of its implementation below, where we analyse the case of `subject_id` number 1936 and 3565. 
@@ -298,7 +298,7 @@ $x =$ `second_episode(start_date)` $-$ `first_episode(start_date)`;
 See in the figure below an example, where we define `combinationWindow = c(0,20)`. This means that the gap between the start date of the second episode and the start of the first episode should be larger than 0 and less or equal than 20. As participant 2 and 3 do not fulfill this condition, they are excluded from the analysis.
 <center>
 ```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
-knitr::include_graphics(here("vignettes/figures/5-combinationWindow_numbers.png"))
+knitr::include_graphics(here("vignettes/5-combinationWindow_numbers.png"))
 ```
 </center>
 
@@ -352,7 +352,7 @@ See an example below, where all participants with an index-marker gap higher tha
 
 <center>
 ```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
-knitr::include_graphics(here("vignettes/figures/6-indexGap.png"))
+knitr::include_graphics(here("vignettes/6-indexGap.png"))
 ```
 </center>
 
