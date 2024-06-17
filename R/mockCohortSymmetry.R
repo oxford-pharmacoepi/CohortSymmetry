@@ -84,7 +84,10 @@ mockCohortSymmetry <- function(seed = 1,
 redundant_fun <- function() {
   here::here()
   CodelistGenerator::mockVocabRef()
-  DrugUtilisation::mockDrugUtilisation()
-  flextable::flextable(iris)
-  gt::gt(iris)
+  CDMConnector::cdmDisconnect(cdm = cdm)
+  cdm <- DrugUtilisation::mockDrugUtilisation()
+  data <- cdm$cohort1 %>% dplyr::collect()
+  CDMConnector::cdmDisconnect(cdm = cdm)
+  flextable::flextable(data)
+  gt::gt(data)
 }

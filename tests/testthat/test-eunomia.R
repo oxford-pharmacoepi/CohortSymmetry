@@ -60,3 +60,9 @@ test_that("eunomia - generateSequenceCohortSet", {
 
   CDMConnector::cdm_disconnect(cdm)
 })
+
+test_that("check redundant_fun", {
+  expect_no_error(
+    redundant_fun()
+  )
+})
