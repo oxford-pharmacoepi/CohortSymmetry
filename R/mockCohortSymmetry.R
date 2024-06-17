@@ -83,8 +83,7 @@ mockCohortSymmetry <- function(seed = 1,
 # to resolve "All declared Imports should be used
 redundant_fun <- function() {
   here::here()
-  cdm <- CodelistGenerator::mockVocabRef()
-  CDMConnector::cdmDisconnect(cdm = cdm)
+  CodelistGenerator::mockVocabRef()
   cdm <- DrugUtilisation::mockDrugUtilisation()
   data <- cdm$cohort1 %>% dplyr::collect()
   flextable::flextable(data)

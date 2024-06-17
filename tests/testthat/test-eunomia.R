@@ -62,6 +62,7 @@ test_that("eunomia - generateSequenceCohortSet", {
 })
 
 test_that("check redundant_fun", {
+  skip_on_cran()
   expect_no_error(
     redundant_fun()
   )
