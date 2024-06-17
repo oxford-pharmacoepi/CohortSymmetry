@@ -28,6 +28,8 @@ mockCohortSymmetry <- function(seed = 1,
                                con = DBI::dbConnect(duckdb::duckdb(), ":memory:"),
                                schema = "main") {
 
+  rlang::check_installed("duckdb")
+
   if (is.null(indexCohort)){
     indexCohort <- dplyr::tibble(
       cohort_definition_id = c(1, 1, 2, 2, 1, 3, 3, 3, 1, 3),
@@ -76,4 +78,15 @@ mockCohortSymmetry <- function(seed = 1,
 
   return(cdm)
 
+}
+
+# to resolve "All declared Imports should be used
+redundant_fun <- function() {
+  here::here()
+  CodelistGenerator::mockVocabRef()
+  cdm <- DrugUtilisation::mockDrugUtilisation()
+  data <- cdm$cohort1 %>% dplyr::collect()
+  flextable::flextable(data)
+  gt::gt(data)
+  CDMConnector::cdmDisconnect(cdm = cdm)
 }

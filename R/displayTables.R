@@ -45,6 +45,10 @@ tableSequenceRatios <- function(result,
                                 studyPopulation = TRUE,
                                 cdmName = TRUE,
                                 .options = NULL) {
+
+  rlang::check_installed("flextable")
+  rlang::check_installed("gt")
+
   # checks
   crude <- T
   adjusted <- T
