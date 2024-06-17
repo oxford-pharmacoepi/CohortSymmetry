@@ -39,18 +39,12 @@ RoxygenNote: 7.3.1
 Suggests:
     testthat (>= 3.1.5),
     DBI (>= 1.0.0),
-    DrugUtilisation (>= 0.5.0),
-    CodelistGenerator,
-    duckdb,
     cli,
     checkmate,
     odbc,
     RPostgres,
     tidyselect,
-    flextable,
-    gt,
     knitr,
-    here,
     dbplyr (>= 2.5.0),
     rmarkdown
 Imports: 
@@ -64,9 +58,15 @@ Imports:
     tibble,
     visOmopResults (>= 0.3.0),
     tidyr,
-    omock (>= 0.2.0),
+    omock (>= 0.2.0),    
     stats,
-    omopgenerics (>= 0.2.1)
+    duckdb,
+    here,
+    omopgenerics (>= 0.2.1),
+    flextable,
+    gt,
+    DrugUtilisation (>= 0.5.0),
+    CodelistGenerator
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/
 BugReports: https://github.com/oxford-pharmacoepi/CohortSymmetry/issues
