@@ -47,15 +47,26 @@ cdm <- cdm_from_con(
 )
 
 # Generate cohorts
-cdm <- DrugUtilisation::generateIngredientCohortSet(
+aspirin_code <- CodelistGenerator::getDrugIngredientCodes(
+  cdm = cdm, 
+  name = "aspirin"
+)
+cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
   cdm = cdm,
   name = "aspirin",
-  ingredient = "aspirin")
+  conceptSet = aspirin_code
+)
 
-cdm <- DrugUtilisation::generateIngredientCohortSet(
+acetaminophen_code <- CodelistGenerator::getDrugIngredientCodes(
+  cdm = cdm, 
+  name = "acetaminophen"
+)
+
+cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
   cdm = cdm,
   name = "acetaminophen",
-  ingredient = "acetaminophen")
+  conceptSet = acetaminophen_code
+)
 ```
 
 Recall that in the previous vignette: Step 1. Generate a sequence cohort, we've generated `cdm$aspirin` and `cdm$acetaminophen` before and using them we could generate `cdm$intersect` like so:
@@ -121,4 +132,8 @@ By default, the minimum number of events to reported is 5, below which results w
 summariseSequenceRatios(cohort = cdm$intersect,
                         minCellCount = 0) %>% 
   dplyr::glimpse()
+```
+
+```{r message= FALSE, warning=FALSE, eval=FALSE}
+CDMConnector::cdmDisconnect(cdm = cdm)
 ```
