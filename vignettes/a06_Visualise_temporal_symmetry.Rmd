@@ -51,15 +51,26 @@ cdm <- cdm_from_con(
 )
 
 # Generate cohorts
-cdm <- DrugUtilisation::generateIngredientCohortSet(
+aspirin_code <- CodelistGenerator::getDrugIngredientCodes(
+  cdm = cdm, 
+  name = "aspirin"
+)
+cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
   cdm = cdm,
   name = "aspirin",
-  ingredient = "aspirin")
+  conceptSet = aspirin_code
+)
 
-cdm <- DrugUtilisation::generateIngredientCohortSet(
+acetaminophen_code <- CodelistGenerator::getDrugIngredientCodes(
+  cdm = cdm, 
+  name = "acetaminophen"
+)
+
+cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
   cdm = cdm,
   name = "acetaminophen",
-  ingredient = "acetaminophen")
+  conceptSet = acetaminophen_code
+)
 
 # Generate a sequence cohort
 cdm <- generateSequenceCohortSet(
@@ -122,6 +133,10 @@ For the `cdm$intersect` we have, it does not make a difference setting it to "fi
 ```{r message= FALSE, warning=FALSE, eval=FALSE}
 plotTemporalSymmetry(result = temporal_symmetry,
                      scales = "fixed")
+```
+
+```{r message= FALSE, warning=FALSE, eval=FALSE}
+CDMConnector::cdmDisconnect(cdm = cdm)
 ```
 
 **That would be the end of the vignette, have fun with the package!**
