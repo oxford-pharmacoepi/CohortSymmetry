@@ -5,66 +5,52 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="CohortSymmetry">
 <title>Step 3. Visualise the sequence ratios • CohortSymmetry</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Step 3. Visualise the sequence ratios">
-<meta property="og:description" content="CohortSymmetry">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Step 3. Visualise the sequence ratios">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">CohortSymmetry</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/a01_Introduction.html">Introduction to CohortSymmetry</a>
-    <a class="dropdown-item" href="../articles/a02_Generate_a_sequence_cohort_set.html">Step 1. Generate a sequence cohort</a>
-    <a class="dropdown-item" href="../articles/a03_Summarise_sequence_ratios.html">Step 2. Obtain the sequence ratios</a>
-    <a class="dropdown-item" href="../articles/a04_Visualise_sequence_ratios.html">Step 3. Visualise the sequence ratios</a>
-    <a class="dropdown-item" href="../articles/a05_Summarise_temporal_symmetry.html">Step 4: Obtain aggregated data on temporal symmetry</a>
-    <a class="dropdown-item" href="../articles/a06_Visualise_temporal_symmetry.html">Step 5: Visualise temporal symmetry</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/a01_Introduction.html">Introduction to CohortSymmetry</a></li>
+    <li><a class="dropdown-item" href="../articles/a02_Generate_a_sequence_cohort_set.html">Step 1. Generate a sequence cohort</a></li>
+    <li><a class="dropdown-item" href="../articles/a03_Summarise_sequence_ratios.html">Step 2. Obtain the sequence ratios</a></li>
+    <li><a class="dropdown-item" href="../articles/a04_Visualise_sequence_ratios.html">Step 3. Visualise the sequence ratios</a></li>
+    <li><a class="dropdown-item" href="../articles/a05_Summarise_temporal_symmetry.html">Step 4: Obtain aggregated data on temporal symmetry</a></li>
+    <li><a class="dropdown-item" href="../articles/a06_Visualise_temporal_symmetry.html">Step 5: Visualise temporal symmetry</a></li>
+  </ul>
 </li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/oxford-pharmacoepi/CohortSymmetry/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/oxford-pharmacoepi/CohortSymmetry/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -73,10 +59,11 @@
 <link href="a04_Visualise_sequence_ratios_files/tabwid-1.1.3/tabwid.css" rel="stylesheet">
 <script src="a04_Visualise_sequence_ratios_files/tabwid-1.1.3/tabwid.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Step 3. Visualise the sequence ratios</h1>
+
+      <h1>Step 3. Visualise the sequence ratios</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/oxford-pharmacoepi/CohortSymmetry/blob/HEAD/vignettes/a04_Visualise_sequence_ratios.Rmd" class="external-link"><code>vignettes/a04_Visualise_sequence_ratios.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/oxford-pharmacoepi/CohortSymmetry/blob/main/vignettes/a04_Visualise_sequence_ratios.Rmd" class="external-link"><code>vignettes/a04_Visualise_sequence_ratios.Rmd</code></a></small>
       <div class="d-none name"><code>a04_Visualise_sequence_ratios.Rmd</code></div>
     </div>
 
@@ -117,23 +104,23 @@ follows (<strong>Step 2. Obtain the sequence ratios</strong>):</p>
 table.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span><span class="op">)</span></span></code></pre></div>
-<div id="hfatjcrgnj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hfatjcrgnj table {
+<div id="eoelfyoqai" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#eoelfyoqai table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hfatjcrgnj thead, #hfatjcrgnj tbody, #hfatjcrgnj tfoot, #hfatjcrgnj tr, #hfatjcrgnj td, #hfatjcrgnj th {
+#eoelfyoqai thead, #eoelfyoqai tbody, #eoelfyoqai tfoot, #eoelfyoqai tr, #eoelfyoqai td, #eoelfyoqai th {
   border-style: none;
 }
 
-#hfatjcrgnj p {
+#eoelfyoqai p {
   margin: 0;
   padding: 0;
 }
 
-#hfatjcrgnj .gt_table {
+#eoelfyoqai .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -159,12 +146,12 @@ table.</p>
   border-left-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_caption {
+#eoelfyoqai .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hfatjcrgnj .gt_title {
+#eoelfyoqai .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -176,7 +163,7 @@ table.</p>
   border-bottom-width: 0;
 }
 
-#hfatjcrgnj .gt_subtitle {
+#eoelfyoqai .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -188,7 +175,7 @@ table.</p>
   border-top-width: 0;
 }
 
-#hfatjcrgnj .gt_heading {
+#eoelfyoqai .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -200,13 +187,13 @@ table.</p>
   border-right-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_bottom_border {
+#eoelfyoqai .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_col_headings {
+#eoelfyoqai .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -221,7 +208,7 @@ table.</p>
   border-right-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_col_heading {
+#eoelfyoqai .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -241,7 +228,7 @@ table.</p>
   overflow-x: hidden;
 }
 
-#hfatjcrgnj .gt_column_spanner_outer {
+#eoelfyoqai .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -253,15 +240,15 @@ table.</p>
   padding-right: 4px;
 }
 
-#hfatjcrgnj .gt_column_spanner_outer:first-child {
+#eoelfyoqai .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hfatjcrgnj .gt_column_spanner_outer:last-child {
+#eoelfyoqai .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hfatjcrgnj .gt_column_spanner {
+#eoelfyoqai .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -273,11 +260,11 @@ table.</p>
   width: 100%;
 }
 
-#hfatjcrgnj .gt_spanner_row {
+#eoelfyoqai .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hfatjcrgnj .gt_group_heading {
+#eoelfyoqai .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -303,7 +290,7 @@ table.</p>
   text-align: left;
 }
 
-#hfatjcrgnj .gt_empty_group_heading {
+#eoelfyoqai .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -318,15 +305,15 @@ table.</p>
   vertical-align: middle;
 }
 
-#hfatjcrgnj .gt_from_md > :first-child {
+#eoelfyoqai .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hfatjcrgnj .gt_from_md > :last-child {
+#eoelfyoqai .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hfatjcrgnj .gt_row {
+#eoelfyoqai .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -345,7 +332,7 @@ table.</p>
   overflow-x: hidden;
 }
 
-#hfatjcrgnj .gt_stub {
+#eoelfyoqai .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -358,7 +345,7 @@ table.</p>
   padding-right: 5px;
 }
 
-#hfatjcrgnj .gt_stub_row_group {
+#eoelfyoqai .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -372,15 +359,15 @@ table.</p>
   vertical-align: top;
 }
 
-#hfatjcrgnj .gt_row_group_first td {
+#eoelfyoqai .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hfatjcrgnj .gt_row_group_first th {
+#eoelfyoqai .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hfatjcrgnj .gt_summary_row {
+#eoelfyoqai .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -390,16 +377,16 @@ table.</p>
   padding-right: 5px;
 }
 
-#hfatjcrgnj .gt_first_summary_row {
+#eoelfyoqai .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_first_summary_row.thick {
+#eoelfyoqai .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hfatjcrgnj .gt_last_summary_row {
+#eoelfyoqai .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -409,7 +396,7 @@ table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_grand_summary_row {
+#eoelfyoqai .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -419,7 +406,7 @@ table.</p>
   padding-right: 5px;
 }
 
-#hfatjcrgnj .gt_first_grand_summary_row {
+#eoelfyoqai .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -429,7 +416,7 @@ table.</p>
   border-top-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_last_grand_summary_row_top {
+#eoelfyoqai .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -439,11 +426,11 @@ table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_striped {
+#eoelfyoqai .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hfatjcrgnj .gt_table_body {
+#eoelfyoqai .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -452,7 +439,7 @@ table.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_footnotes {
+#eoelfyoqai .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -466,7 +453,7 @@ table.</p>
   border-right-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_footnote {
+#eoelfyoqai .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -475,7 +462,7 @@ table.</p>
   padding-right: 5px;
 }
 
-#hfatjcrgnj .gt_sourcenotes {
+#eoelfyoqai .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -489,7 +476,7 @@ table.</p>
   border-right-color: #D3D3D3;
 }
 
-#hfatjcrgnj .gt_sourcenote {
+#eoelfyoqai .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -497,64 +484,73 @@ table.</p>
   padding-right: 5px;
 }
 
-#hfatjcrgnj .gt_left {
+#eoelfyoqai .gt_left {
   text-align: left;
 }
 
-#hfatjcrgnj .gt_center {
+#eoelfyoqai .gt_center {
   text-align: center;
 }
 
-#hfatjcrgnj .gt_right {
+#eoelfyoqai .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hfatjcrgnj .gt_font_normal {
+#eoelfyoqai .gt_font_normal {
   font-weight: normal;
 }
 
-#hfatjcrgnj .gt_font_bold {
+#eoelfyoqai .gt_font_bold {
   font-weight: bold;
 }
 
-#hfatjcrgnj .gt_font_italic {
+#eoelfyoqai .gt_font_italic {
   font-style: italic;
 }
 
-#hfatjcrgnj .gt_super {
+#eoelfyoqai .gt_super {
   font-size: 65%;
 }
 
-#hfatjcrgnj .gt_footnote_marks {
+#eoelfyoqai .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hfatjcrgnj .gt_asterisk {
+#eoelfyoqai .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hfatjcrgnj .gt_indent_1 {
+#eoelfyoqai .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hfatjcrgnj .gt_indent_2 {
+#eoelfyoqai .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hfatjcrgnj .gt_indent_3 {
+#eoelfyoqai .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hfatjcrgnj .gt_indent_4 {
+#eoelfyoqai .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hfatjcrgnj .gt_indent_5 {
+#eoelfyoqai .gt_indent_5 {
   text-indent: 25px;
+}
+
+#eoelfyoqai .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#eoelfyoqai div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
@@ -570,8 +566,8 @@ table.</p>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="Database name" class="gt_row gt_left" style="text-align: left;">Synthea synthetic health database</td>
-<td headers="Index" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Aspirin</td>
-<td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Acetaminophen</td>
+<td headers="Index" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1191 aspirin</td>
+<td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">161 acetaminophen</td>
 <td headers="Study population" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1917</td>
 <td headers="Index first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1,235 (64.4 %)</td>
 <td headers="Marker first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">682 (35.6 %)</td>
@@ -590,23 +586,23 @@ population, one could do the following:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>,</span>
 <span>                    studyPopulation <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<div id="jobufjgfcd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#jobufjgfcd table {
+<div id="trxpwwkzgf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#trxpwwkzgf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#jobufjgfcd thead, #jobufjgfcd tbody, #jobufjgfcd tfoot, #jobufjgfcd tr, #jobufjgfcd td, #jobufjgfcd th {
+#trxpwwkzgf thead, #trxpwwkzgf tbody, #trxpwwkzgf tfoot, #trxpwwkzgf tr, #trxpwwkzgf td, #trxpwwkzgf th {
   border-style: none;
 }
 
-#jobufjgfcd p {
+#trxpwwkzgf p {
   margin: 0;
   padding: 0;
 }
 
-#jobufjgfcd .gt_table {
+#trxpwwkzgf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -632,12 +628,12 @@ population, one could do the following:</p>
   border-left-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_caption {
+#trxpwwkzgf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jobufjgfcd .gt_title {
+#trxpwwkzgf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -649,7 +645,7 @@ population, one could do the following:</p>
   border-bottom-width: 0;
 }
 
-#jobufjgfcd .gt_subtitle {
+#trxpwwkzgf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -661,7 +657,7 @@ population, one could do the following:</p>
   border-top-width: 0;
 }
 
-#jobufjgfcd .gt_heading {
+#trxpwwkzgf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -673,13 +669,13 @@ population, one could do the following:</p>
   border-right-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_bottom_border {
+#trxpwwkzgf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_col_headings {
+#trxpwwkzgf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -694,7 +690,7 @@ population, one could do the following:</p>
   border-right-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_col_heading {
+#trxpwwkzgf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -714,7 +710,7 @@ population, one could do the following:</p>
   overflow-x: hidden;
 }
 
-#jobufjgfcd .gt_column_spanner_outer {
+#trxpwwkzgf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -726,15 +722,15 @@ population, one could do the following:</p>
   padding-right: 4px;
 }
 
-#jobufjgfcd .gt_column_spanner_outer:first-child {
+#trxpwwkzgf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jobufjgfcd .gt_column_spanner_outer:last-child {
+#trxpwwkzgf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jobufjgfcd .gt_column_spanner {
+#trxpwwkzgf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -746,11 +742,11 @@ population, one could do the following:</p>
   width: 100%;
 }
 
-#jobufjgfcd .gt_spanner_row {
+#trxpwwkzgf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#jobufjgfcd .gt_group_heading {
+#trxpwwkzgf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -776,7 +772,7 @@ population, one could do the following:</p>
   text-align: left;
 }
 
-#jobufjgfcd .gt_empty_group_heading {
+#trxpwwkzgf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -791,15 +787,15 @@ population, one could do the following:</p>
   vertical-align: middle;
 }
 
-#jobufjgfcd .gt_from_md > :first-child {
+#trxpwwkzgf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jobufjgfcd .gt_from_md > :last-child {
+#trxpwwkzgf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jobufjgfcd .gt_row {
+#trxpwwkzgf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -818,7 +814,7 @@ population, one could do the following:</p>
   overflow-x: hidden;
 }
 
-#jobufjgfcd .gt_stub {
+#trxpwwkzgf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -831,7 +827,7 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#jobufjgfcd .gt_stub_row_group {
+#trxpwwkzgf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -845,15 +841,15 @@ population, one could do the following:</p>
   vertical-align: top;
 }
 
-#jobufjgfcd .gt_row_group_first td {
+#trxpwwkzgf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jobufjgfcd .gt_row_group_first th {
+#trxpwwkzgf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#jobufjgfcd .gt_summary_row {
+#trxpwwkzgf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -863,16 +859,16 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#jobufjgfcd .gt_first_summary_row {
+#trxpwwkzgf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_first_summary_row.thick {
+#trxpwwkzgf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jobufjgfcd .gt_last_summary_row {
+#trxpwwkzgf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -882,7 +878,7 @@ population, one could do the following:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_grand_summary_row {
+#trxpwwkzgf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -892,7 +888,7 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#jobufjgfcd .gt_first_grand_summary_row {
+#trxpwwkzgf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -902,7 +898,7 @@ population, one could do the following:</p>
   border-top-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_last_grand_summary_row_top {
+#trxpwwkzgf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -912,11 +908,11 @@ population, one could do the following:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_striped {
+#trxpwwkzgf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jobufjgfcd .gt_table_body {
+#trxpwwkzgf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -925,7 +921,7 @@ population, one could do the following:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_footnotes {
+#trxpwwkzgf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -939,7 +935,7 @@ population, one could do the following:</p>
   border-right-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_footnote {
+#trxpwwkzgf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -948,7 +944,7 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#jobufjgfcd .gt_sourcenotes {
+#trxpwwkzgf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -962,7 +958,7 @@ population, one could do the following:</p>
   border-right-color: #D3D3D3;
 }
 
-#jobufjgfcd .gt_sourcenote {
+#trxpwwkzgf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -970,64 +966,73 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#jobufjgfcd .gt_left {
+#trxpwwkzgf .gt_left {
   text-align: left;
 }
 
-#jobufjgfcd .gt_center {
+#trxpwwkzgf .gt_center {
   text-align: center;
 }
 
-#jobufjgfcd .gt_right {
+#trxpwwkzgf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jobufjgfcd .gt_font_normal {
+#trxpwwkzgf .gt_font_normal {
   font-weight: normal;
 }
 
-#jobufjgfcd .gt_font_bold {
+#trxpwwkzgf .gt_font_bold {
   font-weight: bold;
 }
 
-#jobufjgfcd .gt_font_italic {
+#trxpwwkzgf .gt_font_italic {
   font-style: italic;
 }
 
-#jobufjgfcd .gt_super {
+#trxpwwkzgf .gt_super {
   font-size: 65%;
 }
 
-#jobufjgfcd .gt_footnote_marks {
+#trxpwwkzgf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#jobufjgfcd .gt_asterisk {
+#trxpwwkzgf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jobufjgfcd .gt_indent_1 {
+#trxpwwkzgf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jobufjgfcd .gt_indent_2 {
+#trxpwwkzgf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jobufjgfcd .gt_indent_3 {
+#trxpwwkzgf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jobufjgfcd .gt_indent_4 {
+#trxpwwkzgf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jobufjgfcd .gt_indent_5 {
+#trxpwwkzgf .gt_indent_5 {
   text-indent: 25px;
+}
+
+#trxpwwkzgf .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#trxpwwkzgf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
@@ -1042,8 +1047,8 @@ population, one could do the following:</p>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="Database name" class="gt_row gt_left" style="text-align: left;">Synthea synthetic health database</td>
-<td headers="Index" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Aspirin</td>
-<td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Acetaminophen</td>
+<td headers="Index" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1191 aspirin</td>
+<td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">161 acetaminophen</td>
 <td headers="Index first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1,235 (64.4 %)</td>
 <td headers="Marker first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">682 (35.6 %)</td>
 <td headers="CSR (95% CI)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1.81 (1.65 - 1.99)</td>
@@ -1055,23 +1060,23 @@ population, one could do the following:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>,</span>
 <span>                    cdmName <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<div id="cfdjpgkpmy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#cfdjpgkpmy table {
+<div id="ujivnxcljj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ujivnxcljj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#cfdjpgkpmy thead, #cfdjpgkpmy tbody, #cfdjpgkpmy tfoot, #cfdjpgkpmy tr, #cfdjpgkpmy td, #cfdjpgkpmy th {
+#ujivnxcljj thead, #ujivnxcljj tbody, #ujivnxcljj tfoot, #ujivnxcljj tr, #ujivnxcljj td, #ujivnxcljj th {
   border-style: none;
 }
 
-#cfdjpgkpmy p {
+#ujivnxcljj p {
   margin: 0;
   padding: 0;
 }
 
-#cfdjpgkpmy .gt_table {
+#ujivnxcljj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1097,12 +1102,12 @@ population, one could do the following:</p>
   border-left-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_caption {
+#ujivnxcljj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#cfdjpgkpmy .gt_title {
+#ujivnxcljj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1114,7 +1119,7 @@ population, one could do the following:</p>
   border-bottom-width: 0;
 }
 
-#cfdjpgkpmy .gt_subtitle {
+#ujivnxcljj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1126,7 +1131,7 @@ population, one could do the following:</p>
   border-top-width: 0;
 }
 
-#cfdjpgkpmy .gt_heading {
+#ujivnxcljj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1138,13 +1143,13 @@ population, one could do the following:</p>
   border-right-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_bottom_border {
+#ujivnxcljj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_col_headings {
+#ujivnxcljj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1159,7 +1164,7 @@ population, one could do the following:</p>
   border-right-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_col_heading {
+#ujivnxcljj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1179,7 +1184,7 @@ population, one could do the following:</p>
   overflow-x: hidden;
 }
 
-#cfdjpgkpmy .gt_column_spanner_outer {
+#ujivnxcljj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1191,15 +1196,15 @@ population, one could do the following:</p>
   padding-right: 4px;
 }
 
-#cfdjpgkpmy .gt_column_spanner_outer:first-child {
+#ujivnxcljj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#cfdjpgkpmy .gt_column_spanner_outer:last-child {
+#ujivnxcljj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#cfdjpgkpmy .gt_column_spanner {
+#ujivnxcljj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1211,11 +1216,11 @@ population, one could do the following:</p>
   width: 100%;
 }
 
-#cfdjpgkpmy .gt_spanner_row {
+#ujivnxcljj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#cfdjpgkpmy .gt_group_heading {
+#ujivnxcljj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1241,7 +1246,7 @@ population, one could do the following:</p>
   text-align: left;
 }
 
-#cfdjpgkpmy .gt_empty_group_heading {
+#ujivnxcljj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1256,15 +1261,15 @@ population, one could do the following:</p>
   vertical-align: middle;
 }
 
-#cfdjpgkpmy .gt_from_md > :first-child {
+#ujivnxcljj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#cfdjpgkpmy .gt_from_md > :last-child {
+#ujivnxcljj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#cfdjpgkpmy .gt_row {
+#ujivnxcljj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1283,7 +1288,7 @@ population, one could do the following:</p>
   overflow-x: hidden;
 }
 
-#cfdjpgkpmy .gt_stub {
+#ujivnxcljj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1296,7 +1301,7 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#cfdjpgkpmy .gt_stub_row_group {
+#ujivnxcljj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1310,15 +1315,15 @@ population, one could do the following:</p>
   vertical-align: top;
 }
 
-#cfdjpgkpmy .gt_row_group_first td {
+#ujivnxcljj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#cfdjpgkpmy .gt_row_group_first th {
+#ujivnxcljj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#cfdjpgkpmy .gt_summary_row {
+#ujivnxcljj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1328,16 +1333,16 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#cfdjpgkpmy .gt_first_summary_row {
+#ujivnxcljj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_first_summary_row.thick {
+#ujivnxcljj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#cfdjpgkpmy .gt_last_summary_row {
+#ujivnxcljj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1347,7 +1352,7 @@ population, one could do the following:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_grand_summary_row {
+#ujivnxcljj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1357,7 +1362,7 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#cfdjpgkpmy .gt_first_grand_summary_row {
+#ujivnxcljj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1367,7 +1372,7 @@ population, one could do the following:</p>
   border-top-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_last_grand_summary_row_top {
+#ujivnxcljj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1377,11 +1382,11 @@ population, one could do the following:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_striped {
+#ujivnxcljj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#cfdjpgkpmy .gt_table_body {
+#ujivnxcljj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1390,7 +1395,7 @@ population, one could do the following:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_footnotes {
+#ujivnxcljj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1404,7 +1409,7 @@ population, one could do the following:</p>
   border-right-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_footnote {
+#ujivnxcljj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1413,7 +1418,7 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#cfdjpgkpmy .gt_sourcenotes {
+#ujivnxcljj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1427,7 +1432,7 @@ population, one could do the following:</p>
   border-right-color: #D3D3D3;
 }
 
-#cfdjpgkpmy .gt_sourcenote {
+#ujivnxcljj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1435,64 +1440,73 @@ population, one could do the following:</p>
   padding-right: 5px;
 }
 
-#cfdjpgkpmy .gt_left {
+#ujivnxcljj .gt_left {
   text-align: left;
 }
 
-#cfdjpgkpmy .gt_center {
+#ujivnxcljj .gt_center {
   text-align: center;
 }
 
-#cfdjpgkpmy .gt_right {
+#ujivnxcljj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#cfdjpgkpmy .gt_font_normal {
+#ujivnxcljj .gt_font_normal {
   font-weight: normal;
 }
 
-#cfdjpgkpmy .gt_font_bold {
+#ujivnxcljj .gt_font_bold {
   font-weight: bold;
 }
 
-#cfdjpgkpmy .gt_font_italic {
+#ujivnxcljj .gt_font_italic {
   font-style: italic;
 }
 
-#cfdjpgkpmy .gt_super {
+#ujivnxcljj .gt_super {
   font-size: 65%;
 }
 
-#cfdjpgkpmy .gt_footnote_marks {
+#ujivnxcljj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#cfdjpgkpmy .gt_asterisk {
+#ujivnxcljj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#cfdjpgkpmy .gt_indent_1 {
+#ujivnxcljj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#cfdjpgkpmy .gt_indent_2 {
+#ujivnxcljj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#cfdjpgkpmy .gt_indent_3 {
+#ujivnxcljj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#cfdjpgkpmy .gt_indent_4 {
+#ujivnxcljj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#cfdjpgkpmy .gt_indent_5 {
+#ujivnxcljj .gt_indent_5 {
   text-indent: 25px;
+}
+
+#ujivnxcljj .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ujivnxcljj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
@@ -1506,8 +1520,8 @@ population, one could do the following:</p>
       <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="ASR (95% CI)">ASR (95% CI)</th>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
-<td headers="Index" class="gt_row gt_left" style="text-align: left;">Aspirin</td>
-<td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Acetaminophen</td>
+<td headers="Index" class="gt_row gt_left" style="text-align: left;">1191 aspirin</td>
+<td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">161 acetaminophen</td>
 <td headers="Study population" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1917</td>
 <td headers="Index first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1,235 (64.4 %)</td>
 <td headers="Marker first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">682 (35.6 %)</td>
@@ -1521,23 +1535,23 @@ specify. For example, the user can specify a title:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>,</span>
 <span>                    .options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Title"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="iqlnrsjmqn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#iqlnrsjmqn table {
+<div id="bjgwtlmpwz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#bjgwtlmpwz table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#iqlnrsjmqn thead, #iqlnrsjmqn tbody, #iqlnrsjmqn tfoot, #iqlnrsjmqn tr, #iqlnrsjmqn td, #iqlnrsjmqn th {
+#bjgwtlmpwz thead, #bjgwtlmpwz tbody, #bjgwtlmpwz tfoot, #bjgwtlmpwz tr, #bjgwtlmpwz td, #bjgwtlmpwz th {
   border-style: none;
 }
 
-#iqlnrsjmqn p {
+#bjgwtlmpwz p {
   margin: 0;
   padding: 0;
 }
 
-#iqlnrsjmqn .gt_table {
+#bjgwtlmpwz .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1563,12 +1577,12 @@ specify. For example, the user can specify a title:</p>
   border-left-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_caption {
+#bjgwtlmpwz .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#iqlnrsjmqn .gt_title {
+#bjgwtlmpwz .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1580,7 +1594,7 @@ specify. For example, the user can specify a title:</p>
   border-bottom-width: 0;
 }
 
-#iqlnrsjmqn .gt_subtitle {
+#bjgwtlmpwz .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1592,7 +1606,7 @@ specify. For example, the user can specify a title:</p>
   border-top-width: 0;
 }
 
-#iqlnrsjmqn .gt_heading {
+#bjgwtlmpwz .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1604,13 +1618,13 @@ specify. For example, the user can specify a title:</p>
   border-right-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_bottom_border {
+#bjgwtlmpwz .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_col_headings {
+#bjgwtlmpwz .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1625,7 +1639,7 @@ specify. For example, the user can specify a title:</p>
   border-right-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_col_heading {
+#bjgwtlmpwz .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1645,7 +1659,7 @@ specify. For example, the user can specify a title:</p>
   overflow-x: hidden;
 }
 
-#iqlnrsjmqn .gt_column_spanner_outer {
+#bjgwtlmpwz .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1657,15 +1671,15 @@ specify. For example, the user can specify a title:</p>
   padding-right: 4px;
 }
 
-#iqlnrsjmqn .gt_column_spanner_outer:first-child {
+#bjgwtlmpwz .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#iqlnrsjmqn .gt_column_spanner_outer:last-child {
+#bjgwtlmpwz .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#iqlnrsjmqn .gt_column_spanner {
+#bjgwtlmpwz .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1677,11 +1691,11 @@ specify. For example, the user can specify a title:</p>
   width: 100%;
 }
 
-#iqlnrsjmqn .gt_spanner_row {
+#bjgwtlmpwz .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#iqlnrsjmqn .gt_group_heading {
+#bjgwtlmpwz .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1707,7 +1721,7 @@ specify. For example, the user can specify a title:</p>
   text-align: left;
 }
 
-#iqlnrsjmqn .gt_empty_group_heading {
+#bjgwtlmpwz .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1722,15 +1736,15 @@ specify. For example, the user can specify a title:</p>
   vertical-align: middle;
 }
 
-#iqlnrsjmqn .gt_from_md > :first-child {
+#bjgwtlmpwz .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iqlnrsjmqn .gt_from_md > :last-child {
+#bjgwtlmpwz .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iqlnrsjmqn .gt_row {
+#bjgwtlmpwz .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1749,7 +1763,7 @@ specify. For example, the user can specify a title:</p>
   overflow-x: hidden;
 }
 
-#iqlnrsjmqn .gt_stub {
+#bjgwtlmpwz .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1762,7 +1776,7 @@ specify. For example, the user can specify a title:</p>
   padding-right: 5px;
 }
 
-#iqlnrsjmqn .gt_stub_row_group {
+#bjgwtlmpwz .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1776,15 +1790,15 @@ specify. For example, the user can specify a title:</p>
   vertical-align: top;
 }
 
-#iqlnrsjmqn .gt_row_group_first td {
+#bjgwtlmpwz .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#iqlnrsjmqn .gt_row_group_first th {
+#bjgwtlmpwz .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#iqlnrsjmqn .gt_summary_row {
+#bjgwtlmpwz .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1794,16 +1808,16 @@ specify. For example, the user can specify a title:</p>
   padding-right: 5px;
 }
 
-#iqlnrsjmqn .gt_first_summary_row {
+#bjgwtlmpwz .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_first_summary_row.thick {
+#bjgwtlmpwz .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#iqlnrsjmqn .gt_last_summary_row {
+#bjgwtlmpwz .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1813,7 +1827,7 @@ specify. For example, the user can specify a title:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_grand_summary_row {
+#bjgwtlmpwz .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1823,7 +1837,7 @@ specify. For example, the user can specify a title:</p>
   padding-right: 5px;
 }
 
-#iqlnrsjmqn .gt_first_grand_summary_row {
+#bjgwtlmpwz .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1833,7 +1847,7 @@ specify. For example, the user can specify a title:</p>
   border-top-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_last_grand_summary_row_top {
+#bjgwtlmpwz .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1843,11 +1857,11 @@ specify. For example, the user can specify a title:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_striped {
+#bjgwtlmpwz .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#iqlnrsjmqn .gt_table_body {
+#bjgwtlmpwz .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1856,7 +1870,7 @@ specify. For example, the user can specify a title:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_footnotes {
+#bjgwtlmpwz .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1870,7 +1884,7 @@ specify. For example, the user can specify a title:</p>
   border-right-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_footnote {
+#bjgwtlmpwz .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1879,7 +1893,7 @@ specify. For example, the user can specify a title:</p>
   padding-right: 5px;
 }
 
-#iqlnrsjmqn .gt_sourcenotes {
+#bjgwtlmpwz .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1893,7 +1907,7 @@ specify. For example, the user can specify a title:</p>
   border-right-color: #D3D3D3;
 }
 
-#iqlnrsjmqn .gt_sourcenote {
+#bjgwtlmpwz .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1901,64 +1915,73 @@ specify. For example, the user can specify a title:</p>
   padding-right: 5px;
 }
 
-#iqlnrsjmqn .gt_left {
+#bjgwtlmpwz .gt_left {
   text-align: left;
 }
 
-#iqlnrsjmqn .gt_center {
+#bjgwtlmpwz .gt_center {
   text-align: center;
 }
 
-#iqlnrsjmqn .gt_right {
+#bjgwtlmpwz .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iqlnrsjmqn .gt_font_normal {
+#bjgwtlmpwz .gt_font_normal {
   font-weight: normal;
 }
 
-#iqlnrsjmqn .gt_font_bold {
+#bjgwtlmpwz .gt_font_bold {
   font-weight: bold;
 }
 
-#iqlnrsjmqn .gt_font_italic {
+#bjgwtlmpwz .gt_font_italic {
   font-style: italic;
 }
 
-#iqlnrsjmqn .gt_super {
+#bjgwtlmpwz .gt_super {
   font-size: 65%;
 }
 
-#iqlnrsjmqn .gt_footnote_marks {
+#bjgwtlmpwz .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#iqlnrsjmqn .gt_asterisk {
+#bjgwtlmpwz .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#iqlnrsjmqn .gt_indent_1 {
+#bjgwtlmpwz .gt_indent_1 {
   text-indent: 5px;
 }
 
-#iqlnrsjmqn .gt_indent_2 {
+#bjgwtlmpwz .gt_indent_2 {
   text-indent: 10px;
 }
 
-#iqlnrsjmqn .gt_indent_3 {
+#bjgwtlmpwz .gt_indent_3 {
   text-indent: 15px;
 }
 
-#iqlnrsjmqn .gt_indent_4 {
+#bjgwtlmpwz .gt_indent_4 {
   text-indent: 20px;
 }
 
-#iqlnrsjmqn .gt_indent_5 {
+#bjgwtlmpwz .gt_indent_5 {
   text-indent: 25px;
+}
+
+#bjgwtlmpwz .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#bjgwtlmpwz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
@@ -1979,8 +2002,8 @@ specify. For example, the user can specify a title:</p>
 </thead>
 <tbody class="gt_table_body"><tr>
 <td headers="Database name" class="gt_row gt_left" style="text-align: left;">Synthea synthetic health database</td>
-<td headers="Index" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Aspirin</td>
-<td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Acetaminophen</td>
+<td headers="Index" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1191 aspirin</td>
+<td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">161 acetaminophen</td>
 <td headers="Study population" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1917</td>
 <td headers="Index first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1,235 (64.4 %)</td>
 <td headers="Marker first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">682 (35.6 %)</td>
@@ -2002,27 +2025,27 @@ saw for a gt table also applies here):</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>,</span>
 <span>                    type <span class="op">=</span> <span class="st">"flextable"</span><span class="op">)</span></span></code></pre></div>
 <div class="tabwid">
-<style>.cl-d61c6f94{}.cl-d615d922{font-family:'Arial';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-d615d92c{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-d61840e0{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-d61840ea{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-d6185332{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.2pt solid rgba(190, 190, 190, 1.00);border-top: 1.2pt solid rgba(190, 190, 190, 1.00);border-left: 1.2pt solid rgba(190, 190, 190, 1.00);border-right: 1.2pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-d6185333{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(190, 190, 190, 1.00);border-top: 1pt solid rgba(190, 190, 190, 1.00);border-left: 1pt solid rgba(190, 190, 190, 1.00);border-right: 1pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-d6185334{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(190, 190, 190, 1.00);border-top: 1pt solid rgba(190, 190, 190, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table data-quarto-disable-processing="true" class="table cl-d61c6f94">
+<style>.cl-b9bca15a{}.cl-b9b6890a{font-family:'Arial';font-size:10pt;font-weight:bold;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-b9b68914{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-b9b9154e{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-b9b91558{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-b9b92886{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.2pt solid rgba(190, 190, 190, 1.00);border-top: 1.2pt solid rgba(190, 190, 190, 1.00);border-left: 1.2pt solid rgba(190, 190, 190, 1.00);border-right: 1.2pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b9b92890{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(190, 190, 190, 1.00);border-top: 1pt solid rgba(190, 190, 190, 1.00);border-left: 1pt solid rgba(190, 190, 190, 1.00);border-right: 1pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-b9b92891{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(190, 190, 190, 1.00);border-top: 1pt solid rgba(190, 190, 190, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-b9bca15a">
 <thead><tr style="overflow-wrap:break-word;">
-<th class="cl-d6185332"><p class="cl-d61840e0"><span class="cl-d615d922">Database name</span></p></th>
-<th class="cl-d6185332"><p class="cl-d61840e0"><span class="cl-d615d922">Index</span></p></th>
-<th class="cl-d6185332"><p class="cl-d61840e0"><span class="cl-d615d922">Marker</span></p></th>
-<th class="cl-d6185332"><p class="cl-d61840e0"><span class="cl-d615d922">Study population</span></p></th>
-<th class="cl-d6185332"><p class="cl-d61840e0"><span class="cl-d615d922">Index first, N (%)</span></p></th>
-<th class="cl-d6185332"><p class="cl-d61840e0"><span class="cl-d615d922">Marker first, N (%)</span></p></th>
-<th class="cl-d6185332"><p class="cl-d61840e0"><span class="cl-d615d922">CSR (95% CI)</span></p></th>
-<th class="cl-d6185332"><p class="cl-d61840e0"><span class="cl-d615d922">ASR (95% CI)</span></p></th>
+<th class="cl-b9b92886"><p class="cl-b9b9154e"><span class="cl-b9b6890a">Database name</span></p></th>
+<th class="cl-b9b92886"><p class="cl-b9b9154e"><span class="cl-b9b6890a">Index</span></p></th>
+<th class="cl-b9b92886"><p class="cl-b9b9154e"><span class="cl-b9b6890a">Marker</span></p></th>
+<th class="cl-b9b92886"><p class="cl-b9b9154e"><span class="cl-b9b6890a">Study population</span></p></th>
+<th class="cl-b9b92886"><p class="cl-b9b9154e"><span class="cl-b9b6890a">Index first, N (%)</span></p></th>
+<th class="cl-b9b92886"><p class="cl-b9b9154e"><span class="cl-b9b6890a">Marker first, N (%)</span></p></th>
+<th class="cl-b9b92886"><p class="cl-b9b9154e"><span class="cl-b9b6890a">CSR (95% CI)</span></p></th>
+<th class="cl-b9b92886"><p class="cl-b9b9154e"><span class="cl-b9b6890a">ASR (95% CI)</span></p></th>
 </tr></thead>
 <tbody><tr style="overflow-wrap:break-word;">
-<td class="cl-d6185333"><p class="cl-d61840ea"><span class="cl-d615d92c">Synthea synthetic health database</span></p></td>
-<td class="cl-d6185334"><p class="cl-d61840ea"><span class="cl-d615d92c">Aspirin</span></p></td>
-<td class="cl-d6185334"><p class="cl-d61840ea"><span class="cl-d615d92c">Acetaminophen</span></p></td>
-<td class="cl-d6185334"><p class="cl-d61840ea"><span class="cl-d615d92c">1917</span></p></td>
-<td class="cl-d6185334"><p class="cl-d61840ea"><span class="cl-d615d92c">1,235 (64.4 %)</span></p></td>
-<td class="cl-d6185334"><p class="cl-d61840ea"><span class="cl-d615d92c">682 (35.6 %)</span></p></td>
-<td class="cl-d6185334"><p class="cl-d61840ea"><span class="cl-d615d92c">1.81 (1.65 - 1.99)</span></p></td>
-<td class="cl-d6185334"><p class="cl-d61840ea"><span class="cl-d615d92c">1.79 (1.63 - 1.96)</span></p></td>
+<td class="cl-b9b92890"><p class="cl-b9b91558"><span class="cl-b9b68914">Synthea synthetic health database</span></p></td>
+<td class="cl-b9b92891"><p class="cl-b9b91558"><span class="cl-b9b68914">1191 aspirin</span></p></td>
+<td class="cl-b9b92891"><p class="cl-b9b91558"><span class="cl-b9b68914">161 acetaminophen</span></p></td>
+<td class="cl-b9b92891"><p class="cl-b9b91558"><span class="cl-b9b68914">1917</span></p></td>
+<td class="cl-b9b92891"><p class="cl-b9b91558"><span class="cl-b9b68914">1,235 (64.4 %)</span></p></td>
+<td class="cl-b9b92891"><p class="cl-b9b91558"><span class="cl-b9b68914">682 (35.6 %)</span></p></td>
+<td class="cl-b9b92891"><p class="cl-b9b91558"><span class="cl-b9b68914">1.81 (1.65 - 1.99)</span></p></td>
+<td class="cl-b9b92891"><p class="cl-b9b91558"><span class="cl-b9b68914">1.79 (1.63 - 1.96)</span></p></td>
 </tr></tbody>
 </table>
 </div>
@@ -2033,7 +2056,7 @@ saw for a gt table also applies here):</p>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 8</span></span></span>
 <span><span class="co">#&gt;   `Database name`           Index Marker `Study population` `Index first, N (%)`</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>               </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Synthea synthetic health… Aspi… Aceta… 1917               1,235 (64.4 %)      </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Synthea synthetic health… 1191… 161 a… 1917               1,235 (64.4 %)      </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 3 more variables: `Marker first, N (%)` &lt;chr&gt;, `CSR (95% CI)` &lt;chr&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   `ASR (95% CI)` &lt;chr&gt;</span></span></span></code></pre></div>
 <p>One may also wish to change the style of the output, see the R
@@ -2045,27 +2068,27 @@ it to NULL for the gt/flextable default styling.</p>
 <span>                    type <span class="op">=</span> <span class="st">"flextable"</span>,</span>
 <span>                    style <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 <div class="tabwid">
-<style>.cl-d675cda0{}.cl-d66f12da{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-d671d614{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-d671d61e{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-d671ee42{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.2pt solid rgba(190, 190, 190, 1.00);border-top: 1.2pt solid rgba(190, 190, 190, 1.00);border-left: 1.2pt solid rgba(190, 190, 190, 1.00);border-right: 1.2pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-d671ee4c{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(190, 190, 190, 1.00);border-top: 1pt solid rgba(190, 190, 190, 1.00);border-left: 1pt solid rgba(190, 190, 190, 1.00);border-right: 1pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-d671ee56{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(190, 190, 190, 1.00);border-top: 1pt solid rgba(190, 190, 190, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table data-quarto-disable-processing="true" class="table cl-d675cda0">
+<style>.cl-ba3a1766{}.cl-ba342e96{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-ba366490{margin:0;text-align:center;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-ba36649a{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-ba3676ce{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1.2pt solid rgba(190, 190, 190, 1.00);border-top: 1.2pt solid rgba(190, 190, 190, 1.00);border-left: 1.2pt solid rgba(190, 190, 190, 1.00);border-right: 1.2pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ba3676d8{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(190, 190, 190, 1.00);border-top: 1pt solid rgba(190, 190, 190, 1.00);border-left: 1pt solid rgba(190, 190, 190, 1.00);border-right: 1pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-ba3676d9{width:0.75in;background-color:transparent;vertical-align: middle;border-bottom: 1pt solid rgba(190, 190, 190, 1.00);border-top: 1pt solid rgba(190, 190, 190, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 1pt solid rgba(190, 190, 190, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-ba3a1766">
 <thead><tr style="overflow-wrap:break-word;">
-<th class="cl-d671ee42"><p class="cl-d671d614"><span class="cl-d66f12da">Database name</span></p></th>
-<th class="cl-d671ee42"><p class="cl-d671d614"><span class="cl-d66f12da">Index</span></p></th>
-<th class="cl-d671ee42"><p class="cl-d671d614"><span class="cl-d66f12da">Marker</span></p></th>
-<th class="cl-d671ee42"><p class="cl-d671d614"><span class="cl-d66f12da">Study population</span></p></th>
-<th class="cl-d671ee42"><p class="cl-d671d614"><span class="cl-d66f12da">Index first, N (%)</span></p></th>
-<th class="cl-d671ee42"><p class="cl-d671d614"><span class="cl-d66f12da">Marker first, N (%)</span></p></th>
-<th class="cl-d671ee42"><p class="cl-d671d614"><span class="cl-d66f12da">CSR (95% CI)</span></p></th>
-<th class="cl-d671ee42"><p class="cl-d671d614"><span class="cl-d66f12da">ASR (95% CI)</span></p></th>
+<th class="cl-ba3676ce"><p class="cl-ba366490"><span class="cl-ba342e96">Database name</span></p></th>
+<th class="cl-ba3676ce"><p class="cl-ba366490"><span class="cl-ba342e96">Index</span></p></th>
+<th class="cl-ba3676ce"><p class="cl-ba366490"><span class="cl-ba342e96">Marker</span></p></th>
+<th class="cl-ba3676ce"><p class="cl-ba366490"><span class="cl-ba342e96">Study population</span></p></th>
+<th class="cl-ba3676ce"><p class="cl-ba366490"><span class="cl-ba342e96">Index first, N (%)</span></p></th>
+<th class="cl-ba3676ce"><p class="cl-ba366490"><span class="cl-ba342e96">Marker first, N (%)</span></p></th>
+<th class="cl-ba3676ce"><p class="cl-ba366490"><span class="cl-ba342e96">CSR (95% CI)</span></p></th>
+<th class="cl-ba3676ce"><p class="cl-ba366490"><span class="cl-ba342e96">ASR (95% CI)</span></p></th>
 </tr></thead>
 <tbody><tr style="overflow-wrap:break-word;">
-<td class="cl-d671ee4c"><p class="cl-d671d61e"><span class="cl-d66f12da">Synthea synthetic health database</span></p></td>
-<td class="cl-d671ee56"><p class="cl-d671d61e"><span class="cl-d66f12da">Aspirin</span></p></td>
-<td class="cl-d671ee56"><p class="cl-d671d61e"><span class="cl-d66f12da">Acetaminophen</span></p></td>
-<td class="cl-d671ee56"><p class="cl-d671d61e"><span class="cl-d66f12da">1917</span></p></td>
-<td class="cl-d671ee56"><p class="cl-d671d61e"><span class="cl-d66f12da">1,235 (64.4 %)</span></p></td>
-<td class="cl-d671ee56"><p class="cl-d671d61e"><span class="cl-d66f12da">682 (35.6 %)</span></p></td>
-<td class="cl-d671ee56"><p class="cl-d671d61e"><span class="cl-d66f12da">1.81 (1.65 - 1.99)</span></p></td>
-<td class="cl-d671ee56"><p class="cl-d671d61e"><span class="cl-d66f12da">1.79 (1.63 - 1.96)</span></p></td>
+<td class="cl-ba3676d8"><p class="cl-ba36649a"><span class="cl-ba342e96">Synthea synthetic health database</span></p></td>
+<td class="cl-ba3676d9"><p class="cl-ba36649a"><span class="cl-ba342e96">1191 aspirin</span></p></td>
+<td class="cl-ba3676d9"><p class="cl-ba36649a"><span class="cl-ba342e96">161 acetaminophen</span></p></td>
+<td class="cl-ba3676d9"><p class="cl-ba36649a"><span class="cl-ba342e96">1917</span></p></td>
+<td class="cl-ba3676d9"><p class="cl-ba36649a"><span class="cl-ba342e96">1,235 (64.4 %)</span></p></td>
+<td class="cl-ba3676d9"><p class="cl-ba36649a"><span class="cl-ba342e96">682 (35.6 %)</span></p></td>
+<td class="cl-ba3676d9"><p class="cl-ba36649a"><span class="cl-ba342e96">1.81 (1.65 - 1.99)</span></p></td>
+<td class="cl-ba3676d9"><p class="cl-ba36649a"><span class="cl-ba342e96">1.79 (1.63 - 1.96)</span></p></td>
 </tr></tbody>
 </table>
 </div>
@@ -2112,8 +2135,11 @@ colour needs to be specified):</p>
 <div class="section level3">
 <h3 id="modify-labs">Modify <code>labs</code><a class="anchor" aria-label="anchor" href="#modify-labs"></a>
 </h3>
-<p>One could also change the <span class="math inline">\(x\)</span> and
-<span class="math inline">\(y\)</span> labels like so:</p>
+<p>One could also change the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+labels like so:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plotSequenceRatios.html">plotSequenceRatios</a></span><span class="op">(</span>result <span class="op">=</span> <span class="va">result</span>,</span>
 <span>                   onlyaSR <span class="op">=</span> <span class="cn">T</span>,</span>
@@ -2121,9 +2147,11 @@ colour needs to be specified):</p>
 <span>                   colour <span class="op">=</span> <span class="st">"black"</span>,</span>
 <span>                   labs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sequence ratios"</span>, <span class="st">"analysis"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="a04_Visualise_sequence_ratios_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">CDMConnector</span><span class="fu">::</span><span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/cdmDisconnect.html" class="external-link">cdmDisconnect</a></span><span class="op">(</span>cdm <span class="op">=</span> <span class="va">cdm</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
@@ -2134,15 +2162,15 @@ colour needs to be specified):</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
