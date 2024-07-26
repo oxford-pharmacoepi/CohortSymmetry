@@ -351,6 +351,7 @@ test_that("a subset of IDs against a subset of IDs", {
 )
 
 test_that("example of changed combinationWindow", {
+  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -420,9 +421,9 @@ test_that("example of changed combinationWindow", {
   CDMConnector::cdmDisconnect(cdm)
   })
 
-################## Involving cohortDateRange and priorObservation ###################
 # priorObservation
 test_that("priorObservation and cohortDateRange", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1),
     subject_id = c(1, 4, 2, 3),
@@ -504,9 +505,9 @@ test_that("priorObservation and cohortDateRange", {
   CDMConnector::cdmDisconnect(cdm)
 })
 
-################################# Involving washouts ################################
 # washoutWindow
 test_that("tests involving washout", {
+  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1),
     subject_id = c(1, 1, 1, 1),
@@ -700,7 +701,6 @@ test_that("tests involving washout", {
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
 
-########################### Involving indexMarkerGap ########################
 test_that("tests involving indexMarkerGap", {
   skip_on_cran()
   indexCohort <- dplyr::tibble(
