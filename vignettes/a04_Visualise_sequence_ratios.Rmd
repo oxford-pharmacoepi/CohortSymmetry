@@ -51,26 +51,15 @@ cdm <- cdm_from_con(
 )
 
 # Generate cohorts
-aspirin_code <- CodelistGenerator::getDrugIngredientCodes(
-  cdm = cdm, 
-  name = "aspirin"
-)
-cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
+cdm <- DrugUtilisation::generateIngredientCohortSet(
   cdm = cdm,
   name = "aspirin",
-  conceptSet = aspirin_code
-)
+  ingredient = "aspirin")
 
-acetaminophen_code <- CodelistGenerator::getDrugIngredientCodes(
-  cdm = cdm, 
-  name = "acetaminophen"
-)
-
-cdm <- DrugUtilisation::generateDrugUtilisationCohortSet(
+cdm <- DrugUtilisation::generateIngredientCohortSet(
   cdm = cdm,
   name = "acetaminophen",
-  conceptSet = acetaminophen_code
-)
+  ingredient = "acetaminophen")
 
 # Generate a sequence cohort
 cdm <- generateSequenceCohortSet(
