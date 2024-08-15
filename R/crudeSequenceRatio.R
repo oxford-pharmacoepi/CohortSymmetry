@@ -1,8 +1,12 @@
 ### CSR
 crudeSequenceRatio <- function(table) {
 
-  n_index_before_marker <- table %>% dplyr::pull("index_first") %>% sum() #how many occasions are there that index was taken before marker
-  n_marker_before_index <- table %>% dplyr::pull("marker_first") %>% sum() #how many occasions are there that index was taken after marker
+  n_index_before_marker <- table |>
+    dplyr::pull("index_first") |>
+    sum()
+  n_marker_before_index <- table |>
+    dplyr::pull("marker_first") |>
+    sum()
 
   crudeSequenceRatio <- n_index_before_marker / n_marker_before_index
 

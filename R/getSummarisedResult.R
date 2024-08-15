@@ -55,7 +55,7 @@ getSummarisedResult <- function(x) {
                   package_version = as.character(utils::packageVersion("CohortSymmetry")))
 
   x_sum <- x_sum |>
-    dplyr::left_join(setting) %>%
+    dplyr::left_join(setting) |>
     dplyr::select(dplyr::all_of(omopgenerics::resultColumns())) |>
     omopgenerics::newSummarisedResult(
       settings = setting

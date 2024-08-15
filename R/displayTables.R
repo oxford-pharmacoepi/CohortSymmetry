@@ -71,7 +71,7 @@ tableSequenceRatios <- function(result,
     cli::cli_abort("Provide results generated using the same confidence interval.")
   }
 
-  result <- result %>%
+  result <- result |>
     visOmopResults::filterSettings(.data$result_type == "sequence_ratios")
 
   # get study population
@@ -122,7 +122,7 @@ tableSequenceRatios <- function(result,
     ) |>
     visOmopResults::splitGroup() |>
     dplyr::select(!c("estimate_type", dplyr::starts_with("additional"),
-                     dplyr::starts_with("strata"))) %>%
+                     dplyr::starts_with("strata"))) |>
     dplyr::mutate(
       estimate_name = dplyr::case_when(
         .data$variable_name == "crude" ~ paste0("CSR (", ci, "% CI)"),
@@ -139,23 +139,23 @@ tableSequenceRatios <- function(result,
     dplyr::select(-dplyr::all_of(c("variable_name", "variable_level"))) %>%
     {if (studyPopulation) {
       dplyr::union_all(., total_participants)
-    } else .} %>%
+    } else .} |>
     dplyr::rename(
       "Database name" = "cdm_name",
       "Index" = "index_cohort_name",
       "Marker" = "marker_cohort_name"
-    ) %>%
+    ) |>
     dplyr::mutate(
       Index = stringr::str_to_sentence(gsub("_", " ", .data$Index)),
       Marker = stringr::str_to_sentence(gsub("_", " ", .data$Marker))
-    ) %>%
+    ) |>
     # {if (!indexName) {
     #   dplyr::select(., -"Index")
-    # } else .} %>%
+    # } else .} |>
     # {if (!markerName) {
     #   dplyr::select(., -"Marker")
-    # } else .} %>%
-    tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") %>%
+    # } else .} |>
+    tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") |>
     dplyr::select(dplyr::all_of(order_columns))
 
   # output type

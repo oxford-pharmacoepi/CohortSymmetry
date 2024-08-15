@@ -87,7 +87,7 @@ generateSequenceCohortSet <- function(cdm,
 
   # Preprocess both cohorts
   indexPreprocessed <- preprocessCohort(cdm = cdm, cohortName = indexTable,
-                                        cohortId = indexId, cohortDateRange = cohortDateRange) %>%
+                                        cohortId = indexId, cohortDateRange = cohortDateRange) |>
     dplyr::rename("index_id" = "cohort_definition_id",
                   "index_name" = "cohort_name",
       "index_date" = "cohort_start_date",
@@ -95,7 +95,7 @@ generateSequenceCohortSet <- function(cdm,
       "gap_to_prior_index" = "gap_to_prior"
     )
   markerPreprocessed <- preprocessCohort(cdm = cdm, cohortName = markerTable,
-                                         cohortId = markerId, cohortDateRange = cohortDateRange) %>%
+                                         cohortId = markerId, cohortDateRange = cohortDateRange) |>
     dplyr::rename("marker_id" = "cohort_definition_id",
                   "marker_name" = "cohort_name",
                   "marker_date" = "cohort_start_date",
@@ -105,11 +105,11 @@ generateSequenceCohortSet <- function(cdm,
   time_1 <- combinationWindow[1]
   time_2 <- combinationWindow[2]
 
-  joinedData <- indexPreprocessed %>%
+  joinedData <- indexPreprocessed |>
     dplyr::inner_join(
       markerPreprocessed,
       by = "subject_id"
-    ) %>%
+    ) |>
     dplyr::mutate(
       first_date = dplyr::if_else(.data$index_date <= .data$marker_date,
                                                     .data$index_date,
@@ -118,12 +118,12 @@ generateSequenceCohortSet <- function(cdm,
     second_date = dplyr::if_else(.data$index_date >= .data$marker_date,
                                  .data$index_date,
                                  .data$marker_date)
-    ) %>%
+    ) |>
     dplyr::inner_join(
       cdm[["observation_period"]], by = c("subject_id" = "person_id")
-    ) %>%
+    ) |>
     dplyr::filter(.data$first_date >= .data$observation_period_start_date,
-                  .data$second_date <= .data$observation_period_end_date) %>%
+                  .data$second_date <= .data$observation_period_end_date) |>
     dplyr::select("index_id", "subject_id", "index_date",
                   "index_end_date", "gap_to_prior_index",
                   "index_name", "marker_id", "marker_date",
@@ -138,34 +138,34 @@ generateSequenceCohortSet <- function(cdm,
       gap_index_marker = as.numeric(!!CDMConnector::datediff("index_end_date", "marker_date",
                                         interval = "day")),
       gap_marker_index = as.numeric(!!CDMConnector::datediff("marker_end_date", "index_date",
-                                                             interval = "day"))) %>%
+                                                             interval = "day"))) |>
     dplyr::mutate(
       cei = dplyr::if_else(.data$index_date < .data$marker_date,
                            .data$gap_index_marker, .data$gap_marker_index)
-    ) %>%
+    ) |>
     dplyr::select("index_id", "index_name",
                   "marker_id", "marker_name",
                   "subject_id", "index_date",
                   "marker_date", "first_date", "second_date",
                   "cei",
                   "gap_to_prior_index",
-                  "gap_to_prior_marker", "gap")  %>%
+                  "gap_to_prior_marker", "gap")  |>
     dplyr::compute(name = name,
                    temporary = FALSE)
 
-  cdm[["ids"]] <- cdm[[name]] %>%
-    dplyr::select(.data$index_id, .data$marker_id) %>%
-    dplyr::distinct() %>%
-    dplyr::arrange(.data$index_id, .data$marker_id) %>%
-    dplyr::mutate(cohort_definition_id = as.integer(dplyr::row_number())) %>%
+  cdm[["ids"]] <- cdm[[name]] |>
+    dplyr::select(.data$index_id, .data$marker_id) |>
+    dplyr::distinct() |>
+    dplyr::arrange(.data$index_id, .data$marker_id) |>
+    dplyr::mutate(cohort_definition_id = as.integer(dplyr::row_number())) |>
     dplyr::compute(name = "ids", temporary = FALSE)
 
-  cdm[[name]] <- cdm[[name]] %>%
-    dplyr::left_join(cdm[["ids"]], by = c("index_id", "marker_id")) %>%
+  cdm[[name]] <- cdm[[name]] |>
+    dplyr::left_join(cdm[["ids"]], by = c("index_id", "marker_id")) |>
     dplyr::mutate(cohort_start_date = .data$first_date,
                   cohort_end_date = .data$second_date,
                   cohort_name = paste0("index_", .data$index_name,
-                                       "_marker_", .data$marker_name)) %>%
+                                       "_marker_", .data$marker_name)) |>
     dplyr::select("cohort_definition_id", "index_id", "marker_id",
                   "cohort_name", "index_name", "marker_name",
                   "subject_id",
@@ -174,46 +174,46 @@ generateSequenceCohortSet <- function(cdm,
                   "index_date",
                   "marker_date",
                   "cei",
-                  "gap_to_prior_index", "gap_to_prior_marker", "gap") %>%
-    PatientProfiles::addPriorObservation() %>%
+                  "gap_to_prior_index", "gap_to_prior_marker", "gap") |>
+    PatientProfiles::addPriorObservation() |>
     dplyr::compute(name = name,
                    temporary = FALSE)
 
-  cohortSetRef <- cdm[[name]]  %>%
+  cohortSetRef <- cdm[[name]]  |>
     dplyr::select("cohort_definition_id", "cohort_name", "index_id",
-                  "index_name", "marker_id", "marker_name") %>%
+                  "index_name", "marker_id", "marker_name") |>
     dplyr::group_by(.data$cohort_definition_id, .data$cohort_name, .data$index_id,
-                    .data$index_name, .data$marker_id, .data$marker_name) %>%
-    dplyr::distinct() %>%
+                    .data$index_name, .data$marker_id, .data$marker_name) |>
+    dplyr::distinct() |>
     dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
                   washout_window = .env$washoutWindow,
                   index_marker_gap = .env$indexMarkerGap_export,
                   combination_window = paste0("(",.env$comb_export_1, ",",
                                               .env$comb_export_2, ")"))
 
-  cdm[[name]] <- cdm[[name]] %>%
+  cdm[[name]] <- cdm[[name]] |>
     dplyr::select(!c("cohort_name", "index_name", "marker_name"))
 
-  cdm[[name]] <- cdm[[name]] %>%
+  cdm[[name]] <- cdm[[name]] |>
     omopgenerics::newCohortTable(cohortSetRef = cohortSetRef,
                                  cohortAttritionRef = NULL)
 
   # exclusion criteria - where attrition starts
   # 1) within combination window
-  cdm[[name]] <- cdm[[name]] %>%
+  cdm[[name]] <- cdm[[name]] |>
     dplyr::filter(abs(.data$gap) > .env$time_1 &
                   abs(.data$gap) <= .env$time_2) |>
   dplyr::compute(name = name, temporary = FALSE) |>
   omopgenerics::recordCohortAttrition(reason="Events excluded due to the prespecified combination window")
 
   # 2) indexMarkerGap
-  cdm[[name]] <- cdm[[name]] %>%
+  cdm[[name]] <- cdm[[name]] |>
     dplyr::filter(.data$cei <= .env$indexMarkerGap) |>
   dplyr::compute(name = name, temporary = FALSE) |>
   omopgenerics::recordCohortAttrition(reason="Events excluded due to the prespecified index marker gap")
 
   # 3) days prior observation
-  cdm[[name]] <- cdm[[name]] %>%
+  cdm[[name]] <- cdm[[name]] |>
     dplyr::filter(
       .data$prior_observation >= .env$daysPriorObservation
     ) |>
@@ -221,7 +221,7 @@ generateSequenceCohortSet <- function(cdm,
   omopgenerics::recordCohortAttrition(reason="Events excluded due to insufficient prior history")
 
   # 4) washoutWindow
-  cdm[[name]] <- cdm[[name]] %>%
+  cdm[[name]] <- cdm[[name]] |>
     dplyr::filter(
       .data$gap_to_prior_index >= .env$washoutWindow | is.na(.data$gap_to_prior_index),
       .data$gap_to_prior_marker >= .env$washoutWindow | is.na(.data$gap_to_prior_marker)
@@ -230,10 +230,10 @@ generateSequenceCohortSet <- function(cdm,
   omopgenerics::recordCohortAttrition(reason="Events excluded due to insufficient washout window")
 
   # final output table
-  cdm[[name]] <- cdm[[name]] %>%
+  cdm[[name]] <- cdm[[name]] |>
     dplyr::select("cohort_definition_id", "subject_id",
                   "cohort_start_date", "cohort_end_date",
-                  "index_date", "marker_date")  %>%
+                  "index_date", "marker_date")  |>
     dplyr::compute(name = name,
                    temporary = FALSE)
 
@@ -246,23 +246,23 @@ generateSequenceCohortSet <- function(cdm,
 # range to min and max of obs period
 getcohortDateRange <- function(cdm, cohortDateRange) {
   if (is.na(cohortDateRange[1])) {
-    cohortDateRange[1] <- as.Date(cdm[["observation_period"]] %>%
+    cohortDateRange[1] <- as.Date(cdm[["observation_period"]] |>
       dplyr::summarise(
         min(.data$observation_period_start_date,
           na.rm = TRUE
         )
-      ) %>%
-      dplyr::collect() %>%
+      ) |>
+      dplyr::collect() |>
       dplyr::pull())
   }
   if (is.na(cohortDateRange[2])) {
-    cohortDateRange[2] <- as.Date(cdm[["observation_period"]] %>%
+    cohortDateRange[2] <- as.Date(cdm[["observation_period"]] |>
       dplyr::summarise(
         max(.data$observation_period_end_date,
           na.rm = TRUE
         )
-      ) %>%
-      dplyr::collect() %>%
+      ) |>
+      dplyr::collect() |>
       dplyr::pull())
   }
   return(cohortDateRange)
@@ -277,8 +277,8 @@ preprocessCohort <- function(cdm, cohortName, cohortId, cohortDateRange) {
   id <- "tmp_id_12345"
   nm <- paste0("tmp_001_",  omopgenerics::uniqueTableName())
   cohort <- cohort |>
-    dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
-    dplyr::arrange(.data$cohort_start_date) %>%
+    dplyr::group_by(.data$cohort_definition_id, .data$subject_id) |>
+    dplyr::arrange(.data$cohort_start_date) |>
     dplyr::mutate(!!id := dplyr::row_number()) |>
     dplyr::compute(name = nm, temporary = FALSE)
   cohort <- cohort |>
@@ -292,17 +292,16 @@ preprocessCohort <- function(cdm, cohortName, cohortId, cohortDateRange) {
     ) %>%
     dplyr::mutate(gap_to_prior = as.numeric(!!CDMConnector::datediff(
       "previous_exposure", "cohort_start_date"
-    ))) %>%
+    ))) |>
     dplyr::filter(
       .data$cohort_start_date <= !!cohortDateRange[[2]] &
         .data$cohort_start_date >= !!cohortDateRange[[1]]
-    ) %>%
-    dplyr::group_by(.data$cohort_definition_id, .data$subject_id) %>%
-    dplyr::filter(.data[[id]] == min(.data[[id]], na.rm = TRUE)) %>%
-    dplyr::ungroup() %>%
+    ) |>
+    dplyr::group_by(.data$cohort_definition_id, .data$subject_id) |>
+    dplyr::filter(.data[[id]] == min(.data[[id]], na.rm = TRUE)) |>
+    dplyr::ungroup() |>
     dplyr::select(!dplyr::all_of(c(id, "previous_exposure"))) |>
     dplyr::compute(name = nm, temporary = FALSE) |>
-    #PatientProfiles::addPriorObservation() %>%
     PatientProfiles::addCohortName() |>
     dplyr::compute()
   cdm <- omopgenerics::dropTable(cdm = cdm, name = nm)

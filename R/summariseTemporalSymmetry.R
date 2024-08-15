@@ -37,54 +37,54 @@ summariseTemporalSymmetry <- function(cohort,
                                       timescale = timescale,
                                       minCellCount = minCellCount)
 
-  index_names <- attr(cohort, "cohort_set") %>%
+  index_names <- attr(cohort, "cohort_set") |>
     dplyr::select("cohort_definition_id", "index_name", "index_id", "marker_id")
-  marker_names <- attr(cohort, "cohort_set") %>%
+  marker_names <- attr(cohort, "cohort_set") |>
     dplyr::select("cohort_definition_id", "marker_name")
-  cohort_settings <- omopgenerics::settings(cohort)%>%
-    dplyr::mutate(timescale = .env$timescale) %>%
+  cohort_settings <- omopgenerics::settings(cohort)|>
+    dplyr::mutate(timescale = .env$timescale) |>
     dplyr::select(-c("index_id", "marker_id", "index_name", "marker_name"))
   settings <- c("days_prior_observation", "washout_window", "index_marker_gap",
                 "combination_window", "timescale")
 
   output <- cohort %>%
     dplyr::mutate(time = as.numeric(!!CDMConnector::datediff(
-      "index_date", "marker_date", interval = timescale))) %>%
-    dplyr::select("cohort_definition_id", "time") %>%
-    dplyr::group_by(.data$cohort_definition_id, .data$time) %>%
-    dplyr::summarise(count = as.integer(dplyr::n())) %>%
-    dplyr::ungroup() %>%
+      "index_date", "marker_date", interval = timescale))) |>
+    dplyr::select("cohort_definition_id", "time") |>
+    dplyr::group_by(.data$cohort_definition_id, .data$time) |>
+    dplyr::summarise(count = as.integer(dplyr::n())) |>
+    dplyr::ungroup() |>
     dplyr::left_join(
       index_names,
       by = c("cohort_definition_id")
-    ) %>%
+    ) |>
     dplyr::left_join(
       marker_names,
       by = c("cohort_definition_id")
-    ) %>%
+    ) |>
     dplyr::compute()
 
   if(!is.null(cohortId)) {
-    output <- output %>%
+    output <- output |>
       dplyr::filter(.data$cohort_definition_id %in% .env$cohortId)
   }
 
-  output_sum <- output %>%
-    PatientProfiles::addCdmName(cdm = omopgenerics::cdmReference(cohort)) %>%
-    dplyr::collect() %>%
+  output_sum <- output |>
+    PatientProfiles::addCdmName(cdm = omopgenerics::cdmReference(cohort)) |>
+    dplyr::collect() |>
     dplyr::select(-c("index_id", "marker_id")) |>
-    visOmopResults::uniteGroup(cols = c("index_name", "marker_name")) %>%
+    visOmopResults::uniteGroup(cols = c("index_name", "marker_name")) |>
     tidyr::pivot_longer(
       cols = c("time"),
       names_to = "additional_col",
       values_to = "variable_level"
-    ) %>%
-    dplyr::select(-"additional_col") %>%
+    ) |>
+    dplyr::select(-"additional_col") |>
     tidyr::pivot_longer(
       cols = c("count"),
       names_to = "estimate_name",
       values_to = "estimate_value"
-    ) %>%
+    ) |>
     dplyr::mutate(variable_name  = "temporal_symmetry",
                   variable_level = as.integer(.data$variable_level),
                   strata_name = "overall", #to change
@@ -94,8 +94,8 @@ summariseTemporalSymmetry <- function(cohort,
                   estimate_type =
                     dplyr::case_when(
                       (.data$estimate_name == "count") ~ "integer"
-                    )) %>%
-    dplyr::inner_join(cohort_settings, by = "cohort_definition_id") %>%
+                    )) |>
+    dplyr::inner_join(cohort_settings, by = "cohort_definition_id") |>
     dplyr::select(c(-"cohort_name", -"cohort_definition_id"))
 
   setting <- output_sum |>
@@ -106,7 +106,7 @@ summariseTemporalSymmetry <- function(cohort,
                   package_version = as.character(utils::packageVersion("CohortSymmetry")))
 
   output_sum <- output_sum |>
-    dplyr::left_join(setting) %>%
+    dplyr::left_join(setting) |>
     dplyr::select(dplyr::all_of(omopgenerics::resultColumns())) |>
     omopgenerics::newSummarisedResult(
       settings = setting
