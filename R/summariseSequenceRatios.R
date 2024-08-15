@@ -103,8 +103,8 @@ summariseSequenceRatios <- function(cohort,
                       moving_average_restriction = as.character(movingAverageRestriction)) %>%
         dplyr::select("index_id", "index_name", "marker_id", "marker_name",
                       "index_first", "marker_first", "index_first_percentage", "marker_first_percentage",
-                      "csr", "lowerCSR_CI", "upperCSR_CI",
-                      "asr", "lowerASR_CI", "upperASR_CI",
+                      "csr", "lower_csr_ci", "upper_csr_ci",
+                      "asr", "lower_asr_ci", "upper_asr_ci",
                       "days_prior_observation", "washout_window", "index_marker_gap", "combination_window",
                       "confidence_interval", "moving_average_restriction")
     }

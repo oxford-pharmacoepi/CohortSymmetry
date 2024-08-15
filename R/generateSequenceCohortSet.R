@@ -92,7 +92,6 @@ generateSequenceCohortSet <- function(cdm,
                   "index_name" = "cohort_name",
       "index_date" = "cohort_start_date",
       "index_end_date" = "cohort_end_date",
-      #"prior_observation_index" = "prior_observation",
       "gap_to_prior_index" = "gap_to_prior"
     )
   markerPreprocessed <- preprocessCohort(cdm = cdm, cohortName = markerTable,
@@ -101,7 +100,6 @@ generateSequenceCohortSet <- function(cdm,
                   "marker_name" = "cohort_name",
                   "marker_date" = "cohort_start_date",
                   "marker_end_date" = "cohort_end_date",
-                  #"prior_observation_marker" = "prior_observation",
                   "gap_to_prior_marker" = "gap_to_prior")
 
   time_1 <- combinationWindow[1]
@@ -150,7 +148,6 @@ generateSequenceCohortSet <- function(cdm,
                   "subject_id", "index_date",
                   "marker_date", "first_date", "second_date",
                   "cei",
-                  #"prior_observation_marker", "prior_observation_index",
                   "gap_to_prior_index",
                   "gap_to_prior_marker", "gap")  %>%
     dplyr::compute(name = name,
@@ -177,7 +174,6 @@ generateSequenceCohortSet <- function(cdm,
                   "index_date",
                   "marker_date",
                   "cei",
-                  #"prior_observation_marker", "prior_observation_index",
                   "gap_to_prior_index", "gap_to_prior_marker", "gap") %>%
     PatientProfiles::addPriorObservation() %>%
     dplyr::compute(name = name,
@@ -189,8 +185,6 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::group_by(.data$cohort_definition_id, .data$cohort_name, .data$index_id,
                     .data$index_name, .data$marker_id, .data$marker_name) %>%
     dplyr::distinct() %>%
-    # dplyr::tally() %>%
-    # dplyr::select(!"n") %>%
     dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
                   washout_window = .env$washoutWindow,
                   index_marker_gap = .env$indexMarkerGap_export,
@@ -203,7 +197,6 @@ generateSequenceCohortSet <- function(cdm,
   cdm[[name]] <- cdm[[name]] %>%
     omopgenerics::newCohortTable(cohortSetRef = cohortSetRef,
                                  cohortAttritionRef = NULL)
-
 
   # exclusion criteria - where attrition starts
   # 1) within combination window
@@ -244,10 +237,7 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::compute(name = name,
                    temporary = FALSE)
 
-  # in cohort format
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "ids")
-  cdm <- CDMConnector::dropTable(cdm = cdm, name = "index_name")
-  cdm <- CDMConnector::dropTable(cdm = cdm, name = "marker_name")
   return(cdm)
 }
 
