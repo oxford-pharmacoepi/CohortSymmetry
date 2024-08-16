@@ -65,7 +65,7 @@ Imports:
     omopgenerics (>= 0.2.1),
     flextable,
     gt,
-    DrugUtilisation (>= 0.5.0),
+    DrugUtilisation (>= 0.7.0),
     CodelistGenerator (>= 3.1.0)
 Config/testthat/edition: 3
 URL: https://oxford-pharmacoepi.github.io/CohortSymmetry/

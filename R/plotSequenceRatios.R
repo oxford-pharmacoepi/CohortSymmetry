@@ -40,41 +40,41 @@ plotSequenceRatios <- function(result,
                                labs = labs,
                                colours = colours)
 
-  result <- result %>%
+  result <- result |>
     visOmopResults::splitGroup()
 
-  sr_tidy <- result %>%
-    visOmopResults::filterSettings(.data$result_type == "sequence_ratios") %>%
-    dplyr::select(-c("cdm_name", "strata_name", "strata_level", "variable_level")) %>%
-    visOmopResults::splitAdditional() %>%
-    tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") %>%
-    dplyr::mutate(group = paste0(.data$index_cohort_name, " -> ", .data$marker_cohort_name)) %>%
-    dplyr::select(-c("index_cohort_name", "marker_cohort_name")) %>%
+  sr_tidy <- result |>
+    visOmopResults::filterSettings(.data$result_type == "sequence_ratios") |>
+    dplyr::select(-c("cdm_name", "strata_name", "strata_level", "variable_level")) |>
+    visOmopResults::splitAdditional() |>
+    tidyr::pivot_wider(names_from = "estimate_name", values_from = "estimate_value") |>
+    dplyr::mutate(group = paste0(.data$index_cohort_name, " -> ", .data$marker_cohort_name)) |>
+    dplyr::select(-c("index_cohort_name", "marker_cohort_name")) |>
     dplyr::mutate(
       point_estimate = as.numeric(.data$point_estimate),
       lower_CI = as.numeric(.data$lower_CI),
       upper_CI = as.numeric(.data$upper_CI),
       variable_name = as.factor(.data$variable_name)
-    ) %>%
-    dplyr::select(tidyselect::where( ~ dplyr::n_distinct(.) > 1)|.data$group) %>%
+    ) |>
+    dplyr::select(tidyselect::where( ~ dplyr::n_distinct(.) > 1)|.data$group) |>
     dplyr::rename(
       !!labs[1] := "point_estimate",
       !!labs[2] := "group"
     )
 
   if(onlyaSR) {
-    sr_tidy <- sr_tidy %>%
+    sr_tidy <- sr_tidy |>
       dplyr::filter(.data$variable_name == "adjusted")
     colours = c("adjusted" = colours[1])
   } else {
-    sr_tidy <- sr_tidy %>%
+    sr_tidy <- sr_tidy |>
       dplyr::filter(.data$variable_name == "adjusted"|.data$variable_name == "crude")
     colours = c("crude" = colours[1], "adjusted" = colours[2])
   }
 
   facet_wrap_vars <- colnames(sr_tidy)[! colnames(sr_tidy) %in% c(labs[2], labs[1], "lower_CI", "upper_CI", "variable_name", "count", "percentage", "variable_name", "estimate_type")]
   for(i in facet_wrap_vars) {
-    sr_tidy <- sr_tidy %>%
+    sr_tidy <- sr_tidy |>
       dplyr::mutate(!!i := paste0(i, " = ", .data[[i]]))
   }
 

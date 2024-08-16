@@ -67,7 +67,7 @@ checkInputSummariseSequenceRatios <- function(cohort,
   cdm <- omopgenerics::cdmReference(cohort)
   checkCdm(cdm)
 
-  cohort_row <- cohort %>% dplyr::tally() %>% dplyr::pull()
+  cohort_row <- cohort |> dplyr::tally() |> dplyr::pull()
   if (cohort_row <=0){
     cli::cli_abort("Aborted! The cohort has no rows, please revisit the cohort")
   }
@@ -101,7 +101,7 @@ checkInputSummariseTemporalSymmetry <- function(cohort,
   cdm <- omopgenerics::cdmReference(cohort)
   checkCdm(cdm)
 
-  cohort_row <- cohort %>% dplyr::tally() %>% dplyr::pull()
+  cohort_row <- cohort |> dplyr::tally() |> dplyr::pull()
   if (cohort_row <=0){
     cli::cli_abort("Aborted! The cohort has no rows, please revisit the cohort")
   }
@@ -150,7 +150,7 @@ checkInputPlotTemporalSymmetry <- function(result,
                                            colours,
                                            scales) {
 
-  result_check <- result %>%
+  result_check <- result |>
     dplyr::pull("estimate_value")
 
   if (all(is.na(result_check))){
@@ -186,8 +186,8 @@ checkInputPlotSequenceRatios <- function(result,
                                         labs,
                                         colours) {
 
-  result_check <- result %>%
-    dplyr::filter(.data$estimate_name == "point_estimate") %>%
+  result_check <- result |>
+    dplyr::filter(.data$estimate_name == "point_estimate") |>
     dplyr::pull("estimate_value")
 
   if (all(is.na(result_check))){
@@ -234,9 +234,9 @@ checkCohortIds <- function(cohort, cohortId, errorMessage) {
   checkmate::assertNumeric(cohortId, lower = 1, any.missing = FALSE,
                            null.ok = TRUE, add = errorMessage)
   if (!is.null(cohortId)) {
-    ids <- cohort %>%
-      dplyr::select("cohort_definition_id") %>%
-      dplyr::distinct() %>%
+    ids <- cohort |>
+      dplyr::select("cohort_definition_id") |>
+      dplyr::distinct() |>
       dplyr::pull()
     if(!isTRUE(all(cohortId %in% ids))){
       errorMessage$push("Some of the cohort ids given do not exist in the cohort table(s) provided.")
