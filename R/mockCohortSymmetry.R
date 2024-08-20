@@ -44,7 +44,9 @@ mockCohortSymmetry <- function(seed = 1,
           "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2009-11-01", "2021-01-01"
         )
       )
-    )
+    ) |>
+      dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                    subject_id = as.integer(.data$subject_id))
   } else {
     indexCohort <- indexCohort
   }
@@ -59,7 +61,9 @@ mockCohortSymmetry <- function(seed = 1,
         )
       ),
       cohort_end_date = .data$cohort_start_date
-    )
+    ) |>
+      dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                    subject_id = as.integer(.data$subject_id))
   } else {
     markerCohort <- markerCohort
   }
