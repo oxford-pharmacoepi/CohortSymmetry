@@ -24,6 +24,7 @@
 #'                                  indexTable = "cohort_1",
 #'                                  markerTable = "cohort_2")
 #' temporal_symmetry <- summariseTemporalSymmetry(cohort = cdm$joined_cohorts)
+#' CDMConnector::cdmDisconnect(cdm)
 #' }
 #'
 summariseTemporalSymmetry <- function(cohort,
@@ -86,7 +87,8 @@ summariseTemporalSymmetry <- function(cohort,
       values_to = "estimate_value"
     ) |>
     dplyr::mutate(variable_name  = "temporal_symmetry",
-                  variable_level = as.integer(.data$variable_level),
+                  variable_level = as.character(.data$variable_level),
+                  estimate_value = as.character(.data$estimate_value),
                   strata_name = "overall", #to change
                   strata_level = "overall",
                   additional_name = "overall",
@@ -100,13 +102,14 @@ summariseTemporalSymmetry <- function(cohort,
 
   setting <- output_sum |>
     dplyr::distinct(dplyr::across(dplyr::all_of(c(settings, "cdm_name")))) |>
-    dplyr::mutate(result_id = as.character(dplyr::row_number()),
+    dplyr::mutate(result_id = as.integer(dplyr::row_number()),
                   result_type = "sequence_ratios",
                   package_name = "CohortSymmetry",
                   package_version = as.character(utils::packageVersion("CohortSymmetry")))
 
   output_sum <- output_sum |>
-    dplyr::left_join(setting) |>
+    dplyr::left_join(setting, by = c("cdm_name", "days_prior_observation", "washout_window",
+                                     "index_marker_gap", "combination_window", "timescale")) |>
     dplyr::select(dplyr::all_of(omopgenerics::resultColumns())) |>
     omopgenerics::newSummarisedResult(
       settings = setting

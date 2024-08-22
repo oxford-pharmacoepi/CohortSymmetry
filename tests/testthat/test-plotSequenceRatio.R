@@ -96,7 +96,9 @@ test_that("empty result error",{
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
@@ -107,7 +109,9 @@ test_that("empty result error",{
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)

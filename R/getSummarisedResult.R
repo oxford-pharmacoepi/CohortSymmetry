@@ -49,7 +49,7 @@ getSummarisedResult <- function(x) {
 
   setting <- x |>
     dplyr::distinct(dplyr::across(dplyr::all_of(c(settings, "cdm_name")))) |>
-    dplyr::mutate(result_id = as.character(dplyr::row_number()),
+    dplyr::mutate(result_id = as.integer(dplyr::row_number()),
                   result_type = "sequence_ratios",
                   package_name = "CohortSymmetry",
                   package_version = as.character(utils::packageVersion("CohortSymmetry")))

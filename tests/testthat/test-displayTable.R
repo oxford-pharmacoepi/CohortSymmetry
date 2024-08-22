@@ -32,11 +32,11 @@ test_that("tableSequenceRatios - tibble output", {
   skip_if_not_installed("flextable")
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm = cdm,
-                                                   indexTable = "cohort_1",
-                                                   indexId = 1,
-                                                   markerTable = "cohort_2",
-                                                   markerId = 3,
-                                                   name = "joined_cohort")
+                                   indexTable = "cohort_1",
+                                   indexId = 1,
+                                   markerTable = "cohort_2",
+                                   markerId = 3,
+                                   name = "joined_cohort")
 
   res <- summariseSequenceRatios(cohort = cdm$joined_cohort, minCellCount = 0)
 
