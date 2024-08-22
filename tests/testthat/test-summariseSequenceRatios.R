@@ -12,7 +12,9 @@ test_that("summariseSequenceRatios", {
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
@@ -23,7 +25,9 @@ test_that("summariseSequenceRatios", {
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
@@ -76,7 +80,9 @@ test_that("summariseSequenceRatios - testing ratios and CIs, Example 1", {
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
@@ -87,7 +93,9 @@ test_that("summariseSequenceRatios - testing ratios and CIs, Example 1", {
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
@@ -141,7 +149,9 @@ test_that("summariseSequenceRatios - testing ratios and CIs, Example 2", {
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),
@@ -152,7 +162,9 @@ test_that("summariseSequenceRatios - testing ratios and CIs, Example 2", {
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
@@ -208,7 +220,9 @@ test_that("summariseSequenceRatios - testing CI", {
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3),
@@ -219,7 +233,9 @@ test_that("summariseSequenceRatios - testing CI", {
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
@@ -416,7 +432,9 @@ test_that("summariseSequenceRatios - testing cohortId", {
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
@@ -427,7 +445,9 @@ test_that("summariseSequenceRatios - testing cohortId", {
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
@@ -519,7 +539,9 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex1", {
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
@@ -530,7 +552,9 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex1", {
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
@@ -595,7 +619,9 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex2", {
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
@@ -606,7 +632,9 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex2", {
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
@@ -620,8 +648,8 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex2", {
 
   expect_no_error(
     result <- summariseSequenceRatios(cohort = cdm$joined_cohorts,
-                                     movingAverageRestriction = Inf,
-                                     minCellCount = 0)
+                                      movingAverageRestriction = Inf,
+                                      minCellCount = 0)
   )
 
   expect_true(all(
@@ -863,7 +891,9 @@ test_that("min cell count",{
         "2020-04-01", "2021-08-01", "2022-05-23", "2010-03-01", "2020-04-01", "2020-05-30", "2022-02-02", "2013-12-03", "2010-11-01", "2021-01-01"
       )
     )
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   markerCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3),
@@ -874,7 +904,9 @@ test_that("min cell count",{
       )
     ),
     cohort_end_date = cohort_start_date
-  )
+  )|>
+    dplyr::mutate(cohort_definition_id = as.integer(.data$cohort_definition_id),
+                  subject_id = as.integer(.data$subject_id))
 
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)

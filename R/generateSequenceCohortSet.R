@@ -195,6 +195,9 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::select(!c("cohort_name", "index_name", "marker_name"))
 
   cdm[[name]] <- cdm[[name]] |>
+    dplyr::select("cohort_definition_id", "subject_id", "cohort_start_date",
+                  "cohort_end_date", "index_id", "marker_id", "index_date", "marker_date",
+                  "cei", "gap_to_prior_index", "gap_to_prior_marker", "gap", "prior_observation") |>
     omopgenerics::newCohortTable(cohortSetRef = cohortSetRef,
                                  cohortAttritionRef = NULL)
 
@@ -248,22 +251,22 @@ getcohortDateRange <- function(cdm, cohortDateRange) {
   if (is.na(cohortDateRange[1])) {
     cohortDateRange[1] <- as.Date(cdm[["observation_period"]] |>
       dplyr::summarise(
-        min(.data$observation_period_start_date,
+        min = min(.data$observation_period_start_date,
           na.rm = TRUE
         )
       ) |>
       dplyr::collect() |>
-      dplyr::pull())
+      dplyr::pull("min"))
   }
   if (is.na(cohortDateRange[2])) {
     cohortDateRange[2] <- as.Date(cdm[["observation_period"]] |>
       dplyr::summarise(
-        max(.data$observation_period_end_date,
+        max = max(.data$observation_period_end_date,
           na.rm = TRUE
         )
       ) |>
       dplyr::collect() |>
-      dplyr::pull())
+      dplyr::pull("max"))
   }
   return(cohortDateRange)
 }

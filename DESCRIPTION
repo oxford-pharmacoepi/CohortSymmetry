@@ -1,7 +1,7 @@
 Package: CohortSymmetry
 Title: Sequence Symmetry Analysis Using the Observational Medical 
     Outcomes Partnership Common Data Model
-Version: 0.1.2
+Version: 0.1.2.900
 Authors@R: c(
     person("Xihang", "Chen", , "xihang.chen@ndorms.ox.ac.uk", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0001-8112-8959")),
@@ -35,7 +35,7 @@ Description: Calculating crude sequence ratio, adjusted sequence ratio and
 License: Apache License (>= 2)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests:
     testthat (>= 3.1.5),
     DBI (>= 1.0.0),
