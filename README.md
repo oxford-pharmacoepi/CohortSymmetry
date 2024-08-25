@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# CohortSymmetry <img src="man/figures/CSHex.png" align="right" height="139"/>
+# CohortSymmetry <a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/"><img src="man/figures/logo.png" align="right" height="137" alt="CohortSymmetry website" /></a>
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -93,7 +93,7 @@ cdm$aspirin_amoxicillin %>%
   dplyr::glimpse()
 #> Rows: ??
 #> Columns: 6
-#> Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpuuMM3E\file37c411847eae.duckdb]
+#> Database: DuckDB v1.0.0 [root@Darwin 23.6.0:R 4.4.1//private/var/folders/pl/k11lm9710hlgl02nvzx4z9wr0000gp/T/RtmpW84FVx/filefe981fd421a8.duckdb]
 #> $ cohort_definition_id <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
 #> $ subject_id           <int> 65, 119, 185, 144, 235, 197, 310, 280, 316, 331, …
 #> $ cohort_start_date    <date> 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …
@@ -112,11 +112,6 @@ intervals.
 
 ``` r
 res <- summariseSequenceRatios(cohort = cdm$aspirin_amoxicillin)
-#> Joining with `by = join_by(days_prior_observation, washout_window,
-#> index_marker_gap, combination_window, confidence_interval,
-#> moving_average_restriction, cdm_name)`
-#> ! The following column type were changed: • result_id: from character to
-#> integer
  
 res %>% glimpse()
 #> Rows: 10
@@ -124,7 +119,7 @@ res %>% glimpse()
 #> $ result_id        <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
 #> $ cdm_name         <chr> "Synthea synthetic health database", "Synthea synthet…
 #> $ group_name       <chr> "index_cohort_name &&& marker_cohort_name", "index_co…
-#> $ group_level      <chr> "aspirin &&& amoxicillin", "aspirin &&& amoxicillin",…
+#> $ group_level      <chr> "1191_aspirin &&& 723_amoxicillin", "1191_aspirin &&&…
 #> $ strata_name      <chr> "overall", "overall", "overall", "overall", "overall"…
 #> $ strata_level     <chr> "overall", "overall", "overall", "overall", "overall"…
 #> $ variable_name    <chr> "crude", "adjusted", "crude", "crude", "adjusted", "a…
