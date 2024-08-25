@@ -13,6 +13,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Sequence Symmetry Analysis Using the Observational Medical Outcomes Partnership Common Data Model">
 <meta name="description" content="Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the Observational Medical Outcomes Partnership Common Data Model.">
 <meta property="og:description" content="Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the Observational Medical Outcomes Partnership Common Data Model.">
+<meta property="og:image" content="https://oxford-pharmacoepi.github.io/CohortSymmetry/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -57,8 +58,11 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="cohortsymmetry-">CohortSymmetry <img src="reference/figures/CSHex.png" align="right" height="139"><a class="anchor" aria-label="anchor" href="#cohortsymmetry-"></a>
-</h1></div>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="cohortsymmetry-">CohortSymmetry 
+<a class="anchor" aria-label="anchor" href="#cohortsymmetry-"></a>
+</h1>
+</div>
 <!-- badges: start -->
 <!-- badges: end -->
 <p>The goal of CohortSymmetry is to carry out the necessary calculations for Sequence Symmetry Analysis (SSA). It is highly recommended that this method is tested beforehand against well-known positive and negative controls. Such controls could be found using Pratt et al (2015).</p>
@@ -128,7 +132,7 @@
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v0.10.1 [xihangc@Windows 10 x64:R 4.3.1/C:\Users\xihangc\AppData\Local\Temp\RtmpuuMM3E\file37c411847eae.duckdb]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v1.0.0 [root@Darwin 23.6.0:R 4.4.1//private/var/folders/pl/k11lm9710hlgl02nvzx4z9wr0000gp/T/RtmpW84FVx/filefe981fd421a8.duckdb]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           &lt;int&gt; 65, 119, 185, 144, 235, 197, 310, 280, 316, 331, …</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    &lt;date&gt; 1968-07-29, 1967-05-28, 1947-04-07, 1978-10-30, …</span></span>
@@ -142,11 +146,6 @@
 <p>To get the sequence ratios, we would need the output of the generateSequenceCohortSet() function to be fed into <code><a href="reference/summariseSequenceRatios.html">summariseSequenceRatios()</a></code> The output of this process contains cSR(crude sequence ratio), aSR(adjusted sequence ratio) and confidence intervals.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/summariseSequenceRatios.html">summariseSequenceRatios</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">aspirin_amoxicillin</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Joining with `by = join_by(days_prior_observation, washout_window,</span></span>
-<span><span class="co">#&gt; index_marker_gap, combination_window, confidence_interval,</span></span>
-<span><span class="co">#&gt; moving_average_restriction, cdm_name)`</span></span>
-<span><span class="co">#&gt; ! The following column type were changed: • result_id: from character to</span></span>
-<span><span class="co">#&gt; integer</span></span>
 <span> </span>
 <span><span class="va">res</span> <span class="op"><a href="reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
@@ -154,7 +153,7 @@
 <span><span class="co">#&gt; $ result_id        &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span></span>
 <span><span class="co">#&gt; $ cdm_name         &lt;chr&gt; "Synthea synthetic health database", "Synthea synthet…</span></span>
 <span><span class="co">#&gt; $ group_name       &lt;chr&gt; "index_cohort_name &amp;&amp;&amp; marker_cohort_name", "index_co…</span></span>
-<span><span class="co">#&gt; $ group_level      &lt;chr&gt; "aspirin &amp;&amp;&amp; amoxicillin", "aspirin &amp;&amp;&amp; amoxicillin",…</span></span>
+<span><span class="co">#&gt; $ group_level      &lt;chr&gt; "1191_aspirin &amp;&amp;&amp; 723_amoxicillin", "1191_aspirin &amp;&amp;&amp;…</span></span>
 <span><span class="co">#&gt; $ strata_name      &lt;chr&gt; "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ strata_level     &lt;chr&gt; "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ variable_name    &lt;chr&gt; "crude", "adjusted", "crude", "crude", "adjusted", "a…</span></span>
