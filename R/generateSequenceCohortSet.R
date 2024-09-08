@@ -195,7 +195,7 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::select(!c("cohort_name", "index_name", "marker_name"))
 
   if (cdm[[name]] |>
-      dplyr::summarise(n = n_distinct(.data$cohort_definition_id)) |>
+      dplyr::summarise(n = dplyr::n_distinct(.data$cohort_definition_id)) |>
       dplyr::pull("n") == 0) {
     cdm <- omopgenerics::emptyCohortTable(
       cdm = cdm,
