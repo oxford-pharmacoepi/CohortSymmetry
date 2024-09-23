@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CohortSymmetry</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2.900</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -98,7 +98,7 @@ vignettes.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://darwin-eu.github.io/CDMConnector/" class="external-link">CDMConnector</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/omock/" class="external-link">omock</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ohdsi.github.io/omock/" class="external-link">omock</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://oxford-pharmacoepi.github.io/CohortSymmetry/">CohortSymmetry</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span></code></pre></div>
 <p>The CohortSymmetry package works with data mapped to the OMOP CDM.
@@ -108,15 +108,15 @@ two mock cohorts: the <strong>index_cohort</strong> and the
 <strong>marker_cohort</strong>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu-dev.github.io/omopgenerics/reference/emptyCdmReference.html" class="external-link">emptyCdmReference</a></span><span class="op">(</span>cdmName <span class="op">=</span> <span class="st">"mock"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/omock/man/mockPerson.html" class="external-link">mockPerson</a></span><span class="op">(</span>nPerson <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/omock/man/mockObservationPeriod.html" class="external-link">mockObservationPeriod</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/omock/man/mockCohort.html" class="external-link">mockCohort</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockPerson.html" class="external-link">mockPerson</a></span><span class="op">(</span>nPerson <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockObservationPeriod.html" class="external-link">mockObservationPeriod</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCohort.html" class="external-link">mockCohort</a></span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="st">"index_cohort"</span>,</span>
 <span>    numberCohorts <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    cohortName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"index_cohort"</span><span class="op">)</span>,</span>
 <span>    seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/omock/man/mockCohort.html" class="external-link">mockCohort</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://ohdsi.github.io/omock/reference/mockCohort.html" class="external-link">mockCohort</a></span><span class="op">(</span></span>
 <span>    name <span class="op">=</span> <span class="st">"marker_cohort"</span>,</span>
 <span>    numberCohorts <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>    cohortName <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"marker_cohort"</span><span class="op">)</span>, </span>
@@ -124,27 +124,27 @@ two mock cohorts: the <strong>index_cohort</strong> and the
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu">duckdb</span><span class="fu">::</span><span class="fu"><a href="https://r.duckdb.org/reference/duckdb.html" class="external-link">duckdb</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/copy_cdm_to.html" class="external-link">copyCdmTo</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">con</span>, cdm <span class="op">=</span> <span class="va">cdm</span>, schema <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span>
+<span><span class="va">cdm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://darwin-eu.github.io/CDMConnector/reference/copy_cdm_to.html" class="external-link">copyCdmTo</a></span><span class="op">(</span>con <span class="op">=</span> <span class="va">con</span>, cdm <span class="op">=</span> <span class="va">cdm</span>, schema <span class="op">=</span> <span class="st">"main"</span>, overwrite <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">index_cohort</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">index_cohort</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.5.0-1025-azure:R 4.4.1/:memory:]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.8.0-1014-azure:R 4.4.1/:memory:]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
-<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 2, 6, 7, 10, 13, 13, 14, 14, 15, 17, 18,…</span></span>
-<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-02-15, 2001-10-29, 2003-03-16, 1999-11-11, …</span></span>
-<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-10-28, 2003-03-15, 2005-02-08, 2002-04-09, …</span></span>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 3, 5, 5, 6, 7, 8, 8, 11, 13, 13, 15, 16, 16…</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-11-28, 1996-05-02, 1997-06-18, 2004-06-30, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2006-09-05, 1997-06-17, 1998-03-06, 2004-10-22, …</span></span>
 <span></span>
-<span><span class="va">cdm</span><span class="op">$</span><span class="va">marker_cohort</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<span><span class="va">cdm</span><span class="op">$</span><span class="va">marker_cohort</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.5.0-1025-azure:R 4.4.1/:memory:]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.8.0-1014-azure:R 4.4.1/:memory:]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
-<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 2, 3, 3, 5, 5, 6, 6, 6, 8, 8, 8, 9, 9, 9, 1…</span></span>
-<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-07-07, 2001-07-29, 1999-07-08, 2015-01-23, …</span></span>
-<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-07-28, 2007-05-21, 2002-10-15, 2015-03-13, …</span></span></code></pre></div>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 4, 7, 8, 8, 9, 9, 9, 9, 10, 11, 12, 13, 13,…</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-07-27, 1993-02-02, 2019-07-08, 1996-08-14, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2006-10-16, 2007-04-16, 2019-07-26, 1999-10-08, …</span></span></code></pre></div>
 <p>Once we have established a connection to the database, we can use the
 <code><a href="../reference/generateSequenceCohortSet.html">generateSequenceCohortSet()</a></code> function to find the
 intersection of the two cohorts. This function will provide us with the
@@ -155,7 +155,8 @@ individuals who appear in both cohorts, which will be named
 <span>  cdm <span class="op">=</span> <span class="va">cdm</span>,</span>
 <span>  indexTable <span class="op">=</span> <span class="st">"index_cohort"</span>,</span>
 <span>  markerTable <span class="op">=</span> <span class="st">"marker_cohort"</span>,</span>
-<span>  name <span class="op">=</span> <span class="st">"intersect"</span></span>
+<span>  name <span class="op">=</span> <span class="st">"intersect"</span>,</span>
+<span>  combinationWindow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>See below that the generated cohort follows the format of an OMOP CDM
 cohort with the addition of two extra columns: <em>index_date</em> and
@@ -163,36 +164,37 @@ cohort with the addition of two extra columns: <em>index_date</em> and
 <em>cohort_start_date</em> in the <strong>index_cohort</strong> and the
 <strong>marker_cohort</strong>, respectively.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.5.0-1025-azure:R 4.4.1/:memory:]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.8.0-1014-azure:R 4.4.1/:memory:]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
-<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 2, 6, 13, 17, 18, 21, 25, 26, 28, 33, 35, 37, …</span></span>
-<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-02-15, 1999-07-08, 2011-03-07, 2014-06-14, …</span></span>
-<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-07-07, 1999-11-11, 2011-06-29, 2014-06-24, …</span></span>
-<span><span class="co">#&gt; $ index_date           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-02-15, 1999-11-11, 2011-03-07, 2014-06-24, …</span></span>
-<span><span class="co">#&gt; $ marker_date          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2001-07-07, 1999-07-08, 2011-06-29, 2014-06-14, …</span></span></code></pre></div>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 7, 8, 11, 13, 16, 17, 21, 23, 24, 32, 35, 3…</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-07-27, 1993-02-02, 1996-08-14, 2016-05-30, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-11-28, 1996-05-02, 1996-10-23, 2016-06-03, …</span></span>
+<span><span class="co">#&gt; $ index_date           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-11-28, 1996-05-02, 1996-10-23, 2016-05-30, …</span></span>
+<span><span class="co">#&gt; $ marker_date          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-07-27, 1993-02-02, 1996-08-14, 2016-06-03, …</span></span></code></pre></div>
 <p>Once we have the intersect cohort, you are able to explore the
 temporal symmetry by using <code>summariseTemporalSymmetry</code> and
 <code><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry()</a></code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseTemporalSymmetry.html">summariseTemporalSymmetry</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span><span class="op">)</span></span>
-<span><span class="va">result</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 13</span></span>
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseTemporalSymmetry.html">summariseTemporalSymmetry</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span>, </span>
+<span>                                    timescale <span class="op">=</span> <span class="st">"year"</span><span class="op">)</span></span>
+<span><span class="va">result</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 18</span></span>
 <span><span class="co">#&gt; Columns: 13</span></span>
-<span><span class="co">#&gt; $ result_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span></span>
+<span><span class="co">#&gt; $ result_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span></span>
 <span><span class="co">#&gt; $ cdm_name         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "mock", "mock", "mock", "mock", "mock", "mock", "mock…</span></span>
 <span><span class="co">#&gt; $ group_name       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "index_name &amp;&amp;&amp; marker_name", "index_name &amp;&amp;&amp; marker_…</span></span>
 <span><span class="co">#&gt; $ group_level      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "index_cohort &amp;&amp;&amp; marker_cohort", "index_cohort &amp;&amp;&amp; m…</span></span>
 <span><span class="co">#&gt; $ strata_name      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "temporal_symmetry", "temporal_symmetry", "temporal_s…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0", "-7", "-4", "-2", "-6", "4", "-1", "-3", "1", "-…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "-2", "7", "-6", "8", "-4", "0", "18", "6", "10", "2"…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "count", "count", "count", "count", "count",…</span></span>
 <span><span class="co">#&gt; $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "integer", "integer", "integer", "integer", "integer"…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, "6", NA, NA, NA, NA, NA, NA</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "22", NA, NA, NA, "10", "134", NA, NA, NA, "9", "14",…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span></span>
@@ -204,7 +206,7 @@ corresponding confidence intervals.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summariseSequenceRatios.html">summariseSequenceRatios</a></span><span class="op">(</span>cohort <span class="op">=</span> <span class="va">cdm</span><span class="op">$</span><span class="va">intersect</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">result</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">result</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 10</span></span>
 <span><span class="co">#&gt; Columns: 13</span></span>
 <span><span class="co">#&gt; $ result_id        <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1</span></span>
@@ -217,30 +219,30 @@ corresponding confidence intervals.</p>
 <span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sequence_ratio", "sequence_ratio", "sequence_ratio",…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "point_estimate", "point_estimate", "lower_CI", "uppe…</span></span>
 <span><span class="co">#&gt; $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "numeric", "numeric", "numeric", "numeric", "numeric"…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0.833333333333333", "1", "0.356560793577192", "1.918…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1.17977528089888", "1.16171264565546", "0.9665793825…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span></code></pre></div>
 <p>Finally, we can visualise the results using
 <code><a href="../reference/tableSequenceRatios.html">tableSequenceRatios()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
-<div id="mwivqtlymz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mwivqtlymz table {
+<div id="yqeckdwhkh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#yqeckdwhkh table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mwivqtlymz thead, #mwivqtlymz tbody, #mwivqtlymz tfoot, #mwivqtlymz tr, #mwivqtlymz td, #mwivqtlymz th {
+#yqeckdwhkh thead, #yqeckdwhkh tbody, #yqeckdwhkh tfoot, #yqeckdwhkh tr, #yqeckdwhkh td, #yqeckdwhkh th {
   border-style: none;
 }
 
-#mwivqtlymz p {
+#yqeckdwhkh p {
   margin: 0;
   padding: 0;
 }
 
-#mwivqtlymz .gt_table {
+#yqeckdwhkh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -266,12 +268,12 @@ corresponding confidence intervals.</p>
   border-left-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_caption {
+#yqeckdwhkh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mwivqtlymz .gt_title {
+#yqeckdwhkh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -283,7 +285,7 @@ corresponding confidence intervals.</p>
   border-bottom-width: 0;
 }
 
-#mwivqtlymz .gt_subtitle {
+#yqeckdwhkh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -295,7 +297,7 @@ corresponding confidence intervals.</p>
   border-top-width: 0;
 }
 
-#mwivqtlymz .gt_heading {
+#yqeckdwhkh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -307,13 +309,13 @@ corresponding confidence intervals.</p>
   border-right-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_bottom_border {
+#yqeckdwhkh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_col_headings {
+#yqeckdwhkh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -328,7 +330,7 @@ corresponding confidence intervals.</p>
   border-right-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_col_heading {
+#yqeckdwhkh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -348,7 +350,7 @@ corresponding confidence intervals.</p>
   overflow-x: hidden;
 }
 
-#mwivqtlymz .gt_column_spanner_outer {
+#yqeckdwhkh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -360,15 +362,15 @@ corresponding confidence intervals.</p>
   padding-right: 4px;
 }
 
-#mwivqtlymz .gt_column_spanner_outer:first-child {
+#yqeckdwhkh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mwivqtlymz .gt_column_spanner_outer:last-child {
+#yqeckdwhkh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mwivqtlymz .gt_column_spanner {
+#yqeckdwhkh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -380,11 +382,11 @@ corresponding confidence intervals.</p>
   width: 100%;
 }
 
-#mwivqtlymz .gt_spanner_row {
+#yqeckdwhkh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mwivqtlymz .gt_group_heading {
+#yqeckdwhkh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -410,7 +412,7 @@ corresponding confidence intervals.</p>
   text-align: left;
 }
 
-#mwivqtlymz .gt_empty_group_heading {
+#yqeckdwhkh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -425,15 +427,15 @@ corresponding confidence intervals.</p>
   vertical-align: middle;
 }
 
-#mwivqtlymz .gt_from_md > :first-child {
+#yqeckdwhkh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mwivqtlymz .gt_from_md > :last-child {
+#yqeckdwhkh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mwivqtlymz .gt_row {
+#yqeckdwhkh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -452,7 +454,7 @@ corresponding confidence intervals.</p>
   overflow-x: hidden;
 }
 
-#mwivqtlymz .gt_stub {
+#yqeckdwhkh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -465,7 +467,7 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#mwivqtlymz .gt_stub_row_group {
+#yqeckdwhkh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -479,15 +481,15 @@ corresponding confidence intervals.</p>
   vertical-align: top;
 }
 
-#mwivqtlymz .gt_row_group_first td {
+#yqeckdwhkh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mwivqtlymz .gt_row_group_first th {
+#yqeckdwhkh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mwivqtlymz .gt_summary_row {
+#yqeckdwhkh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -497,16 +499,16 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#mwivqtlymz .gt_first_summary_row {
+#yqeckdwhkh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_first_summary_row.thick {
+#yqeckdwhkh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mwivqtlymz .gt_last_summary_row {
+#yqeckdwhkh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -516,7 +518,7 @@ corresponding confidence intervals.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_grand_summary_row {
+#yqeckdwhkh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -526,7 +528,7 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#mwivqtlymz .gt_first_grand_summary_row {
+#yqeckdwhkh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -536,7 +538,7 @@ corresponding confidence intervals.</p>
   border-top-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_last_grand_summary_row_top {
+#yqeckdwhkh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -546,11 +548,11 @@ corresponding confidence intervals.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_striped {
+#yqeckdwhkh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mwivqtlymz .gt_table_body {
+#yqeckdwhkh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -559,7 +561,7 @@ corresponding confidence intervals.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_footnotes {
+#yqeckdwhkh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -573,7 +575,7 @@ corresponding confidence intervals.</p>
   border-right-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_footnote {
+#yqeckdwhkh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -582,7 +584,7 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#mwivqtlymz .gt_sourcenotes {
+#yqeckdwhkh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -596,7 +598,7 @@ corresponding confidence intervals.</p>
   border-right-color: #D3D3D3;
 }
 
-#mwivqtlymz .gt_sourcenote {
+#yqeckdwhkh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -604,72 +606,72 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#mwivqtlymz .gt_left {
+#yqeckdwhkh .gt_left {
   text-align: left;
 }
 
-#mwivqtlymz .gt_center {
+#yqeckdwhkh .gt_center {
   text-align: center;
 }
 
-#mwivqtlymz .gt_right {
+#yqeckdwhkh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mwivqtlymz .gt_font_normal {
+#yqeckdwhkh .gt_font_normal {
   font-weight: normal;
 }
 
-#mwivqtlymz .gt_font_bold {
+#yqeckdwhkh .gt_font_bold {
   font-weight: bold;
 }
 
-#mwivqtlymz .gt_font_italic {
+#yqeckdwhkh .gt_font_italic {
   font-style: italic;
 }
 
-#mwivqtlymz .gt_super {
+#yqeckdwhkh .gt_super {
   font-size: 65%;
 }
 
-#mwivqtlymz .gt_footnote_marks {
+#yqeckdwhkh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mwivqtlymz .gt_asterisk {
+#yqeckdwhkh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mwivqtlymz .gt_indent_1 {
+#yqeckdwhkh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mwivqtlymz .gt_indent_2 {
+#yqeckdwhkh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mwivqtlymz .gt_indent_3 {
+#yqeckdwhkh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mwivqtlymz .gt_indent_4 {
+#yqeckdwhkh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mwivqtlymz .gt_indent_5 {
+#yqeckdwhkh .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mwivqtlymz .katex-display {
+#yqeckdwhkh .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mwivqtlymz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#yqeckdwhkh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -688,11 +690,11 @@ corresponding confidence intervals.</p>
 <td headers="Database name" class="gt_row gt_left" style="text-align: left;">mock</td>
 <td headers="Index" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Index cohort</td>
 <td headers="Marker" class="gt_row gt_left" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">Marker cohort</td>
-<td headers="Study population" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">22</td>
-<td headers="Index first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">10 (45.5 %)</td>
-<td headers="Marker first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">12 (54.5 %)</td>
-<td headers="CSR (95% CI)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">0.83 (0.36 - 1.92)</td>
-<td headers="ASR (95% CI)" class="gt_row gt_right" style="text-align: left;">1.00 (0.43 - 2.30)</td>
+<td headers="Study population" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">388</td>
+<td headers="Index first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">210 (54.1 %)</td>
+<td headers="Marker first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">178 (45.9 %)</td>
+<td headers="CSR (95% CI)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1.18 (0.97 - 1.44)</td>
+<td headers="ASR (95% CI)" class="gt_row gt_right" style="text-align: left;">1.16 (0.95 - 1.42)</td>
 </tr></tbody>
 </table>
 </div>
@@ -719,7 +721,7 @@ following flow chat:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>
