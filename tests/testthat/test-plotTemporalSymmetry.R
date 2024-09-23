@@ -1,6 +1,6 @@
 test_that("plot working", {
   cdm <- omock::mockCdmReference(cdmName = "mock") |>
-    omock::mockPerson(nPerson = 100) |>
+    omock::mockPerson(nPerson = 1000) |>
     omock::mockObservationPeriod() |>
     omock::mockCohort(
       name = "marker_cohort",
@@ -21,9 +21,9 @@ test_that("plot working", {
                                    overwrite = TRUE)
   cdm <- generateSequenceCohortSet(cdm, "index_cohort", "marker_cohort", "joined_cohort", combinationWindow = c(0, Inf))
 
-  result <- summariseTemporalSymmetry(cohort = cdm$joined_cohort)
+  result <- summariseTemporalSymmetry(cohort = cdm$joined_cohort, timescale = "year")
   plotTS <- plotTemporalSymmetry(result = result)
-  plotTS2 <- plotTemporalSymmetry(result = result, xlim = c(-100,100))
+  plotTS2 <- plotTemporalSymmetry(result = result, xlim = c(-5,5))
   plotTS3 <- plotTemporalSymmetry(result = result, colours = c("white", "black"))
   plotTS4 <- plotTemporalSymmetry(result = result, plotTitle = "Test")
   plotTS5 <- plotTemporalSymmetry(result = result, labs = c("lab1", "lab2"))

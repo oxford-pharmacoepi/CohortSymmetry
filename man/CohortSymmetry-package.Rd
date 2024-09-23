@@ -6,6 +6,8 @@
 \alias{CohortSymmetry-package}
 \title{CohortSymmetry: Sequence Symmetry Analysis Using the Observational Medical Outcomes Partnership Common Data Model}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Calculating crude sequence ratio, adjusted sequence ratio and confidence intervals using data mapped to the Observational Medical Outcomes Partnership Common Data Model.
 }
 \seealso{
