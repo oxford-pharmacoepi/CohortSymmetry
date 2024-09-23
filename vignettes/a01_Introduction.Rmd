@@ -51,7 +51,7 @@ The CohortSymmetry package works with data mapped to the OMOP CDM. Hence, the in
 
 ```{r message= FALSE, warning=FALSE}
 cdm <- emptyCdmReference(cdmName = "mock") |>
-  mockPerson(nPerson = 100) |>
+  mockPerson(nPerson = 1000) |>
   mockObservationPeriod() |>
   mockCohort(
     name = "index_cohort",
@@ -67,12 +67,12 @@ cdm <- emptyCdmReference(cdmName = "mock") |>
   )
 
 con <- dbConnect(duckdb::duckdb())
-cdm <- copyCdmTo(con = con, cdm = cdm, schema = "main")
+cdm <- copyCdmTo(con = con, cdm = cdm, schema = "main", overwrite = T)
 
-cdm$index_cohort %>% 
+cdm$index_cohort |> 
   dplyr::glimpse()
 
-cdm$marker_cohort %>% 
+cdm$marker_cohort |> 
   dplyr::glimpse()
 
 ```
@@ -84,22 +84,24 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "index_cohort",
   markerTable = "marker_cohort",
-  name = "intersect"
+  name = "intersect",
+  combinationWindow = c(0, Inf)
 )
 ```
 
 See below that the generated cohort follows the format of an OMOP CDM cohort with the addition of two extra columns: *index_date* and *marker_date*. These columns correspond to the *cohort_start_date* in the **index_cohort** and the **marker_cohort**, respectively.
 
 ```{r message= FALSE, warning=FALSE}
-cdm$intersect %>% 
+cdm$intersect |> 
   dplyr::glimpse()
 ```
 
 Once we have the intersect cohort, you are able to explore the temporal symmetry by using `summariseTemporalSymmetry` and `plotTemporalSymmetry()`:
 
 ```{r message= FALSE, warning=FALSE}
-result <- summariseTemporalSymmetry(cohort = cdm$intersect)
-result %>% dplyr::glimpse()
+result <- summariseTemporalSymmetry(cohort = cdm$intersect, 
+                                    timescale = "year")
+result |> dplyr::glimpse()
 
 plotTemporalSymmetry(result = result)
 ```
@@ -108,7 +110,7 @@ Next, we will use the `summariseSequenceRatios()` function to get the crude sequ
 ```{r message= FALSE, warning=FALSE}
 result <- summariseSequenceRatios(cohort = cdm$intersect)
 
-result %>% dplyr::glimpse()
+result |> dplyr::glimpse()
 ```
 Finally, we can visualise the results using `tableSequenceRatios()`:
 ```{r message= FALSE, warning=FALSE}

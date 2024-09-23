@@ -73,7 +73,7 @@ cdm <- generateSequenceCohortSet(
 # Obtaining temporal symmetry
 
 ```{r message= FALSE, warning=FALSE}
-summariseTemporalSymmetry(cohort = cdm$intersect) %>% 
+summariseTemporalSymmetry(cohort = cdm$intersect) |> 
   dplyr::glimpse()
 ```
 
@@ -85,7 +85,7 @@ This parameter is used to subset the cohort table inputted to the `summariseTemp
 
 ```{r message= FALSE, warning=FALSE}
 summariseTemporalSymmetry(cohort = cdm$intersect,
-                          cohortId = 1) %>% 
+                          cohortId = 1) |> 
   dplyr::glimpse()
 ```
 
@@ -97,13 +97,13 @@ Recall the default for the timescale is `month`, one could also change this to e
 
 ```{r message= FALSE, warning=FALSE}
 summariseTemporalSymmetry(cohort = cdm$intersect,
-                          timescale = "day") %>% 
+                          timescale = "day") |> 
   dplyr::glimpse()
 ```
 
 ```{r message= FALSE, warning=FALSE}
 summariseTemporalSymmetry(cohort = cdm$intersect,
-                          timescale = "year") %>% 
+                          timescale = "year") |> 
   dplyr::glimpse()
 ```
 
@@ -113,7 +113,7 @@ By default, the minimum number of events to reported is 5, below which results w
 
 ```{r message= FALSE, warning=FALSE}
 summariseTemporalSymmetry(cohort = cdm$intersect,
-                          minCellCount = 0) %>% 
+                          minCellCount = 0) |> 
   dplyr::glimpse()
 ```
 

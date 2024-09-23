@@ -65,10 +65,10 @@ cdm <- DrugUtilisation::generateIngredientCohortSet(
   name = "acetaminophen",
   ingredient = "acetaminophen")
 
-cdm$aspirin %>% 
+cdm$aspirin |> 
   dplyr::glimpse()
 
-cdm$acetaminophen %>% 
+cdm$acetaminophen |> 
   dplyr::glimpse()
 ```
 
@@ -103,7 +103,7 @@ cdm <- generateSequenceCohortSet(
   indexMarkerGap = NULL, #default
   combinationWindow = c(0,Inf))
 
-cdm$intersect %>% 
+cdm$intersect |> 
   dplyr::glimpse()
 ```
 
@@ -169,11 +169,11 @@ cdm <- generateSequenceCohortSet(
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   combinationWindow = c(0,Inf))
 
-cdm$intersect %>%  
+cdm$intersect |>  
   dplyr::summarise(min_cohort_start_date = min(cohort_start_date), 
             max_cohort_start_date = max(cohort_start_date),
             min_cohort_end_date   = min(cohort_end_date),
-            max_cohort_end_date   = max(cohort_end_date)) %>% 
+            max_cohort_end_date   = max(cohort_end_date)) |> 
   dplyr::glimpse()
 ```
 
@@ -200,13 +200,13 @@ cdm <- generateSequenceCohortSet(
   daysPriorObservation = 0,
   combinationWindow = c(0,Inf))
 
-cdm$intersect %>% 
+cdm$intersect |> 
   dplyr::inner_join(
-    cdm$observation_period %>% 
+    cdm$observation_period |> 
       dplyr::select("subject_id" = "person_id", "observation_period_start_date")
-  ) %>% 
-  dplyr::filter(subject_id %in% c(2,53)) %>% 
-  dplyr::mutate(daysPriorObservation = cohort_start_date - observation_period_start_date) %>% 
+  ) |> 
+  dplyr::filter(subject_id %in% c(2,53)) |> 
+  dplyr::mutate(daysPriorObservation = cohort_start_date - observation_period_start_date) |> 
   dplyr::glimpse()
 ```
 Now we impose a prior history requirement of 365 days. As seen, participant 53 is excluded as it does not have enough days of prior observation before the included event.
@@ -221,12 +221,12 @@ cdm <- generateSequenceCohortSet(
   daysPriorObservation = 365,
   combinationWindow = c(0,Inf))
 
-cdm$intersect %>% 
+cdm$intersect |> 
   dplyr::inner_join(
-    cdm$observation_period %>% 
+    cdm$observation_period |> 
       dplyr::select("subject_id" = "person_id", "observation_period_start_date")
-  ) %>% 
-  dplyr::filter(subject_id %in% c(2,53)) %>%
+  ) |> 
+  dplyr::filter(subject_id %in% c(2,53)) |>
   dplyr::glimpse()
 ```
 
@@ -253,13 +253,13 @@ cdm <- generateSequenceCohortSet(
   washoutWindow = 0,
   combinationWindow = c(0, Inf))
 
-cdm$aspirin %>% 
-  dplyr::filter(subject_id %in% c(1936,3565)) %>% 
-  dplyr::group_by(subject_id) %>% 
+cdm$aspirin |> 
+  dplyr::filter(subject_id %in% c(1936,3565)) |> 
+  dplyr::group_by(subject_id) |> 
   dplyr::arrange(cohort_start_date)
 
-cdm$intersect %>% 
-  dplyr::filter(subject_id %in% c(1936,3565)) %>% 
+cdm$intersect |> 
+  dplyr::filter(subject_id %in% c(1936,3565)) |> 
   dplyr::glimpse()
 ```
 Notice that by setting a washout window of 0, both participants are included. However, see that the included episode of participant 1936 happens at 1950-05-06, and a previous episode (not included within the study period), happened just 210 days before this one (1949-10-08). Hence, by using a `washoutWindow` of 365, this participant is excluded from the analysis:
@@ -275,9 +275,9 @@ cdm <- generateSequenceCohortSet(
   washoutWindow = 365,
   combinationWindow = c(0, Inf))
 
-cdm$intersect %>% 
-  dplyr::filter(subject_id %in% c(1936,3565)) %>%
-  dplyr::arrange(subject_id, cohort_start_date) %>%
+cdm$intersect |> 
+  dplyr::filter(subject_id %in% c(1936,3565)) |>
+  dplyr::arrange(subject_id, cohort_start_date) |>
   dplyr::glimpse()
 ```
 
@@ -314,8 +314,8 @@ cdm <- generateSequenceCohortSet(
   daysPriorObservation = 365,
   combinationWindow = c(0, Inf))
 
-cdm$intersect %>%
-  dplyr::filter(subject_id %in% c(80,187)) %>%
+cdm$intersect |>
+  dplyr::filter(subject_id %in% c(80,187)) |>
   dplyr::mutate(combinationWindow = pmax(index_date, marker_date) - pmin(index_date, marker_date))
 ```
 
@@ -331,7 +331,7 @@ cdm <- generateSequenceCohortSet(
   daysPriorObservation = 365,
   combinationWindow = c(0, Inf))
 
-cdm$intersect %>%
+cdm$intersect |>
   dplyr::filter(subject_id %in% c(80,187))
 ```
 
@@ -367,23 +367,23 @@ cdm <- generateSequenceCohortSet(
   daysPriorObservation = 365,
   indexMarkerGap = NULL)
 
-cdm$intersect %>%
-  dplyr::filter(subject_id %in% c(80,754)) %>%
+cdm$intersect |>
+  dplyr::filter(subject_id %in% c(80,754)) |>
   dplyr::inner_join(
     # As for both, acetaminophen (marker) is the first event:
-    cdm$acetaminophen %>% 
+    cdm$acetaminophen |> 
       dplyr::select("subject_id", 
              "marker_date" = "cohort_start_date", 
              "first_episode_end_date" = "cohort_end_date"),
     by = c("subject_id", "marker_date")
-  ) %>%
+  ) |>
   dplyr::inner_join(
-    cdm$aspirin %>% 
+    cdm$aspirin |> 
       dplyr::select("subject_id", 
              "index_date" = "cohort_start_date",
              "second_episode_start_date" = "cohort_start_date"),
     by = c("subject_id", "index_date")
-  ) %>%
+  ) |>
   dplyr::mutate(indexMarkerGap = second_episode_start_date - first_episode_end_date)
   
 ```
@@ -398,7 +398,7 @@ cdm <- generateSequenceCohortSet(
   daysPriorObservation = 365,
   indexMarkerGap = 30)
 
-cdm$intersect %>%
+cdm$intersect |>
   dplyr::filter(subject_id %in% c(80,754)) 
 ```
 
