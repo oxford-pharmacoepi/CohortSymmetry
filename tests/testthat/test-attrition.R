@@ -181,12 +181,12 @@ test_that("attrition: combinationWindow", {
                                             markerCohort = markerCohort)
 
   cdm <- generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable = "cohort_1",
-                                                   indexId=1,
-                                                   markerTable = "cohort_2",
-                                                   markerId=3,
-                                                   combinationWindow = c(30,365))
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   indexId=1,
+                                   markerTable = "cohort_2",
+                                   markerId=3,
+                                   combinationWindow = c(30,365))
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) |>
                      dplyr::select(cohort_definition_id) |>
@@ -220,11 +220,13 @@ test_that("attrition: combinationWindow", {
 
   expect_false(2 %in% (cdm$joined_cohorts |>
                          dplyr::collect() |>
+                         dplyr::arrange(subject_id) |>
                          dplyr::pull(subject_id) |>
                          as.numeric()))
 
   expect_identical((cdm$joined_cohorts |>
                       dplyr::collect() |>
+                      dplyr::arrange(subject_id) |>
                       dplyr::pull(subject_id) |>
                       as.numeric()),
                    c(1,3,4,5))
@@ -379,6 +381,8 @@ test_that("attrition: indexMarkerGap", {
                     dplyr::pull(excluded_records)==0))
 
   expect_identical(cdm$joined_cohorts_3 |>
+                     dplyr::collect() |>
+                     dplyr::arrange(subject_id) |>
                      dplyr::pull(subject_id) |>
                      as.numeric(),
                    c(3, 4, 5)

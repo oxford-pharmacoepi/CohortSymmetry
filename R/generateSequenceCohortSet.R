@@ -73,6 +73,10 @@ generateSequenceCohortSet <- function(cdm,
     combinationWindow[2] <- as.integer(99999)
   }
 
+  if(!is.finite(movingAverageRestriction)){
+    movingAverageRestriction <- 99999
+  }
+
   if (is.null(indexMarkerGap)) {
     indexMarkerGap <- combinationWindow[2]
     indexMarkerGap_export <- comb_export_2
