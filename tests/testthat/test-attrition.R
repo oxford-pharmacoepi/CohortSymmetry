@@ -354,6 +354,8 @@ test_that("attrition: indexMarkerGap", {
                 dplyr::pull(excluded_subjects)==3)
 
   expect_identical(cdm$joined_cohorts_2 |>
+                     dplyr::collect() |>
+                     dplyr::arrange(subject_id) |>
                      dplyr::pull(subject_id) |>
                      as.numeric(),
                    c(2,5)
