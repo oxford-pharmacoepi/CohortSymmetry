@@ -20,6 +20,7 @@
 #' and the start of the second episode in a sequence/combination.
 #' @param combinationWindow A constrain to be placed on the gap between two initiations.
 #' Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.
+#' @param movingAverageRestriction The moving window when calculating nSR, default is 548.
 #'
 #' @return
 #' A table within the cdm reference.
@@ -48,7 +49,8 @@ generateSequenceCohortSet <- function(cdm,
                               daysPriorObservation = 0,
                               washoutWindow = 0,
                               indexMarkerGap = NULL,
-                              combinationWindow = c(0,365)) {
+                              combinationWindow = c(0,365),
+                              movingAverageRestriction = 548) {
   # checks
   checkInputgenerateSequenceCohortSet(
     cdm = cdm,
@@ -61,7 +63,8 @@ generateSequenceCohortSet <- function(cdm,
     daysPriorObservation = daysPriorObservation,
     washoutWindow = washoutWindow,
     indexMarkerGap = indexMarkerGap,
-    combinationWindow = combinationWindow
+    combinationWindow = combinationWindow,
+    movingAverageRestriction = movingAverageRestriction
   )
   comb_export_1 <- as.character(combinationWindow[1])
   comb_export_2 <- as.character(combinationWindow[2])
