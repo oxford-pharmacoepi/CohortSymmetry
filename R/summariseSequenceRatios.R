@@ -6,7 +6,6 @@
 #' @param cohort A cohort table in the cdm.
 #' @param cohortId The Ids in the cohort that are to be included in the analyses.
 #' @param confidenceInterval Default is 95, indicating the central 95% confidence interval.
-#' @param movingAverageRestriction The moving window when calculating nSR, default is 548.
 #' @param minCellCount The minimum number of events to reported, below which
 #' results will be obscured. If 0, all results will be reported.
 #'
@@ -22,7 +21,7 @@
 #'                                  name = "joined_cohorts",
 #'                                  indexTable = "cohort_1",
 #'                                  markerTable = "cohort_2")
-#' pssa_result <- summariseSequenceRatios(cohort = cdm$joined_cohorts)
+#' pssa_result <- summariseSequenceRatios(cohort = cdm$joined_cohorts, minCellCount = 0)
 #' pssa_result
 #' CDMConnector::cdmDisconnect(cdm)
 #' }
@@ -30,14 +29,12 @@
 summariseSequenceRatios <- function(cohort,
                                     cohortId = NULL,
                                     confidenceInterval = 95,
-                                    movingAverageRestriction = 548,
                                     minCellCount = 5) {
 
   # checks
   checkInputSummariseSequenceRatios(cohort = cohort,
                                     cohortId = cohortId,
                                     confidenceInterval = confidenceInterval,
-                                    movingAverageRestriction = movingAverageRestriction,
                                     minCellCount = minCellCount)
 
   if (is.null(cohortId)){
@@ -88,25 +85,26 @@ summariseSequenceRatios <- function(cohort,
         dplyr::summarise(marker_first = sum(.data$marker_first), index_first = sum(.data$index_first), .groups = "drop") |>
         dplyr::ungroup()
 
-      csr<-crudeSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]])
-      nsr<-nullSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], movingAverageRestriction = movingAverageRestriction)
-      asr<-adjustedSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], movingAverageRestriction = movingAverageRestriction)
-      counts <- getConfidenceInterval(temp[[paste0("index_",i, "_marker_", j)]], nsr, confidenceInterval = confidenceInterval) |>
-        dplyr::select(-"index_first_by_nsr", -"marker_first_by_nsr", -"index_first", -"marker_first")
+      csr <- crudeSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]])
+      nsr <- omopgenerics::settings(cohort) |>
+        dplyr::filter(.data$index_id == i & .data$marker_id == j) |>
+        dplyr::pull("nsr")
+      asr <- adjustedSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], nsr = nsr)
+      counts <- getConfidenceInterval(temp[[paste0("index_",i, "_marker_", j)]], nsr = nsr, confidenceInterval = confidenceInterval) |>
+        dplyr::select(-c("index_first", -"marker_first"))
 
       results[[paste0("index_",i, "_marker_", j)]] <- cbind(temp2[[paste0("index_",i, "_marker_", j)]],
                                                             cbind(tibble::tibble(csr = csr,asr = asr),
                                                                   counts)) |>
         dplyr::mutate(marker_first_percentage = round(.data$marker_first/(.data$marker_first + .data$index_first)*100, digits = 1),
                       index_first_percentage = round(.data$index_first/(.data$marker_first + .data$index_first)*100, digits = 1),
-                      confidence_interval = as.character(.env$confidenceInterval),
-                      moving_average_restriction = as.character(movingAverageRestriction)) |>
+                      confidence_interval = as.character(.env$confidenceInterval)) |>
         dplyr::select("index_id", "index_name", "marker_id", "marker_name",
                       "index_first", "marker_first", "index_first_percentage", "marker_first_percentage",
                       "csr", "lower_csr_ci", "upper_csr_ci",
                       "asr", "lower_asr_ci", "upper_asr_ci",
                       "days_prior_observation", "washout_window", "index_marker_gap", "combination_window",
-                      "confidence_interval", "moving_average_restriction")
+                      "confidence_interval")
     }
   }
 

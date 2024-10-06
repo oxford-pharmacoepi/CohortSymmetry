@@ -8,7 +8,6 @@ summariseSequenceRatios(
   cohort,
   cohortId = NULL,
   confidenceInterval = 95,
-  movingAverageRestriction = 548,
   minCellCount = 5
 )
 }
@@ -18,8 +17,6 @@ summariseSequenceRatios(
 \item{cohortId}{The Ids in the cohort that are to be included in the analyses.}
 
 \item{confidenceInterval}{Default is 95, indicating the central 95\% confidence interval.}
-
-\item{movingAverageRestriction}{The moving window when calculating nSR, default is 548.}
 
 \item{minCellCount}{The minimum number of events to reported, below which
 results will be obscured. If 0, all results will be reported.}
@@ -38,7 +35,7 @@ cdm <- generateSequenceCohortSet(cdm = cdm,
                                  name = "joined_cohorts",
                                  indexTable = "cohort_1",
                                  markerTable = "cohort_2")
-pssa_result <- summariseSequenceRatios(cohort = cdm$joined_cohorts)
+pssa_result <- summariseSequenceRatios(cohort = cdm$joined_cohorts, minCellCount = 0)
 pssa_result
 CDMConnector::cdmDisconnect(cdm)
 }

@@ -101,7 +101,7 @@ cdm <- generateSequenceCohortSet(
   daysPriorObservation = 0, #default
   washoutWindow = 0, #default
   indexMarkerGap = NULL, #default
-  combinationWindow = c(0,Inf))
+  combinationWindow = c(0,Inf)) # default
 
 cdm$intersect |> 
   dplyr::glimpse()

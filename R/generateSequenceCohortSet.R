@@ -51,7 +51,7 @@ generateSequenceCohortSet <- function(cdm,
                               indexMarkerGap = NULL,
                               combinationWindow = c(0,365),
                               movingAverageRestriction = 548) {
-  # checks
+  ### checks
   checkInputgenerateSequenceCohortSet(
     cdm = cdm,
     indexTable = indexTable,
@@ -66,6 +66,8 @@ generateSequenceCohortSet <- function(cdm,
     combinationWindow = combinationWindow,
     movingAverageRestriction = movingAverageRestriction
   )
+
+  ### restructuring parameters
   comb_export_1 <- as.character(combinationWindow[1])
   comb_export_2 <- as.character(combinationWindow[2])
 
@@ -84,7 +86,6 @@ generateSequenceCohortSet <- function(cdm,
     indexMarkerGap_export <- indexMarkerGap
   }
 
-  # modify cohortDateRange if necessary
   if (any(is.na(cohortDateRange))) {
     cohortDateRange <- getcohortDateRange(
       cdm = cdm,
@@ -92,7 +93,92 @@ generateSequenceCohortSet <- function(cdm,
     )
   }
 
-  # Preprocess both cohorts
+  ### nsr
+  nsr_name <- omopgenerics::uniqueId()
+  nsr_index_name <- paste0(nsr_name, "_", indexTable, "_index")
+  nsr_marker_name <- paste0(nsr_name, "_", markerTable, "_marker")
+  nsr_summary_name <- paste0(nsr_name, "_nsr_summary")
+
+  index_nsr_summary <- inc_cohort_summary(cdm = cdm,
+                                          tableName = indexTable,
+                                          cohortId = indexId,
+                                          nsrTableName = nsr_index_name,
+                                          cohortDateRange = cohortDateRange) |>
+    dplyr::rename("index_cohort_definition_id" = "cohort_definition_id",
+                  "index_n" = "n")
+
+  marker_nsr_summary <- inc_cohort_summary(cdm = cdm,
+                                           tableName = markerTable,
+                                           cohortId = markerId,
+                                           nsrTableName = nsr_marker_name,
+                                           cohortDateRange = cohortDateRange) |>
+    dplyr::rename("marker_cohort_definition_id" = "cohort_definition_id",
+                  "marker_n" = "n")
+
+  nsr_df <- index_nsr_summary |>
+    dplyr::full_join(marker_nsr_summary,
+                     by = "cohort_start_date",
+                     relationship = "many-to-many") |>
+    dplyr::select(
+      "index_cohort_definition_id",
+      "marker_cohort_definition_id",
+      "cohort_start_date",
+      "index_n",
+      "marker_n"
+    ) |>
+    dplyr::compute(name = nsr_summary_name, temporary = FALSE)
+
+  nsr_calc <- list()
+  existing_index_id <- nsr_df |>
+    dplyr::filter(!is.na(.data$index_cohort_definition_id)) |>
+    dplyr::distinct(.data$index_cohort_definition_id) |>
+    dplyr::collect() |>
+    dplyr::pull(.data$index_cohort_definition_id)
+
+  existing_marker_id <- nsr_df |>
+    dplyr::filter(!is.na(.data$marker_cohort_definition_id)) |>
+    dplyr::distinct(.data$marker_cohort_definition_id) |>
+    dplyr::collect() |>
+    dplyr::pull(.data$marker_cohort_definition_id)
+
+  for (i in existing_index_id){
+    for (j in existing_marker_id){
+      nsr_calc_df <- nsr_df |>
+        dplyr::filter(is.na(.data$index_cohort_definition_id) | .data$index_cohort_definition_id == i) |>
+        dplyr::filter(is.na(.data$marker_cohort_definition_id) | .data$marker_cohort_definition_id == j) |>
+        dplyr::mutate(
+          index_n = case_when(
+            is.na(index_n) ~ 0,
+            T ~ index_n
+          ),
+          marker_n = case_when(
+            is.na(marker_n) ~ 0,
+            T ~ marker_n
+          )
+        ) |>
+        dplyr::select("cohort_start_date", "index_n", "marker_n") |>
+        dplyr::collect() |>
+        dplyr::mutate(
+          marker_forward = deltaCumulativeSum(.data$marker_n, .data$cohort_start_date, movingAverageRestriction, backwards = F),
+          marker_backward = deltaCumulativeSum(.data$marker_n, .data$cohort_start_date, movingAverageRestriction, backwards = T)
+        ) |>
+        dplyr::mutate(im_forward = index_n * marker_forward,
+                      im_backward = index_n * marker_backward)
+
+      numerator <- sum(nsr_calc_df$im_forward)
+      denominator <- sum(nsr_calc_df$im_forward) + sum(nsr_calc_df$im_backward)
+
+      pa <- numerator/denominator
+      nsr <- pa/(1-pa)
+
+      nsr_calc[[paste0("index_", i, "_marker_", j)]] <-
+        tibble::tibble(index_id = i, marker_id = j, nsr = nsr)
+    }
+  }
+
+  nsr_tbl <- Reduce(dplyr::union_all, nsr_calc)
+
+  ### Preprocess both cohorts
   indexPreprocessed <- preprocessCohort(cdm = cdm, cohortName = indexTable,
                                         cohortId = indexId, cohortDateRange = cohortDateRange) |>
     dplyr::rename("index_id" = "cohort_definition_id",
@@ -137,7 +223,7 @@ generateSequenceCohortSet <- function(cdm,
                   "marker_end_date", "gap_to_prior_marker",
                   "marker_name", "first_date", "second_date")
 
-  # Post-join processing
+  ### Post-join processing
   cdm[[name]] <- joinedData %>%
     dplyr::mutate(
       gap = as.numeric(!!CDMConnector::datediff("index_date", "marker_date",
@@ -196,7 +282,11 @@ generateSequenceCohortSet <- function(cdm,
                   washout_window = .env$washoutWindow,
                   index_marker_gap = .env$indexMarkerGap_export,
                   combination_window = paste0("(",.env$comb_export_1, ",",
-                                              .env$comb_export_2, ")"))
+                                              .env$comb_export_2, ")"),
+                  moving_average_restriction = .env$movingAverageRestriction) |>
+    dplyr::left_join(nsr_tbl,
+                     by = c("index_id", "marker_id"),
+                     copy = T)
 
   cdm[[name]] <- cdm[[name]] |>
     dplyr::select(!c("cohort_name", "index_name", "marker_name"))
@@ -216,7 +306,7 @@ generateSequenceCohortSet <- function(cdm,
       omopgenerics::newCohortTable(cohortSetRef = cohortSetRef,
                                    cohortAttritionRef = NULL)
 
-    # exclusion criteria - where attrition starts
+    ### exclusion criteria - where attrition starts
     # 1) within combination window
     cdm[[name]] <- cdm[[name]] |>
       dplyr::filter(abs(.data$gap) > .env$time_1 &
@@ -257,6 +347,8 @@ generateSequenceCohortSet <- function(cdm,
   }
 
   cdm <- CDMConnector::dropTable(cdm = cdm, name = "ids")
+  cdm <- CDMConnector::dropTable(cdm = cdm, name = dplyr::starts_with(nsr_name))
+
   return(cdm)
 }
 
@@ -325,4 +417,28 @@ preprocessCohort <- function(cdm, cohortName, cohortId, cohortDateRange) {
     dplyr::compute()
   cdm <- omopgenerics::dropTable(cdm = cdm, name = nm)
   return(cohort)
+}
+
+inc_cohort_summary <- function(cdm, tableName, cohortId, nsrTableName, cohortDateRange){
+  nsr_cohort <- cdm [[tableName]]
+  if (!is.null(cohortId)) {
+    nsr_cohort <- nsr_cohort |>
+      dplyr::filter(.data$cohort_definition_id %in% .env$cohortId)
+  }
+  nsr_cohort_summary <- nsr_cohort |>
+    dplyr::group_by(.data$cohort_definition_id, .data$subject_id) |>
+    dplyr::arrange(.data$cohort_start_date) |>
+    dplyr::mutate(row_num := dplyr::row_number()) |>
+    dplyr::filter(.data$row_num == 1) |>
+    dplyr::select(-"row_num") |>
+    dplyr::ungroup() |>
+    dplyr::group_by(.data$cohort_definition_id, .data$cohort_start_date) |>
+    dplyr::summarise(n = n()) |>
+    dplyr::ungroup() |>
+    dplyr::filter(
+      .data$cohort_start_date <= !!cohortDateRange[[2]] &
+        .data$cohort_start_date >= !!cohortDateRange[[1]]
+    ) |>
+    dplyr::compute(name = nsrTableName, temporary = FALSE)
+  return(nsr_cohort_summary)
 }
