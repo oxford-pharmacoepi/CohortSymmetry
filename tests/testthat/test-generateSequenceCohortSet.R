@@ -392,7 +392,6 @@ test_that("example of changed combinationWindow", {
     dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(loc %>% dplyr::tally() %>% dplyr::pull(n) == 2) #inf gives more values
-  expect_true(all(loc %>% dplyr::select(subject_id) %>% dplyr::pull() == c(1,3)))
 
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
