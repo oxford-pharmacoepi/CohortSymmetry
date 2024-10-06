@@ -191,45 +191,44 @@ knitr::include_graphics(here("vignettes/3-PriorObservation.png"))
 The number of days of prior history required can be implemented using the argument `daysPriorObservation`. See an example below, where we focus on two different individuals: participant 2 and 53. Without a prior history requirement, both individuals are included in the analysis:
 
 ```{r message= FALSE, warning=FALSE}
-cdm <- generateSequenceCohortSet(
-  cdm = cdm,
-  indexTable = "aspirin",
-  markerTable = "acetaminophen",
-  name = "intersect",
-  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
-  daysPriorObservation = 0,
-  combinationWindow = c(0,Inf))
+ cdm <- generateSequenceCohortSet(
+   cdm = cdm,
+   indexTable = "aspirin",
+   markerTable = "acetaminophen",
+   name = "intersect_date_range",
+   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+   daysPriorObservation = 0,
+   combinationWindow = c(0,Inf))
 
-cdm$intersect |> 
-  dplyr::inner_join(
-    cdm$observation_period |> 
-      dplyr::select("subject_id" = "person_id", "observation_period_start_date")
-  ) |> 
-  dplyr::filter(subject_id %in% c(2,53)) |> 
-  dplyr::mutate(daysPriorObservation = cohort_start_date - observation_period_start_date) |> 
-  dplyr::glimpse()
+ cdm$intersect_date_range |>
+   dplyr::inner_join(
+     cdm$observation_period |>
+       dplyr::select("subject_id" = "person_id", "observation_period_start_date")
+   ) |>
+   dplyr::filter(subject_id %in% c(2,53)) |>
+   dplyr::mutate(daysPriorObservation = cohort_start_date - observation_period_start_date) |>
+   dplyr::glimpse()
 ```
 Now we impose a prior history requirement of 365 days. As seen, participant 53 is excluded as it does not have enough days of prior observation before the included event.
 
 ```{r message= FALSE, warning=FALSE}
-cdm <- generateSequenceCohortSet(
-  cdm = cdm,
-  indexTable = "aspirin",
-  markerTable = "acetaminophen",
-  name = "intersect",
-  cohortDateRange = as.Date(c("1950-01-01","1980-01-01")),
-  daysPriorObservation = 365,
-  combinationWindow = c(0,Inf))
-
-cdm$intersect |> 
-  dplyr::inner_join(
-    cdm$observation_period |> 
-      dplyr::select("subject_id" = "person_id", "observation_period_start_date")
-  ) |> 
-  dplyr::filter(subject_id %in% c(2,53)) |>
-  dplyr::glimpse()
+ cdm <- generateSequenceCohortSet(
+   cdm = cdm,
+   indexTable = "aspirin",
+   markerTable = "acetaminophen",
+   name = "intersect_prior_history",
+   cohortDateRange = as.Date(c("1950-01-01","1980-01-01")),
+   daysPriorObservation = 365,
+   combinationWindow = c(0,Inf))
+ 
+ cdm$intersect_prior_history |>
+   dplyr::inner_join(
+     cdm$observation_period |>
+       dplyr::select("subject_id" = "person_id", "observation_period_start_date")
+  ) |>
+   dplyr::filter(subject_id %in% c(2,53)) |>
+   dplyr::glimpse()
 ```
-
 
 ## Specified study period, prior history requirement and washout period
 
@@ -240,26 +239,26 @@ We can also specify the minimum washout period required for an event or episode 
 knitr::include_graphics(here("vignettes/4-washoutPeriod.png"))
 ```
 </center>
-This functionality can be implemented using the `washoutWindow` argument. See an example of its implementation below, where we analyse the case of `subject_id` number 1936 and 3565. 
+This functionality can be implemented using the `washoutWindow` argument. See an example of its implementation below, where we analyse the case of `subject_id` number 1936 and 3565.
 
 ```{r message= FALSE, warning=FALSE}
 cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intersect",
+  name = "intersect_washout_0",
   cohortDateRange = as.Date(c("1950-01-01","1980-01-01")),
   daysPriorObservation = 365,
   washoutWindow = 0,
   combinationWindow = c(0, Inf))
 
-cdm$aspirin |> 
-  dplyr::filter(subject_id %in% c(1936,3565)) |> 
-  dplyr::group_by(subject_id) |> 
+cdm$aspirin |>
+  dplyr::filter(subject_id %in% c(1936,3565)) |>
+  dplyr::group_by(subject_id) |>
   dplyr::arrange(cohort_start_date)
 
-cdm$intersect |> 
-  dplyr::filter(subject_id %in% c(1936,3565)) |> 
+cdm$intersect_washout_0 |>
+  dplyr::filter(subject_id %in% c(1936,3565)) |>
   dplyr::glimpse()
 ```
 Notice that by setting a washout window of 0, both participants are included. However, see that the included episode of participant 1936 happens at 1950-05-06, and a previous episode (not included within the study period), happened just 210 days before this one (1949-10-08). Hence, by using a `washoutWindow` of 365, this participant is excluded from the analysis:
@@ -269,18 +268,17 @@ cdm <- generateSequenceCohortSet(
   cdm = cdm,
   indexTable = "aspirin",
   markerTable = "acetaminophen",
-  name = "intersect",
+  name = "intersect_washout_365",
   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
   daysPriorObservation = 365,
   washoutWindow = 365,
   combinationWindow = c(0, Inf))
 
-cdm$intersect |> 
+cdm$intersect_washout_365 |>
   dplyr::filter(subject_id %in% c(1936,3565)) |>
   dplyr::arrange(subject_id, cohort_start_date) |>
   dplyr::glimpse()
 ```
-
 
 ## Specified study period, prior history requirement and combination window
 
@@ -301,106 +299,105 @@ knitr::include_graphics(here("vignettes/5-combinationWindow_numbers.png"))
 ```
 </center>
 
-
 In the `generateSequenceCohortSet()` function, this is implemented using the `combinationWindow` argument. Notice that in the previous examples, as we did not want any combination window requirement, we have set this argument to `combinationWindow = c(0,Inf)`, as by default is `combinationWindow = c(0, 365)`. In the following example, we explore subject_id 80 and 187 to see the functionality of this argument. When using no restriction for the combination window, both are included in the **intersect** cohort:
 
-```{r message= FALSE, warning=FALSE}
-cdm <- generateSequenceCohortSet(
-  cdm = cdm,
-  indexTable = "aspirin",
-  markerTable = "acetaminophen",
-  name = "intersect",
-  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
-  daysPriorObservation = 365,
-  combinationWindow = c(0, Inf))
+# ```{r message= FALSE, warning=FALSE}
+# cdm <- generateSequenceCohortSet(
+#   cdm = cdm,
+#   indexTable = "aspirin",
+#   markerTable = "acetaminophen",
+#   name = "intersect_changed_cw",
+#   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+#   daysPriorObservation = 365,
+#   combinationWindow = c(0, Inf))
+# 
+# cdm$intersect_changed_cw |>
+#   dplyr::filter(subject_id %in% c(80,187)) |>
+#   dplyr::mutate(combinationWindow = pmax(index_date, marker_date) - pmin(index_date, marker_date))
+# ```
 
-cdm$intersect |>
-  dplyr::filter(subject_id %in% c(80,187)) |>
-  dplyr::mutate(combinationWindow = pmax(index_date, marker_date) - pmin(index_date, marker_date))
-```
+<!-- However, when restricting a maximum combination window of 365 days, participant 187 is excluded from the analysis, as the difference between two initiations is greater than 365: -->
 
-However, when restricting a maximum combination window of 365 days, participant 187 is excluded from the analysis, as the difference between two initiations is greater than 365:
+# ```{r message= FALSE, warning=FALSE}
+# cdm <- generateSequenceCohortSet(
+#   cdm = cdm,
+#   indexTable = "aspirin",
+#   markerTable = "acetaminophen",
+#   name = "intersect",
+#   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
+#   daysPriorObservation = 365,
+#   combinationWindow = c(0, Inf))
+# 
+# cdm$intersect |>
+#   dplyr::filter(subject_id %in% c(80,187))
+# ```
 
-```{r message= FALSE, warning=FALSE}
-cdm <- generateSequenceCohortSet(
-  cdm = cdm,
-  indexTable = "aspirin",
-  markerTable = "acetaminophen",
-  name = "intersect",
-  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
-  daysPriorObservation = 365,
-  combinationWindow = c(0, Inf))
+<!-- ## Specified study period, prior history requirement and index gap -->
 
-cdm$intersect |>
-  dplyr::filter(subject_id %in% c(80,187))
-```
+<!-- We define the index-marker gap to refer to the maximum number of days between the start of the second episode and the end of the first episode. That means: -->
 
-## Specified study period, prior history requirement and index gap
+<!-- <center> -->
 
-We define the index-marker gap to refer to the maximum number of days between the start of the second episode and the end of the first episode. That means:
+<!-- $x =$ `second_episode(cohort_start_date)` $-$ `first_episode(cohort_end_date)`; -->
 
-<center>
+<!-- x $\leq$ `indexMarkerGap` -->
 
-$x =$ `second_episode(cohort_start_date)` $-$ `first_episode(cohort_end_date)`;
+<!-- </center> -->
 
-x $\leq$ `indexMarkerGap`
+<!-- See an example below, where all participants with an index-marker gap higher than 30 days are excluded from the analysis (participant 2, 3 and 6): -->
 
-</center>
+<!-- <center> -->
+<!-- ```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE} -->
+<!-- knitr::include_graphics(here("vignettes/6-indexGap.png")) -->
+<!-- ``` -->
+<!-- </center> -->
 
-See an example below, where all participants with an index-marker gap higher than 30 days are excluded from the analysis (participant 2, 3 and 6):
+<!-- Use `indexGap` argument to impose this restriction. See how this affects participant 80 and 754 in the example below: -->
 
-<center>
-```{r,echo=FALSE, message=FALSE, out.width="80%", warning=FALSE}
-knitr::include_graphics(here("vignettes/6-indexGap.png"))
-```
-</center>
+<!-- ```{r message= FALSE, warning=FALSE} -->
+<!-- cdm <- generateSequenceCohortSet( -->
+<!--   cdm = cdm, -->
+<!--   indexTable = "aspirin", -->
+<!--   markerTable = "acetaminophen", -->
+<!--   name = "intersect", -->
+<!--   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")), -->
+<!--   daysPriorObservation = 365, -->
+<!--   indexMarkerGap = NULL) -->
 
-Use `indexGap` argument to impose this restriction. See how this affects participant 80 and 754 in the example below:
+<!-- cdm$intersect |> -->
+<!--   dplyr::filter(subject_id %in% c(80,754)) |> -->
+<!--   dplyr::inner_join( -->
+<!--     # As for both, acetaminophen (marker) is the first event: -->
+<!--     cdm$acetaminophen |>  -->
+<!--       dplyr::select("subject_id",  -->
+<!--              "marker_date" = "cohort_start_date",  -->
+<!--              "first_episode_end_date" = "cohort_end_date"), -->
+<!--     by = c("subject_id", "marker_date") -->
+<!--   ) |> -->
+<!--   dplyr::inner_join( -->
+<!--     cdm$aspirin |>  -->
+<!--       dplyr::select("subject_id",  -->
+<!--              "index_date" = "cohort_start_date", -->
+<!--              "second_episode_start_date" = "cohort_start_date"), -->
+<!--     by = c("subject_id", "index_date") -->
+<!--   ) |> -->
+<!--   dplyr::mutate(indexMarkerGap = second_episode_start_date - first_episode_end_date) -->
 
-```{r message= FALSE, warning=FALSE}
-cdm <- generateSequenceCohortSet(
-  cdm = cdm,
-  indexTable = "aspirin",
-  markerTable = "acetaminophen",
-  name = "intersect",
-  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
-  daysPriorObservation = 365,
-  indexMarkerGap = NULL)
+<!-- ``` -->
+<!-- By using a `indexMarkerGap = 30`, participant 80 is excluded from the analysis, as is index-marker gap is larger than 30: -->
+<!-- ```{r message= FALSE, warning=FALSE} -->
+<!-- cdm <- generateSequenceCohortSet( -->
+<!--   cdm = cdm, -->
+<!--   indexTable = "aspirin", -->
+<!--   markerTable = "acetaminophen", -->
+<!--   name = "intersect", -->
+<!--   cohortDateRange = as.Date(c("1950-01-01","1969-01-01")), -->
+<!--   daysPriorObservation = 365, -->
+<!--   indexMarkerGap = 30) -->
 
-cdm$intersect |>
-  dplyr::filter(subject_id %in% c(80,754)) |>
-  dplyr::inner_join(
-    # As for both, acetaminophen (marker) is the first event:
-    cdm$acetaminophen |> 
-      dplyr::select("subject_id", 
-             "marker_date" = "cohort_start_date", 
-             "first_episode_end_date" = "cohort_end_date"),
-    by = c("subject_id", "marker_date")
-  ) |>
-  dplyr::inner_join(
-    cdm$aspirin |> 
-      dplyr::select("subject_id", 
-             "index_date" = "cohort_start_date",
-             "second_episode_start_date" = "cohort_start_date"),
-    by = c("subject_id", "index_date")
-  ) |>
-  dplyr::mutate(indexMarkerGap = second_episode_start_date - first_episode_end_date)
-  
-```
-By using a `indexMarkerGap = 30`, participant 80 is excluded from the analysis, as is index-marker gap is larger than 30:
-```{r message= FALSE, warning=FALSE}
-cdm <- generateSequenceCohortSet(
-  cdm = cdm,
-  indexTable = "aspirin",
-  markerTable = "acetaminophen",
-  name = "intersect",
-  cohortDateRange = as.Date(c("1950-01-01","1969-01-01")),
-  daysPriorObservation = 365,
-  indexMarkerGap = 30)
-
-cdm$intersect |>
-  dplyr::filter(subject_id %in% c(80,754)) 
-```
+<!-- cdm$intersect |> -->
+<!--   dplyr::filter(subject_id %in% c(80,754))  -->
+<!-- ``` -->
 
 ```{r message= FALSE, warning=FALSE, eval=FALSE}
 CDMConnector::cdmDisconnect(cdm = cdm)
