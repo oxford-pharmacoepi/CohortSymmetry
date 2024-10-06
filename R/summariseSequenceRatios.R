@@ -49,12 +49,12 @@ summariseSequenceRatios <- function(cohort,
   results <- list()
   cohort_tidy <- cohort |>
     dplyr::filter(.data$cohort_definition_id %in% cohortId) |>
-    dplyr::left_join(CDMConnector::settings(cohort), copy = T, by = "cohort_definition_id") |>
+    dplyr::left_join(omopgenerics::settings(cohort), copy = T, by = "cohort_definition_id") |>
     dplyr::compute()
 
   for (i in (cohort_tidy |> dplyr::distinct(.data$index_id) |> dplyr::pull())){
     for (j in (cohort_tidy |> dplyr::filter(.data$index_id == i) |> dplyr::distinct(.data$marker_id) |> dplyr::pull())){
-      temp[[paste0("index_", i, "_marker_", j)]] <-
+        temp[[paste0("index_", i, "_marker_", j)]] <-
         cohort_tidy |>
         dplyr::filter(.data$index_id == i & .data$marker_id == j) |>
         dplyr::left_join(
@@ -91,7 +91,7 @@ summariseSequenceRatios <- function(cohort,
         dplyr::pull("nsr")
       asr <- adjustedSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], nsr = nsr)
       counts <- getConfidenceInterval(temp[[paste0("index_",i, "_marker_", j)]], nsr = nsr, confidenceInterval = confidenceInterval) |>
-        dplyr::select(-c("index_first", -"marker_first"))
+        dplyr::select(-c("index_first", "marker_first"))
 
       results[[paste0("index_",i, "_marker_", j)]] <- cbind(temp2[[paste0("index_",i, "_marker_", j)]],
                                                             cbind(tibble::tibble(csr = csr,asr = asr),

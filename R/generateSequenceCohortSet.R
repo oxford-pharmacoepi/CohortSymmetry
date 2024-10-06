@@ -50,7 +50,7 @@ generateSequenceCohortSet <- function(cdm,
                               washoutWindow = 0,
                               indexMarkerGap = NULL,
                               combinationWindow = c(0,365),
-                              movingAverageRestriction = 548) {
+                              movingAverageRestriction = 548){
   ### checks
   checkInputgenerateSequenceCohortSet(
     cdm = cdm,
@@ -67,30 +67,37 @@ generateSequenceCohortSet <- function(cdm,
     movingAverageRestriction = movingAverageRestriction
   )
 
-  ### restructuring parameters
-  comb_export_1 <- as.character(combinationWindow[1])
-  comb_export_2 <- as.character(combinationWindow[2])
-
-  if(!is.finite(combinationWindow[2])){
-    combinationWindow[2] <- as.integer(99999)
-  }
-
-  if(!is.finite(movingAverageRestriction)){
-    movingAverageRestriction <- 99999
-  }
-
-  if (is.null(indexMarkerGap)) {
-    indexMarkerGap <- combinationWindow[2]
-    indexMarkerGap_export <- comb_export_2
-  } else {
-    indexMarkerGap_export <- indexMarkerGap
-  }
-
+  ### internal and exported parameters
   if (any(is.na(cohortDateRange))) {
     cohortDateRange <- getcohortDateRange(
       cdm = cdm,
       cohortDateRange = cohortDateRange
     )
+  }
+
+  cohort_date_range_1 <- cohortDateRange[[1]]
+  cohort_date_range_2 <- cohortDateRange[[2]]
+
+  comb_export_1 <- as.character(combinationWindow[[1]])
+  comb_export_2 <- as.character(combinationWindow[[2]])
+
+  combination_window <- combinationWindow
+
+  if(!is.finite(combination_window[2])){
+    combination_window[2] <- as.integer(99999)
+  }
+
+  moving_average_restriction <- movingAverageRestriction
+
+  if(!is.finite(moving_average_restriction)){
+    moving_average_restriction <- as.integer(99999)
+  }
+
+  index_marker_gap <- indexMarkerGap
+
+  if (is.null(index_marker_gap)) {
+    index_marker_gap <- combination_window[2]
+    indexMarkerGap <- combinationWindow[2]
   }
 
   ### nsr
@@ -107,6 +114,10 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::rename("index_cohort_definition_id" = "cohort_definition_id",
                   "index_n" = "n")
 
+  if (nrow(index_nsr_summary |> dplyr::collect()) ==0){
+    cli::cli_abort("Aborted! There are no events in the index cohort during the cohortDateRange specified. ")
+  }
+
   marker_nsr_summary <- inc_cohort_summary(cdm = cdm,
                                            tableName = markerTable,
                                            cohortId = markerId,
@@ -114,6 +125,10 @@ generateSequenceCohortSet <- function(cdm,
                                            cohortDateRange = cohortDateRange) |>
     dplyr::rename("marker_cohort_definition_id" = "cohort_definition_id",
                   "marker_n" = "n")
+
+  if (nrow(marker_nsr_summary |> dplyr::collect()) ==0){
+    cli::cli_abort("Aborted! There are no events in the marker cohort during the cohortDateRange specified. ")
+  }
 
   nsr_df <- index_nsr_summary |>
     dplyr::full_join(marker_nsr_summary,
@@ -159,8 +174,8 @@ generateSequenceCohortSet <- function(cdm,
         dplyr::select("cohort_start_date", "index_n", "marker_n") |>
         dplyr::collect() |>
         dplyr::mutate(
-          marker_forward = deltaCumulativeSum(.data$marker_n, .data$cohort_start_date, movingAverageRestriction, backwards = F),
-          marker_backward = deltaCumulativeSum(.data$marker_n, .data$cohort_start_date, movingAverageRestriction, backwards = T)
+          marker_forward = deltaCumulativeSum(.data$marker_n, .data$cohort_start_date, moving_average_restriction, backwards = F),
+          marker_backward = deltaCumulativeSum(.data$marker_n, .data$cohort_start_date, moving_average_restriction, backwards = T)
         ) |>
         dplyr::mutate(im_forward = index_n * marker_forward,
                       im_backward = index_n * marker_backward)
@@ -195,8 +210,8 @@ generateSequenceCohortSet <- function(cdm,
                   "marker_end_date" = "cohort_end_date",
                   "gap_to_prior_marker" = "gap_to_prior")
 
-  time_1 <- combinationWindow[1]
-  time_2 <- combinationWindow[2]
+  time_1 <- combination_window[1]
+  time_2 <- combination_window[2]
 
   joinedData <- indexPreprocessed |>
     dplyr::inner_join(
@@ -278,9 +293,11 @@ generateSequenceCohortSet <- function(cdm,
     dplyr::group_by(.data$cohort_definition_id, .data$cohort_name, .data$index_id,
                     .data$index_name, .data$marker_id, .data$marker_name) |>
     dplyr::distinct() |>
-    dplyr::mutate(days_prior_observation = .env$daysPriorObservation,
+    dplyr::mutate(cohort_date_range = paste0("(",.env$cohort_date_range_1, ",",
+                                             .env$cohort_date_range_2, ")"),
+                  days_prior_observation = .env$daysPriorObservation,
                   washout_window = .env$washoutWindow,
-                  index_marker_gap = .env$indexMarkerGap_export,
+                  index_marker_gap = .env$indexMarkerGap,
                   combination_window = paste0("(",.env$comb_export_1, ",",
                                               .env$comb_export_2, ")"),
                   moving_average_restriction = .env$movingAverageRestriction) |>
@@ -316,7 +333,7 @@ generateSequenceCohortSet <- function(cdm,
 
     # 2) indexMarkerGap
     cdm[[name]] <- cdm[[name]] |>
-      dplyr::filter(.data$cei <= .env$indexMarkerGap) |>
+      dplyr::filter(.data$cei <= .env$index_marker_gap) |>
       dplyr::compute(name = name, temporary = FALSE) |>
       omopgenerics::recordCohortAttrition(reason="Events excluded due to the prespecified index marker gap")
 

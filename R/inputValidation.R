@@ -284,7 +284,7 @@ checkMovingAverageRestriction <- function(movingAverageRestriction, errorMessage
   if (movingAverageRestriction != Inf) {
     checkmate::assertIntegerish(
       movingAverageRestriction,
-      lower = 0, any.missing = FALSE, max.len = 10, add = errorMessage
+      lower = 1, any.missing = FALSE, max.len = 10, add = errorMessage
     )
   }
 }

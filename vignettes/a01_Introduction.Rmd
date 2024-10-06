@@ -106,7 +106,7 @@ result |> dplyr::glimpse()
 plotTemporalSymmetry(result = result)
 ```
 
-Next, we will use the `summariseSequenceRatios()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals. 
+Next, we will use the `summariseSequenceRatios()` function to get the crude sequence ratios, adjusted sequence ratios, and the corresponding confidence intervals.
 ```{r message= FALSE, warning=FALSE}
 result <- summariseSequenceRatios(cohort = cdm$intersect)
 

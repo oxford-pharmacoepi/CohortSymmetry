@@ -551,14 +551,14 @@ test_that("attrition: washoutWindow", {
                                    indexId = 1,
                                    markerTable = "cohort_2",
                                    markerId = 3,
-                                   cohortDateRange = as.Date(c("2022-01-01", NA)),
+                                   cohortDateRange = as.Date(c("2012-01-01", NA)),
                                    combinationWindow = c(0, Inf))
 
   expect_identical(cdm$joined_cohorts |>
                      dplyr::collect() |>
                      nrow() |>
                      as.numeric(),
-                   1)
+                   2)
 
   expect_true(all(omopgenerics::attrition(cdm$joined_cohorts) |>
                     dplyr::pull(excluded_subjects)==0))
@@ -569,7 +569,7 @@ test_that("attrition: washoutWindow", {
                                    indexId = 1,
                                    markerTable = "cohort_2",
                                    markerId = 3,
-                                   cohortDateRange = as.Date(c("2022-01-01", NA)),
+                                   cohortDateRange = as.Date(c("2012-01-01", NA)),
                                    combinationWindow = c(0, Inf),
                                    washoutWindow = 365)
 
@@ -577,13 +577,13 @@ test_that("attrition: washoutWindow", {
                      dplyr::filter(reason == "Initial qualifying events") |>
                      dplyr::pull(number_records) |>
                      as.numeric(),
-                   1)
+                   2)
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) |>
                      dplyr::filter(reason == "Events excluded due to insufficient washout window") |>
                      dplyr::pull(excluded_records) |>
                      as.numeric(),
-                   1)
+                   0)
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
