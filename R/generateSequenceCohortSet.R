@@ -162,12 +162,12 @@ generateSequenceCohortSet <- function(cdm,
         dplyr::filter(is.na(.data$index_cohort_definition_id) | .data$index_cohort_definition_id == i) |>
         dplyr::filter(is.na(.data$marker_cohort_definition_id) | .data$marker_cohort_definition_id == j) |>
         dplyr::mutate(
-          index_n = case_when(
-            is.na(index_n) ~ 0,
+          index_n = dplyr::case_when(
+            is.na(.data$index_n) ~ 0,
             T ~ index_n
           ),
-          marker_n = case_when(
-            is.na(marker_n) ~ 0,
+          marker_n = dplyr::case_when(
+            is.na(.data$marker_n) ~ 0,
             T ~ marker_n
           )
         ) |>
@@ -177,8 +177,8 @@ generateSequenceCohortSet <- function(cdm,
           marker_forward = deltaCumulativeSum(.data$marker_n, .data$cohort_start_date, moving_average_restriction, backwards = F),
           marker_backward = deltaCumulativeSum(.data$marker_n, .data$cohort_start_date, moving_average_restriction, backwards = T)
         ) |>
-        dplyr::mutate(im_forward = index_n * marker_forward,
-                      im_backward = index_n * marker_backward)
+        dplyr::mutate(im_forward = .data$index_n * .data$marker_forward,
+                      im_backward = .data$index_n * .data$marker_backward)
 
       numerator <- sum(nsr_calc_df$im_forward)
       denominator <- sum(nsr_calc_df$im_forward) + sum(nsr_calc_df$im_backward)
@@ -445,12 +445,12 @@ inc_cohort_summary <- function(cdm, tableName, cohortId, nsrTableName, cohortDat
   nsr_cohort_summary <- nsr_cohort |>
     dplyr::group_by(.data$cohort_definition_id, .data$subject_id) |>
     dplyr::arrange(.data$cohort_start_date) |>
-    dplyr::mutate(row_num := dplyr::row_number()) |>
+    dplyr::mutate(row_num = dplyr::row_number()) |>
     dplyr::filter(.data$row_num == 1) |>
     dplyr::select(-"row_num") |>
     dplyr::ungroup() |>
     dplyr::group_by(.data$cohort_definition_id, .data$cohort_start_date) |>
-    dplyr::summarise(n = n()) |>
+    dplyr::summarise(n = dplyr::n()) |>
     dplyr::ungroup() |>
     dplyr::filter(
       .data$cohort_start_date <= !!cohortDateRange[[2]] &

@@ -623,15 +623,16 @@ test_that("tests involving washout", {
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 
-  cdm <- generateSequenceCohortSet(cdm,
-                                   name = "joined_cohorts",
-                                   indexTable ="cohort_1",
-                                   markerTable = "cohort_2",
-                                   cohortDateRange = as.Date(c("2020-04-01", NA)),
-                                   washoutWindow = 365,
-                                   combinationWindow = c(0,Inf)
+  expect_error(
+    cdm <- generateSequenceCohortSet(cdm,
+                                     name = "joined_cohorts",
+                                     indexTable ="cohort_1",
+                                     markerTable = "cohort_2",
+                                     cohortDateRange = as.Date(c("2020-04-01", NA)),
+                                     washoutWindow = 365,
+                                     combinationWindow = c(0,Inf)
+    )
   )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0) #washout fails
 
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -656,58 +657,6 @@ test_that("tests involving washout", {
       dplyr::pull(cohort_end_date) %>%
       as.Date(),
     as.Date("2014-01-01")
-  )
-
-  cdm <- generateSequenceCohortSet(cdm,
-                                   name = "joined_cohorts",
-                                   indexTable ="cohort_1",
-                                   markerTable = "cohort_2",
-                                   cohortDateRange = as.Date(c("2020-01-01", NA)),
-                                   washoutWindow = 0,
-                                   combinationWindow = c(0,Inf)
-  )
-
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-  expect_identical(
-    cdm$joined_cohorts %>%
-      dplyr::select(cohort_start_date) %>%
-      dplyr::pull(cohort_start_date) %>%
-      as.Date(),
-    as.Date("2020-01-01")
-  )
-
-  expect_identical(
-    cdm$joined_cohorts %>%
-      dplyr::select(cohort_end_date) %>%
-      dplyr::pull(cohort_end_date) %>%
-      as.Date(),
-    as.Date("2021-04-25")
-  )
-
-  cdm <- generateSequenceCohortSet(cdm,
-                                   name = "joined_cohorts",
-                                   indexTable ="cohort_1",
-                                   markerTable = "cohort_2",
-                                   cohortDateRange = as.Date(c("2020-01-01", NA)),
-                                   washoutWindow = 365,
-                                   combinationWindow = c(0,Inf)
-  )
-
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-  expect_identical(
-    cdm$joined_cohorts %>%
-      dplyr::select(cohort_start_date) %>%
-      dplyr::pull(cohort_start_date) %>%
-      as.Date(),
-    as.Date("2020-01-01")
-  )
-
-  expect_identical(
-    cdm$joined_cohorts %>%
-      dplyr::select(cohort_end_date) %>%
-      dplyr::pull(cohort_end_date) %>%
-      as.Date(),
-    as.Date("2021-04-25")
   )
 
   CDMConnector::cdmDisconnect(cdm = cdm)
