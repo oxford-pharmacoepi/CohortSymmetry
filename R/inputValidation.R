@@ -8,7 +8,8 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
                                         daysPriorObservation,
                                         washoutWindow,
                                         indexMarkerGap,
-                                        combinationWindow
+                                        combinationWindow,
+                                        movingAverageRestriction
                                         ) {
 
   # Check cdm objects, writing schema and index/marker tables
@@ -53,6 +54,9 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
   ## Check washoutWindow
   checkWashoutWindow(washoutWindow, errorMessage)
 
+  ## Check movingAverageRestriction
+  checkMovingAverageRestriction(movingAverageRestriction, errorMessage)
+
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
 }
@@ -60,7 +64,6 @@ checkInputgenerateSequenceCohortSet <- function(cdm,
 checkInputSummariseSequenceRatios <- function(cohort,
                                               cohortId,
                                               confidenceInterval,
-                                              movingAverageRestriction,
                                               minCellCount) {
 
   # Check cdm objects, writing schema and index/marker tables
@@ -84,9 +87,6 @@ checkInputSummariseSequenceRatios <- function(cohort,
 
   ## Check confidenceInterval
   checkConfidenceInterval(confidenceInterval, errorMessage)
-
-  ## Check movingAverageRestriction
-  checkMovingAverageRestriction(movingAverageRestriction, errorMessage)
 
   # Report errors
   checkmate::reportAssertions(collection = errorMessage)
@@ -284,7 +284,7 @@ checkMovingAverageRestriction <- function(movingAverageRestriction, errorMessage
   if (movingAverageRestriction != Inf) {
     checkmate::assertIntegerish(
       movingAverageRestriction,
-      lower = 0, any.missing = FALSE, max.len = 10, add = errorMessage
+      lower = 1, any.missing = FALSE, max.len = 10, add = errorMessage
     )
   }
 }

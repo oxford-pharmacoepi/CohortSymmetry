@@ -7,9 +7,6 @@ getConfidenceInterval <- function(table, nsr, confidenceInterval = 95){
     marker_first = table |> dplyr::pull("marker_first") |> sum()
   )
 
-  counts$index_first_by_nsr <- counts$index_first/nsr
-  counts$marker_first_by_nsr <- counts$marker_first/nsr
-
    if (counts$index_first == 0){
     counts$index_first <-  0.5
     counts$lower_csr_ci <- stats::qbeta(confidenceIntervalLevel, counts$index_first + 0.5, counts$marker_first + 0.5)

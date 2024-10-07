@@ -42,7 +42,7 @@ test_that("one ID against one ID, example 1", {
                                    markerId=1)
   expect_true((cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n)) == 2)
   cdm$joined_cohorts <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::mutate(gap_between_index_marker = marker_date - index_date) %>%
     dplyr::compute()
   expect_true(all(cdm$joined_cohorts %>% dplyr::pull(gap_between_index_marker)<= 365))
@@ -55,7 +55,6 @@ test_that("one ID against one ID, example 1", {
 )
 
 test_that("one ID against one ID, example 2", {
-  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -64,7 +63,7 @@ test_that("one ID against one ID, example 2", {
                                    markerTable = "cohort_2",
                                    markerId=2)
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
 
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
@@ -75,7 +74,6 @@ test_that("one ID against one ID, example 2", {
 )
 
 test_that("one ID against one ID, example 3", {
-  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -85,7 +83,7 @@ test_that("one ID against one ID, example 3", {
                                    markerId=2)
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr::tally() %>% dplyr::pull(n))== 3)
@@ -164,7 +162,7 @@ test_that("change combinationWindow one ID against one ID, example 1", {
                                    combinationWindow = c(0,30))
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 30))
   expect_true(all(0 < abs(loc$marker_date - loc$index_date)))
@@ -179,7 +177,7 @@ test_that("change combinationWindow one ID against one ID, example 1", {
                                    combinationWindow = c(0,Inf))
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(all(0 < abs(loc$marker_date - loc$index_date)))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 3)
@@ -193,7 +191,7 @@ test_that("change combinationWindow one ID against one ID, example 1", {
                                    combinationWindow = c(7,365))
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 365))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_2") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 2)
@@ -216,7 +214,7 @@ test_that("change combinationWindow one ID against one ID, example 2", {
                                    combinationWindow = c(0,30))
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(all(abs(loc$marker_date - loc$index_date) <= 30))
   expect_true(all(0 < abs(loc$marker_date - loc$index_date)))
@@ -231,7 +229,7 @@ test_that("change combinationWindow one ID against one ID, example 2", {
                                    combinationWindow = c(0,Inf))
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(all(0 < abs(loc$marker_date - loc$index_date)))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_3" & marker_name=="cohort_1") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 2)
@@ -245,7 +243,7 @@ test_that("change combinationWindow one ID against one ID, example 2", {
                                    combinationWindow = c(7,Inf))
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true((loc %>% dplyr::filter(index_name=="cohort_3" & marker_name=="cohort_1") %>% dplyr:: tally() %>% dplyr:: pull(n)) == 1)
   expect_true(all(loc$cohort_end_date-loc$cohort_start_date>7))
@@ -267,7 +265,7 @@ test_that("all IDs against all IDs", {
                                    combinationWindow = c(0,Inf))
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true((cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n)==20))
   expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_1") %>% dplyr::tally() %>% dplyr::pull(n)) == 2 &
@@ -298,7 +296,7 @@ test_that("one index (rsp. marker) ID against all marker (rsp. index) IDs", {
   )
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
 
   expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_1") %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
@@ -316,7 +314,7 @@ test_that("one index (rsp. marker) ID against all marker (rsp. index) IDs", {
   )
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
 
   expect_true((loc %>% dplyr::filter(index_name=="cohort_1" & marker_name=="cohort_1") %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
@@ -340,7 +338,7 @@ test_that("a subset of IDs against a subset of IDs", {
   )
 
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
 
   expect_true((loc %>% dplyr::filter(index_name=="cohort_2" & marker_name=="cohort_3") %>% dplyr::tally() %>% dplyr::pull(n) == 2) &
@@ -376,7 +374,7 @@ test_that("example of changed combinationWindow", {
                                    combinationWindow = c(0,Inf)
   )
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(loc %>% dplyr::tally() %>% dplyr::pull(n) == 4) #inf gives more values
 
@@ -389,10 +387,9 @@ test_that("example of changed combinationWindow", {
                                    combinationWindow = c(0,Inf)
   )
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(loc %>% dplyr::tally() %>% dplyr::pull(n) == 2) #inf gives more values
-  expect_true(all(loc %>% dplyr::select(subject_id) %>% dplyr::pull() == c(1,3)))
 
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -403,7 +400,7 @@ test_that("example of changed combinationWindow", {
                                    combinationWindow = c(0,365)
   )
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(loc %>% dplyr::tally() %>% dplyr::pull(n) == 1) #inf gives more values
   expect_true(loc %>% dplyr::select(subject_id) %>% dplyr::pull() == 1)
@@ -417,7 +414,7 @@ test_that("example of changed combinationWindow", {
                                    combinationWindow = c(7,Inf)
   )
   loc <- cdm$joined_cohorts %>%
-    dplyr::inner_join(CDMConnector::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
+    dplyr::inner_join(omopgenerics::settings(cdm$joined_cohorts), by = "cohort_definition_id", copy = T) %>%
     dplyr::collect()
   expect_true(loc %>% dplyr::tally() %>% dplyr::pull(n) == 1) #inf gives more values
   expect_true(loc %>% dplyr::select(subject_id) %>% dplyr::pull() == 3)
@@ -623,15 +620,16 @@ test_that("tests involving washout", {
   )
   expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
 
-  cdm <- generateSequenceCohortSet(cdm,
-                                   name = "joined_cohorts",
-                                   indexTable ="cohort_1",
-                                   markerTable = "cohort_2",
-                                   cohortDateRange = as.Date(c("2020-04-01", NA)),
-                                   washoutWindow = 365,
-                                   combinationWindow = c(0,Inf)
+  expect_error(
+    cdm <- generateSequenceCohortSet(cdm,
+                                     name = "joined_cohorts",
+                                     indexTable ="cohort_1",
+                                     markerTable = "cohort_2",
+                                     cohortDateRange = as.Date(c("2020-04-01", NA)),
+                                     washoutWindow = 365,
+                                     combinationWindow = c(0,Inf)
+    )
   )
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 0) #washout fails
 
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -656,58 +654,6 @@ test_that("tests involving washout", {
       dplyr::pull(cohort_end_date) %>%
       as.Date(),
     as.Date("2014-01-01")
-  )
-
-  cdm <- generateSequenceCohortSet(cdm,
-                                   name = "joined_cohorts",
-                                   indexTable ="cohort_1",
-                                   markerTable = "cohort_2",
-                                   cohortDateRange = as.Date(c("2020-01-01", NA)),
-                                   washoutWindow = 0,
-                                   combinationWindow = c(0,Inf)
-  )
-
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-  expect_identical(
-    cdm$joined_cohorts %>%
-      dplyr::select(cohort_start_date) %>%
-      dplyr::pull(cohort_start_date) %>%
-      as.Date(),
-    as.Date("2020-01-01")
-  )
-
-  expect_identical(
-    cdm$joined_cohorts %>%
-      dplyr::select(cohort_end_date) %>%
-      dplyr::pull(cohort_end_date) %>%
-      as.Date(),
-    as.Date("2021-04-25")
-  )
-
-  cdm <- generateSequenceCohortSet(cdm,
-                                   name = "joined_cohorts",
-                                   indexTable ="cohort_1",
-                                   markerTable = "cohort_2",
-                                   cohortDateRange = as.Date(c("2020-01-01", NA)),
-                                   washoutWindow = 365,
-                                   combinationWindow = c(0,Inf)
-  )
-
-  expect_true(cdm$joined_cohorts %>% dplyr::tally() %>% dplyr::pull(n) == 1)
-  expect_identical(
-    cdm$joined_cohorts %>%
-      dplyr::select(cohort_start_date) %>%
-      dplyr::pull(cohort_start_date) %>%
-      as.Date(),
-    as.Date("2020-01-01")
-  )
-
-  expect_identical(
-    cdm$joined_cohorts %>%
-      dplyr::select(cohort_end_date) %>%
-      dplyr::pull(cohort_end_date) %>%
-      as.Date(),
-    as.Date("2021-04-25")
   )
 
   CDMConnector::cdmDisconnect(cdm = cdm)

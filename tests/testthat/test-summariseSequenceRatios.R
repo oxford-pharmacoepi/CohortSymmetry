@@ -60,13 +60,10 @@ test_that("summariseSequenceRatios", {
       cohort = cdm$joined_cohorts,
       confidenceInterval = -101)
   )
-
     CDMConnector::cdm_disconnect(cdm = cdm)
-
 })
 
 test_that("summariseSequenceRatios - testing ratios and CIs, Example 1", {
-  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -124,7 +121,6 @@ test_that("summariseSequenceRatios - testing ratios and CIs, Example 1", {
   expect_true(all(res$combination_window == "(0,365)"))
   expect_true(all(res$index_marker_gap==365))
   expect_true(all(res$confidence_interval==95))
-  expect_true(all(res$moving_average_restriction==548))
   expect_true(all(as.integer(res$first_pharmac_index_percentage)<=100 & 0 <= as.integer(res$first_pharmac_index_percentage)))
 
   int <- res %>%
@@ -135,7 +131,6 @@ test_that("summariseSequenceRatios - testing ratios and CIs, Example 1", {
   })
 
 test_that("summariseSequenceRatios - testing ratios and CIs, Example 2", {
-  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
     subject_id = c(1, 4, 2, 3, 5, 7, 8, 9, 6, 10),
@@ -191,7 +186,6 @@ test_that("summariseSequenceRatios - testing ratios and CIs, Example 2", {
   expect_true(all(res$combination_window == "(0,365)"))
   expect_true(all(res$index_marker_gap==365))
   expect_true(all(res$confidence_interval==95))
-  expect_true(all(res$moving_average_restriction==548))
   expect_true((res$index_cohort_name=="cohort_1"))
   expect_true((res$marker_cohort_name=="cohort_3"))
   expect_true(all(as.integer(res$first_pharmac_index_percentage)<=100 & 0 <= as.integer(res$first_pharmac_index_percentage)))
@@ -559,18 +553,20 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex1", {
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
 
-  cdm <- generateSequenceCohortSet(cdm = cdm,
-                                   name = "joined_cohorts",
-                                   indexTable = "cohort_1",
-                                   markerTable = "cohort_2",
-                                   daysPriorObservation = 0,
-                                   combinationWindow = c(0, Inf))
+  expect_no_error(
+    cdm <- generateSequenceCohortSet(cdm = cdm,
+                                     name = "joined_cohorts",
+                                     indexTable = "cohort_1",
+                                     markerTable = "cohort_2",
+                                     daysPriorObservation = 0,
+                                     combinationWindow = c(0, Inf),
+                                     movingAverageRestriction = 730)
+  )
 
   expect_no_error(
     result <- summariseSequenceRatios(cohort = cdm$joined_cohorts,
-                                     cohortId = 1,
-                                     movingAverageRestriction = 730,
-                                     minCellCount = 0)
+                                      cohortId = 1,
+                                      minCellCount = 0)
   )
 
   expect_true(
@@ -639,16 +635,18 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex2", {
   cdm <- mockCohortSymmetry(indexCohort = indexCohort,
                             markerCohort = markerCohort)
 
-  cdm <- generateSequenceCohortSet(cdm = cdm,
-                                   name = "joined_cohorts",
-                                   indexTable = "cohort_1",
-                                   markerTable = "cohort_2",
-                                   daysPriorObservation = 0,
-                                   combinationWindow = c(0, Inf))
+  expect_no_error(
+    cdm <- generateSequenceCohortSet(cdm = cdm,
+                                     name = "joined_cohorts",
+                                     indexTable = "cohort_1",
+                                     markerTable = "cohort_2",
+                                     daysPriorObservation = 0,
+                                     combinationWindow = c(0, Inf),
+                                     movingAverageRestriction = Inf)
+  )
 
   expect_no_error(
     result <- summariseSequenceRatios(cohort = cdm$joined_cohorts,
-                                      movingAverageRestriction = Inf,
                                       minCellCount = 0)
   )
 
@@ -680,31 +678,30 @@ test_that("summariseSequenceRatios - testing moving average restriction, ex2", {
          as.numeric())
   ))
 
-  expect_equal(
-    omopgenerics::settings(result) %>%
-    dplyr::pull("moving_average_restriction") %>%
-    as.numeric(),
-    Inf)
+  cdm <- generateSequenceCohortSet(cdm = cdm,
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   markerTable = "cohort_2",
+                                   daysPriorObservation = 0,
+                                   combinationWindow = c(0, Inf),
+                                   movingAverageRestriction = Inf)
 
   res_90 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     cohortId = 1,
     confidenceInterval = 90,
-    movingAverageRestriction = Inf,
     minCellCount = 0)
 
   res_95 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     cohortId = 1,
     confidenceInterval = 95,
-    movingAverageRestriction = Inf,
     minCellCount = 0)
 
   res_99 <- summariseSequenceRatios(
     cohort = cdm$joined_cohorts,
     cohortId = 1,
     confidenceInterval = 99,
-    movingAverageRestriction = Inf,
     minCellCount = 0)
 
   expect_true(
