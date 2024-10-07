@@ -64,7 +64,6 @@ test_that("summariseSequenceRatios", {
 })
 
 test_that("summariseSequenceRatios - testing ratios and CIs, Example 1", {
-  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 2, 2, 2, 2, 2),
     subject_id = c(1, 4, 2, 3, 5, 5, 4, 3, 6, 1),
@@ -132,7 +131,6 @@ test_that("summariseSequenceRatios - testing ratios and CIs, Example 1", {
   })
 
 test_that("summariseSequenceRatios - testing ratios and CIs, Example 2", {
-  skip_on_cran()
   indexCohort <- dplyr::tibble(
     cohort_definition_id = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
     subject_id = c(1, 4, 2, 3, 5, 7, 8, 9, 6, 10),

@@ -55,7 +55,6 @@ test_that("one ID against one ID, example 1", {
 )
 
 test_that("one ID against one ID, example 2", {
-  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
@@ -75,7 +74,6 @@ test_that("one ID against one ID, example 2", {
 )
 
 test_that("one ID against one ID, example 3", {
-  skip_on_cran()
   cdm <- mockCohortSymmetry()
   cdm <- generateSequenceCohortSet(cdm,
                                    name = "joined_cohorts",
