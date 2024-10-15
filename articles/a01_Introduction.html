@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">CohortSymmetry</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3.900</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,7 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/a01_Introduction.html">Introduction to CohortSymmetry</a></li>
-    <li><a class="dropdown-item" href="../articles/a02_Generate_a_sequence_cohort_set.html">Step 1. Generate a sequence cohort</a></li>
+    <li><a class="dropdown-item" href="../articles/a02_Generate_a_sequence_cohort.html">Step 1. Generate a sequence cohort</a></li>
     <li><a class="dropdown-item" href="../articles/a03_Summarise_sequence_ratios.html">Step 2. Obtain the sequence ratios</a></li>
     <li><a class="dropdown-item" href="../articles/a04_Visualise_sequence_ratios.html">Step 3. Visualise the sequence ratios</a></li>
     <li><a class="dropdown-item" href="../articles/a05_Summarise_temporal_symmetry.html">Step 4: Obtain aggregated data on temporal symmetry</a></li>
@@ -130,7 +130,7 @@ two mock cohorts: the <strong>index_cohort</strong> and the
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.8.0-1014-azure:R 4.4.1/:memory:]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v1.1.0 [unknown@Linux 6.8.0-1015-azure:R 4.4.1/:memory:]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 3, 5, 5, 6, 7, 8, 8, 11, 13, 13, 15, 16, 16…</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-11-28, 1996-05-02, 1997-06-18, 2004-06-30, …</span></span>
@@ -140,7 +140,7 @@ two mock cohorts: the <strong>index_cohort</strong> and the
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 4</span></span>
-<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.8.0-1014-azure:R 4.4.1/:memory:]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v1.1.0 [unknown@Linux 6.8.0-1015-azure:R 4.4.1/:memory:]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
 <span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 4, 7, 8, 8, 9, 9, 9, 9, 10, 11, 12, 13, 13,…</span></span>
 <span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-07-27, 1993-02-02, 2019-07-08, 1996-08-14, …</span></span>
@@ -168,13 +168,13 @@ cohort with the addition of two extra columns: <em>index_date</em> and
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: ??</span></span>
 <span><span class="co">#&gt; Columns: 6</span></span>
-<span><span class="co">#&gt; Database: DuckDB v1.0.0 [unknown@Linux 6.8.0-1014-azure:R 4.4.1/:memory:]</span></span>
+<span><span class="co">#&gt; Database: DuckDB v1.1.0 [unknown@Linux 6.8.0-1015-azure:R 4.4.1/:memory:]</span></span>
 <span><span class="co">#&gt; $ cohort_definition_id <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…</span></span>
-<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 3, 7, 8, 11, 13, 16, 17, 21, 23, 24, 32, 35, 3…</span></span>
-<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-07-27, 1993-02-02, 1996-08-14, 2016-05-30, …</span></span>
-<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-11-28, 1996-05-02, 1996-10-23, 2016-06-03, …</span></span>
-<span><span class="co">#&gt; $ index_date           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-11-28, 1996-05-02, 1996-10-23, 2016-05-30, …</span></span>
-<span><span class="co">#&gt; $ marker_date          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 2002-07-27, 1993-02-02, 1996-08-14, 2016-06-03, …</span></span></code></pre></div>
+<span><span class="co">#&gt; $ subject_id           <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 42, 108, 124, 128, 190, 217, 251, 296, 325, 343, …</span></span>
+<span><span class="co">#&gt; $ cohort_start_date    <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1987-01-14, 1973-06-03, 1992-09-12, 2015-03-10, …</span></span>
+<span><span class="co">#&gt; $ cohort_end_date      <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1987-08-06, 1973-11-14, 1993-11-07, 2016-03-07, …</span></span>
+<span><span class="co">#&gt; $ index_date           <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1987-01-14, 1973-11-14, 1993-11-07, 2015-03-10, …</span></span>
+<span><span class="co">#&gt; $ marker_date          <span style="color: #949494; font-style: italic;">&lt;date&gt;</span> 1987-08-06, 1973-06-03, 1992-09-12, 2016-03-07, …</span></span></code></pre></div>
 <p>Once we have the intersect cohort, you are able to explore the
 temporal symmetry by using <code>summariseTemporalSymmetry</code> and
 <code><a href="../reference/plotTemporalSymmetry.html">plotTemporalSymmetry()</a></code>:</p>
@@ -191,10 +191,10 @@ temporal symmetry by using <code>summariseTemporalSymmetry</code> and
 <span><span class="co">#&gt; $ strata_name      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ strata_level     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ variable_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "temporal_symmetry", "temporal_symmetry", "temporal_s…</span></span>
-<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "-2", "7", "-6", "8", "-4", "0", "18", "6", "10", "2"…</span></span>
+<span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "5", "-5", "2", "3", "7", "8", "-6", "-2", "-11", "4"…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "count", "count", "count", "count", "count", "count",…</span></span>
 <span><span class="co">#&gt; $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "integer", "integer", "integer", "integer", "integer"…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "22", NA, NA, NA, "10", "134", NA, NA, NA, "9", "14",…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, "9", "14", NA, NA, NA, "22", NA, "5", "14", "…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span></span>
@@ -219,30 +219,30 @@ corresponding confidence intervals.</p>
 <span><span class="co">#&gt; $ variable_level   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "sequence_ratio", "sequence_ratio", "sequence_ratio",…</span></span>
 <span><span class="co">#&gt; $ estimate_name    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "point_estimate", "point_estimate", "lower_CI", "uppe…</span></span>
 <span><span class="co">#&gt; $ estimate_type    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "numeric", "numeric", "numeric", "numeric", "numeric"…</span></span>
-<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1.17977528089888", "1.16171264565546", "0.9665793825…</span></span>
+<span><span class="co">#&gt; $ estimate_value   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1.17977528089888", "1404.75510365564", "0.9665793825…</span></span>
 <span><span class="co">#&gt; $ additional_name  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span>
 <span><span class="co">#&gt; $ additional_level <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "overall", "overall", "overall", "overall", "overall"…</span></span></code></pre></div>
 <p>Finally, we can visualise the results using
 <code><a href="../reference/tableSequenceRatios.html">tableSequenceRatios()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/tableSequenceRatios.html">tableSequenceRatios</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div>
-<div id="yqeckdwhkh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#yqeckdwhkh table {
+<div id="zftotwqmdf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zftotwqmdf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#yqeckdwhkh thead, #yqeckdwhkh tbody, #yqeckdwhkh tfoot, #yqeckdwhkh tr, #yqeckdwhkh td, #yqeckdwhkh th {
+#zftotwqmdf thead, #zftotwqmdf tbody, #zftotwqmdf tfoot, #zftotwqmdf tr, #zftotwqmdf td, #zftotwqmdf th {
   border-style: none;
 }
 
-#yqeckdwhkh p {
+#zftotwqmdf p {
   margin: 0;
   padding: 0;
 }
 
-#yqeckdwhkh .gt_table {
+#zftotwqmdf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -268,12 +268,12 @@ corresponding confidence intervals.</p>
   border-left-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_caption {
+#zftotwqmdf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yqeckdwhkh .gt_title {
+#zftotwqmdf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -285,7 +285,7 @@ corresponding confidence intervals.</p>
   border-bottom-width: 0;
 }
 
-#yqeckdwhkh .gt_subtitle {
+#zftotwqmdf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -297,7 +297,7 @@ corresponding confidence intervals.</p>
   border-top-width: 0;
 }
 
-#yqeckdwhkh .gt_heading {
+#zftotwqmdf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -309,13 +309,13 @@ corresponding confidence intervals.</p>
   border-right-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_bottom_border {
+#zftotwqmdf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_col_headings {
+#zftotwqmdf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -330,7 +330,7 @@ corresponding confidence intervals.</p>
   border-right-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_col_heading {
+#zftotwqmdf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -350,7 +350,7 @@ corresponding confidence intervals.</p>
   overflow-x: hidden;
 }
 
-#yqeckdwhkh .gt_column_spanner_outer {
+#zftotwqmdf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -362,15 +362,15 @@ corresponding confidence intervals.</p>
   padding-right: 4px;
 }
 
-#yqeckdwhkh .gt_column_spanner_outer:first-child {
+#zftotwqmdf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yqeckdwhkh .gt_column_spanner_outer:last-child {
+#zftotwqmdf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yqeckdwhkh .gt_column_spanner {
+#zftotwqmdf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -382,11 +382,11 @@ corresponding confidence intervals.</p>
   width: 100%;
 }
 
-#yqeckdwhkh .gt_spanner_row {
+#zftotwqmdf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#yqeckdwhkh .gt_group_heading {
+#zftotwqmdf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -412,7 +412,7 @@ corresponding confidence intervals.</p>
   text-align: left;
 }
 
-#yqeckdwhkh .gt_empty_group_heading {
+#zftotwqmdf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -427,15 +427,15 @@ corresponding confidence intervals.</p>
   vertical-align: middle;
 }
 
-#yqeckdwhkh .gt_from_md > :first-child {
+#zftotwqmdf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yqeckdwhkh .gt_from_md > :last-child {
+#zftotwqmdf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yqeckdwhkh .gt_row {
+#zftotwqmdf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -454,7 +454,7 @@ corresponding confidence intervals.</p>
   overflow-x: hidden;
 }
 
-#yqeckdwhkh .gt_stub {
+#zftotwqmdf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -467,7 +467,7 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#yqeckdwhkh .gt_stub_row_group {
+#zftotwqmdf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -481,15 +481,15 @@ corresponding confidence intervals.</p>
   vertical-align: top;
 }
 
-#yqeckdwhkh .gt_row_group_first td {
+#zftotwqmdf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yqeckdwhkh .gt_row_group_first th {
+#zftotwqmdf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#yqeckdwhkh .gt_summary_row {
+#zftotwqmdf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -499,16 +499,16 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#yqeckdwhkh .gt_first_summary_row {
+#zftotwqmdf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_first_summary_row.thick {
+#zftotwqmdf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yqeckdwhkh .gt_last_summary_row {
+#zftotwqmdf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -518,7 +518,7 @@ corresponding confidence intervals.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_grand_summary_row {
+#zftotwqmdf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -528,7 +528,7 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#yqeckdwhkh .gt_first_grand_summary_row {
+#zftotwqmdf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -538,7 +538,7 @@ corresponding confidence intervals.</p>
   border-top-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_last_grand_summary_row_top {
+#zftotwqmdf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -548,11 +548,11 @@ corresponding confidence intervals.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_striped {
+#zftotwqmdf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#yqeckdwhkh .gt_table_body {
+#zftotwqmdf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -561,7 +561,7 @@ corresponding confidence intervals.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_footnotes {
+#zftotwqmdf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -575,7 +575,7 @@ corresponding confidence intervals.</p>
   border-right-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_footnote {
+#zftotwqmdf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -584,7 +584,7 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#yqeckdwhkh .gt_sourcenotes {
+#zftotwqmdf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -598,7 +598,7 @@ corresponding confidence intervals.</p>
   border-right-color: #D3D3D3;
 }
 
-#yqeckdwhkh .gt_sourcenote {
+#zftotwqmdf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -606,85 +606,85 @@ corresponding confidence intervals.</p>
   padding-right: 5px;
 }
 
-#yqeckdwhkh .gt_left {
+#zftotwqmdf .gt_left {
   text-align: left;
 }
 
-#yqeckdwhkh .gt_center {
+#zftotwqmdf .gt_center {
   text-align: center;
 }
 
-#yqeckdwhkh .gt_right {
+#zftotwqmdf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yqeckdwhkh .gt_font_normal {
+#zftotwqmdf .gt_font_normal {
   font-weight: normal;
 }
 
-#yqeckdwhkh .gt_font_bold {
+#zftotwqmdf .gt_font_bold {
   font-weight: bold;
 }
 
-#yqeckdwhkh .gt_font_italic {
+#zftotwqmdf .gt_font_italic {
   font-style: italic;
 }
 
-#yqeckdwhkh .gt_super {
+#zftotwqmdf .gt_super {
   font-size: 65%;
 }
 
-#yqeckdwhkh .gt_footnote_marks {
+#zftotwqmdf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#yqeckdwhkh .gt_asterisk {
+#zftotwqmdf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yqeckdwhkh .gt_indent_1 {
+#zftotwqmdf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yqeckdwhkh .gt_indent_2 {
+#zftotwqmdf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yqeckdwhkh .gt_indent_3 {
+#zftotwqmdf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yqeckdwhkh .gt_indent_4 {
+#zftotwqmdf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yqeckdwhkh .gt_indent_5 {
+#zftotwqmdf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#yqeckdwhkh .katex-display {
+#zftotwqmdf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#yqeckdwhkh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#zftotwqmdf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 <table class="table gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead><tr class="gt_col_headings">
-<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Database name">Database name</th>
+<th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Database-name">Database name</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Index">Index</th>
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Marker">Marker</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Study population">Study population</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Index first, N (%)">Index first, N (%)</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Marker first, N (%)">Marker first, N (%)</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="CSR (95% CI)">CSR (95% CI)</th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="ASR (95% CI)">ASR (95% CI)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Study-population">Study population</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Index-first,-N-(%)">Index first, N (%)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="Marker-first,-N-(%)">Marker first, N (%)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="CSR-(95%-CI)">CSR (95% CI)</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="text-align: center; font-weight: bold;" scope="col" id="ASR-(95%-CI)">ASR (95% CI)</th>
     </tr></thead>
 <tbody class="gt_table_body"><tr>
 <td headers="Database name" class="gt_row gt_left" style="text-align: left;">mock</td>
@@ -694,7 +694,7 @@ corresponding confidence intervals.</p>
 <td headers="Index first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">210 (54.1 %)</td>
 <td headers="Marker first, N (%)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">178 (45.9 %)</td>
 <td headers="CSR (95% CI)" class="gt_row gt_right" style="text-align: left; border-left-width: 1px; border-left-style: solid; border-left-color: #D3D3D3; border-right-width: 1px; border-right-style: solid; border-right-color: #D3D3D3; border-top-width: 1px; border-top-style: solid; border-top-color: #D3D3D3; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #D3D3D3;">1.18 (0.97 - 1.44)</td>
-<td headers="ASR (95% CI)" class="gt_row gt_right" style="text-align: left;">1.16 (0.95 - 1.42)</td>
+<td headers="ASR (95% CI)" class="gt_row gt_right" style="text-align: left;">1,404.76 (1,150.90 - 1,715.99)</td>
 </tr></tbody>
 </table>
 </div>
