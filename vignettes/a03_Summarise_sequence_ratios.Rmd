@@ -103,14 +103,7 @@ summariseSequenceRatios(
 ```
 
 ## Modify `movingAverageRestriction`
-The idea of moving average restriction is necessary only for the null sequence ratio calculation, please refer to Lai et al. (2017) for more details on this parameter (parameter d when calculating P in page 578). Following Tsiropoulos et al. (2009), by default, the argument `movingAverageRestriction` is set to be  $548$ ($18$ months). Should one wish to modify this, one could do something like:
-
-```{r message = FALSE, warning = FALSE}
-summariseSequenceRatios(
-  cohort = cdm$intersect,
-  movingAverageRestriction = 600) |> 
-  dplyr::glimpse()
-```
+The idea of moving average restriction is necessary only for the null sequence ratio calculation, please refer to Lai et al. (2017) for more details on this parameter (parameter d when calculating P in page 578). Following Tsiropoulos et al. (2009), by default, the argument `movingAverageRestriction` is set to be  $548$ ($18$ months). 
 
 ## Modify `minCellCount`
 

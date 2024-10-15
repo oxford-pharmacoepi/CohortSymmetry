@@ -15,7 +15,8 @@ generateSequenceCohortSet(
   daysPriorObservation = 0,
   washoutWindow = 0,
   indexMarkerGap = NULL,
-  combinationWindow = c(0, 365)
+  combinationWindow = c(0, 365),
+  movingAverageRestriction = 548
 )
 }
 \arguments{
@@ -46,6 +47,8 @@ and the start of the second episode in a sequence/combination.}
 
 \item{combinationWindow}{A constrain to be placed on the gap between two initiations.
 Default c(0,365), meaning the gap should be larger than 0 but less than or equal to 365.}
+
+\item{movingAverageRestriction}{The moving window when calculating nSR, default is 548.}
 }
 \value{
 A table within the cdm reference.

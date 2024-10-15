@@ -181,12 +181,12 @@ test_that("attrition: combinationWindow", {
                                             markerCohort = markerCohort)
 
   cdm <- generateSequenceCohortSet(cdm = cdm,
-                                                   name = "joined_cohorts",
-                                                   indexTable = "cohort_1",
-                                                   indexId=1,
-                                                   markerTable = "cohort_2",
-                                                   markerId=3,
-                                                   combinationWindow = c(30,365))
+                                   name = "joined_cohorts",
+                                   indexTable = "cohort_1",
+                                   indexId=1,
+                                   markerTable = "cohort_2",
+                                   markerId=3,
+                                   combinationWindow = c(30,365))
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) |>
                      dplyr::select(cohort_definition_id) |>
@@ -220,11 +220,13 @@ test_that("attrition: combinationWindow", {
 
   expect_false(2 %in% (cdm$joined_cohorts |>
                          dplyr::collect() |>
+                         dplyr::arrange(subject_id) |>
                          dplyr::pull(subject_id) |>
                          as.numeric()))
 
   expect_identical((cdm$joined_cohorts |>
                       dplyr::collect() |>
+                      dplyr::arrange(subject_id) |>
                       dplyr::pull(subject_id) |>
                       as.numeric()),
                    c(1,3,4,5))
@@ -352,6 +354,8 @@ test_that("attrition: indexMarkerGap", {
                 dplyr::pull(excluded_subjects)==3)
 
   expect_identical(cdm$joined_cohorts_2 |>
+                     dplyr::collect() |>
+                     dplyr::arrange(subject_id) |>
                      dplyr::pull(subject_id) |>
                      as.numeric(),
                    c(2,5)
@@ -379,6 +383,8 @@ test_that("attrition: indexMarkerGap", {
                     dplyr::pull(excluded_records)==0))
 
   expect_identical(cdm$joined_cohorts_3 |>
+                     dplyr::collect() |>
+                     dplyr::arrange(subject_id) |>
                      dplyr::pull(subject_id) |>
                      as.numeric(),
                    c(3, 4, 5)
@@ -545,14 +551,14 @@ test_that("attrition: washoutWindow", {
                                    indexId = 1,
                                    markerTable = "cohort_2",
                                    markerId = 3,
-                                   cohortDateRange = as.Date(c("2022-01-01", NA)),
+                                   cohortDateRange = as.Date(c("2012-01-01", NA)),
                                    combinationWindow = c(0, Inf))
 
   expect_identical(cdm$joined_cohorts |>
                      dplyr::collect() |>
                      nrow() |>
                      as.numeric(),
-                   1)
+                   2)
 
   expect_true(all(omopgenerics::attrition(cdm$joined_cohorts) |>
                     dplyr::pull(excluded_subjects)==0))
@@ -563,7 +569,7 @@ test_that("attrition: washoutWindow", {
                                    indexId = 1,
                                    markerTable = "cohort_2",
                                    markerId = 3,
-                                   cohortDateRange = as.Date(c("2022-01-01", NA)),
+                                   cohortDateRange = as.Date(c("2012-01-01", NA)),
                                    combinationWindow = c(0, Inf),
                                    washoutWindow = 365)
 
@@ -571,13 +577,13 @@ test_that("attrition: washoutWindow", {
                      dplyr::filter(reason == "Initial qualifying events") |>
                      dplyr::pull(number_records) |>
                      as.numeric(),
-                   1)
+                   2)
 
   expect_identical(omopgenerics::attrition(cdm$joined_cohorts) |>
                      dplyr::filter(reason == "Events excluded due to insufficient washout window") |>
                      dplyr::pull(excluded_records) |>
                      as.numeric(),
-                   1)
+                   0)
 
   CDMConnector::cdmDisconnect(cdm = cdm)
 })
