@@ -44,18 +44,16 @@ summariseSequenceRatios <- function(cohort,
       dplyr::pull("cohort_definition_id")
   }
 
-  temp <- list()
-  temp2<-list()
-  results <- list()
   cohort_tidy <- cohort |>
     dplyr::filter(.data$cohort_definition_id %in% cohortId) |>
     dplyr::left_join(omopgenerics::settings(cohort), copy = T, by = "cohort_definition_id") |>
     dplyr::compute()
 
+  output <- data.frame()
+
   for (i in (cohort_tidy |> dplyr::distinct(.data$index_id) |> dplyr::pull())){
     for (j in (cohort_tidy |> dplyr::filter(.data$index_id == i) |> dplyr::distinct(.data$marker_id) |> dplyr::pull())){
-        temp[[paste0("index_", i, "_marker_", j)]] <-
-        cohort_tidy |>
+      temporary_cohort <- cohort_tidy |>
         dplyr::filter(.data$index_id == i & .data$marker_id == j) |>
         dplyr::left_join(
           cohort_tidy |>
@@ -75,27 +73,29 @@ summariseSequenceRatios <- function(cohort,
             "cohort_start_date", "cohort_end_date"
           ))) |>
         dplyr::collect() |>
-        dplyr::group_by(.data$days_first, .data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window) |>
+        dplyr::group_by(.data$days_first, .data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window, .data$moving_average_restriction) |>
         dplyr::summarise(marker_first = sum(.data$order_ba, na.rm = T), index_first = sum((!.data$order_ba), na.rm = T), .groups = "drop") |>
         dplyr::ungroup()
 
-      temp2[[paste0("index_",i, "_marker_", j)]] <-
-        temp[[paste0("index_",i, "_marker_", j)]] |>
-        dplyr::group_by(.data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window) |>
-        dplyr::summarise(marker_first = sum(.data$marker_first), index_first = sum(.data$index_first), .groups = "drop") |>
-        dplyr::ungroup()
-
-      csr <- crudeSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]])
+      csr <- crudeSequenceRatio(temporary_cohort)
       nsr <- omopgenerics::settings(cohort) |>
         dplyr::filter(.data$index_id == i & .data$marker_id == j) |>
         dplyr::pull("nsr")
-      asr <- adjustedSequenceRatio(temp[[paste0("index_",i, "_marker_", j)]], nsr = nsr)
-      counts <- getConfidenceInterval(temp[[paste0("index_",i, "_marker_", j)]], nsr = nsr, confidenceInterval = confidenceInterval) |>
+      asr <- csr/nsr
+      counts <- getConfidenceInterval(temporary_cohort,
+                                      nsr = nsr,
+                                      confidenceInterval = confidenceInterval) |>
         dplyr::select(-c("index_first", "marker_first"))
 
-      results[[paste0("index_",i, "_marker_", j)]] <- cbind(temp2[[paste0("index_",i, "_marker_", j)]],
-                                                            cbind(tibble::tibble(csr = csr,asr = asr),
-                                                                  counts)) |>
+      meta_info <-
+        temporary_cohort |>
+        dplyr::group_by(.data$index_id, .data$index_name, .data$marker_id, .data$marker_name, .data$days_prior_observation, .data$washout_window, .data$index_marker_gap, .data$combination_window, .data$moving_average_restriction) |>
+        dplyr::summarise(marker_first = sum(.data$marker_first), index_first = sum(.data$index_first), .groups = "drop") |>
+        dplyr::ungroup()
+
+      partial_result <- cbind(meta_info,
+                              cbind(tibble::tibble(csr = csr,asr = asr),
+                                    counts)) |>
         dplyr::mutate(marker_first_percentage = round(.data$marker_first/(.data$marker_first + .data$index_first)*100, digits = 1),
                       index_first_percentage = round(.data$index_first/(.data$marker_first + .data$index_first)*100, digits = 1),
                       confidence_interval = as.character(.env$confidenceInterval)) |>
@@ -104,11 +104,10 @@ summariseSequenceRatios <- function(cohort,
                       "csr", "lower_csr_ci", "upper_csr_ci",
                       "asr", "lower_asr_ci", "upper_asr_ci",
                       "days_prior_observation", "washout_window", "index_marker_gap", "combination_window",
-                      "confidence_interval")
+                      "moving_average_restriction", "confidence_interval")
+      output <- rbind(output, partial_result)
     }
   }
-
-  output <- Reduce(dplyr::union_all, results)
 
   ifp_100 <- output |>
     dplyr::filter(.data$index_first_percentage == 100) |>

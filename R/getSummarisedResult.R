@@ -1,6 +1,6 @@
 getSummarisedResult <- function(x) {
   settings <- c("days_prior_observation", "washout_window", "index_marker_gap",
-                "combination_window", "confidence_interval")
+                "combination_window", "moving_average_restriction", "confidence_interval")
   x_sum <- x |>
     dplyr::mutate(
       group_name = "index_cohort_name &&& marker_cohort_name",
@@ -56,7 +56,7 @@ getSummarisedResult <- function(x) {
 
   x_sum <- x_sum |>
     dplyr::left_join(setting, by = c("days_prior_observation", "washout_window",
-                     "index_marker_gap", "combination_window", "confidence_interval",
+                     "index_marker_gap", "combination_window", "moving_average_restriction", "confidence_interval",
                      "cdm_name")) |>
     dplyr::select(dplyr::all_of(omopgenerics::resultColumns())) |>
     omopgenerics::newSummarisedResult(
